@@ -1,11 +1,18 @@
 {
-  "name": "houxit-core",
+  "name": "houxit",
   "version": "0.1.11",
   "description": "The blueprint for modern web apps.",
-  "private": true,
-  "workspaces": [
-    "packages/*"
-  ],
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "files": [
     "dist"
   ],

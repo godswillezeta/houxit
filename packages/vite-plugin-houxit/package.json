@@ -1,0 +1,21 @@
+{
+  "name": "@houxit/vite-plugin-houxit",
+  "version": "0.1.0",
+  "description": "Official houxit vite plugin",
+  "repository": {
+    "type": "git",
+    "url": "github.com/houxitsystems/vite-plugin-houxit"
+  },
+  "dependencies":{
+    "houxit":"0.1.11",
+    "@houxit/compiler":"1.0.0"
+  },
+  "license": "MIT",
+  "author": "Prince Godswill Chukwuemeka Ezeta",
+  "type": "module",
+  "main": "vite-plugin-houxit.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": []
+}
