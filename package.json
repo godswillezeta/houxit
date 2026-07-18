@@ -25,5 +25,8 @@
     "widgets"
   ],
   "author": "Houxit Systems",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "vite": "^8.1.5"
+  }
 }

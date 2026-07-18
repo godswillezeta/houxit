@@ -7,6 +7,8 @@ const destrutureAssignmentRegex=/(var|let|const)\s+(\{|\[)([\w$\s\,]+)*(\]|\})\s
 const importRegex=/import\s+((\{([\w$\s\,]+)*\})*|([\w$\,\s]+)*)*\s+from/gm;
 const destructureImportRegex=/import\s+((([\w$]+)?\s*\,\s*)*(\{([\w$\s\,]+)*\})*)\s+from/gm;
 const undeclaredAssignmentRegex=/(([\w$]+)[ ]*=[ ]*)/g
+
+
 function NamespaceVariantAdapter(source, useUndeclaredProps= false){
   const NamespaceVariables=new Set();
   const NamespaceMap=[];
@@ -60,15 +62,14 @@ function NamespaceVariantAdapter(source, useUndeclaredProps= false){
 
 function namespaceGenerator(NamespaceVariables, NamespaceMap) {
   // Generate the variable collection code
-  return `const __variables__ = {};// Try to capture each variable's value
+  return `const __variables__ = {
+    __env__:false
+  };
 ${NamespaceMap.map(varName => `
 try {
   __variables__['${varName}'] = ${varName};
-} catch (err) { // Variable might not be accessible in this scope // __variables__['${varName}'] = undefined;
-  //console.debug('Could not access variable ${varName}:', err.message);
-}
+} catch (err) {}
 `).join('')}
-return useModel(__variables__);
 `;
 }
 export default function detector(source, state={}, GenerateStr=false){
@@ -92,4 +93,12 @@ export default function detector(source, state={}, GenerateStr=false){
     console.warn(err);
   }
   return object
+}
+
+export function importExtractor(src){
+  let str=[];
+  return [ src.replace(allImportStatementsRegex, (match)=>{
+    str.push(match)
+    return "";
+  }), str.join(`\n`)];
 }
