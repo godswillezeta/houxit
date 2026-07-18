@@ -1,214 +1,11684 @@
-"use strict";Object.defineProperty(exports,Symbol.toStringTag,{value:`Module`});var e=console.log,t=`0.1.10`,n=()=>`houxit-0.1.10`,r=Array.isArray,i=Object.prototype.toString,a=e=>i.call(e),o=e=>a(e)===`[object Date]`,s=e=>a(e)===`[object Set]`,c=e=>a(e)===`[object Map]`,l=e=>a(e)===`[object WeakMap]`,u=e=>a(e)===`[object WeakSet]`,d=e=>Sa(e)===`string`,f=e=>e==null,p=e=>a(e)===`[object Undefined]`,m=e=>Sa(e)===`object`,h=e=>a(e)===`[object Object]`,g=e=>Y(e,[String,Number,Boolean,Date])||f(e),_=Object.hasOwn,v=Object.assign,y=Object.entries,b=Object.keys,x=Object.values,ee=Object.preventExtensions,S=Object.defineProperty,C=Object.is,w=(e,t)=>t in e;function T(e,t){return d(e)?new Set(e.split(`,`)).has(t):r(e)?new Set(e).has(t):Y(t,[Set,M,Map])?e.has(t):h(e)?w(e,t):!1}var te=(e={})=>Object.freeze(e),ne=typeof self<`u`&&typeof self==`object`,re=/([\s\S]+[^=]*)[ ]*=[ ]*([\s\S]+)?|([\w_$\-]+)/m,ie=/^([\w\-$.[\]\(\)]+)::/,ae=/[='"!@#%^&*()+\-\[\]{};:\\|,.<\/? ]/,oe=e=>d(e)&&/[\w$]/.test(e.at(0))&&!ae.test(e),E=e=>Sa(e)===`function`,D=e=>E(e)&&!Rt(e),se=e=>Sa(e)===`number`,ce=e=>Sa(e)===`boolean`,le=e=>a(e)===`[object Symbol]`,ue=e=>d(e)||le(e),de=e=>a(e)===`[object Promise]`&&E(e.then)&&E(e.catch),O=e=>e===!0,k=e=>e===!1,fe=`<<< Houxit Exception >>> ..... >>>>>>>`,pe=/"(.*?)"|'(.*?)'|`+(.*?\s)`+/gm;function A(e,t,n=!1,r=``){let i=!0;P(t)&&(i=t[z].settings.debug),i&&(n&&console.warn(`${fe}\n\nEncountered a problem ${r} \n\n at  at  \n <${t&&P(t)?t[L].name:`UnknownWidget`}> widget`),console.error(`${fe}\n\n${e}\n\n"${e?.stack||``}"`))}function me(e,t){let n=!0;P(t)&&(n=t[z].settings.debug),n&&console.warn(`${fe}\n\n${e}`)}var he=e=>e&&!r(e)&&D(e[Symbol.iterator]),ge=e=>e===1/0,_e=e=>(Y(e,[Object,Array,Set,Map,M])||he(e))&&!d(e),ve=!0,ye=!0,be=!0,xe=e=>e===``,Se=e=>/^@[\w\-|[\]$_]+/.test(e),Ce=e=>/^\$\$[\w\-|[\]_]+/.test(e),we=e=>/^\#[\w\-|[\]_$]+/.test(e),Te=(e,t=!1)=>(t?/^\.\.\.[\w$.]+/:/^\.\.\.[\w$_]+/).test(e),Ee=e=>!!(e||se(e)),De=e=>/^\*[\w\-|[\]$\_]+/.test(e),Oe={build:Function,model:Function,widgets:Object,preBuild:Function,postBuild:Function,preMount:Function,postMount:Function,preUpdate:Function,postUpdate:Function,postDestroy:Function,preDestroy:Function,handlers:Object,params:[Array,Object],buildConfig:Object,styles:String,directives:Object,template:String,name:String,observers:Object,filters:Object,blocks:Object,signals:Array,transmit:Function,receive:[Array,Object],slots:Array,markdown:String,context:Function,computed:Object,mixins:Array,onTracked:Function,onEffect:Function,onCatch:Function,onSlotRender:Function,onSlotEffect:Function,render:Function,refs:Array,install:Function,templateClasses:Object,animations:Object,transitions:Object},ke=e=>T(`model,preBuild,postBuild,preMount,postMount,preUpdate,postUpdate,preDestroy,postDestroy,transmit,onTracked,onEffect,onCatch,onSlotEffect,onSlotEffect,install`,e),Ae=e=>T(`widgets,handlers,buildConfig,directives,observers,filters,blocks,computed,templateClasses,animations,transitions`,e),je=e=>T(`build,styles,template,name,markdown,context,render`,e),Me=e=>T(`signals,slots,mixins,refs`,e),Ne=e=>T(`params,receive`,e),Pe=b(Oe).join(`,`),Fe=`markdownSrc,styleSrc,templateSrc`,Ie=e=>T(Fe,e),Le=e=>a(e)===`[object Arguments]`;function j(e){return e?(e=G(e),Y(e,[String,Array,ba])?e.length:Y(e,[Set,Map,M])?e.size:m(e)?b(e).length:se(e)?e:-1):0}var Re=e=>T(Pe,e),ze=`html,head,style,title,body,address,article,aside,footer,header,h1,h2,h3,h4,h5,h6,main,nav,section,blockquote,dd,div,dl,dt,figcaption,figure,li,menu,ol,p,pre,ul,a,abbr,b,bdi,bdo,cite,code,data,dfn,em,i,kbd,mark,q,rp,rt,ruby,s,samp,small,span,strong,sub,sup,time,u,var,audio,map,video,iframe,object,picture,portal,svg,math,canvas,noscript,script,del,ins,caption,col,colgroup,table,tbody,td,tfoot,th,thead,tr,datalist,fieldset,form,label,legend,meter,optgroup,option,output,progress,select,textarea,details,dialog,summary,button,base,link,meta,hr,br,wbr,area,img,track,embed,source,input,template,slot`,Be=e=>T(ze,e),Ve=`template,slot`,He=`select,textarea,input,form,progress,meter,option`,Ue=e=>Tt(e)&&T(He,e.localName),We=e=>T(Ve,e),Ge=`base,link,meta,hr,br,wbr,area,img,track,embed,source,input`,Ke=e=>T(Ge,e),qe=`acronym,noembed,applet,noframes,bgsound,param,big,blink,plaintext,center,rb,content,rtc,dir,shadow,font,spacer,frame,strike,frameset,image,tt,keygen,xmp,marquee,nobr,menuitem`,Je=e=>T(qe,e),Ye=`accesskey,contenteditable,dir,draggable,enterkeyhint,hidden,inert,innerText,inputmode,popover,lang,noModule,nonce,outerText,spellcheck,style,tabindex,title,translate,className,value,innerHTML,outerHTML`,Xe=e=>T(Ye,e),Ze=`disabled,hidden,draggable,checked,selected,defer,ismap,reversed,readonly,autoplay,disableremoteplayback,muted,loop,autofocus,async,controls,default,inert,open,scoped,seamless,muted,multiple,itemscope,allowfullscreen,formnovalidate,nomodule,novalidate`,Qe=e=>T(Ze,e),$e=`animate,animateMotion,animateTransform,circle,clipPath,defs,desc,discard,ellipse,feBlend,feColorMatrix,feComponentTransfer,feComposite,feConvolveMatrix,feDiffuseLighting,feDisplacementMap,feDistantLight,feDropShadow,feFlood,feFuncA,feFuncB,feFuncG,feFuncR,feGaussianBlur,feImage,feMerge,feMergeNode,feMorphology,feOffset,fePointLight,feSpecularLighting,feSpotLight,feTile,feTurbulence,filter,foreignObject,g,hatch,hatchpath,image,line,linearGradient,marker,mask,metadata,mpath,path,pattern,polygon,polyline,radialGradient,rect,set,stopsvg,switch,symbol,text,textPath,tspan,use,view`,et=`altGlyph,altGlyphDef,altGlyphItem,cursor,font,font-face,font-face-format,font-face-name,font-face-src,font-face-uri,glyph,glyphToken,hkern,missing-glyph,tref,vkern`,tt=e=>T($e,e),nt=e=>T(et,e),rt=`malignmark,menclose,annotation,annotation-xml,maction,merror,maligngroup,mfenced,mn,mo,mmultiscripts,mfrac,semantics,none,mlongdiv,mlabeledtr,mfraction,mtr,mglyph,mi,mover,munder,munderover,mpadded,mphantom,mspace,mroot,mprescripts,msline,mrow,ms,mscarries,mscarry,msgroup,msqrt,mstack,mtd,mtext,mtable,mstyle,msub,msubsup,msrow,msup`,it=e=>T(rt,e),at=e=>Be(e)||We(e)||Ke(e)||tt(e)||it(e)?!0:((Je(e)||nt(e))&&A(`"${e}" is an html/svg deprecated tag, and should not be used in new projects\n\nhouxit does not allow the compilation of obselete elements`),!1),M=class extends K{constructor(){super(...arguments)}},ot=Symbol(`<Motion:key>`),st=class{constructor(e,t={},n,r){this[ot]={params:{},mode:`both`};let i=n===`transition`?`trasite`:`animate`;if(!D(e)){A(`"${i}()" "${n}" function expects a plain function...\nvalidation failed`);return}else if(t&&!h(t)){A(`"params" @ argument 2 of "${i}" "${n}" function expects a plain object object of parameter properties`);return}else if(r&&!d(r)&&!T(`both,in,out`,r)){A(`Failed to validate the "mode" argument/..`);return}v(this[ot],{key:n,[n]:e,params:v(this[ot].params,t),mode:r||`both`}),this.type=n}},ct=class extends st{constructor(e,t){super(e,t,`animation`)}},lt=class extends st{constructor(e,t,n=`both`){super(e,t,`transition`,n)}},ut=class{constructor(e){this.content=e}content=``;hydrationFlushs=new M},dt=class{constructor(e){this.fragment=si(e)}fragment=[];hydrationFlushs=new M;hx_Element=void 0},ft=Symbol(`template-class`),pt=class{constructor(e,...t){}},mt=e=>e instanceof st,ht=e=>e instanceof ut,gt=e=>e instanceof dt,_t=e=>e instanceof pt,vt=[String,Function,Object,Array,Symbol,Number,Boolean],yt=[Set,Map,WeakMap,WeakSet,Date,WeakRef,Promise,RegExp,Proxy,BigInt,ArrayBuffer,M];function bt(e){return ne?new Set([Element]).has(e)?!0:Ct(e)||e instanceof Element:!1}var xt=e=>e.match(/[A-Z]/),St={ELEMENT_NODE:1,ATTRIBUTE_NODE:2,TEXT_NODE:3,CDATA_SECTION_NODE:4,ENTITY_REFERENCE_NODE:5,ENTITY_NODE:6,PROCESSING_INSTRUCTION_NODE:7,COMMENT_NODE:8,DOCUMENT_NODE:9,DOCUMENT_TYPE_NODE:10,DOCUMENT_FRAGMENT_NODE:11,NOTATION_NODE:12},Ct=e=>ne&&(e instanceof HTMLElement||e instanceof SVGElement),wt=e=>e&&e.nodeType===St.TEXT_NODE,Tt=e=>e&&Ct(e)&&e.nodeType===St.ELEMENT_NODE,Et=e=>e&&e.nodeType===St.COMMENT_NODE;function Dt(e){return g(e)||D(e)||Ct(e)||Y(e,[Array,ko,Wt,To,pt])}function Ot(e){return Dt(e)&&!(g(e)||r(e))}var kt=e=>h(e)&&e instanceof Ru,At=e=>Y(e,Proxy),jt=e=>e&&(m(e)&&!At(e)&&!Wi(e)||Bn(e)||E(e)||tr(e));function Mt(e){return D(e)&&e?.constructor?.name===`AsyncFunction`}function Nt(e,t){return Function(`"use strict"; return (${e})`)(t)}function Pt(e,t=!1){try{return Nt(e),!0}catch(n){return O(t)&&(A(`Statement not passage in mustache/binding context\n\nContext expects a single expression\n\n"${e}"`),A(n)),!1}}var Ft=e=>ne&&e?.getRootNode()===document,It=`abort,animationcancel,animationend,animationiteration,animationstart,auxclick,blur,error,focus,canplay,canplaythrough,cancel,change,click,close,contextmenu,dblclick,drag,dragend,dragenter,dragleave,dragover,dragstart,drop,durationchange,emptied,ended,formdata,gotpointercapture,input,invalid,keydown,keypress,load,keyup,loadeddata,loadedmetadata,loadend,loadstart,lostpointercapture,mousedown,mouseenter,mouseleave,mousemove,mouseout,mouseover,mouseup,mousewheel,wheel,pause,play,playing,pointerdown,pointermove,pointerup,pointercancel,pointerover,pointerout,pointerleave,pointerenter,pointerlockchange,pointerlockerror,progress,ratechange,reset,resize,scroll,securitypolicyviolation,seeked,seeking,select,selectstart,selectionchange,slotchange,stalled,submit,suspend,timeupdate,touchcancel,touchend,touchstart,touchmove,transitioncancel,transitionrun,transitioned,transitionstart,waiting,volumechange,autocompleteerror,autocomplete,hover`,Lt=e=>T(It,e),Rt=e=>E(e)&&e.toString().startsWith(`class`),zt=`created,mounted,updated,init,destroyed`;function Bt(e,t){return T(er,t)||T(e[B]?.widgets||{},t)}var Vt=(e,t)=>T(er,t)?er[t]:T(e[B].widgets,t)?e[B].widgets[t]:null;function Ht(e,t){return!Hc(t)&&T(e[B]?.directives||{},t)}var Ut=(e,t)=>T(e[B].directives,t)?e[B].directives[t]:null,Wt=class{slots={};constructor(e={}){y(e).forEach(([e,t])=>this.slots[e]=t)}},Gt=e=>e instanceof Wt,N=e=>e instanceof ko,P=e=>e instanceof kp,Kt=e=>e instanceof Zs,qt=e=>e instanceof qs,Jt=e=>e instanceof X,Yt=`$element,$signals,$parent,$root,$observe,$useAgent,$tick,$write,$effectHook,[[[reactive__Token]]],$params,$attrs,$events`,Xt=e=>T(Yt,e);function Zt(e,t){j(arguments)===1&&h(e)&&(t=e),t&&!h(t)&&(t=null);let n=Function(`name`,`
-     return name ? class ${e}{} : Object ;
-    `);return n=n(e),n=new n,t&&v(n,t),n}var Qt=e=>g(e)&&!f(e);function $t(e){return e=G(e),Qt(e)?String(e):D(e)?e():Y(e,[Array,Date,Function])?e.toString():!f(e)&&!h(e)?JSON.stringify(e):``}var en=/^(async[ ]+)?(\(([\w$,.\[\]\{\} ]*)\)|[\w$]+)[ ]*=>[ ]*[{]?\s*/,tn=/^(async[ ]+)?(function)?([*]?([ ]*)[\w$]*)?\(([\w$]*)?\)[ ]*\{\s*/m,nn=e=>D(e)&&en.test(e.toString()),rn=e=>d(e)&&O(en.test(e)||tn.test(e)),an=/^{(.*?)}$/,on=/^\[(.*?)\]$/,sn=/^((\(|\<)(.*?)(\)|\>))$/,cn=e=>an.test(e)||on.test(e),ln=class{},un=class{},dn=class{},fn=class{},pn=class{},mn=class{},hn=class{},gn=class{},_n=e=>e instanceof ln,vn=e=>e instanceof dn,yn=e=>e instanceof gn,bn=e=>P(e)&&e[L].widgetType===`class-based`,xn=e=>P(e)&&e[L].widgetType===`function-based`,F=Symbol(),Sn=Symbol(),Cn=Symbol(`[[[$$$$dir__ref$$$$]]]`),wn=Symbol(`[[[$$@@dir$$__render]]]`),Tn=Symbol(`[[[$$@context]]]`),I=Symbol(),L=Symbol(),R=Symbol(),z=Symbol(),B=Symbol(),En=Symbol(),Dn=Symbol(),On=Symbol(),kn=Symbol(),An=Symbol(),jn=Symbol(),Mn=Symbol(),Nn=Symbol(`<suspense:element.$elemen>`),Pn=Symbol(),Fn=Symbol(),In=e=>N(e)&&_(e,Pn),Ln=e=>N(e)&&_(e.VNodeManager,Nn),Rn=class{constructor(e,t={}){t=v({delay:200,timeout:1/0},t),zn(t),this[Mn]={load:e,config:t,cache:void 0,postLoad:0}}};function zn(e){for(let[t,n]of y(e))if(!T(`delay,error,fallback,timeout`,t))A(`Unrecognized key "${t}" passed to 'AsyncWidget' config object`);else if(T(`delay,timeout`,t)&&(!se(n)||isNaN(Number(n))))A(`"${t}" config prop of "AsyncWidget" expects a type of "number"`);else if(!(T(`error,fallback`,t)&&!D(n)))continue}var Bn=e=>e instanceof Rn&&_(e,Mn),Vn=e=>jn===e&&C(jn,e),Hn=Symbol(`hx:fragment`),Un=Symbol(`hx:portal`),Wn=Symbol(`hx:build`),Gn=Symbol(`hx:self`),Kn=Symbol(`hx:provider`),qn=Symbol(`hx:motion`),Jn=Symbol(`hx:suspense`),Yn=Symbol(`hx:memo`),Xn=Symbol(`hx:if`),Zn=Symbol(`hx:else-if`),Qn=Symbol(`hx:else`),$n=Symbol(`hx:for`),er={"hx:fragment":Hn,"hx:provider":Kn,"hx:portal":Un,"hx:build":Wn,"hx:self":Gn,"hx:motion":qn,"hx:memo":Yn,"hx:suspense":Jn,"hx:else-if":Zn,"hx:for":$n,"hx:else":Qn,"hx:if":Xn};function tr(e){for(let t of x(er))if(e===t)return!0;return!1}var nr=new Map;function rr(e){for(let[t,n]of x(er))if(e===t)return!0}var ir=Symbol(),ar=e=>P(e)&&e[L].isSelfRecursive===!0,or=e=>T(`if,else,else-if,for,const,class,new,debugger,html,await`,e),sr=e=>T(`else,else-if,const,new,debugger,html,await`,e),cr=Symbol();function V(){}V[cr]=!0;function lr(e,t,n){return oe(n)||el(e.__public_model__,n)||O(t&&el(t.LabContext||{},n)||rn(n))}var ur=e=>/^\$\$if[\w|$ ]*$/.test(e),dr=e=>/^\$\$else-if[\w$| ]*$/.test(e),fr=e=>/^\$\$else[\w$| ]*$/.test(e),pr=e=>/^\$\$for[\w_$| ]*$/.test(e);function mr(e){return Mi(E(e)?e():e)}var hr=new WeakSet;function gr(e){return g(e)?(A(`Non mutatable values been marked as raw:: "${typeof e}" cannot be set to raw data to hide from reactive effect assembling`),e):(g(e)||yr(e)||hr.add(e),e)}function _r(e){return gr(e)}function vr(e){return!g(e)&&hr.has(e)}function yr(e){return vr(e)}function br(e,t){return co(...arguments)}var xr=e=>Y(e,[Array,Set,M,ba]),Sr=e=>T(`build,preBuild`,e),Cr={params:Uu,postBuild:id,preMount:ad,postMount:od,preUpdate:sd,postUpdate:dd,preDestroy:fd,postDestroy:pd,onEffect:cd,onCatch:ld,onTracked:ud,onSlotEffect:nd,onSlotRender:rd,buildConfig:Yu,signals:qu,slots:Gu,transmit:Xu,receive:Qu,context:ed,install:Er},wr=`hx-comment`,Tr=e=>T(b(Cr).join(`,`),e);function Er(e){return Dr(...arguments)}function Dr(e){if(!H(arguments,{count:1,validators:[Function],name:`useInstall()`}))return;let t=Va({name:`useInstall()`});if(P(t))return Or(t,e,`useInstall()`)&&t[I].installers_plugin.add(e),!0}function Or(e,t,n){return bp(e)?(A(`Irresponsible use of "${n}" in an initBuild widget instance`,e,!0),!1):!0}function kr(e={}){if(!H(arguments,{name:`useOptions`,required:[!0],count:1,validators:[Object]}))return[V,V];let t=Va({name:`useOptions`});if(!t&&!H(arguments,{name:`useOptions`,validators:[Object],count:1}))return{};for(let[n,r]of y(e))Re(n)?Tr(n)?Cr[n](r):Sr(n)?A(`[useOptions options Error] invalid option "${n}" passed to options Adapter: not a valid  adapter.\n\nuse the options API macros instead`,t):t[z].opts[n]=r:t[I]._OPTIONS[n]=r;return t}function Ar(e){return kr(...arguments)}function jr(...e){let t=[];if(e.forEach(e=>t.push(e)),!H(e,{validators:t,name:`mergeProps`,min:1}))return te();let n={};for(let[t,r]of e.entries())Mr(n,r);return n}function Mr(e,t){for(let[n,i]of y(t))if(_(e,n))if(pl(n)){let t=r(e[n])?e[n]:[e[n]],a=$(i);e[n]=[...t,...a]}else if(n===`class`){let t=new M;al(e[n],t),e.class=al(i,t)}else n===`style`&&(e.style={...ll(null,e[n],{}),...ll(null,i,{})});else n===`class`?e[n]=al(i,new M):n===`style`?e[n]=ll(null,i,{}):e[n]=i;return e}function Nr(...e){return jr(...e)}var Pr={name:``,max:1/0,validators:[],self:void 0,min:0,required:[],count:void 0,validator:()=>!0};function H(e,t=Pr){if(e=[...e],!C(Pr,t))t={...t,...Pr};else return!0;let{name:n,max:i,validators:a,self:o,required:s,min:c,count:l,validator:u}=t;if(se(i)&&j(e)>i)return A(i===0?`${n} Adapter does not accept any Argument`:`Parameter arguments received at ${n} macro exceds validator arguments maximum count\n\n"${n}()" expects only maximum of "${i}" arguments`,o),!1;if(c&&j(e)<c)return A(`"${n}" function expects atleast "${c}" minimum of arguments\n\n${j(e)} received`,o),!1;if(!p(l)&&!j(e)===l)return A(`"${n}" method expects only ${l} number of arguments\n${j(e)} passed`,o),!1;if(!u(...e))return!1;if(j(s)){for(let[t,r]of s.entries())if(!j(e)>=Number(t)&&p(e[t]))return A(`Argument at index ${t} of ${n} expects a required positional parameter\n\nparameter not provided or is undefined :: use "null" instead if you tend to skip or not context an argument value `,o),!1}if(r(a)&&j(a)&&j(e))for(let[t,r]of e.entries()){if(!t>j(a))break;if(k(Y(r,a[t]||ga)))return A(`unexpected argument value type received at ${t} index of the "${n}" adapter\n\nInvalid input type`,o),!1}return!0}var Fr={name:``,self:void 0,props:{}},Ir={type:void 0,required:!1,default:void 0};function Lr(e,t){C(t,Fr)||(t={...t,...Fr});let{name:n,props:r,self:i}=t;if(!m(t)){A(`configuration parameter at argument 2 of validatorProps expects a plain javascript object`);return}else if(!h(e)||_(e,`props`)&&!h(e.props))return A(`unexpected value received at "${n}, validation for ${h(e)?`{}.prop`:`{}`}" adapter\n\nInvalid input type :: expects a plain Object`,i),!1;let a={};for(let[n,r]of y(t.props)){if(!h(n))return A(`Properties validator expects a plain object\n
-        For the "${r}" prop validation`),!1;if(C(n,Ir)||(n={...n,...Ir}),!Sd(null,a,[e,n,r],`prop`)||!wd(null,a,[e,n,r],`prop`))return!1}return!0}function Rr(e,t){return H(arguments,{validators:[[Array,Set,M,ba],Object],count:2,required:[!0,!0],name:`validateCollection`})?H(e,t):!1}function zr(e,t){return Rr(...arguments)}function Br(e,t){return Lr(...arguments)}function Vr(e){function t(t,n){return H(arguments,{min:1,max:2,validators:[ga,Object],name:`deepTranform`})?Qr(t,e,n?.shallow||!1,n||{}):t}return function(e,n){return t(...arguments)}}function Hr(e,t,n){let r=n[jn];delete n[jn];function i(){return t.effectTrack()}function a(){return t.effectTrigger()}n=r(i,a,Vr(t));let o=t.factoryObject;t.config=n,n.accessor&&(delete e[t.accessor],t.accessor=n.accessor,e[t.accessor]=void 0,delete n.accessor);for(let e of[`get`,`set`].values())if(_(n,e)){if(!E(n[e]))return A(`"${e}" property descriptor at "factoryToken" is of an invalid data type\ntype of 'Function' expected`),te();o[e]=n[e],delete n[e]}return n}function Ur(e,t){t.onTracked&&(e.onTrackedHook=()=>{e.trackZoom||(e.trackZoom=!0,Xm(t.onTracked.bind(this)).then(()=>e.trackZoom=!1))}),t.onEffect&&(e.onEffectHook=()=>{e.effectZoom||(e.effectZoom=!0,Xm(t.onEffect.bind(this)).then(()=>e.effectZoom=!1))})}function Wr(){return v(new gn,{observers:new M,subscribers:new M,self:void 0,superObs:void 0,onTrackedHook:V,onEffectHook:V,accessor:`data`,effectTrack:V,effectTrigger:V,factoryObject:{},trackZoom:!1,effectZoom:!1,shallow:!1,readonly:!1,isComputed:!1,refGenreId:void 0})}function Gr(e,t,n){let{isFactoryToken:r,isComputed:i,readonly:a,shallow:o,accessor:s,config:c}=n;function l(){return G(e.data)}let u={},d=new Map;return t.effectTrack=e=>{let n=jf(d,s(),this,e);n&&(n.get_data=l),t.onTrackedHook()},t.effectTrigger=()=>{Mf(d,s(),this),t.onEffectHook()},r?U([`get`,`set`]).each(e=>{_(t.factoryObject,e)&&(u[e]=t.factoryObject[e])}):(u.get=function(){let e=l();return t.effectTrack(e),e},u.set=function(n,r){return a&&!ra(n)?(A(`Cannot reassign/mutate a "readonly" token value\n\n___MUTATION FAILED___\n........".${r}" property assignment \n\nFailed writing to a readonly \n.........>>>bypassKey verification failure occured...`),!1):(n=G(a?n[ia]:n),n=Qr(n,t,o,c),e[s()]=n,t.effectTrigger(),!0)}),u}function Kr(e,t){let n=Wr(),r=()=>n.accessor;t=h(t)?t:{};let i=_(t,jn);if(i&&(t=Hr.call(this,e,n,t)),C(t,te()))return;let a={};for(let e of[`shallow`,`readonly`,`computed`].values())_(t,e)&&(a[nl(`is-`+e)]=t[e],delete t[e]);t=v(v({},t),a);let{readonly:o=!1,isComputed:s=!1,shallow:c=!1}=t;Ur.call(this,n,t),e[r()]=Qr(e[r()],n,c,t),this[Di]=n;let l=Gr.call(this,e,n,{isFactoryToken:i,isComputed:s,readonly:o,shallow:c,accessor:r,config:t});delete n.factoryObject,S(this,r(),l),v(n,{readonly:o,shallow:c,isComputed:s,updateFlags:0,cache:void 0}),S(this,Ei,{value:`[[[${o?`readonly`:`reactive`}__Token]]]`,enumerable:ve})}var qr=class{constructor(e,t={}){Kr.call(this,...arguments)}isSameToken(e){return W(e)&&C(this,e)}create(e,t){return ei(...arguments)}},Jr=class extends qr{constructor(e,t){super(...arguments)}},Yr=class extends qr{constructor(e,t){super(...arguments)}},Xr=class extends qr{constructor(e,t){super(...Zr(e,t))}},Zr=(e,t)=>[{data:e},t];function Qr(e,t,n,r){return bt(e)||Wi(e)||g(e)||n||yr(e)?e:Af(e,r,t)}function $r(e,t={}){return W(e)||(e=ee(new Jr({data:e},t))),e}function ei(e,t){return $r(...arguments)}function ti(e){if(H(arguments,{count:1,validators:[Function],name:`factoryToken`}))return new Xr({data:void 0},{[jn]:e})}function ni(e){return ti(...arguments)}function ri(){let e=new Date;return Zt(`TraceBack`,{h:e.getHours(),m:e.getMinutes(),s:e.getSeconds(),ms:e.getMilliseconds()})}var ii=class extends Error{constructor(e,...t){super(...t)}};function ai(){}function oi(e){return e instanceof M}var si=e=>s(e)||Le(e)||r(e)?[...e]:oi(e)?e.list():e,ci=`push,pop,shift,unshift,splice,sort,reverse,copyWithin,fill`,li=`add,delete,clear`,ui=`set,delete,clear`,di=`add,delete,clear,shift,unshift,splice,pop,extend,replace,prepend,arrange,exchange`,fi=`define,delete`;function pi(e){return r(e)?ci:s(e)?li:c(e)?ui:oi(e)?di:h(e)?fi:``}function mi(e,t,n){let r=e;e=G(e);let i=pi(e)+`write`,a=Zt(`Mutatations`);for(let o of i.split(`,`).values()){function i(i){let a;Y(e,[Set,M,Array,Map])?a=e[o](i):h(e)&&(o===`define`?a=S(e,...arguments):o===`delete`&&(delete e[i],a=!0));let s=a;return(n||!g(r))&&t&&o===`write`&&(s=tl(_n(n)?n:g(r)?te():r,t,j(arguments)?i:e)),s}i=Function(`fn`,`
-        return function ${o===`delete`?`del`:o}(value){
+"use strict";
+Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
+//#region src/index.js
+var log = console.log;
+var version = "0.1.10";
+var get_version = () => "houxit-0.1.10";
+var isArray = Array.isArray;
+var toString = Object.prototype.toString;
+var _toStringCall = (txt) => toString.call(txt);
+var isDate = (date) => _toStringCall(date) === "[object Date]";
+var isSet = (val) => _toStringCall(val) === "[object Set]";
+var isMap = (map) => _toStringCall(map) === "[object Map]";
+var isWeakMap = (map) => _toStringCall(map) === "[object WeakMap]";
+var isWeakSet = (setup) => _toStringCall(setup) === "[object WeakSet]";
+var isString = (str) => getType(str) === "string";
+var isNull = (arg) => arg == null;
+var isUndefined = (arg) => _toStringCall(arg) === "[object Undefined]";
+var isObject = (obj) => getType(obj) === "object";
+var isPObject = (obj) => _toStringCall(obj) === "[object Object]";
+var isPrimitive = (val) => validateType(val, [
+	String,
+	Number,
+	Boolean,
+	Date
+]) || isNull(val);
+var hasOwn = Object.hasOwn;
+var assign = Object.assign;
+var entries = Object.entries;
+var keys = Object.keys;
+var values = Object.values;
+var preventX = Object.preventExtensions;
+var define = Object.defineProperty;
+var isS = Object.is;
+var hasProp = (obj, prop) => prop in obj;
+function _makeMap_(obj, arg) {
+	return isString(obj) ? new Set(obj.split(",")).has(arg) : isArray(obj) ? new Set(obj).has(arg) : validateType(arg, [
+		Set,
+		Tuple,
+		Map
+	]) ? obj.has(arg) : isPObject(obj) ? hasProp(obj, arg) : false;
+}
+var freeze = (obj = {}) => Object.freeze(obj);
+var inBrowserCompiler = typeof self !== "undefined" && typeof self === "object";
+var variableDeclarationRegex = /([\s\S]+[^=]*)[ ]*=[ ]*([\s\S]+)?|([\w_$\-]+)/m;
+var templateClassValidatorRegex = /^([\w\-$.[\]\(\)]+)::/;
+var invalidIdentifierCharRegex = /[='"!@#%^&*()+\-\[\]{};:\\|,.<\/? ]/;
+var isValidIdentifier = (variable) => isString(variable) && /[\w$]/.test(variable.at(0)) && !invalidIdentifierCharRegex.test(variable);
+var isFunction = (func) => getType(func) === "function";
+var isPFunction = (func) => isFunction(func) && !isClass(func);
+var isNumber = (num) => getType(num) === "number";
+var isBoolean = (bool) => getType(bool) === "boolean";
+var isSymbol = (sym) => _toStringCall(sym) === "[object Symbol]";
+var isChar = (char) => isString(char) || isSymbol(char);
+var isPromise = (prom) => _toStringCall(prom) === "[object Promise]" && isFunction(prom.then) && isFunction(prom.catch);
+var isTrue = (compute) => compute === true;
+var isFalse = (compute) => compute === false;
+var $warner = `<<< Houxit Exception >>> ..... >>>>>>>`;
+var stringsMonitorRegex = /"(.*?)"|'(.*?)'|`+(.*?\s)`+/gm;
+function debugHandler(msg, self, dictateW = false, txt = "") {
+	let DEBUG_ENV = true;
+	if (isHouxitBuild(self)) DEBUG_ENV = self[$$$core].settings.debug;
+	if (DEBUG_ENV) {
+		if (dictateW) console.warn(`${$warner}\n\nEncountered a problem ${txt} \n\n at  at  \n <${self && isHouxitBuild(self) ? self[$$$ownProperties].name : "UnknownWidget"}> widget`);
+		console.error(`${$warner}\n\n${msg}\n\n"${msg?.stack || ""}"`);
+	}
+}
+function $warn(msg, self) {
+	let DEBUG_ENV = true;
+	if (isHouxitBuild(self)) DEBUG_ENV = self[$$$core].settings.debug;
+	if (DEBUG_ENV) console.warn(`${$warner}\n\n${msg}`);
+}
+var isIterator = (iterator) => iterator && !isArray(iterator) && isPFunction(iterator[Symbol.iterator]);
+var isInfinity = (num) => num === Infinity;
+var isIterable = (iterable) => (validateType(iterable, [
+	Object,
+	Array,
+	Set,
+	Map,
+	Tuple
+]) || isIterator(iterable)) && !isString(iterable);
+var enumerable = true;
+var configurable = true;
+var writable = true;
+var isEmptyStr = (str) => str === "";
+var hasAt_bind = (key) => /^@[\w\-|[\]$_]+/.test(key);
+var has$$_bind = (key) => /^\$\$[\w\-|[\]_]+/.test(key);
+var hasAsh_bind = (key) => /^\#[\w\-|[\]_$]+/.test(key);
+var hasSpread_bind = (key, useAccessor = false) => (useAccessor ? /^\.\.\.[\w$.]+/ : /^\.\.\.[\w$_]+/).test(key);
+var exists = (value) => value || isNumber(value) ? true : false;
+var hasAsterisks_bind = (key) => /^\*[\w\-|[\]$\_]+/.test(key);
+var widgetOptionType = {
+	build: Function,
+	model: Function,
+	widgets: Object,
+	preBuild: Function,
+	postBuild: Function,
+	preMount: Function,
+	postMount: Function,
+	preUpdate: Function,
+	postUpdate: Function,
+	postDestroy: Function,
+	preDestroy: Function,
+	handlers: Object,
+	params: [Array, Object],
+	buildConfig: Object,
+	styles: String,
+	directives: Object,
+	template: String,
+	name: String,
+	observers: Object,
+	filters: Object,
+	blocks: Object,
+	signals: Array,
+	transmit: Function,
+	receive: [Array, Object],
+	slots: Array,
+	markdown: String,
+	context: Function,
+	computed: Object,
+	mixins: Array,
+	onTracked: Function,
+	onEffect: Function,
+	onCatch: Function,
+	onSlotRender: Function,
+	onSlotEffect: Function,
+	render: Function,
+	refs: Array,
+	install: Function,
+	templateClasses: Object,
+	animations: Object,
+	transitions: Object
+};
+var isMergableMethods = (n) => _makeMap_("model,preBuild,postBuild,preMount,postMount,preUpdate,postUpdate,preDestroy,postDestroy,transmit,onTracked,onEffect,onCatch,onSlotEffect,onSlotEffect,install", n);
+var isMergableObjects = (n) => _makeMap_("widgets,handlers,buildConfig,directives,observers,filters,blocks,computed,templateClasses,animations,transitions", n);
+var isInvalidMixinOption = (n) => _makeMap_("build,styles,template,name,markdown,context,render", n);
+var isMergeableArrays = (n) => _makeMap_("signals,slots,mixins,refs", n);
+var isMergeableArrays_Objects = (n) => _makeMap_("params,receive", n);
+var validWidgetOptions = keys(widgetOptionType).join(",");
+var nodeJSOnlyOption = "markdownSrc,styleSrc,templateSrc";
+var isNodeJSOnlyOption = (opt) => _makeMap_(nodeJSOnlyOption, opt);
+var isArgument = (arg) => _toStringCall(arg) === "[object Arguments]";
+function len(obj) {
+	if (!obj) return 0;
+	obj = unwrap(obj);
+	return validateType(obj, [
+		String,
+		Array,
+		Arguments
+	]) ? obj.length : validateType(obj, [
+		Set,
+		Map,
+		Tuple
+	]) ? obj.size : isObject(obj) ? keys(obj).length : isNumber(obj) ? obj : -1;
+}
+var isValidWidgetOption = (opts) => _makeMap_(validWidgetOptions, opts);
+var HTML_TAGS = "html,head,style,title,body,address,article,aside,footer,header,h1,h2,h3,h4,h5,h6,main,nav,section,blockquote,dd,div,dl,dt,figcaption,figure,li,menu,ol,p,pre,ul,a,abbr,b,bdi,bdo,cite,code,data,dfn,em,i,kbd,mark,q,rp,rt,ruby,s,samp,small,span,strong,sub,sup,time,u,var,audio,map,video,iframe,object,picture,portal,svg,math,canvas,noscript,script,del,ins,caption,col,colgroup,table,tbody,td,tfoot,th,thead,tr,datalist,fieldset,form,label,legend,meter,optgroup,option,output,progress,select,textarea,details,dialog,summary,button,base,link,meta,hr,br,wbr,area,img,track,embed,source,input,template,slot";
+var IS_HTML_TAG = (txt) => _makeMap_(HTML_TAGS, txt);
+var WEB_COMPONENTS = "template,slot";
+var HTML_FORM_ELEMENTS = "select,textarea,input,form,progress,meter,option";
+var Is_Form_Element = (element) => IS_ELEMENT_NODE(element) && _makeMap_(HTML_FORM_ELEMENTS, element.localName);
+var IS_WEB_COMPONENT = (txt) => _makeMap_(WEB_COMPONENTS, txt);
+var HTML_VOID_TAGS = "base,link,meta,hr,br,wbr,area,img,track,embed,source,input";
+var IS_HTML_VOID_TAG = (txt) => _makeMap_(HTML_VOID_TAGS, txt);
+var HTML_DEPRECATED_TAGS = "acronym,noembed,applet,noframes,bgsound,param,big,blink,plaintext,center,rb,content,rtc,dir,shadow,font,spacer,frame,strike,frameset,image,tt,keygen,xmp,marquee,nobr,menuitem";
+var IS_HTML_DEPRECATED_TAG = (txt) => _makeMap_(HTML_DEPRECATED_TAGS, txt);
+var HTMLIDLAttributes = "accesskey,contenteditable,dir,draggable,enterkeyhint,hidden,inert,innerText,inputmode,popover,lang,noModule,nonce,outerText,spellcheck,style,tabindex,title,translate,className,value,innerHTML,outerHTML";
+var isHTMLIDLAttributes = (txt) => _makeMap_(HTMLIDLAttributes, txt);
+var HTMLBooleanAttributes = "disabled,hidden,draggable,checked,selected,defer,ismap,reversed,readonly,autoplay,disableremoteplayback,muted,loop,autofocus,async,controls,default,inert,open,scoped,seamless,muted,multiple,itemscope,allowfullscreen,formnovalidate,nomodule,novalidate";
+var isHTMLBooleanAttributes = (txt) => _makeMap_(HTMLBooleanAttributes, txt);
+var SVG_TAGS = "animate,animateMotion,animateTransform,circle,clipPath,defs,desc,discard,ellipse,feBlend,feColorMatrix,feComponentTransfer,feComposite,feConvolveMatrix,feDiffuseLighting,feDisplacementMap,feDistantLight,feDropShadow,feFlood,feFuncA,feFuncB,feFuncG,feFuncR,feGaussianBlur,feImage,feMerge,feMergeNode,feMorphology,feOffset,fePointLight,feSpecularLighting,feSpotLight,feTile,feTurbulence,filter,foreignObject,g,hatch,hatchpath,image,line,linearGradient,marker,mask,metadata,mpath,path,pattern,polygon,polyline,radialGradient,rect,set,stopsvg,switch,symbol,text,textPath,tspan,use,view";
+var SVG_DEPRECATED_TAGS = "altGlyph,altGlyphDef,altGlyphItem,cursor,font,font-face,font-face-format,font-face-name,font-face-src,font-face-uri,glyph,glyphToken,hkern,missing-glyph,tref,vkern";
+var IS_SVG_TAG = (tag) => _makeMap_(SVG_TAGS, tag);
+var IS_SVG_DEPRRCATED_TAG = (tag) => _makeMap_(SVG_DEPRECATED_TAGS, tag);
+var MATHML_TAGS = "malignmark,menclose,annotation,annotation-xml,maction,merror,maligngroup,mfenced,mn,mo,mmultiscripts,mfrac,semantics,none,mlongdiv,mlabeledtr,mfraction,mtr,mglyph,mi,mover,munder,munderover,mpadded,mphantom,mspace,mroot,mprescripts,msline,mrow,ms,mscarries,mscarry,msgroup,msqrt,mstack,mtd,mtext,mtable,mstyle,msub,msubsup,msrow,msup";
+var IS_MATHML_TAG = (tag) => _makeMap_(MATHML_TAGS, tag);
+var IS_VALID_TAGNAME = (txt) => {
+	if (IS_HTML_TAG(txt) || IS_WEB_COMPONENT(txt) || IS_HTML_VOID_TAG(txt) || IS_SVG_TAG(txt) || IS_MATHML_TAG(txt)) return true;
+	if (IS_HTML_DEPRECATED_TAG(txt) || IS_SVG_DEPRRCATED_TAG(txt)) debugHandler(`"${txt}" is an html/svg deprecated tag, and should not be used in new projects\n\nhouxit does not allow the compilation of obselete elements`);
+	return false;
+};
+var Tuple = class extends BaseTuple {
+	constructor() {
+		super(...arguments);
+	}
+};
+var $motionKey = Symbol("<Motion:key>");
+var BaseMotion = class {
+	constructor(motion, params = {}, key, mode) {
+		this[$motionKey] = {
+			params: {},
+			mode: "both"
+		};
+		const type = key === "transition" ? "trasite" : "animate";
+		if (!isPFunction(motion)) {
+			debugHandler(`"${type}()" "${key}" function expects a plain function...\nvalidation failed`);
+			return;
+		} else if (params && !isPObject(params)) {
+			debugHandler(`"params" @ argument 2 of "${type}" "${key}" function expects a plain object object of parameter properties`);
+			return;
+		} else if (mode && !isString(mode) && !_makeMap_("both,in,out", mode)) {
+			debugHandler(`Failed to validate the "mode" argument/..`);
+			return;
+		}
+		assign(this[$motionKey], {
+			key,
+			[key]: motion,
+			params: assign(this[$motionKey].params, params),
+			mode: mode || "both"
+		});
+		this.type = key;
+	}
+};
+var Animation = class extends BaseMotion {
+	constructor(animation, params) {
+		super(animation, params, "animation");
+	}
+};
+var Transition = class extends BaseMotion {
+	constructor(transition, params, mode = "both") {
+		super(transition, params, "transition", mode);
+	}
+};
+var SSRText = class {
+	constructor(text) {
+		this.content = text;
+	}
+	content = "";
+	hydrationFlushs = new Tuple();
+};
+var SSRFragment = class {
+	constructor(array) {
+		this.fragment = arrSet(array);
+	}
+	fragment = [];
+	hydrationFlushs = new Tuple();
+	hx_Element = void 0;
+};
+var TemplateClassKey = Symbol("template-class");
+var BaseTemplateClass = class {
+	constructor(callback, ...args) {}
+};
+var isBaseMotion = (klass) => klass instanceof BaseMotion;
+var isSSRText = (klass) => klass instanceof SSRText;
+var isSSRFragment = (klass) => klass instanceof SSRFragment;
+var isTemplateClass = (klass) => klass instanceof BaseTemplateClass;
+var DataFunctionMap = [
+	String,
+	Function,
+	Object,
+	Array,
+	Symbol,
+	Number,
+	Boolean
+];
+var XtructDataCallableTypes = [
+	Set,
+	Map,
+	WeakMap,
+	WeakSet,
+	Date,
+	WeakRef,
+	Promise,
+	RegExp,
+	Proxy,
+	BigInt,
+	ArrayBuffer,
+	Tuple
+];
+function isDomSpecialConstructor(value) {
+	if (!inBrowserCompiler) return false;
+	if ((/* @__PURE__ */ new Set([Element])).has(value)) return true;
+	return isNativeElement(value) || value instanceof Element;
+}
+var hasUpperCase = (str) => str.match(/[A-Z]/);
+var NodeTypeMap = {
+	ELEMENT_NODE: 1,
+	ATTRIBUTE_NODE: 2,
+	TEXT_NODE: 3,
+	CDATA_SECTION_NODE: 4,
+	ENTITY_REFERENCE_NODE: 5,
+	ENTITY_NODE: 6,
+	PROCESSING_INSTRUCTION_NODE: 7,
+	COMMENT_NODE: 8,
+	DOCUMENT_NODE: 9,
+	DOCUMENT_TYPE_NODE: 10,
+	DOCUMENT_FRAGMENT_NODE: 11,
+	NOTATION_NODE: 12
+};
+var isNativeElement = (vnode) => inBrowserCompiler && (vnode instanceof HTMLElement || vnode instanceof SVGElement);
+var IS_TEXT_NODE = (node) => node && node.nodeType === NodeTypeMap.TEXT_NODE;
+var IS_ELEMENT_NODE = (node) => node && isNativeElement(node) && node.nodeType === NodeTypeMap.ELEMENT_NODE;
+var IS_COMMENT_NODE = (node) => node && node.nodeType === NodeTypeMap.COMMENT_NODE;
+function isChildrenNode(val) {
+	return isPrimitive(val) || isPFunction(val) || isNativeElement(val) || validateType(val, [
+		Array,
+		HouxitElement,
+		slotInstanceMap,
+		vNodeClass,
+		BaseTemplateClass
+	]);
+}
+function isChildrenObj(val) {
+	return isChildrenNode(val) && !(isPrimitive(val) || isArray(val));
+}
+var isBaseWidget = (widget) => isPObject(widget) && widget instanceof Widget;
+var isProxy = (value) => validateType(value, Proxy);
+var validHouxitWidget = (w) => w && (isObject(w) && !isProxy(w) && !isStream(w) || isAsyncWidget(w) || isFunction(w) || isHouxitBuiltinSymbolWidget(w));
+function isAsyncFunction(fn) {
+	return isPFunction(fn) && fn?.constructor?.name === "AsyncFunction";
+}
+function parseScript(script, args) {
+	return new Function(`"use strict"; return (${script})`)(args);
+}
+function passableBlock(block, warn = false) {
+	try {
+		parseScript(block);
+		return true;
+	} catch (err) {
+		if (isTrue(warn)) {
+			debugHandler(`Statement not passage in mustache/binding context\n\nContext expects a single expression\n\n"${block}"`);
+			debugHandler(err);
+		}
+		return false;
+	}
+}
+var isInDomNode = (element) => inBrowserCompiler && element?.getRootNode() === document;
+var GLOBAL_EVENTS = "abort,animationcancel,animationend,animationiteration,animationstart,auxclick,blur,error,focus,canplay,canplaythrough,cancel,change,click,close,contextmenu,dblclick,drag,dragend,dragenter,dragleave,dragover,dragstart,drop,durationchange,emptied,ended,formdata,gotpointercapture,input,invalid,keydown,keypress,load,keyup,loadeddata,loadedmetadata,loadend,loadstart,lostpointercapture,mousedown,mouseenter,mouseleave,mousemove,mouseout,mouseover,mouseup,mousewheel,wheel,pause,play,playing,pointerdown,pointermove,pointerup,pointercancel,pointerover,pointerout,pointerleave,pointerenter,pointerlockchange,pointerlockerror,progress,ratechange,reset,resize,scroll,securitypolicyviolation,seeked,seeking,select,selectstart,selectionchange,slotchange,stalled,submit,suspend,timeupdate,touchcancel,touchend,touchstart,touchmove,transitioncancel,transitionrun,transitioned,transitionstart,waiting,volumechange,autocompleteerror,autocomplete,hover";
+var IS_VALID_EVENT_HANDLER = (eventName) => _makeMap_(GLOBAL_EVENTS, eventName);
+var isClass = (val) => isFunction(val) && val.toString().startsWith("class");
+var directivesHooksMap = "created,mounted,updated,init,destroyed";
+function instance_Has_Widget(self, name) {
+	return _makeMap_(BUILT_IN_WIDGETS, name) || _makeMap_(self[$$$register]?.widgets || {}, name);
+}
+var normalize_Widget = (self, name) => _makeMap_(BUILT_IN_WIDGETS, name) ? BUILT_IN_WIDGETS[name] : _makeMap_(self[$$$register].widgets, name) ? self[$$$register].widgets[name] : null;
+function instance_Has_Directive(self, name) {
+	return !isHouxitDirective(name) && _makeMap_(self[$$$register]?.directives || {}, name);
+}
+var normalize_Directives = (self, name) => _makeMap_(self[$$$register].directives, name) ? self[$$$register].directives[name] : null;
+var slotInstanceMap = class {
+	slots = /* @__PURE__ */ new Object();
+	constructor(opts = {}) {
+		entries(opts).forEach(([name, value]) => this.slots[name] = value);
+	}
+};
+var isSlotInstance = (val) => val instanceof slotInstanceMap;
+var isHouxitElement = (vnode) => vnode instanceof HouxitElement;
+var isHouxitBuild = (widget) => widget instanceof HouxitBuild;
+var isHouxitTextElement = (vnode) => vnode instanceof HouxitTextElement;
+var isHouxitNativeElement = (vnode) => vnode instanceof HouxitNativeElement;
+var isHouxitFragmentElement = (vnode) => vnode instanceof HouxitFragmentElement;
+var proxySkipped = "$element,$signals,$parent,$root,$observe,$useAgent,$tick,$write,$effectHook,[[[reactive__Token]]],$params,$attrs,$events";
+var isProxySkipped = (prop) => _makeMap_(proxySkipped, prop);
+function createObj(name, props) {
+	if (len(arguments) === 1 && isPObject(name)) props = name;
+	if (props && !isPObject(props)) props = null;
+	let objXtruct = Function("name", `
+     return name ? class ${name}{} : Object ;
+    `);
+	objXtruct = objXtruct(name);
+	objXtruct = new objXtruct();
+	if (props) assign(objXtruct, props);
+	return objXtruct;
+}
+var canRender = (value) => isPrimitive(value) && !isNull(value);
+function compileToRenderable(value) {
+	value = unwrap(value);
+	if (canRender(value)) return String(value);
+	else if (isPFunction(value)) return value();
+	else if (validateType(value, [
+		Array,
+		Date,
+		Function
+	])) return value.toString();
+	else if (!isNull(value) && !isPObject(value)) return JSON.stringify(value);
+	return "";
+}
+var arrowFNRegex = /^(async[ ]+)?(\(([\w$,.\[\]\{\} ]*)\)|[\w$]+)[ ]*=>[ ]*[{]?\s*/;
+var functionFNRegex = /^(async[ ]+)?(function)?([*]?([ ]*)[\w$]*)?\(([\w$]*)?\)[ ]*\{\s*/m;
+var isArrowFunction = (fn) => isPFunction(fn) && arrowFNRegex.test(fn.toString());
+var isFNString = (str) => isString(str) && isTrue(arrowFNRegex.test(str) || functionFNRegex.test(str));
+var objectDestructureRegex = /^{(.*?)}$/;
+var arrayDestructureRegex = /^\[(.*?)\]$/;
+var isForLoopDestructureRegex = /^((\(|\<)(.*?)(\)|\>))$/;
+var isDestructureSyntax = (syntax) => objectDestructureRegex.test(syntax) || arrayDestructureRegex.test(syntax);
+var Model = class {};
+var Params = class {};
+var Attrs = class {};
+var Slots = class {};
+var Refs = class {};
+var Signals = class {};
+var Events = class {};
+var ReactiveEffectObject = class {};
+var isModelInstance = (model) => model instanceof Model;
+var isAttrsInstance = (param) => param instanceof Attrs;
+var isREffObj = (param) => param instanceof ReactiveEffectObject;
+var isClassBasedBuild = (build) => isHouxitBuild(build) && build[$$$ownProperties].widgetType === "class-based";
+var isFunctionBasedBuild = (build) => isHouxitBuild(build) && build[$$$ownProperties].widgetType === "function-based";
+var $$tupleStore = Symbol();
+var $$dexTransformKey = Symbol();
+var $$$$dir__ref$$$$ = Symbol("[[[$$$$dir__ref$$$$]]]");
+var dir$$__render = Symbol("[[[$$@@dir$$__render]]]");
+var $$$context = Symbol("[[[$$@context]]]");
+var $$$operands = Symbol();
+var $$$ownProperties = Symbol();
+var $$$compiler = Symbol();
+var $$$core = Symbol();
+var $$$register = Symbol();
+var $$$StreamProxyKey = Symbol();
+var lifeCiycleBinding = Symbol();
+var $$$customDirs = Symbol();
+var SSRHydrationSymbol = Symbol();
+var factoryHXSelfInstance = Symbol();
+var $factoryTokenKey = Symbol();
+var $asyncVnodeKey = Symbol();
+var $suspenseElement = Symbol("<suspense:element.$elemen>");
+var AsyncHxElementTrackerKey = Symbol();
+var PRIVATE_PROPERTY_KEY = Symbol();
+var isAsyncTrackerElement = (el) => isHouxitElement(el) && hasOwn(el, AsyncHxElementTrackerKey);
+var isSuspenseElement = (el) => isHouxitElement(el) && hasOwn(el.VNodeManager, $suspenseElement);
+var AsyncWidget = class {
+	constructor(load, config = {}) {
+		config = assign({
+			delay: 200,
+			timeout: Infinity
+		}, config);
+		validateAsyncWidgetConfig(config);
+		this[$asyncVnodeKey] = {
+			load,
+			config,
+			cache: void 0,
+			postLoad: 0
+		};
+	}
+};
+function validateAsyncWidgetConfig(config) {
+	for (let [key, value] of entries(config)) if (!_makeMap_("delay,error,fallback,timeout", key)) debugHandler(`Unrecognized key "${key}" passed to 'AsyncWidget' config object`);
+	else if (_makeMap_("delay,timeout", key) && (!isNumber(value) || isNaN(Number(value)))) debugHandler(`"${key}" config prop of "AsyncWidget" expects a type of "number"`);
+	else if (_makeMap_("error,fallback", key) && !isPFunction(value)) {} else continue;
+}
+var isAsyncWidget = (vnode) => vnode instanceof AsyncWidget && hasOwn(vnode, $asyncVnodeKey);
+var isFRKey = (key) => $factoryTokenKey === key && isS($factoryTokenKey, key);
+var Fragment = Symbol("hx:fragment");
+var Portal = Symbol("hx:portal");
+var Build = Symbol("hx:build");
+var Self = Symbol("hx:self");
+var Provider = Symbol("hx:provider");
+var Motion = Symbol("hx:motion");
+var Suspense = Symbol("hx:suspense");
+var Memo = Symbol("hx:memo");
+var If = Symbol("hx:if");
+var ElseIf = Symbol("hx:else-if");
+var Else = Symbol("hx:else");
+var For = Symbol("hx:for");
+var BUILT_IN_WIDGETS = {
+	"hx:fragment": Fragment,
+	"hx:provider": Provider,
+	"hx:portal": Portal,
+	"hx:build": Build,
+	"hx:self": Self,
+	"hx:motion": Motion,
+	"hx:memo": Memo,
+	"hx:suspense": Suspense,
+	"hx:else-if": ElseIf,
+	"hx:for": For,
+	"hx:else": Else,
+	"hx:if": If
+};
+function isHouxitBuiltinSymbolWidget(widget) {
+	for (const sym of values(BUILT_IN_WIDGETS)) if (widget === sym) return true;
+	return false;
+}
+var CUSTOM_BUILT_IN_WIDGETS_STORE = /* @__PURE__ */ new Map();
+function isCustomBuiltinSymWidget(widget) {
+	for (const [sym, factory] of values(BUILT_IN_WIDGETS)) if (widget === sym) return true;
+}
+var $buildHx_ElementKey = Symbol();
+var isSelfRecursiveWidget = (build) => isHouxitBuild(build) && build[$$$ownProperties].isSelfRecursive === true;
+var isBuiltinBlocks = (block) => _makeMap_("if,else,else-if,for,const,class,new,debugger,html,await", block);
+var isBuiltinVoidBlocks = (block) => _makeMap_("else,else-if,const,new,debugger,html,await", block);
+var $passKey = Symbol();
+function pass() {}
+pass[$passKey] = true;
+function isContextMethodString(self, hx_Element, str) {
+	return isValidIdentifier(str) || object_Has_Path(self.__public_model__, str) || isTrue(hx_Element && object_Has_Path(hx_Element.LabContext || {}, str) || isFNString(str));
+}
+var isIfKey = (key) => /^\$\$if[\w|$ ]*$/.test(key);
+var isElseIfKey = (key) => /^\$\$else-if[\w$| ]*$/.test(key);
+var isElseKey = (key) => /^\$\$else[\w$| ]*$/.test(key);
+var isForKey = (key) => /^\$\$for[\w_$| ]*$/.test(key);
+function read(fn) {
+	return unToken(isFunction(fn) ? fn() : fn);
+}
+var rawObjectStoreMap = /* @__PURE__ */ new WeakSet();
+function _markRaw(obj) {
+	if (isPrimitive(obj)) {
+		debugHandler(`Non mutatable values been marked as raw:: "${typeof obj}" cannot be set to raw data to hide from reactive effect assembling`);
+		return obj;
+	}
+	if (isPrimitive(obj) || isRaw(obj)) return obj;
+	rawObjectStoreMap.add(obj);
+	return obj;
+}
+function markRaw(obj) {
+	return _markRaw(obj);
+}
+function _isRaw(obj) {
+	if (isPrimitive(obj)) return false;
+	return rawObjectStoreMap.has(obj);
+}
+function isRaw(obj) {
+	return _isRaw(obj);
+}
+function memMove(value, deep) {
+	return _makeCloneVersion(...arguments);
+}
+var isCollection = (item) => validateType(item, [
+	Array,
+	Set,
+	Tuple,
+	Arguments
+]);
+var isInvalidInjectorOpt = (opt) => _makeMap_("build,preBuild", opt);
+var adaptableComposers = {
+	params: useParams,
+	postBuild,
+	preMount,
+	postMount,
+	preUpdate,
+	postUpdate,
+	preDestroy,
+	postDestroy,
+	onEffect,
+	onCatch,
+	onTracked,
+	onSlotEffect,
+	onSlotRender,
+	buildConfig: defineConfig,
+	signals: defineSignals,
+	slots: defineSlots,
+	transmit: useTransmit,
+	receive: useReceiver,
+	context: useContext,
+	install: useInstall
+};
+var c_str = "hx-comment";
+var isAllowedAdapterOpts = (opt) => _makeMap_(keys(adaptableComposers).join(","), opt);
+function useInstall(callback) {
+	return _useInstallAdaptor(...arguments);
+}
+function _useInstallAdaptor(callback) {
+	if (!validateCollectionArgs(arguments, {
+		count: 1,
+		validators: [Function],
+		name: "useInstall()"
+	})) return;
+	const self = getCurrentRunningEffect({ name: "useInstall()" });
+	if (!isHouxitBuild(self)) return;
+	if (irresponsibleInstallWarn(self, callback, "useInstall()")) self[$$$operands].installers_plugin.add(callback);
+	return true;
+}
+function irresponsibleInstallWarn(self, callback, ns) {
+	if (isInitialBuild(self)) {
+		debugHandler(`Irresponsible use of "${ns}" in an initBuild widget instance`, self, true);
+		return false;
+	}
+	return true;
+}
+function _useOptionsAdapter(instance = {}) {
+	if (!validateCollectionArgs(arguments, {
+		name: "useOptions",
+		required: [true],
+		count: 1,
+		validators: [Object]
+	})) return [pass, pass];
+	const self = getCurrentRunningEffect({ name: "useOptions" });
+	if (!self && !validateCollectionArgs(arguments, {
+		name: "useOptions",
+		validators: [Object],
+		count: 1
+	})) return {};
+	for (const [key, value] of entries(instance)) if (!isValidWidgetOption(key)) self[$$$operands]._OPTIONS[key] = value;
+	else if (isAllowedAdapterOpts(key)) adaptableComposers[key](value);
+	else if (isInvalidInjectorOpt(key)) debugHandler(`[useOptions options Error] invalid option "${key}" passed to options Adapter: not a valid  adapter.\n\nuse the options API macros instead`, self);
+	else self[$$$core].opts[key] = value;
+	return self;
+}
+function useOptions(obj) {
+	return _useOptionsAdapter(...arguments);
+}
+function _mergeProps_(...props_list) {
+	const validators = [];
+	props_list.forEach((object) => validators.push(object));
+	if (!validateCollectionArgs(props_list, {
+		validators,
+		name: "mergeProps",
+		min: 1
+	})) return freeze();
+	const originProps = {};
+	for (let [index, attrs] of props_list.entries()) transformGeneticPropsMerge(originProps, attrs);
+	return originProps;
+}
+function transformGeneticPropsMerge(origin, attrs) {
+	for (const [key, item] of entries(attrs)) if (hasOwn(origin, key)) {
+		if (isOnListener(key)) {
+			const value = !isArray(origin[key]) ? [origin[key]] : origin[key];
+			const itemData = arrayInverter(item);
+			origin[key] = [...value, ...itemData];
+		} else if (key === "class") {
+			const patchRecord = new Tuple();
+			mapClassTypeTransform(origin[key], patchRecord);
+			origin.class = mapClassTypeTransform(item, patchRecord);
+		} else if (key === "style") origin.style = {
+			...compileStyleProps(null, origin[key], {}),
+			...compileStyleProps(null, item, {})
+		};
+	} else if (key === "class") origin[key] = mapClassTypeTransform(item, new Tuple());
+	else if (key === "style") origin[key] = compileStyleProps(null, item, {});
+	else origin[key] = item;
+	return origin;
+}
+function mergeProps(...props) {
+	return _mergeProps_(...props);
+}
+var argumentsValidator = {
+	name: "",
+	max: Infinity,
+	validators: [],
+	self: void 0,
+	min: 0,
+	required: [],
+	count: void 0,
+	validator: () => true
+};
+function validateCollectionArgs(args, config = argumentsValidator) {
+	args = [...args];
+	if (!isS(argumentsValidator, config)) config = {
+		...config,
+		...argumentsValidator
+	};
+	else return true;
+	const { name, max, validators, self, required, min, count, validator } = config;
+	if (isNumber(max) && len(args) > max) {
+		debugHandler(max === 0 ? `${name} Adapter does not accept any Argument` : `Parameter arguments received at ${name} macro exceds validator arguments maximum count\n\n"${name}()" expects only maximum of "${max}" arguments`, self);
+		return false;
+	}
+	if (min && len(args) < min) {
+		debugHandler(`"${name}" function expects atleast "${min}" minimum of arguments\n\n${len(args)} received`, self);
+		return false;
+	}
+	if (!isUndefined(count) && !len(args) === count) {
+		debugHandler(`"${name}" method expects only ${count} number of arguments\n${len(args)} passed`, self);
+		return false;
+	}
+	if (!validator(...args)) return false;
+	if (len(required)) {
+		for (let [index, check] of required.entries()) if (!len(args) >= Number(index) && isUndefined(args[index])) {
+			debugHandler(`Argument at index ${index} of ${name} expects a required positional parameter\n\nparameter not provided or is undefined :: use "null" instead if you tend to skip or not context an argument value `, self);
+			return false;
+		}
+	}
+	if (isArray(validators) && len(validators) && len(args)) for (let [key, item] of args.entries()) {
+		if (!key > len(validators)) break;
+		if (isFalse(validateType(item, validators[key] || Any))) {
+			debugHandler(`unexpected argument value type received at ${key} index of the "${name}" adapter\n\nInvalid input type`, self);
+			return false;
+		}
+	}
+	return true;
+}
+var objectPropsValidator = {
+	name: "",
+	self: void 0,
+	props: {}
+};
+var validatorProps = {
+	type: void 0,
+	required: false,
+	default: void 0
+};
+function validatePropsInput(value, config) {
+	if (!isS(config, objectPropsValidator)) config = {
+		...config,
+		...objectPropsValidator
+	};
+	let { name, props, self } = config;
+	if (!isObject(config)) {
+		debugHandler(`configuration parameter at argument 2 of validatorProps expects a plain javascript object`);
+		return;
+	} else if (!isPObject(value) || hasOwn(value, "props") && !isPObject(value.props)) {
+		debugHandler(`unexpected value received at "${name}, validation for ${isPObject(value) ? "{}.prop" : "{}"}" adapter\n\nInvalid input type :: expects a plain Object`, self);
+		return false;
+	}
+	const propsSet = {};
+	for (let [param, ind] of entries(config.props)) {
+		if (!isPObject(param)) {
+			debugHandler(`Properties validator expects a plain object\n
+        For the "${ind}" prop validation`);
+			return false;
+		}
+		if (!isS(param, validatorProps)) param = {
+			...param,
+			...validatorProps
+		};
+		if (!runObjectifiedParamsValidation(null, propsSet, [
+			value,
+			param,
+			ind
+		], "prop")) return false;
+		else if (!paramsValidationCircle(null, propsSet, [
+			value,
+			param,
+			ind
+		], "prop")) return false;
+	}
+	return true;
+}
+function _validateCollection(collection, config) {
+	if (!validateCollectionArgs(arguments, {
+		validators: [[
+			Array,
+			Set,
+			Tuple,
+			Arguments
+		], Object],
+		count: 2,
+		required: [true, true],
+		name: "validateCollection"
+	})) return false;
+	return validateCollectionArgs(collection, config);
+}
+function validateCollection(collection, config) {
+	return _validateCollection(...arguments);
+}
+function validateProps(value, config) {
+	return validatePropsInput(...arguments);
+}
+function deepTranformMacro(watchers) {
+	function _transform(value, config) {
+		if (!validateCollectionArgs(arguments, {
+			min: 1,
+			max: 2,
+			validators: [Any, Object],
+			name: "deepTranform"
+		})) return value;
+		return _createReactiveProxyCollectons(value, watchers, config?.shallow || false, config || {});
+	}
+	return function deepTranform(value, config) {
+		return _transform(...arguments);
+	};
+}
+function fineTuneFactoryTokenCompile(effective, watchers, config) {
+	const callback = config[$factoryTokenKey];
+	delete config[$factoryTokenKey];
+	function track() {
+		return watchers.effectTrack();
+	}
+	function effect() {
+		return watchers.effectTrigger();
+	}
+	config = callback(track, effect, deepTranformMacro(watchers));
+	const factoryObject = watchers.factoryObject;
+	watchers.config = config;
+	if (config.accessor) {
+		delete effective[watchers.accessor];
+		watchers.accessor = config.accessor;
+		effective[watchers.accessor] = void 0;
+		delete config.accessor;
+	}
+	for (let desc of ["get", "set"].values()) if (hasOwn(config, desc)) {
+		if (!isFunction(config[desc])) {
+			debugHandler(`"${desc}" property descriptor at "factoryToken" is of an invalid data type\ntype of 'Function' expected`);
+			return freeze();
+		}
+		factoryObject[desc] = config[desc];
+		delete config[desc];
+	}
+	return config;
+}
+function refLifeCircleHooksConfig(watchers, config) {
+	if (config.onTracked) watchers.onTrackedHook = () => {
+		if (watchers.trackZoom) return;
+		watchers.trackZoom = true;
+		tick(config.onTracked.bind(this)).then(() => watchers.trackZoom = false);
+	};
+	if (config.onEffect) watchers.onEffectHook = () => {
+		if (watchers.effectZoom) return;
+		watchers.effectZoom = true;
+		tick(config.onEffect.bind(this)).then(() => watchers.effectZoom = false);
+	};
+}
+function Token_X_ReactiveEffectObject() {
+	return assign(new ReactiveEffectObject(), {
+		observers: new Tuple(),
+		subscribers: new Tuple(),
+		self: void 0,
+		superObs: void 0,
+		onTrackedHook: pass,
+		onEffectHook: pass,
+		accessor: "data",
+		effectTrack: pass,
+		effectTrigger: pass,
+		factoryObject: {},
+		trackZoom: false,
+		effectZoom: false,
+		shallow: false,
+		readonly: false,
+		isComputed: false,
+		refGenreId: void 0
+	});
+}
+function defineTokenRuntime_Carriers(effective, watchers, metrics) {
+	const { isFactoryToken, isComputed, readonly, shallow, accessor, config } = metrics;
+	function getter() {
+		return unwrap(effective.data);
+	}
+	const descriptor = {};
+	const dep = /* @__PURE__ */ new Map();
+	watchers.effectTrack = (value) => {
+		const depS = _subscribeToEffect(dep, accessor(), this, value);
+		if (depS) depS.get_data = getter;
+		watchers.onTrackedHook();
+	};
+	watchers.effectTrigger = () => {
+		_notifyEffectSubs(dep, accessor(), this);
+		watchers.onEffectHook();
+	};
+	if (isFactoryToken) iterate(["get", "set"]).each((desc) => {
+		if (hasOwn(watchers.factoryObject, desc)) descriptor[desc] = watchers.factoryObject[desc];
+	});
+	else {
+		descriptor.get = function() {
+			const value = getter();
+			watchers.effectTrack(value);
+			return value;
+		};
+		descriptor.set = function(value, prop) {
+			if (readonly && !isReadonlyBypasser(value)) {
+				debugHandler(`Cannot reassign/mutate a "readonly" token value\n\n___MUTATION FAILED___\n........".${prop}" property assignment \n\nFailed writing to a readonly \n.........>>>bypassKey verification failure occured...`);
+				return false;
+			}
+			value = unwrap(readonly ? value[bypassSymbol] : value);
+			value = _createReactiveProxyCollectons(value, watchers, shallow, config);
+			effective[accessor()] = value;
+			watchers.effectTrigger();
+			return true;
+		};
+	}
+	return descriptor;
+}
+function _Houxit_Token__Constructor(effective, config) {
+	const watchers = Token_X_ReactiveEffectObject();
+	const accessor = () => watchers.accessor;
+	config = isPObject(config) ? config : {};
+	const isFactoryToken = hasOwn(config, $factoryTokenKey);
+	if (isFactoryToken) config = fineTuneFactoryTokenCompile.call(this, effective, watchers, config);
+	if (isS(config, freeze())) return;
+	const reConfig = {};
+	for (let conf of [
+		"shallow",
+		"readonly",
+		"computed"
+	].values()) if (hasOwn(config, conf)) {
+		reConfig[toCamelCase("is-" + conf)] = config[conf];
+		delete config[conf];
+	}
+	config = assign(assign({}, config), reConfig);
+	const { readonly = false, isComputed = false, shallow = false } = config;
+	refLifeCircleHooksConfig.call(this, watchers, config);
+	effective[accessor()] = _createReactiveProxyCollectons(effective[accessor()], watchers, shallow, config);
+	this[refInternalEffectKey] = watchers;
+	const descriptors = defineTokenRuntime_Carriers.call(this, effective, watchers, {
+		isFactoryToken,
+		isComputed,
+		readonly,
+		shallow,
+		accessor,
+		config
+	});
+	delete watchers.factoryObject;
+	define(this, accessor(), descriptors);
+	assign(watchers, {
+		readonly,
+		shallow,
+		isComputed,
+		updateFlags: 0,
+		cache: void 0
+	});
+	define(this, refGenreId, {
+		value: `[[[${readonly ? "readonly" : "reactive"}__Token]]]`,
+		enumerable
+	});
+}
+var BaseToken = class {
+	constructor(effective, config = {}) {
+		_Houxit_Token__Constructor.call(this, ...arguments);
+	}
+	isSameToken(ref) {
+		return isToken(ref) && isS(this, ref);
+	}
+	create(valueX, config) {
+		return token(...arguments);
+	}
+};
+var reactive__Token = class extends BaseToken {
+	constructor(token, config) {
+		super(...arguments);
+	}
+};
+var readonly__Token = class extends BaseToken {
+	constructor(token, config) {
+		super(...arguments);
+	}
+};
+var Token = class extends BaseToken {
+	constructor(token, config) {
+		super(...CustomTokenizerArgs(token, config));
+	}
+};
+var CustomTokenizerArgs = (token, config) => [{ data: token }, config];
+function _createReactiveProxyCollectons(iterable, watcher, shallow, config) {
+	if (isDomSpecialConstructor(iterable) || isStream(iterable) || isPrimitive(iterable) || shallow || isRaw(iterable)) return iterable;
+	return _createStream(iterable, config, watcher);
+}
+function __Houxit__Tokenizer__Machine___(target, config = {}) {
+	if (!isToken(target)) target = preventX(new reactive__Token({ data: target }, config));
+	return target;
+}
+function token(target, config) {
+	return __Houxit__Tokenizer__Machine___(...arguments);
+}
+function _factoryToken(callback) {
+	if (!validateCollectionArgs(arguments, {
+		count: 1,
+		validators: [Function],
+		name: "factoryToken"
+	})) return;
+	return new Token({ data: void 0 }, { [$factoryTokenKey]: callback });
+}
+function factoryToken(callback) {
+	return _factoryToken(...arguments);
+}
+function traceBack() {
+	const date = /* @__PURE__ */ new Date();
+	return createObj("TraceBack", {
+		h: date.getHours(),
+		m: date.getMinutes(),
+		s: date.getSeconds(),
+		ms: date.getMilliseconds()
+	});
+}
+var Exception = class extends Error {
+	constructor(msg, ...args) {
+		super(...args);
+	}
+};
+function raise() {}
+function isTuple(tp) {
+	return tp instanceof Tuple;
+}
+var arrSet = (setData) => isSet(setData) || isArgument(setData) || isArray(setData) ? [...setData] : isTuple(setData) ? setData.list() : setData;
+var arrayMM = "push,pop,shift,unshift,splice,sort,reverse,copyWithin,fill";
+var setMM = "add,delete,clear";
+var mapMM = "set,delete,clear";
+var tupleMM = "add,delete,clear,shift,unshift,splice,pop,extend,replace,prepend,arrange,exchange";
+var objectMM = "define,delete";
+function getMutationArgs(data) {
+	return isArray(data) ? arrayMM : isSet(data) ? setMM : isMap(data) ? mapMM : isTuple(data) ? tupleMM : isPObject(data) ? objectMM : "";
+}
+function getAgentMutators(data, prop, model) {
+	const value = data;
+	data = unwrap(data);
+	let mutateArgs = getMutationArgs(data) + "write";
+	const mutation_object = createObj("Mutatations");
+	for (let name of mutateArgs.split(",").values()) {
+		function mutate(arg) {
+			let rv = void 0;
+			if (validateType(data, [
+				Set,
+				Tuple,
+				Array,
+				Map
+			])) rv = data[name](arg);
+			else if (isPObject(data)) {
+				if ("define" === name) rv = define(data, ...arguments);
+				else if ("delete" === name) {
+					delete data[arg];
+					rv = true;
+				}
+			}
+			let assV = rv;
+			if ((model || !isPrimitive(value)) && prop && name === "write") assV = set_Object_Value(isModelInstance(model) ? model : !isPrimitive(value) ? value : freeze(), prop, len(arguments) ? arg : data);
+			return assV;
+		}
+		mutate = Function("fn", `
+        return function ${name === "delete" ? "del" : name}(value){
           return fn(...arguments);
         }
-      `)(i),S(a,o,{value:i,enumerable:ve})}return a}function hi(e,t){let n=()=>e;if(!H(arguments,{min:1,max:2,validators:[ga,[ln]],name:`useAgent`}))return[n,V];if(P(this)&&!ue(e))return A(`data path at positional argument 1 expects a string/symbol value of an existing model path
-
-.>...$useAgent`),[n,V];if(_n(t)&&!ue(e))return A(`data property at positional argument 1 of "useAgent" expects a string/symbol value
-
-Must be a model valid path`),[n,V];let r=P(this)?this:_n(t)?{__public_model__:t}:null;t=r?r.__public_model__:null,r&&!P(r)&&delete r.__public_model__;let i=_n(t)?e:W(e)?e[Di].accessor:``;if(_n(t)&&!el(t,i))return A(`"${i}" property is not a valid model property`),[n,V];e=_n(t)&&Ee(i)?Z(t,i||``):e;let a=mi(e,i,t),o=0,s=()=>mr(e);function c(n){if(D(n)&&o<1&&(o++,S(a,`data`,{get(){return s()}})),D(n))try{n(a)}catch(e){return A(`Encountered an error during the call of the writer callback\n\n${e}`),!1}else if(!D(n))return tl(_n(t)?t:g(e)?te():e,i,n),!0}function l(){return s()}function u(...e){return c(...e)}return[l,u]}function gi(e,t){return hi(...arguments)}function _i(e){if(!H(arguments,{name:`$write`,count:1,validators:[Object]}))return!1;for(let[t,n]of y(e)){if(!el(this.__public_model__,t))return A(`"${t}" not found in model instance\n\n..............at......"$write"`,this,!0),!1;this.__public_model__.$useAgent(t)[1](({write:e})=>e(n))}return!0}function vi(e){return Y(e,[Set,Map,Array,M])?e.entries():h(e)?y(e):he(e)?e:[].entries()}var yi=class{constructor(e){let{value:t,type:n}=e;this.value=t,this._type=n}value=void 0;_type=``},bi=e=>e instanceof yi;function xi(e=void 0){return new yi({value:e,type:`continue`})}function Si(e){return new yi({value:e,type:`break`})}function Ci(e){return new yi({value:e,type:`return`})}function wi(e,t,n){let r=0;if(se(e))for(let n=0;n<e;n++){let e=t(n,r);if(r++,bi(e)){if(e._type===`continue`)continue;if(e._type===`break`)break;if(e._type===`return`)return e.value}}else if(n)for(let[n,i]of vi(e)){let e=t(i,n,r);if(r++,bi(e)){if(e._type===`continue`)continue;if(e._type===`break`)break;if(e._type===`return`)return e.value}}else for(let[n,i]in y(e)){let e=t(n,i,r);if(r++,bi(e)){if(e._type===`continue`)continue;if(e._type===`break`)break;if(e._type===`return`)return e.value}}}function Ti(e,t){if(!H(arguments,{name:`iterate`,min:1,max:2,validators:[Object,String]}))return!1;if(!t||!T(`of,in`,t))t=`of`;else if(!_e(e)&&!se(e))return A(`No iterable .value prop received at parameter 1 object of the "iterate" helper macro`),!1;let n=t&&t.trim()===`of`;function r(t){return wi(e,t,n)}return r.each=r,r}function U(e,t){return Ti(...arguments)}v(U,{Continue:xi,Break:Si,Return:Ci});var Ei=Symbol(`[[[GenreIDType]]]`),Di=Symbol();function Oi(e,t={}){if(!H(arguments,{name:`readonly`,required:[!0],min:1,max:2,validators:[ga,Object]}))return;let n=t.metrics||[];if(_(t,`metrics`)&&delete t.metrics,Fi(e))return Vi(e);if(Ii(e))return e;let[r=!1,i]=n;return t.readonly=!0,ee(new Yr({data:e},t))}function ki(e,t){return Oi(...arguments)}function Ai(e,t={}){if(!H(arguments,{name:`shallow`,required:[!0],min:1,max:2,validators:[ga,Object]}))return;let n=t.metrics||[];if(_(t,`metrics`)&&delete t.metrics,W(e)&&!Li(e))return Bi(e);if(Li(e))return e;let[r=!1,i]=n;return t.shallow=!0,ee(new Jr({data:e},t))}function ji(e,t){return Ai(...arguments)}function W(e){return e instanceof qr}function G(e){return W(e)?e[e[Di].accessor]:e}function Mi(e){return G(e)}function Ni(e,t,n){if(!(!H(arguments,{min:2,max:3,validators:[[Object,Array],[String,Symbol],Object],name:`toToken`,required:[!0,!0]})||!e))return ei(e[t],n)}function Pi(e,t){return Ni(...arguments)}function Fi(e){return W(e)&&e[Ei]===`[[[reactive__Token]]]`}function Ii(e){return W(e)&&e[Ei]===`[[[readonly__Token]]]`}function Li(e){return W(e)&&O(e[Di].shallow)}function Ri(e){return Ii(e)&&Li(e)}function zi(e){return Ii(e)&&e[Di].isComputed}function Bi(e,t={}){return Li(e)?e:ji(G(e),t)}function Vi(e,t={}){return Ii(e)?e:ki(G(e),t)}var Hi=class{constructor(e=void 0){this[ia]=e}};function Ui(e){let t=H(arguments,{count:1,name:`isStream`});if(!e||!t&&!Y(e,[Object,Set,M,Map,Array]))return!1;let n=e[En];return _(e,En)&&l(n)&&yn(n.get(e))}function Wi(e){return Ui(...arguments)}function Gi(e){return Wi(e)&&e[En].get(e).shallow}function Ki(e){return Gi(...arguments)}function qi(e){return Wi(e)&&e[En].get(e).readonly}function Ji(e){return qi(e)}function Yi(e){return Ki(e)&&Ji(e)}function Xi(e,t,n){if(g(e)){A(`Value Exception
-Failed to convert a primitive Value to a streamable object
-
-Expects a plain object or a collection`);return}else if(n=new M(...n),n.contains(`readonly`,`shallow`)&&Yi(e)||n.has(`readonly`)&&Ji(e)||n.has(`shallow`)&&Ki(e))return e;return Wi(e)&&(e=e[En].get(e).origin),Af(e,{readonly:n.has(`readonly`),shallow:n.has(`shallow`),...h(t)?t:{}})}function Zi(e,t){return Xi(e,t,[`readonly`])}function Qi(e,t){return Zi(...arguments)}function $i(e,t){return Xi(e,t,[`shallow`])}function ea(e,t){return $i(...arguments)}function ta(e,t){return dynamicStreamTransform(e,t,[`readonly`,`shallow`])}function na(e,t){return ta(...arguments)}var ra=e=>e instanceof Hi,ia=Symbol(`Readonly_Bypass_Symbol`);function aa(e,t,n){return tl(e,t,new Hi(n))}function oa(e,t=!1){if(!Y(e,[Object,Array,M]))return e;if(oi(e))return e.freeze();if(O(t))for(let[t,n]of vi(e))e[t]=oa(n,!0);return oi(e)?e:te(e)}function sa(e,t){if(!H(arguments,{min:1,max:2,validators:[Function,Object],name:`trackEffectDeps`}))return[];let n=q(e);J(n);function r(){return n.runEffect()}function i(){return n.value}return[[...si(n.dependencies)],i,r]}function ca(e,t){return sa(...arguments)}function la(e,t){if(!H(arguments,{name:`effectHook`,required:[!0,!1],min:1,max:2,validators:[Function,Object]}))return V;let n=Va({name:`effectHook`});return n?da.call(n,...arguments):(A(`effectHook called out of scope`),V)}function ua(e,t){return la(...arguments)}function da(e,t={}){if(!H(arguments,{name:`effectHook`,validators:[Function,Object],min:1,max:2,required:[!0]}))return;t.initial=!1;let n=q(function(){return e()},this),{value:r,dependencies:i}=J(n);return df.call(this,i,e,t,n),function e(...t){return e(...t)}}var fa=class{constructor(e,t){this.type=e,this.validator=t}},pa=class extends fa{constructor(){super([],e=>!0)}},ma=class extends fa{constructor(){super([],e=>f(e)||xe(e))}},ha=e=>e instanceof fa,ga=new pa,_a=new ma,va=Symbol(),ya=new class extends fa{constructor(){super([Function],e=>Rt(e))}},ba=new class extends fa{constructor(){super([],e=>Le(e))}},xa=new class extends fa{constructor(){super([Array,Set,ba,M],e=>xr(e))}};function Sa(e){return r(e)?`array`:o(e)?`date`:s(e)?`set`:c(e)?`map`:oi(e)?`tuple`:e instanceof pa?`any`:e instanceof ma?`none`:W(e)?`_`+Fi(e)?`reactive`:`readonly__Token`:typeof e}var Ca=class extends M{constructor(){super(...arguments)}},wa=class extends Array{constructor(e=[]){let t=j(e)===1&&se(e[0]);if(t&&e.push(void 0),j(arguments)>1)e=si(arguments);else if(xr(e))e=si(e);else if(j(arguments)){let t=[];t.push(e),e=t}super(...e),t&&this.pop()}},Ta=class extends Set{constructor(){super(...arguments)}},Ea=class extends WeakSet{constructor(e){super(),this[va]=e;for(let t of[`has`,`add`,`delete`].values())this[t]=e[t]}},Da=class extends WeakMap{constructor(e){super(),this[va]=e;for(let t of[`get`,`set`,`has`,`delete`,`getOrInsert`,`getOrInsertComputed`].values())this[t]=e[t]}};function Oa(...e){}Oa.prototype.set=function(e,t){};function ka(e,t,n){return e?(A(`cannot perfom ${t} on ${n}\n\ninstance may have been frozen or sealed from future possible mutations`),!1):!0}var Aa=class{value=0;constructor(e){this.value=Number(e)}},ja=e=>e instanceof Aa;function Ma(e){return new Aa(e)}function Na(e){this[F]={array:[],unique:new Set,isFrozen:!1};let t=0;S(this,`size`,{get(){return t},set(e){return ja(e)?(t=e.value,!0):(A(`Mutation Exception
-Cannot mutate the size property of a Tuple Object
-`),!1)}});let n=0;for(let t of e.values())this[F].unique.has(t)||(this[F].unique.add(t),this[F].array.push(t),Pa(this),n++);this.size=Ma(j(this[F].array))}function Pa(e){let t=b(e),n=e.list();for(let[t,r]of n.entries())(r!==e[t]||t>j(this)-1)&&(e[t]=r);let r=0;for(let i of t.values())i=Number(i),i!==r&&(e[i]=r),r>j(n)-1&&delete e[r],r++}function K(...e){Na.call(this,e)}function Fa(e){if(H(arguments,{count:1,validators:[Function],name:`Tuple.filter()`}))return new M(...this.list().filter(e))}K.prototype.filter=function(e){return Fa(...arguments)},K.prototype.find=function(e){return this.list().find(...arguments)},K.prototype.shift=function(){if(!ka(this[F].isFrozen,`Tuple.shift()`,`tuple`))return!1;let e;return this.size>0&&(e=this[F].array.shift(),this[F].unique.delete(e),this.size=Ma(this.size-1),Pa(this)),e},K.prototype.freeze=function(e=!1){return this[F].array=oa(this[F].array,e),this[F].isFrozen=!0,this},K.prototype.values=function(){return this.list().values()},K.prototype.keys=function(){return this.list().keys()},K.prototype.entries=function(){return this.list().entries()},K.prototype.isTuple=function(e){return oi(e)},K.prototype.has=function(e){return this[F].unique.has(e)},K.prototype.indexOf=function(e){return j(arguments)&&this.has(e)?this.list().indexOf(e):-1},K.prototype.add=function(e){return k(ka(this[F].isFrozen,`Tuple.add()`,`tuple`))?!1:j(arguments)&&!this.has(e)?(this[F].unique.add(e),this[F].array.push(e),this.size=Ma(this.size+1),Pa(this),!0):!1},K.prototype.delete=function(e){return k(ka(this[F].isFrozen,`Tuple.delete()`,`tuple`))?!1:this.has(e)?this.splice(this.indexOf(e),1):!1},K.prototype.replace=function(e,t){return k(ka(this[F].isFrozen,`replace()`,`tuple`))||!this.has(e)&&this.has(t)?!1:this.splice(this.indexOf(e),1,t)},K.prototype.prepend=function(e){return k(ka(this[F].isFrozen,`Tuple.prepend()`,`tuple`))||this.has(e)?!1:(this[F].array.unshift(e),this[F].unique.add(e),this.size=Ma(this.size+1),Pa(this),!0)},K.prototype.splice=function(e,t,...n){if(k(ka(this[F].isFrozen,`Tuple.splice()`,`tuple`))||!j(arguments)||!H(arguments,{min:0,max:1/0,validators:[Number,Number],name:`Tuple.splice()`}))return!1;if(j(arguments)>1&&e+t-1>this.size)return A(`deleteCount argument 2 count at "Tuple.splice()" exceeds the tuple size`),!1;if(j(arguments)===1){for(let[t,n]of this.list().entries())t>=e&&this[F].unique.delete(n);this[F].array.splice(e)}else if(j(arguments)===2){let n=t;for(let[t,r]of this.list().entries())t>=e&&n>0&&(this[F].unique.delete(r),n--);this[F].array.splice(e,t)}else if(j(n)){let r=t;for(let[t,n]of this.list().entries())t>=e&&r>0&&(this[F].unique.delete(n),r--);for(let e of n.values())this.has(e)?n.splice(n.indexOf(e),1):this[F].unique.add(e);j(n)&&this[F].array.splice(e,t,...n)}return this.size=Ma(j(this.list())),Pa(this),!0},K.prototype.map=function(e){return this.list().map(e)},K.prototype.exchange=function(e,t){if(!(this.has(e)&&this.has(t)))return A(`argument ${this.has(e)?`2`:`1`} not a member of this tuple`),!1;let n=this.indexOf(e),r=this.indexOf(t);return this[F].array[n]=t,this[F].array[r]=e,Pa(this),!0},K.prototype.arrange=function(e,t=0){if(!H(arguments,{name:`Tuple.arrange()`,min:1,max:2,validators:[xa,Number]}))return!1;if(!j(e)&&!this.size)return;if(t>(this.size||1)-1)return A(`Tuple.arrange()'s "start" argument @parameter 2 exceeds the tuple size\n"${t}"`),!1;let n=new M,r=new Set(si(e));this.forEach(e=>{r.has(e)||this.delete(e)});for(let[t,r]of vi(e))this.has(r)?this[F].array.splice(this.indexOf(r),1):this[F].unique.add(r),n.add(r);return this[F].array.splice(t,j(n),...si(n)),Pa(this),this.size=Ma(j(this.list())),!0},K.prototype.clear=function(){return!k(ka(this[F].isFrozen,`Tuple.clear()`,`tuple`))&&this.splice(0)},K.prototype.pop=function(){if(k(ka(this[F].isFrozen,`Tuple.pop()`,`tuple`)))return!1;if(this.size<=0)return;let e=this[F].array.pop();return this[F].unique.delete(e),this.size=Ma(j(this.list())),Pa(this),e},K.prototype.at=function(e){if(H(arguments,{count:1,validators:[Number],name:`Tuple.at()`})){if(e=Number(e),isNaN(e)){A(`index passed to Tuple.at() is not a number`);return}else if(e<0&&e>this.size)return A(`index exceded Tuple limit.........
-"at()"`),null;return this.list()[e]}},K.prototype.list=function(){return[...this[F].array]},K.prototype.extend=function(e){if(!H(arguments,{count:1,validators:[xa],name:`Tuple.extend()`}))return!1;for(let[t,n]of vi(e))this.add(n);return!0},K.prototype.forEach=function(e){return this.list().forEach(...arguments)},K.prototype.contains=function(...e){if(!j(e))return!1;for(let t of e.values())if(!this.has(t))return!1;return!0};var Ia=new M,La=void 0,Ra=void 0;new M;function za(e){Ia.add(e),P(Ra)&&(La=Ra),Ra=e}function Ba(){Ra=La||void 0}function Va(e){let t=Ra,{name:n,silently:r}=e;return P(t)?t:(r||A(`"${n}()" Adapter method cannot be called outside of a build widget or function widget body.\n\n"${n}()" may have been called from an asynchronous thread from the origin or outside of the build option method/function based widget\n\nCheck if the widget instance build method is an arrow function`),!1)}var Ha=new M,Ua=class{effects=new M;property=void 0;constructor(e){this.property=e}subscribe(){Ha.list().toReversed().forEach(e=>{e.depend(this),this.effects.add(e)})}notifyEffects(){this.effects.forEach(e=>e.notify())}},Wa=class{effect=void 0;self=void 0;callbacks=new M;value=void 0;active=!0;followers=new M;notified=!1;constructor(e,t){v(this,{effect:e,self:t})}dependencies=new M;notified=!1;depend(e){this.dependencies.add(e)}notify(e=!1){this.notified||this.reducer&&this.reducer.notified&&!e||(this.notified=!0,this.schedule())}schedule(){if(P(this.self)){for(let[e,t,n]of this.callbacks.values())t===`effect`?this.self[I]._OBSERVERS.add([e,n]):t===`priority`&&this.self[R].VN_Tree.priority.add(e);this.self.__public_model__.$pushEffect().then(()=>{this.propagate(),this.notified=!1})}else this.flushType&&this.flushType===`sync`?(this.callbacks.forEach(([e])=>e?.()),this.propagate(),this.notified=!1):Xm(()=>{this.callbacks.forEach(([e])=>e?.()),this.propagate(),this.notified=!1})}attachCallback(e,t=`effect`,n=`sync`){let{self:r}=this;!this.reducer&&!j(this.dependencies)||this.callbacks.add([e,t,n])}flushDeps(){this.dependencies.forEach(e=>{e.effects.delete(this)}),this.dependencies.clear()}runEffect(e){return this.reducer&&!this.r_flag?this:(this.flushDeps(),J(this,e))}endLife(){this.flushDeps(),this.callbacks.clear(),this.effect=V,this.active=!1,this.reducer&&this.reducer.followers.delete(this),this.__proto__={}}follow(e){this.followers.add(e)}propagate(){this.followers.forEach(e=>e.notify(!0))}},Ga=e=>e instanceof Ua,Ka=e=>e instanceof Wa;function q(e,t){return new Wa(e,t)}function J(e,...t){return Ha.has(e)||Ha.add(e),e.value=e.effect(...t),Ha.delete(e),e}function qa(e,t){return lf(...arguments)}function Ja(e,t,n){return cf(...arguments)}function Ya(e){let t,n,r;if(e&&!Y(e,[Function,String,Object])){A(`easing Function argument 1 receives an invalid argument`);return}h(e)?({css:t,fn:n,name:r}=e,t&&!d(t)&&(A(`easing Function "css" property receives an invalid argument...
-expects a css valid easing value`),t=void 0),n&&!D(n)&&(A(`easing Function "fn" property receives an invalid argument...
-expects a Function return a valid easing value`),n=void 0)):d(e)?t=e:D(e)&&(n=e),!n&&t&&t.startsWith(`cubic-bezier`)&&(n=xu(t)),v(this,{css:t,fn:n,name:r})}var Xa=class{css=void 0;fn=void 0;name=void 0;constructor(e){Ya.call(this,e)}},Za={linear:e=>e,easeIn:e=>e*e,easeOut:e=>1-(1-e)*(1-e),easeInOut:e=>e<.5?2*e*e:1-(-2*e+2)**2/2,cubicIn:e=>e*e*e,cubicOut:e=>1-(1-e)**3,cubicInOut:e=>e<.5?4*e*e*e:1-(-2*e+2)**3/2,quartIn:e=>e**4,quartOut:e=>1-(1-e)**4,quartInOut:e=>e<.5?8*e**4:1-(-2*e+2)**4/2,quintIn:e=>e**5,quintOut:e=>1-(1-e)**5,quintInOut:e=>e<.5?16*e**5:1-(-2*e+2)**5/2,sineIn:e=>1-Math.cos(e*Math.PI/2),sineOut:e=>Math.sin(e*Math.PI/2),sineInOut:e=>-(Math.cos(Math.PI*e)-1)/2,expoIn:e=>e===0?0:2**(10*e-10),expoOut:e=>e===1?1:1-2**(-10*e),expoInOut:e=>e===0||e===1?e:e<.5?2**(20*e-10)/2:(2-2**(-20*e+10))/2,circIn:e=>1-Math.sqrt(1-e*e),circOut:e=>Math.sqrt(1-(e-1)**2),circInOut:e=>e<.5?(1-Math.sqrt(1-(2*e)**2))/2:(Math.sqrt(1-(-2*e+2)**2)+1)/2,backIn:e=>2.70158*e*e*e-1.70158*e*e,backOut:e=>1+2.70158*(e-1)**3+1.70158*(e-1)**2,springSoft:e=>1-Math.cos(e*3*Math.PI)*Math.exp(-4*e),backInOut:e=>{let t=1.70158*1.525;return e<.5?(2*e)**2*(3.5949095*2*e-t)/2:((2*e-2)**2*(3.5949095*(e*2-2)+t)+2)/2},bounceOut:e=>{let t=7.5625,n=2.75;return e<1/n?t*e*e:e<2/n?t*(e-=1.5/n)*e+.75:e<2.5/n?t*(e-=2.25/n)*e+.9375:t*(e-=2.625/n)*e+.984375},spring:e=>1-Math.cos(e*4.5*Math.PI)*Math.exp(-6*e),bounceIn:e=>1-bounceOut(1-e),bounceInOut:e=>e<.5?(1-bounceOut(1-2*e))/2:(1+bounceOut(2*e-1))/2,elasticIn:e=>{let t=2*Math.PI/3;return e===0||e===1?e:-(2**(10*e-10))*Math.sin((e*10-10.75)*t)},elasticOut:e=>{let t=2*Math.PI/3;return e===0||e===1?e:2**(-10*e)*Math.sin((e*10-.75)*t)+1},elasticInOut:e=>{let t=2*Math.PI/4.5;return e===0||e===1?e:e<.5?-(2**(20*e-10)*Math.sin((20*e-11.125)*t))/2:2**(-20*e+10)*Math.sin((20*e-11.125)*t)/2+1},ease:e=>e<.5?4*e*e*e:1-(-2*e+2)**3/2,stepStart:e=>+(e>0),stepEnd:e=>e<1?0:1,smoothstep:e=>e*e*(3-2*e),smootherstep:e=>e*e*e*(e*(6*e-15)+10),anticipate:e=>e*e*(3.5523700000000002*e-1.70158*1.5),overshoot:e=>(--e,e*e*(2.70158*e+1.70158)+1),recoil:e=>Math.sin(e*Math.PI*2)*(1-e)*.2+e,snap:e=>e<.9?(e/.9)**3:1,springHeavy:e=>1-Math.cos(e*6*Math.PI)*Math.exp(-8*e)},Qa={springSoft:`cubic-bezier(0.2, 1.2, 0.4, 1)`,snap:`cubic-bezier(0.2, 1, 0.3, 1)`,recoil:`cubic-bezier(0.7, -0.4, 0.95, 0.9)`,anticipate:`cubic-bezier(0.68, -0.6, 0.32, 1.6)`,smootherstep:`cubic-bezier(0.4, 0, 0.2, 1)`,linear:`linear`,springHeavy:`cubic-bezier(0.3, 1.8, 0.4, 1)`,overshoot:`cubic-bezier(0.34, 1.56, 0.64, 1)`,smoothstep:`cubic-bezier(0.4, 0, 0.2, 1)`,easeIn:`cubic-bezier(0.55, 0.085, 0.68, 0.53)`,spring:`cubic-bezier(0.25, 1.5, 0.5, 1)`,easeOut:`cubic-bezier(0.25, 0.46, 0.45, 0.94)`,easeInOut:`cubic-bezier(0.455, 0.03, 0.515, 0.955)`,cubicIn:`cubic-bezier(0.55, 0.055, 0.675, 0.19)`,cubicOut:`cubic-bezier(0.215, 0.61, 0.355, 1)`,cubicInOut:`cubic-bezier(0.645, 0.045, 0.355, 1)`,quartIn:`cubic-bezier(0.895, 0.03, 0.685, 0.22)`,quartOut:`cubic-bezier(0.165, 0.84, 0.44, 1)`,quartInOut:`cubic-bezier(0.77, 0, 0.175, 1)`,quintIn:`cubic-bezier(0.755, 0.05, 0.855, 0.06)`,quintOut:`cubic-bezier(0.23, 1, 0.32, 1)`,quintInOut:`cubic-bezier(0.86, 0, 0.07, 1)`,sineIn:`cubic-bezier(0.47, 0, 0.745, 0.715)`,sineOut:`cubic-bezier(0.39, 0.575, 0.565, 1)`,sineInOut:`cubic-bezier(0.445, 0.05, 0.55, 0.95)`,expoIn:`cubic-bezier(0.95, 0.05, 0.795, 0.035)`,expoOut:`cubic-bezier(0.19, 1, 0.22, 1)`,expoInOut:`cubic-bezier(1, 0, 0, 1)`,circIn:`cubic-bezier(0.6, 0.04, 0.98, 0.335)`,circOut:`cubic-bezier(0.075, 0.82, 0.165, 1)`,circInOut:`cubic-bezier(0.785, 0.135, 0.15, 0.86)`,backIn:`cubic-bezier(0.6, -0.28, 0.735, 0.045)`,backOut:`cubic-bezier(0.175, 0.885, 0.32, 1.275)`,backInOut:`cubic-bezier(0.68, -0.55, 0.265, 1.55)`,bounceIn:`cubic-bezier(0.6, -0.28, 0.735, 0.045)`,bounceOut:`cubic-bezier(0.175, 0.885, 0.32, 1.275)`,bounceInOut:`cubic-bezier(0.68, -0.55, 0.265, 1.55)`,elasticIn:`cubic-bezier(0.7, -0.75, 0.99, 0.01)`,elasticOut:`cubic-bezier(0.16, 1.5, 0.3, 1)`,elasticInOut:`cubic-bezier(0.87, -0.5, 0.13, 1.5)`,easeInOut:`ease-in-out`,ease:`ease`,stepStart:`step-start`,stepEnd:`step-end`},$a={};U(Za).each((e,t)=>{$a[t]=eo({css:Qa[t],fn:e,name:t})});function eo(e){return new Xa(e)}function to(e){return e&&e instanceof Xa}var no=class{constructor(e,t){v(this,{$owner:e,vNode:t})}super=void 0;fallbackElement=void 0;errorElement=void 0;activeElement=void 0;rerenderObj={};timeout=1/0;hx_Element=void 0;delay=200;triggerResolved=V;state={pending:!1,failed:!1,resolved:!1,postLoad:0};errorCaptured(e,t,n){this.state.failed=!0,this.triggerFailure(e,t,n)}resolvedHook(){this.state.resolved=!0,this.triggerResolved()}hooks={errorHooks:new M,awaitHooks:new M,resolvedHooks:new M};metrics={$owner:void 0,vNodes:void 0,priorities:new M,vacuums:0,cashe:void 0,res:void 0,useFallback:!1};triggerFailure=V;enterFallback(){this.state.pending}promise=void 0;ref=void 0;instance=void 0;get activeAwaits(){return this.state.postLoad}set activeAwaits(e){return e>this.state.postLoad&&U(this.hooks.awaitHooks).each(e=>e()),this.state.postLoad=e,!0}loadChain=new M};function ro(e,t){if(!H(arguments,{name:`agent`,required:[!0,!1],min:1,max:2,validators:[ga,Object]}))return V;if(!Va({name:`agent`}))return[V,V];let n=[e,v({shallow:!0},t||{})];return hi(!W(e)&&!g(e)?Kf(...n):ei(...n))}function io(e,t){return ro(...arguments)}function ao(e){let t=this;if(!(!P(this)&&(t=Va({name:`pushEffect`}),!P(t)))&&H(arguments,{max:1,validators:[Function],name:`pushEffect`,self:this}))return t[I].dependency.trigger(),E(e)?Xm(e):Promise.resolve()}function oo(e){return ao.call(this,...arguments)}function so(e){if(!N(e)){A(`cloneVElement() macro expects a houxit virtual node as it's first argument`);return}return e.compiler_options.createElement()}function co(e,t=!1,n=[]){let i,[a,o]=n;if(g(e)||xr(a)&&isNaN(Number(o))||Y(e,[ko,qr,Function,Symbol])||g(e))return e;if(xr(e)){let n=e.map((n,r)=>t?co(n,t,[e,r]):n),i=(t=[])=>new e.__proto__.constructor(...t);return j(n)===1&&r(e)?(i=i(),i.push(n[0])):i=i(n),i}else if(m(e)){if(Oo(a))return T(`prototype_,type,GeneticProvider,children,hx_Element`,o),e;let n=r(e)&&j(e)===1&&se(e[0]);if(n&&(e=[...e],e.push(void 0)),i=v(new e.__proto__.constructor,e),n&&i.pop(),!t)return i;for(let[e,n]of vi(i))g(n)||(i[e]=co(n,t,[i,e]))}return i}var lo=(e,t)=>xe(e)&&xe(t)||p(e)&&p(t)||e===null&&t===null;function uo(e,t){if(e=G(e),t=G(t),Y(e,_a)&&Y(t,_a))return!!lo(e,t);if(Sa(e)!==Sa(t))return!1;if(g(e)&&g(t))return e===t;if(xr(e)){if(j(e)!==j(t))return!1;t=Y(t,[Set,M])?si(t):t;for(let[n,r]of e.entries())if(!uo(r,t[n]))return!1;return!0}else if(c(e)){if(j(e)!==j(t))return!1;let n=0;for(let[r,i]of e.entries()){if(!uo(r,t.keys().next()))return!1;let e=t.values().next();if(!uo(t,e))return!1;n++}return!0}else if(m(e)){if(j(e)!==j(t))return!1;let n=0;for(let[r,i]of y(e)){if(r!==b(t)[n]||!uo(i,t[r]))return!1;n++}return!0}return JSON.stringify(e)===JSON.stringify(t)}function fo(){let e=Zt(`Houxit`);e[Fn]={}}Zt(`Exceptions`,{SE:e=>A(``,e,P(e))});var po={debug:Boolean,forwardSlot:Boolean,forwardAttrs:Boolean,delimiters:Array,scopedStyle:Boolean,forwardEvents:Boolean},mo=new class{debug=!0;forwardSlot=!0;forwardAttrs=!0;forwardEvents=this.forwardAttrs;delimiters=[`{{`,`}}`];scopedStyle=!0},ho=class{debug(e){if(k(Xd(this,`debug`,e)))return this;mo.debug=e}forwardAttrs(e){if(k(Xd(this,`forwardAttrs`,e)))return this;mo.forwardAttrs=e}forwardEvents(e){if(k(Xd(this,`forwardEvents`,e)))return this;mo.forwardEvents=e}forwardSlot(e){if(k(Xd(this,`forwardSlot`,e)))return this;mo.forwardSlot=e}delimiters(e){if(k(Xd(this,`delimiters`,e)))return this;mo.delimiters=e}scopedStyle(e){if(k(Xd(this,`scopedStyle`,e)))return this;mo.scopedStyle=e}};function go(e,...t){try{return Reflect.construct(Object,si(args),e)}catch{return!1}}function _o(e){return/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/m.test(e)}var vo=`*****`,yo=RegExp(`(${vc(vo)}[\\d])`,`g`);function bo(e,t,n={}){let r=t;n=v({global:!1,block:`declare`},n);let{global:i,block:a}=n;_o(t)&&(t=vc(t));let o=`mu`;i&&(o+=`g`);let s=RegExp(`(${t} *\\()([\\S\\s]*)`,o),c=[],l=0;e=e.replace(pe,(e,t,n)=>{c.push(e);let r=vo+l;return l++,r});let[u,d,f]=e.match(s);f=f.replace(yo,(e,t,n)=>c[Number(t.match(/\d/))]);let p=``,m=0,h=``,g=!0,_=e=>/['"]/.test(e);for(let[e,t]of y(f))if(p+=t,_(t)&&(h||=(g=!1,t),t===h&&(h=``,g=!0)),g){if(t===`(`)m++;else if(t===`)`){if(m===0)break;m--}}return{name:r,content:p.slice(0,-1),source:r+`(`+p}}function Y(e,t){if(E(t)){if(new Set(vt).has(t))return Sa(e)===Sa(t())&&!f(e);if(new Set(yt).has(t)){let n=!1;try{n=Sa(e)===Sa(new t)&&!f(e)}catch{return n}return n}else if(bt(t)||Rt(t)||go(t)){let n=!1;try{n=e instanceof t}catch{return n}return n}}else if(r(t)){let n=!1;for(let r of t.values()){if(!E(r)&&!ha(r)&&!f(r)&&!xe(r))return A(`type check value is not a function or class constructor type\n\n found "${r}"`),!1;if(n=Y(e,r),O(n))return n}return n}else if(ha(t)){if(t instanceof pa)return!Y(e,_a);if(t instanceof ma)return Y(e,[void 0,null,``]);let n;return t.validator&&(n=t.validator(e)),!O(n)&&t.type&&(n=Y(e,t.type)),n}else if(new Set([void 0,null,``]).has(t))return d(e)?xe(e):f(e);return!1}function xo(e,t,n,r,i){return So(...arguments)}function So(e,t,n,r,i){g(t)||(A(`cannot create a TEXT_NODE element from a none primitive value.......\n\n"${t}" value`,e),t=``);let a=Q(e),o=n.is_hyperscript,s;if(!r&&!a&&(s=document.createTextNode(t),s._hx_Element={hx_Element:n,_vnode_key:void 0}),!o&&_o(t)||o&&E(t)){let i=q(function(){return o?ks(t):Cc(e,t,n)},e),{dependencies:c,value:l}=J(i);if(!r&&!a?s.textContent=l:(s=l,n.$element=l),!r&&P(e)&&(!a||Qf(e))){let e=np(i,()=>{wt(s)&&(s.textContent=i?.runEffect?.().value)});n?.VN_Tree.FLUSHS.add(e)}}return(r||a)&&(o||!_o(t))&&(s=t,n.$element=t),s}var Co={0:`TEXT`,16:`CLASS`,32:`STYLE`,48:`ATTRS`,64:`EVENTS`,80:`PARAMS`,96:`FRAGMENT`,112:`SLOTS`,128:`CHILDREN`};`FRAGMENT,CLASS,STYLE,ATTRS,EVENTS,PARAMS,TEXT,SLOTS,CHILDREN`.split(`,`);var wo=class{constructor(e,t,n,r={}){this.type=e,jt(e)&&(this.GeneticProvider=e),this.props=h(t)?t:{},_(this.props,`key`)&&(this.key=this.props.key,delete this.props.key),f(n)||(this.children=new M(...$(n)).list());let{subs:i,ctx:a,is_hyperscript:o,key:s,config:c,self:l,flags:u=[]}=r;this.ctx=a;for(let e of u.values())this.subscriptions[Co[e]]=Co[e].toString(2);this.prototype_=e}type=null;props={};compiler={};prototype_=null;children=null;key=null;config=null;_is_VNodeClass=!0;filesFilter={$$$Events:{},$Model_Event:null,$Notifiers:null,$ssr_kit:{events:new M,props:{},hydrationFlushs:new M},parent:void 0};rawChildren=null;rawProps=null;children=null;hx_Element=null;is_hyperscript=!1;GeneticProvider=null},To=class extends wo{constructor(){super(...arguments)}},Eo=Symbol(`wfu_class_prop`),Do=class{constructor(){this[Eo]=void 0}},Oo=e=>e instanceof To,ko=class{constructor(){Ct(this.$element)&&S(this.$element,`houxitElement`,{value:this,enumerable:ve,configurable:ye})}base_element=void 0;get_parent_element(){return this.$element.parentElement.houxitElement}prototype_=void 0;$element=void 0;slot_name=void 0;widget_instance=void 0;updated_hook=V;destroyed_hook=V;_vnode_key=void 0;patch_tracks=new Set;conditional_record={src:void 0,res:!1,passed:!1};compiler_options={context:{}};VNodeManager={updateFlags:{active:!1},motion_object:{transite:new M,animate:new M,config:{},hooks:{transition:{in:new M,out:new M,stop:new M,destroy:new M},animation:{to:void 0,from:void 0,options:{},play:new M,pause:new M,reverse:new M,cancel:new M,destroy:new M,finish:new M,restart:new M}},create(e,t,n){this[e].add({fn:t,...n})}},posix:[],GeneticProvider:void 0,vNodeClass:void 0,factoryCompiler:V,LifeCycleHooks:{init_hook:new M,created_hook:new M,mounted_hook:new M,updated_hook:new M,destroyed_hook:new M},patchFlags:{subscriptions:new M,PropFlags:new M,shapeProps:{}},dexTransform:{sourcesArray:[],syntaxArray:[]},SSRVnode:void 0};VN_Tree={KEYS_INDEXES:new M,LEAGUE_TREE:{},FLUSHS:new M,ELEMENTS:void 0};hx_build=void 0;is_hyperscript=!1;IS_RENDERLESS=!1;LabContext=void 0;mounted=!1;isLoopWrappRenderer=!1;NodeList=new M;PATCH_FLAGS=new M};function Ao(e,t){for(let n of[[`[`,`]`],[`{`,`}`],[`(`,`)`],[`<`,`>`]].values())if((n.includes(e)||n.includes(t))&&(e===n[0]&&t===n[1]||e===n[1]&&t===n[0]))return!0;return!1}function jo(e,t){let[n,r,i]=t;return Ao(n,r)?!0:(A(`Unmaching tags for "for" directive loop data keys mapping\n opening tag does not match a closing tag\n\n found ${i} Unmaching`,e,!0),!1)}var Mo=/(((\(|\<)?(((\{|\[)(.*?[ ]*)*?(\}|\]))|([\w.\$]+))[ ]*(\,[ ]*(.*?))?(\)|\>)?)[ ]+([of|in]+)[ ]+)?([\w.\$\[\]\(\) \S\{\}]+)/;function No(e,t,n=!1){let r={},i=t.match(Mo);if(!i||!i[14]){A(`Usupported Loop format in 'for' ${n?`block`:`directive`}\n\n"${t}" loop syntax is invalid or is not recognised`,e,!0);return}let[a,o,s,c,l,u,d,f,p,m,h,g,_,y,b]=i;if(!(c&&!jo(e,[c,_,``]))){if(!b){A(`unable to alocate loop resource in loof 'for'`,e,!0);return}if(v(r,{obj:b,value:l,type:y}),c&&g){let[e,t]=g.split(`,`).map(e=>e.trim());r.key=e,r.index=t}return r}}function Po(e,t,n,r=!1,i,a){let o=No(e,t,r,a);if(!o)return;let s,c;try{s=a?i.effect:q(()=>G(Z(e,o.obj,n)),e),c=(a?s.runEffect():J(s)).value}catch(t){A(`Trouble accessing '${o.obj}' object for for loop\n\nnot found on instance or is undefined\n\n${t}`,e,!0);return}if(!_e(c)&&!se(c)){A(`Undefined scope for for, \n\n${o.obj} not iterable`,e,!0);return}if(o.type&&!T(`of,in`,o.type)){A(`((Iteration issue))\n\n"${o.type}" is not an iterator\n "of" or "in" only supported by Houxit`,e,!0);return}return{effect:s,obj:c,keyName:o.key?.trim(),valToken:o.value?.trim(),loopType:o.type?.trim(),token:o.obj,index:o.index?.trim()}}function Fo(e){let t=!1,n=!1,r={},i=0;for(let[a,o]of y(e))t||=ur(a)||fr(a)||dr(a),ur(a)&&v(r,{ifIndex:i,hasIf:!0,getIf:o,ifKey:a}),fr(a)&&v(r,{elseIndex:i,hasElse:!0,getElse:o,elseKey:a}),dr(a)&&v(r,{elseIfIndex:i,getElseIf:o,hasElseIf:!0,elseIfKey:a}),pr(a)&&(n=!0,v(r,{forIndex:i,hasFor:!0,getFor:o,forKey:a})),i++;return v(r,{hasIFWithFor:t&&n,has_conditional:t}),r}var Io=e=>N(e)&&O(e.IS_RENDERLESS);function Lo(e,t,n){let r=0;for(let e of[...arguments].values())e&&r++;return r}function Ro(e,t,n,r,i,a,o){let[s,c,l]=a[3];if(Lo(s,l,c)>1){A(`((directive))>.....Overloaded Conditional directive found on element instance\n\n
-        "${s?`$$if`:c?`$$else-if`:`$$else`}"\nfailed to determine>>>>`,e,!0);return}let u=e[I].initializedRender,d=new Vo(e,t,n,r,a,i,o),f=e=>{if(s)return d.Panel_If_Block();if(c||l)return d.Panel_elseif_Block(l,e)},p=f({i:j(r)});return u||(p.compiler_options.createElement=f),p}var zo=(e,t,{suspenseFlag:n})=>N(e)||n&&Oo(e)?e.conditional_record.src===t:!1;function Bo(e){return ac(e)&&h(e.VNodeManager.isMemoChild)}var Vo=class{options=void 0;constructor(e,t,n,r,i,a,o){let{type:s,props:c,children:l,key:u}=t,[d,f,p]=i,m=n?v({},n.LabContext):{};a=v(v({},a),m),v(this,{propValue:f,srcKey:p,self:e,props:br(t.props,!0),vnode:t,hx_Element:n,siblings:r,ctx:a,config:o,effect:void 0,isRerender:e[I].initializedRender,createElement:()=>Ns(this.vnode,e,!1,n?.LabContext,r,a,n,o),rf:[]}),this.vnode.props=v({},this.vnode.props)}Panel_If_Block(e=`if`,t,n){let{config:r,self:i,propValue:a,hx_Element:o,vnode:s,siblings:c,srcKey:l,ctx:u,isRerender:d}=this,f=e===`else`,p=t?t.conditional_record.passed:!1,m,h=t?.conditional_record.src||e,g=this.effect??q(()=>f?!0:Z(i,a,u),i);this.effect?g.runEffect():J(g);let _=g.value;return delete this.vnode.props[l],(p||!_)&&(m=Ho(_,e,t)),_&&!p&&r.suspenseFlag?(m=this.vnode,m.conditional_record={}):_&&!p&&(m=this.createElement(),v(m.conditional_record,{src:e,res:!!_,passed:!p&&_})),o?.NodeList.add(m),!this.effect&&!d&&(this.effect=g,t&&(t.conditional_record.effect.follow(g),g.reducer=t.conditional_record.effect),m.conditional_record.effect=g,np(g,t=>{let n=c.indexOf(m),a=m.compiler_options.createElement({i:n});if(a.compiler_options.createElement=m.compiler_options.createElement,r.memoVault&&!cs(i,a))return;let s=uh(i,m,a,t,o||i.$build,{args:[{i:n}],config:{FORCE:e!==h,...r}});v(m.conditional_record,a.conditional_record),s&&(s.compiler_options.createElement=a.compiler_options.createElement,m=s,v(s.conditional_record,a.conditional_record),c.splice(n,1,m))},i)),m}Panel_elseif_Block(e=!1,t){let n=e?`else`:`else-if`,{config:r,self:i,propValue:a,hx_Element:o,siblings:s,vnode:c,srcKey:l,ctx:u}=this,d=i[I].initializedRender,f=s[t.i-1],p;return f&&f.conditional_record.passed,delete c.props[l],!d&&!f||!zo(f,`if`,r)&&!zo(f,`else-if`,r)?(A(`The "$$${n}" conditional rendering directive block expects a preceding "$$if" or "$$else-if" directive element\n\nMay return unexpected result during production\nDid you mean "$$if" directive instead?\n at>>>>>`,i,!0),p=Ho(!1,n,f),p.compiler_options.createElement=this.createElement,p):this.Panel_If_Block(n,f,t)}};function Ho(e,t,n){return $s(r=>{v(r.conditional_record,{src:t,res:!!e,passed:n?n.conditional_record.passed:!1})})}function Uo(e,t){let n=!1;for(let[i,a]of y(e))if(r(e)?n=T(t,a):h(e)&&(n=T(t,i)),O(n))break;return n}function Wo(e,t,n){return e&&an.test(e)&&!m(t)?(A(`Invalid object destructuring from a none object value\n\nillegal destructuring found at "${t}" on "$$<...>" directive definition\nTarget value is not an object`,n,!0),!1):e&&on.test(e)&&!r(t)?(A(`Invalid array destructuring from a none array value\n\nillegal destructuring found at "${t}" on $$*** directive definition\nTarget value is not an array iterable`,n,!0),!1):!0}function Go(e,t,n,r,i,a,o,s){t=br(t,!0);let[c,l,u]=a,d=e[I].initializedRender,f=fm(e),p=f?s.For_Loop_Instance:Po(e,l,n,!1,s,d)||{};f?p.obj=p.effect.runEffect().value:s.For_Loop_Instance=p;let{obj:m,keyName:h,valToken:g,loopType:_,ref:y,index:b,effect:x}=p;d||(s.effect=x),t.props=v({},t.props),delete t.props[u],!f&&_===`in`&&g&&Y(m,[Object,xa])&&(me(`((Warning))
-
-We recommend against the use of the 'for...in' loops type since it iterates over all of the object's enumerable and non-symbol properties 
-
-Leaving the value data as "undefined"
-Use "for...of" instead......`,e),me(`Many JavaScript style guides and linters recommend against the use of 'for...in', because it iterates over the entire prototype chain which is rarely what one wants, and may be a confusion with the more widely-used "for...of" loop
-
-It's included in Houxit for completeness.`,e));let ee=[];U(m,_).each(function(a,c,l){let u=br(t,!0);if(i=v({},i),Wo(g,a,e))if(se(m))g&&(i[g]=a+1),h&&(i[h]=g?a:a+1),b&&(i[b]=b),qo(e,u,i,ee,c,a,n,o,r,s);else{let t={};g&&(t.valToken=g),h&&(t.keyName=h),b&&(t.index=b),i=Ko(e,{valToken:g,keyName:h,index:b,hx_Element:n},{ky:c,vl:a,count:l},i),qo(e,u,i,ee,l,a,n,o,r,s)}});let S=ee[j(ee)-1],C=new X(ee,e,n);if(S&&v(C.conditional_record,S.conditional_record),C.isLoopWrappRenderer=!0,N(n)&&n.NodeList.add(C),!d){let n=np(x,()=>{Ds(e,C,t,m,x,s)});C.VN_Tree.FLUSHS.add(n)}return C}function Ko(e,t,n,r){let{valToken:i,keyName:a,index:o,hx_Element:s}=t,{ky:c,vl:l,count:u}=n;if(i&&cn(i)){if(!Wo(i,l,e))return r;r=Ws(r,{[Sn]:{sourcesArray:[l],syntaxArray:[i]}})}else i&&(r[i]=l);return a&&(r[a]=i?c:l),o&&(r[o]=u),v({},r)}function qo(e,t,n,r,i,a,o,s,c,l){o?.LabContext&&(n=Ws(o.LabContext,n||{}));let{has_conditional:u}=s,d=()=>Ns(t,e,!1,n,u&&i===0?c:r,null,o,l),f=d();f.compiler_options.createElement=d,f&&r.push(f)}function Jo(e,t,n,r,i,a,o,s){let c=t.is_hyperscript,{type:l,props:u,children:d}=t,{hasIFWithFor:f,ifIndex:p,elseIndex:m,elseIfIndex:h,forIndex:g}=a,{getIf:_,hasIf:v,hasElse:y,getElse:b,hasElseIf:x,getElseIf:ee,hasFor:S,getFor:C}=a,{ifKey:w,elseKey:T,elseIfKey:te,forKey:ne}=a,re=v?_:y?b:x?ee:S?C:null,ie=v||y||x,ae=[ie,re,v?w:y?T:x?te:S?ne:null,[v,x,y]];if(y&&S&&m>g){A(`A "$$for" directive loop cannot take precedence in the presence of an "$$else" condition directive statements
-
-directive scoping error`,e,!0);return}return t=br(t,!0),t.filesFilter.hasDir=!0,f&&(v?p:y?m:x?h:-1)<g?Ro(e,t,r,i,o,ae,s):S?Go(e,t,r,i,o,[ie,C,ne],a,s):ie?Ro(e,t,r,i,o,ae,s):Ns(t,e,c,o,i,null,r,s)}function Yo(e,t,n,r={},i,a=``){return(function(){for(let r of t.values())if(!Hl(r))try{let t=r[Dn],a=qt(i)?n:e.__public_model__;r.call(e.__public_model__,a,t)}catch(t){A(`$$`+r.name+`(`+a.slice(0,-5)+`) >>
-Unresolved problem during the call of the `+a.slice(0,-5)+` hook of custom `+(r.dirName||``)+` directive
-`,e,!0),A(t,e);break}})()}function Xo(e,t,n){let r=r=>[e,n.VNodeManager.LifeCycleHooks[r],t,e.__public_model__,n,r];return j(n.VNodeManager.LifeCycleHooks.created_hook)&&Yo(...r(`created_hook`)),j(n.VNodeManager.LifeCycleHooks.mounted_hook)&&e[R].whenMountedHooks.add(function(){qm(e,t,()=>{Yo(...r(`mounted_hook`))})}),U([`updated_hook`,`destroyed_hook`]).each(e=>{j(n.VNodeManager.LifeCycleHooks[e])&&Zo(...r(e))}),t}function Zo(e,t,n,r,i,a){i[a]=function(){Yo(e,t,n,e.__public_model__,i,a)}}function Qo(e,t,n,r){try{Xm(()=>t[t[Di].accessor]=n)}catch(t){A(`(ref) >>\nUresolved error when dilating the special ref prop>>>\n\n${t}`,e,!0);return}}function $o(e,t,n,r,i,a,o,s){fs(e.children,Ls(e));let c=new X(e.children?jg(e.children,t,null,o,r,s):[],t,o,e.props?.key);return c._vnode_key=e.key,c}function es(e,t,n){let[r,i,a]=n;return!e||!_(e,i)?(A(`"${r}" built-in widget expects a "${i}" params\nMissing...`,t,!0),!1):a&&!Y(e[i],a)?(A(`"${r}" validation for the "${i}" param is invalid`,t,!0),!1):!0}function ts(e,t,n,r,i,a,o,s){if(ar(t))return $s();let c=t[z].virtualNode.prototype_;return e=Iu(c,br(e.props),br(e.children||[])),e[An]=!0,Ns(e,t,n,r,i,a,o,s)}function ns(e,t){if(d(t)){if(at(t)||Is(t))return t;if(Bt(e,t))return Vt(e,t);Fs(t,e);return}else if(jt(t))return t;A(`<Bulld/>.self property value failed to compile
-unrecognized data type`,e,!0)}function rs(e,t,n,r,i,a,o,s){if(!es(e.props,t,[`hx:build`,`self`]))return $s();let c=e.props,l=t[I].initializedRender;c=br(c,!0);let u=e.compiler[Wn]?.self||{},d=ns(t,c.self);delete c.self,c=Eh(e.rawProps,`self`),c.key=e.key;let f=()=>d?(e=Iu(d,c,br(e.children||[],n)),Ns(e,t,n,r,i,a,o,s)):$s(),p=f();return p.compiler_options.createElement=f,l||np(u,e=>{d=ns(t,u.runEffect().value);let n=f();n.compiler_options.createElement=f;let r=uh(t,p,n,e,N(o)?o:null,{config:s});r&&(p=r)}),p}function is(e,t){let n=Mi(t.target),r=n?zp(n):void 0;if(!r||!Tt(r)){A(`Unable to generate portal element
-
-
-        Target not existing in the current document model layer
-
-
-        Mount target for Portal widget is not a valid element node`,e,!0);return}return r}function as(e,t,n,r,i,a,o,s){if(!es(e.props,t,[`hx:portal`,`target`]))return $s();let c=is(t,e.props);if(!c)return $s();fs(e.children,Ls(e));let l=new X(e.children?jg(e.children,t,null,o,r,s):[],t,o,e.key);return c.append(l.$element),l.$element=zh(),l._vnode_key=e.key,l}function os(e){return Jt(e)?e.NodeList.list():xr(e)?si(e):[e]}function ss(e,t,n,r){let i=new M,a=!1;for(let o of t.values()){let t=cs(e,o,n,r);ac(t)?i.add(t):t||(a=!0)}return[i,a]}function cs(e,t,n,r){let i=$s();if(!t)return i;let a=r||{count:0};t=os(t);let o;if(j(t)&&(j(t)>1||!ac(t[0])))if(j(t)>1){let[r,i]=ss(e,t,n,a);if(i)return;o=r.at(0)}else{if(Jt(t[0]))return cs(e,t[0],n,a);if(Io(t[0]))return i;A(`"<Memo>" expects atleast a single child widget instance
-
-<Memo> validation failed...
-Not a widget Instance`,e,!0),A(`<Memo> expects a widget element instance...not a regular HTML element or unidentified DOM/Custom Wrapper`);return}else if(!j(t))return i;else if(j(t)&&ac(t[0]))return a.count++,t[0];if(!r&&a.count>1){A(`<Memo> child widget may have supassed the number of expected <Memo> container\n\n1 at most expected >>> ${a.count} <<< found `,e,!0);return}return ac(o)?o:i}function ls(e,t,n,r,i,a,o,s){t[I].initializedRender,n=t[z].map.is_hyperscript;let c=e.children,{max:l,test:u}=e.props;l=Number(l),l&&(l<1||isNaN(l))?(A(`Failed validation of <Memo>.max param\n"${l}" ${isNaN(l)?`is not a number`:`is less than 1`}`,t,!0),l=1/0):l||=1/0,u&&!D(u)&&A(`<Memo>.test prop expects a plain function returning Boolean
-INVALID <TEST> PROPERTY VALUE`,t);let d={storage:new Map,keys:new M,caches:[],stableID:void 0,stabilityChecker(){return cs(t,this.Wrapper,!0)},Wrapper:void 0,max:l,test:u};s.memoVault=d;let f=jg(c,t,null,o,a,s),p=cs(t,f);if(!p)return $s();let m=t[R].memoVault;m.add(d);let h=m.indexOf(d);p.VNodeManager.isMemoChild={index:h,vault:d};let g=new X($(f),t);return g.VN_Tree.FLUSHS.add(()=>m.delete(d)),d.Wrapper=g,g}function us(e,t,n,r,i=[],a,o){new Set(i).has(`default`)||i.push(`default`),e[I].initializedRender;let s=new M,c={};U(i).each((e,t)=>{c[e+`X`]=new M});let[l,u,d,f,p,m]=r;m&&(m._$$all_=s);let h=e[z].map.is_hyperscript,_=[];return U($(t.children)).each((t,l)=>{if(g(t))return c.defaultX.add(t),s.add(t),U.Continue();if(h)Gt(t)?U(t.slots).each((t,n)=>{U(i).each(r=>{if(n===r){if(r!=="default"&&j(c[r]))return A(`"`+r+`" slot already defined...
-duplicated slot for "`+r+`" not allowed!!!`,e,!0),U.Continue();c[r+`X`].add(t),s.add(t)}})}):Dt(t)&&(c.defaultX.add(t),s.add(t));else{if($h(t))return U.Continue();let l=t.props;n=br(n),n.NodeList=new M;let u=N(t)?t:Ns(t,e,h,f,_,p,n,{suspenseFlag:!0,...o});if((N(u)||Oo(u))&&(_.push(u),Oo(u)&&(t=u),u.conditional_record.src===`else`&&(_=[])),k(u))_=[];else if(Io(u))return;let{hasDir:d,getKey:m,getDir:g}=sc(l||{},`$$slot`);if(!d){if(Ah(t.prototype_)){if(jh(t.prototype_)===`await`)return c.defaultX.add(t),s.add(t),U.Continue();let l=new M;a&&(t.filesFilter.suspense=a),Xg(e,t,[n,l,t.type,r[3],r[4]],{suspenseFlag:!0}),U(us(e,{children:l.list()},n,r,i,a,o)).each((e,t)=>{j(e)&&c[t].extend(e)})}else t=br(t,!0),c.defaultX.add(t),s.add(t);return}let v=vl(e,{key:m,attr:g},h,n,{isRerender:e[I].initializedRender});U(i).each(n=>{if(v.key===n){if(n!=="default"&&j(c[n+`X`])){A(`"`+n+`" slot already defined...
-duplicated/multiple slots for "`+n+`" slot not allowed!!!`,e,!0);return}c[n+`X`].add(t),s.add(t)}}),t.filesFilter.bindings=v,t.filesFilter.shouldRestore=!0,delete t.props?.[m],t.filesFilter.creatRestore=()=>{Xm(()=>{t.filesFilter.shouldRestore&&!t.filesFilter.slotsRestored&&(t.props[m]=g,t.filesFilter.slotsRestored=!0,delete t.filesFilter.shouldRestore)})}}}),c}function ds(e,t,[n,r],i,a,o,s){let c=e[z].map.is_hyperscript,l=e[z].initializedRender;if(j(n)||j(r)){let i=(n,r,i)=>{let u=l?V:Rs(e);c?U(n).each((e,t)=>{let a=[];r===`error`&&a.push(i),n.splice(t,1,e?.(...a))}):r===`error`&&(a=Jl(e,a,n.at(0)?.filesFilter.bindings?.value||`error`,br(i))),c||n.forEach(e=>e.filesFilter?.creatRestore());let d=t[r+`Element`];return d||=jg(n,e,null,o,a,s),d=Jt(d)?d:new X($(d),e,o),u(),t[r+`Element`]=d,d};return[()=>i(n,`fallback`),e=>i(r,`error`,e)]}return[]}function fs(e,t){t&&U(e).each(e=>{Oo(e)?e.filesFilter.suspense=t:N(e)&&(e.VNodeManager.suspense=t)})}function ps(e){let t=e?.super;return t&&!t.state.resolved?t:e}function ms(e,t,n,r){let i=n.filesFilter.$$$Events||{},a={};return U([`pending`,`resolved`,`failed`]).each(e=>{a[`on`+e.at(0).toUpperCase()+e.slice(1)]=function(t){r||i[e]?.callbacks.list().forEach(e=>e(t))}}),a}function hs(e,t,n,i,a,o,s,c){let l=t[I].initializedRender;n=t[z].map.is_hyperscript;let u=new no(t,e),d=Ls(e);d&&(u.super=d,d.metrics.priorities.add(u));let f=()=>ps(u);u.suspenX=f;let p=e.filesFilter.parent;u.hx_Element=P(p)?p.$build:p;let{timeout:m,delay:h}=e.props||{},g=e.await;U({timeout:m,delay:h}).each((n,r)=>{if(!_(e.props||{},r))return U.Continue();if(isNaN(Number(n)))return A(`<Suspense> validation for "${r}" prop failed\n expects a Number value type`,t,!0),U.Continue();if(n<0)return A(`<Suspense>.[${r}] prop receives a negative value...`,t,!0),U.Continue();u[r]=n});let y;if(_(e.props||{},`await`))if(!Mt(g)&&!de(g)){let e=!0;D(g)&&(y=g(),de(y)&&(e=!1)),e&&A(`"await" <Suspense> prop expects an "async Function" , a "Promise object" or a callback that returns a "Promise object" object`,t,!0)}else y=Mt(g)?g():g;let b={},{defaultX:x,fallbackX:ee,errorX:S}=us(t,e,s,[s,a,e.type,i,o,b],[`default`,`fallback`,`error`],u);fs(b._$$all_,u),ge(f().timeout)||setTimeout(()=>{!f().state.resolved&&!f().state.failed&&f().errorCaptured(V,{message:`<Suspense> render wait timed out`},l?te:null)},f().timeout),u.promise=de(y)?y:Promise.resolve();let{onPending:C,onResolved:w,onFailed:T}=ms(t,u,e,l);de(y)&&u.activeAwaits++;let[te,ne]=ds(t,u,[ee,S],e,o,s,c);d&&(u.switchFallback=()=>{u.state.pending&&_s(t,u,te(),l,c)}),u.triggerFailure=function(e=V,n,r){let i=E(r)?r():ne(n);_s(t,u,i,l,c),!r&&(e(),A(n?.message),T(n))},u.triggerResolved=()=>{U(u.metrics.priorities).each(e=>{if(!e.super)return U.Return();e.switchFallback()}),w()};let re;function ie(){let e=jg(x.list(),t,null,s,o,c);return r(e)?new X(e,t):e}de(y)?(u.state.pending=!0,C(),y.then(r=>{if(!n){let n=e.filesFilter.$$dir_PROVIDE_bindings;n&&(delete e.filesFilter.$$dir_PROVIDE_bindings,o=Jl(t,o||{},n?.value,r))}u.activeAwaits--;let i=l?V:Rs(t);re=ie(),i()}).catch(e=>{u.state.failed=!0,u.errorCaptured(V,{message:e.message})})):re=ie(),u.state.postLoad?u.promise.then(()=>{(async function(){await gs(u),await gs(u)})().then(e).catch(e=>{u.state.failed=!0,u.errorCaptured(V,{message:e.message})}).then(()=>{n||Xm(()=>{U([S,ee,x]).each(e=>{e.forEach(e=>delete e.filesFilter.slotsRestored)})})});function e(){v(u.state,{pending:!1,resolved:!0}),u.triggerResolved(),_s(t,u,re,l,c),n||U([S,ee,x]).each(e=>{e.forEach(e=>e.filesFilter.creatRestore?.())})}}):v(u.state,{pending:!1,resolved:!0});let ae;return!l&&u.state.pending&&u.delay>0?(u.useFallback=!0,setTimeout(()=>{u.state.pending&&!u.state.failed&&!u.state.resolved&&_s(t,u,te(),l,c)},u.delay)):u.state.pending&&(ae=te()),u.useFallback&&u.state.pending?ae=new X([],t):u.state.resolved&&(ae=new X(re,t)),u.activeElement=ae,ae.VNodeManager[Nn]=u,ae._vnode_key=e.key,ae}async function gs(e){for(let t of e.loadChain.list().values())await t.then(()=>{e.loadChain.delete(t),e.activeAwaits--}).catch(e=>{throw Error(e)})}function _s(e,t,n,r,i){let{activeElement:a,vNode:o}=t,s=t.rerenderObj;if(n._vnode_key=o.key,r){rh(e,s.activeElement,n,s.observer,i);return}let c=o.filesFilter.parent;c=P(c)?c.$build:c;let l=c.NodeList.indexOf(a),u=c.VN_Tree.KEYS_INDEXES[l];c.VN_Tree.LEAGUE_TREE[u][0]=n,c.NodeList.replace(a,n);let d=mh(a);t.activeElement=n,d.before(n.$element),hh(a),n.VNodeManager[Nn]=t}var vs={},ys={},bs=(e,t,n)=>T(n===`transitions`?vs:ys,t)||T(e[B][n],t);function xs(e,t,n){let r=n===`transitions`?vs:ys;return T(r,t)?r[t]:e[B][n][t]||V}function Ss(e,{mode:t,value:n,key:r}){if(n&&d(n)){let t=r===`transite`?`transitions`:`animations`;if(!bs(e,n,t)){A(`Unrecognized ${t} name "${n}"\n\n if this is a custom ${t}, make sure it's registered through the local ${t} option or global prototype '.${t}()' method`,e,!0);return}return xs(e,n,t)}else if(n&&!D(n)){A(`<Motion> "${r}" prop expects ${r===`animate`?`an animation`:`a transition`} function>>>>\nValidation failed...`,e,!0);return}else if(n)return n}function Cs(e,t,n,i,a,o,s,c){let l=t[I].initializedRender;n=t[z].map.is_hyperscript,c=v({animate:void 0,transite:void 0,params:{},mode:`both`},c);let{animate:u,transite:f,params:p,mode:m}=e.props||{};U({animate:u,transite:f,params:p,mode:m}).each((n,r)=>{if(_(e.props||{},r)){if(r===`animate`||r===`transite`)n=Ss(t,{mode:m,value:n,key:r});else if(r===`mode`){if(m&&!d(n)){A(`<Motion> "params" prop requires a string value>>>
-validation failed...`,t,!0);return}else if(m&&!T(`in,out,both`,n)){A(`<Motion>.mode params property receives an Invalid mode argument...
-receives "`+n+`"`,t,!0);return}}else if(r===`params`){if(n&&!h(n)){A(`<Motion> "params" prop requires a plain object>>>
-validation failed...`,t,!0);return}else p&&(c.params=v(c.params,p));return}else if(!n)return;c[r]=n}});let g=jg($(e.children),t,null,s,o,c);return g=r(g)?new X(g,t):g,Ts(g,e=>{U([`transite`,`animate`]).each(t=>{c[t]&&Es(e,c[t],m,t,c.params)}),vu(t,e,{isRerender:l,is_hyperscript:n},e.$element)},s,[t,null,s,o,c],l),g._vnode_key=e.key,g}function ws(e,t,n){let r;qt(e)?r=e:Ct(e)&&(r=e._hx_Element.hx_Element);let i=r?.VNodeManager?.motion_object?.hooks,a=i?.transition?.out;if(r&&(i.animation.from=r.$element.getBoundingClientRect()),!r||!j(a)){t();return}async function o(){for(let e of a.values())await e()}async function s(){await o(),await Xm(()=>t())}return s()}function Ts(e,t=V,n,r,i){if(qt(e))t(e);else if(Jt(e))U(e.VN_Tree.LEAGUE_TREE).each(([n,a],o)=>{Ts(n,t,e,r,i)});else if(ac(e))Ts(e.widget_instance?.$build,t,e,r,i);else if(Kt(e)){let a=jg([Iu(`span`)],...r);if(n=P(n)?n.$build:n,!i&&n.$element){let t=document.createComment(wr);e.$element.before(t),gh(e),e.$element.remove(),t.after(a.$element),a.$element.style.display=`inline-block`,a.$element.append(e.$element),t.remove()}let o=n.NodeList.indexOf(e),s=n.VN_Tree.KEYS_INDEXES[o];n.VN_Tree.LEAGUE_TREE[s][0]=a,n.NodeList.replace(e,a),a.NodeList.add(e),a.VN_Tree.LEAGUE_TREE[s]=[e,0],a.VN_Tree.KEYS_INDEXES.add(s),t(a),e=a}return e}function Es(e,t,n,r,i){e.VNodeManager.motion_object.create(r,t,{mode:n,params:i,element:e.$element})}function Ds(e,t,n,r,i,a,o){let s=t.compiler_options.createElement();a.memoVault&&!cs(e,s)||rh(e,t,s,o,a)}function Os(e,t,n,r,i,a,o,s){if(!es(e.props,t,[`hx:for`,`each`]))return $s();let{each:c}=e.props;t[I].initializedRender;let l=new M;n=t[z].map.is_hyperscript;let u=Ws(a||{},r||{}),d=e.filesFilter.$$dir_PROVIDE_bindings,f=e.compiler[e.prototype_].each,p=[o,l,`hx:for`,u,a,f.value,d],m=()=>Hg(t,e,`For`,p,[e.children],!0,{effect:f}),h=m();return h.compiler_options.createElement=m,h}function ks(e,...t){return go(e,...si(t))||D(e)?e(...si(t)):e}function As(e,t,n,r,i,a,o,s){if(!es(e.props,t,[`hx:if`,`test`]))return $s();let{test:c}=e.props,l=t[I].initializedRender;n=t[z].map.is_hyperscript;let u=Ws(a||{},r||{}),f=q(()=>G(n||!d(c)?ks(c):Z(t,c,Ws(u,a||{})))),p=J(f).value;s.effect=f;let m=new M;!l&&!n&&(e.compiler[Xn]={test:f});let h=[o,m,`hx:if`,u,a,p],g=()=>Wg(t,e,`If`,h,[e.children],s,!0);s.createElement=g;let{flush:_}=g(),v=new X(m.list(),t,o);return s.ELEMENT=v,v.VN_Tree.FLUSHS.add(_),v}function js(e,t,n,r,i,a,o,s){return qg(t,e,s,`hx:else`+(e.prototype_===Zn?`-if`:``),!0),$s()}function Ms(e,t,n,r,i,a,o,s){let{prototype_:c}=e,l={};o={subscriptions:new M,PropFlags:new M,vNodeClass:e},T([Hn,Gn,Wn,Un,Jn,qn,Xn,Zn,$n,Yn],c)&&(c===Wn&&(e.rawProps=br(e.props,n)),Rl(e,t,o,{is_hyperscript:n,ctx:r,ssc:a},l,s),e.props=l);let u=[e,t,n,r,i,a,o,s];if(c===Hn)return $o(...u);if(c===Gn)return ts(...u);if(c===Wn)return rs(...u);if(c===Un)return as(...u);if(c===Yn)return ls(...u);if(c===Jn)return hs(...u);if(c===qn)return Cs(...u);if(c===Kn){[...u];return}else if(c===$n)return Os(...u);else if(c===Xn)return As(...u);else if(T([Zn,Qn],c))return js(...u)}function Ns(e,t,n,r,i,a,o,s={}){s=v({},s);let c=t[I].initializedRender;c&&e.filesFilter.memMoved&&delete e.filesFilter.memMoved,!e.filesFilter.memMoved&&!c&&(e=br(e,!0),e.filesFilter.memMoved=!0),r=Ws(v({},r||{}),a||{}),a=null;let l=Fo(e.props||{}),{has_conditional:u,hasFor:f}=l,p=f||u,m,{prototype_:h}=e,g=[e,t,n,r,i,a,o,s,null];if(!(s.suspenseFlag&&!p&&!f)){if(!n&&p){let n=()=>Jo(t,e,null,o,i,l,r,s);m=n(),Ps(m,n)}else if(tr(h))m=Ms(...g);else if(jt(h))m=Hs(...g);else if(d(h))at(h)?m=new qs(...g):Is(h)?m=new Js(...g):Fs(h,t);else if(rr(h))return nr.get(h)(...g);return m}}function Ps(e,t){e.compiler_options.createElement||(e.compiler_options.createElement=t)}function Fs(e,t){A(`tagname "${e}" is not a valid html element, or a registered widget instance\n\n
-      if this is a customElement, make sure its defined through the "customElements.define()" method `,t,!0)}function Is(e){return D(customElements.get(e))}function Ls(e){return P(e)?e[z].virtualNode.filesFilter.suspense:e?.[Oo(e)?`filesFilter`:`VNodeManager`]?.suspense}function Rs(e){let t=e[I].initializedRender,n=(n=!0)=>{t&&(e[I].initializedRender=n)};return n(!1),n}function zs(e,t,n,r,i,a,o){let s=t.config.fallback,c=!1,l;if(s){let i=()=>{if(a||t.resolved||t.failed)return;if(!Dt(s)){A(`fallback content of "asyncWidget" is not a valid Houxit element`,e,!0);return}let i=Rs(e);fs(s,a);let u=jg($(s),e,null,n,r,o);u=new X($(u),e,n),u[Pn]={},i(),c=!0;let{activeElement:d}=t;d&&(mh(l).before(u.$element),hh(l),Us(e,u,t.fallback[Pn])),l=u,t.activeElement=l};!a&&t.config.delay>0?setTimeout(i,t.config.delay):i()}return c&&!a?l:(l=new X([],e,n),l[Pn]={},t.activeElement=l,l)}function Bs(e,t,n,r){n.resolved=!0,t[Pn]={};let{activeElement:i}=n;mh(i).before(t.$element),hh(i),Us(e,t,n.fallback[Pn])}function Vs(e,t,n,r,i,a){let o=Rs(e);fs(t.config.error,suspense);let s=jg($(t.config.error),e,null,n,r,a);s=new X($(s),e,n),o(),s[Pn]={},i||(mh(t.fallback).before(s.$element),hh(t.fallback)),Us(e,s,t.fallback[Pn]),t.failed=!0}function Hs(e,t,n=!1,r,i,a,o,s,c=!1){let{prototype_:l}=e,u=Ls(e);if(!Bn(l))return new Ys(...arguments);let d=l,f=d[Mn],h=br(d[Mn]);u?.state,h.resolved=!1,h.pending=!1,h.failed=!1,h.activeElement=void 0;let g=()=>o?.VN_Tree||t?.$build?.VN_Tree;if(!h.postLoad&&!f.cache){let n=h.load();if(!de(n)){A(`asyncWidget instance load callback expects a javascript Promise instance object as a return value`,t,!0);return}let r=h.config.timeout;ge(r)||setTimeout(()=>{!h.resolved&&!h.failed&&(Vs(t,h,o,a,u,s),A(`"asyncWidget" resolving timed out`,t,!0))},r);let i=e=>{if(h.failed=!0,u){ps(u).errorCaptured(()=>{A(e,t,!0)},{message:`Failed resolving state during an "async build()" process\n\nReason::"${e.message}"`});return}Vs(t,h,o,a,u,s),A(`Failed resolving state during an "async build()" process\n\nReason::"${e.message}"`,t,!0)};n=n.then(n=>{m(n)&&p(n.prototype)&&_(n,`default`)&&(n=n.default),h.cache=n,f.cache=n,h.postLoad++,v(e,{prototype_:n,GeneticProvider:n,type:n}),e.filesFilter[Mn]={prototype_:l};try{let e=Rs(t),n=new Ys(...arguments);e();let r=n.widget_instance[I].awaitReady,a=()=>{Bs(t,n,h,u)};de(r)?r.then(()=>{a()}).catch(i):a()}catch(e){i(e)}}).catch(i),u&&(u.activeAwaits++,u.loadChain.add(n));let c=zs(t,h,o,a,g,u,s);return h.fallback=c,c}else{d=h.cache,v(e,{prototype_:d,GeneticProvider:d,type:d});let t=new Ys(...arguments);return t[Pn]={},h.activeElement=t,t}}function Us(e,t,n){let{hx_Element:r,key:i,self:a}=n;a?a.$build=t:r&&(r.VN_Tree.LEAGUE_TREE[i][0]=t,r.NodeList.replace(n,t))}function Ws(e,t,n=!1){return e||t?(e=n?e:v({},e),_(t,Sn)&&(!_(e,Sn)&&_(t,Sn)?e[Sn]={sourcesArray:[],syntaxArray:[]}:_(e,Sn)&&(n||(e[Sn]=v({},e[Sn]))),e[Sn].syntaxArray=si(new Set([...e[Sn].syntaxArray,...t[Sn].syntaxArray])),e[Sn].sourcesArray=si(new Set([...e[Sn].sourcesArray,...t[Sn].sourcesArray])),t=v({},t),delete t[Sn]),e=v(e,t),e):n?e||t:v({},e||t||{})}function Gs(e,t,n){if(N(e))if(!f(t)&&!g(t)){A(`key prop value expects primitive values`,n,!0);return}else f(t)||(e._vnode_key=t)}function Ks(e,t,n=!1,r,i,a,o,s,c=!1){e.hx_Element=this,this.VNodeManager.vNodeClass=e,n=e.is_hyperscript,this.is_hyperscript=n;let l=t[I]?.initializedRender;e.filesFilter.suspense&&(this.VNodeManager.suspense=e.filesFilter.suspense),s.topLevelSlotContext&&!ac(e.filesFilter.parent)&&delete s.topLevelSlotContext;let{type:u,props:d,children:f,key:p}=e;r=Ws(r||{},a||{}),this.LabContext=Ws(this.LabContext,r),e.hx_Element=this,c&&(this.VNodeManager.rawChildren=()=>e.rawChildren),this.compiler_options.parent=e.filesFilter.parent,tc(t,d,this);let m=[...arguments];m.pop();let h=uc(e,t,this,i,e.IS_RENDERLESS,m,s);if(!l&&qt(this)&&Xo(t,h,this),this.$element=h,!l){let e=ac(this)?this.widget_instance[L]:this.compiler_options;!Io(this)&&w(e,`ref_$$Prop`)&&Qo(t,e.ref_$$Prop,ac(this)?this.widget_instance:this.$element,this)}Gs(this,e.key,t)}var qs=class extends ko{constructor(e){super(...arguments),this.VNodeManager.SSRVnode=new To,Ks.call(this,...arguments),this.prototype_=e.type}},Js=class extends qs{constructor(){super(...arguments)}},Ys=class extends ko{constructor(e){super(...arguments),this.VNodeManager.SSRVnode=[],Ks.call(this,...arguments,!0),this.prototype_=e.prototype_}},X=class extends ko{constructor(e=[],t,n,r,i){super(),P(t)||(t=null),e=$(e);let a=0,o=t?t[I].initializedRender:void 0;this.VNodeManager.SSRVnode=[],Qf(t)||Q(t);let s=Q(t),c=Qf(t);!s&&!o&&(this.VNodeManager.posix=[document.createComment(wr),document.createComment(wr)]);let l=!s&&!o?zh():s?[]:void 0,[u,d]=this.getSSRPosixEl();u&&!s&&l?.append(u);for(let[n,r]of e.entries())!(r??o)&&!l||(N(r)&&!s&&this.NodeList.add(r),l?.[s?`push`:`append`](Qs(r,s,c)),In(r)&&(r[Pn]={key:n,hx_Element:this}),cc(this,r,a,t,i),a++);d&&!s&&l?.append(d),Gs(this,r,t),o||(this.VN_Tree.ELEMENTS=()=>{let e=new M,[t,n]=this.getSSRPosixEl();if(!Ft(t))return e;let r=t;for(;r;){let t=r.nextSibling;if(e.add(r),r===n)break;r=t}return e}),this.$element=c&&!o?new dt(l):l,s&&(c&&(this.$element.hx_Element=this),this.VNodeManager.SSRVnode=this.$element)}getSSRPosixEl(){return this.VNodeManager.posix}upload(e){return this.VN_Tree.ELEMENTS().forEach((t,n)=>e(t,n))}},Xs=class extends X{constructor(){super(),this.IS_RENDERLESS=!0}},Zs=class extends ko{constructor(e,t,n,r,i={}){super();let a=t[I].initializedRender,o=Qf(t);if(this.is_hyperscript=t[z].map.is_hyperscript,n&&(this.LabContext=v({},n?.LabContext||{})),!this.is_hyperscript&&r&&(this.LabContext=Ws(this.LabContext,r)),this.$element=So(t,e,this,a,i),this.prototype_=a||Q(t)?this.$element:this.$element.textContent,Q(t)&&(this.$element=o?new ut(this.prototype_):this.prototype_,this.VNodeManager.SSRVnode=this.$element,o&&this.$element.hydrationFlushs.add(e=>this.$element=e)),this.is_hyperscript&&i.lazy_effect&&!a){let e=np(i.lazy_effect,e=>{wt(this.$element)&&(this.$element.textContent=i.lazy_effect.runEffect().value)});this.VN_Tree.FLUSHS.add(e)}}};function Qs(e,t,n){let r=t?N(e)?e.$element:e:e.$element;return(xr(r)||ac(e))&&n&&(!xr(r)&&ac(e)?r=e.widget_instance.$build.$element:(r=new dt(r),r.hx_Element=ac(e)?e.widget_instance.$build:e)),r}function $s(e=V){let t=new Xs;return e(t),t}function ec(e,t){return N(e)&&N(t)&&C(e.__proto__.constructor,t.__proto__.constructor)}function tc(e,t,n){if(!(!t||!t[wn]||!j(t[wn])))for(let r of t[wn].values())if(ue(r.name)&&!Hc(r.name)){if(!w(e[B].directives,r.name)||!e[B].directives[r.name]){A(`"${r.name}" is not a registered directive\n`,e,!0);return}else if(!Y(e[B].directives[r.name],[Function,Object])){A(`directive resolved at "${r.name}" is not a valid directive data value`,e,!0);return}nc(e,r,e[B].directives[r.name],n),t[wn].delete(r)}else d(r.name)||(nc(e,r,r.name,n),t[wn].delete(r))}function nc(e,t,n,r){if(h(n)){for(let[i,a]of y(n))if(T(zt,i)){if(!D(a)){A(`"${i} directive hook received at $$ is not a function`,e,!0);return}a.value=t.value,a.modifiers=t.modifiers,r[i+`_hook`].add(a)}}else D(n)&&(n.value=t.value,n.modifiers=t.modifiers,r.created_hook.add(n))}function rc(e){if(H(arguments,{count:1,validators:[[Object,Function]],required:[!0],name:`enSlot()`})){if(Rt(e)){A(`Uresolved function type ---- received at "enSlot"
-
-Seems to be a "class" instance value type`);return}else D(e)&&(e={default:e});return new Wt(e||{})}}function ic(e){return rc(...arguments)}var ac=e=>e instanceof Ys;function oc(e){return(De(e)?`$$bind:`:Se(e)?`$$on:`:we(e)?`$$slot:`:e[0])+e.slice(1)}function sc(e,t){let n={hasDir:!1};for(let[n,r]of y(e)){let e=n;if(n=oc(n),n.startsWith(t))return{hasDir:!0,getDir:r,getKey:e}}return n}function cc(e,t,n,r,i){let a=Kt(t)?n:t._vnode_key;a=a?isNaN(Number(a))?a:Number(a):null;let o=e.VN_Tree.KEYS_INDEXES;if(!f(a)&&o.has(a)){A(`keyed element seemes to have been dublicated within this render siblings >>"${a}"<<<\n\nCheck for possible duplicates in special key props\n`,r,!0);return}i&&f(a)&&(a=o.has(a)?n:i[n]),f(a)&&(a=n),o.add(a),e.VN_Tree.LEAGUE_TREE[a]=[t,n]}function lc(e,t,n,r,i,a,o){return uc(...arguments)}function uc(e,t,n,r,i,a,o){let{prototype_:s}=e;return d(s)&&at(s)?fc(...arguments):d(s)?dc(...arguments):mc(...arguments)}function dc(e,t,n,r,i,a,o){let{type:s,props:c,children:l,key:u}=e;if(j(arguments),n?.is_hyperscript,t[I]?.initializedRender)return;let d=document.createElement(s);return d._set_compiler_options(...arguments),d}function fc(e,t,n,r,i,a,o,s){o=v({},o);let{type:c,props:l,children:u,key:f}=e;j(arguments);let p=Q(t),m=Qf(t),h,g=e.is_hyperscript,y=t[I]?.initializedRender;!y&&d(c)&&(h=p?n.VNodeManager.SSRVnode:document.createElement(c),p&&(h.type=c),n&&P(t)&&(n.hx_build=t[L].hx_build,t[L].hx_build&&(p?h.props[`data-hx_build`]=t[L].hx_build:h.setAttribute(`data-hx_build`,t[L].hx_build))),y||(h._hx_Element={hx_Element:n,_vnode_key:e.key},n&&qm(t,h,()=>{n.VNodeManager.motion_object.hooks.animation.from=h.getBoundingClientRect()}))),m&&h.filesFilter.$ssr_kit.hydrationFlushs.add(e=>{n.$element=e});let b={is_hyperscript:g,isRerender:y},{hasDir:x,getKey:ee,getDir:S}=g?{}:sc(l||{},`$$slot`);x&&(o.topLevelSlotContext?(Yl(t,vl(t,{key:ee,attr:S},g,n,b),e,n,b,{}),delete o.topLevelSlotContext):A(`$$slot directive definitions are only allowed on a widgets top-level consumer scope instances\n\n"slot' directive on '${c}' element has failed to compile away...cross-check element render position`,t,!0));let C;if(u&&!Ke(c))if(!y&&_(e.filesFilter,`dir--raw`)){if(Z(t,e.filesFilter[`dir--raw`],n,!0)){let t=yc(e.rawChildren);y?n.$element=t:p?h.props.innerHTML=t:h.innerHTML=t}}else{o={...o,slotTap:{parent:n}},fs(u,Ls(e)),C=jg(u,t,!0,n,v({},n.LabContext),o),C=$(C);let r=0;p&&(h.children=[]);for(let[e,i]of C.entries())!i||!y&&(p&&ht(i.$element)?!i.$element.content:!i.$element)||(i&&n.NodeList.add(i),p?h.children.push(Qs(i,p,m)):!y&&i.$element&&h.append(i.$element),In(i)&&(node[Pn]={key:e,hx_Element:n}),cc(n,i,r,t),r++)}l&&Rl(e,t,n,b,h,o),!y&&e.prototype_===`slot`&&!(p?h?.props.name.trim():h.name?.trim())&&(Pl(t,{value:`default`},h,n,{is_hyperscript:g,isRerender:y,vNode:e}),C?.forEach(e=>n.VNodeManager.patchFlags.subscriptions.extend(e.VNodeManager.patchFlags.subscriptions)));let{hasDir:w}=sc(l||{},`$$model`);if(!y)return h}function pc(e,t,n,r,i){return fc(...arguments)}function mc(e,t,n,r,i,a,o){let{type:s,props:c,children:l,prototype_:u}=e,d=n?.is_hyperscript;t[I].initializedRender;let f,p={self:t,hx_Element:n,isRerender:t[I]?.initializedRender,...o};return jt(u)?f=Ph(t,e,n,p,o):A(`widget initializer failed to compile...`,!0,t),f&&(d||(n.hx_build=f[L].hx_build),f[L]?.slot_name&&(n.slot_name=f[L].slot_name)),P(f)?f.$build?.$element:void 0}function hc(e,t){let{hx_Element:n,siblings:r,IS_RENDERLESS:i,config:a}=t;return mc(e,a.hx_Element,r,i,null,a)}var gc=`<,>`;function _c(e){let t=!1;for(let n of e.values())gc.split(`,`).forEach(e=>{if(t=n.includes(e),t)return t});return t}function vc(e){return e.replace(/[.!@#%_\,<>:;'"\-=*+?^${}()|[\]\\]/g,`\\$&`)}function yc(e,t=!1){return e.replace(/</g,`&lt;`).replace(/>/g,`&gt;`).replace(/"/g,`&quot;`).replace(/"/g,`&quot;`).replace(/\\/g,`&#39;`)}function bc(e){return e.replace(/&lt;/g,`<`).replace(/&gt;/g,`>`).replace(/&quot;/g,`"`).replace(/&#39;/g,`\\`)}function xc(e,t,n){return t=$t(G(t)),n?yc(t):t}function Sc(e,t){if(!r(t))return A(`expects an arrah of character strings encoding
-
-.....delimiters config setup`,e,P(e)),!1;let[n,i]=t;if(n&&i){if(!_o(n)||!_o(i))return A(`mustache customization error::
-
- delimeters must match value of special characters
-
-e.g !, @, #, $, %, ^, &, *, (, ),  [, ], {, }, ;, :, ?`,e,P(e)),!1;if(_c([n,i]))return A(`Invalid  delimiter value :: \n\n"${n} or ${i} is an unsupported delimiter constructs"\n cannot be used as a string mustache delimeter since this are javascript multiline string interpolation technic\n\n Delimeter Configuration failed`,e,P(e)),!1}return!0}function Cc(e,t,n,r=!1){let[i,a]=e[z].settings.delimiters;i=_o(i)?vc(i):i,a=_o(a)?vc(a):a;let o=RegExp(`${i}([${i}]?.*?[${a}]*)${a}`,`mg`);return t.match(o)&&(t=t.replace(o,(t,i)=>{i=bc(i.trim());let a=[],o=0;i=i.replace(pe,(e,t,n)=>{a.push(e);let r=vo+o;return o++,r});let s=i.split(`%`);for(let[e,t]of s.entries())s[e]=t.replace(yo,(e,t,n)=>a[Number(t.match(/\d/))]);return i=i.replace(yo,(e,t,n)=>a[Number(t.match(/\d/))]),i=Z(e,s.shift().trim(),n),i=G(i),j(s)&&(i=Rc(e,i,s,n,r)),xc(e,i,void 0)})),t}function Z(e,t,n,r=!1){let i,a=P(e)?e.__public_model__:_n(e)?e:Object.create(null),o=N(n)?n?.LabContext||{}:h(n)?n:{};try{i=Uc(a,t,e,o)}catch(n){if(console.error(n),t&&!r){A(`Accessor Error::\n\n"${t}" property value was accessed during render, but not initialized on model or is undefined\n\nat at\n ..."${t}" property \n\n${n}`,e,!0);return}else return t}return i}function wc(e,t){if(!H(arguments,{name:`useBind`,required:[!0,!1],min:1,max:2,validators:[String,Object]})||!Va({name:`useBind`}))return null}function Tc(e,t){return wc(e,t)}var Ec=(e,t)=>T(Lc,t)||T(e[B].filters,t),Dc=(e,t)=>_(Lc,t)?Lc[t]:e[B].filters[t]||V;function Oc(e,t){return Qt(e)?!0:(A(`"${t}" template filter expects a plain string value`),!1)}function kc(e,t,n,r,i){let a=String(e).trim(),o=t,s=n,c=String(r),l=a.slice(Number(o.at(0)),Number(o.at(-1))),u=a.slice(s.at(0),s.at(-1)),d=Number(u),f=l+c;return d>0&&(f=l+`.`+u+c),i?f+` `+jc(Number(a),i):f}function Ac(e,t=``){if(e=Number(e),!se(e)||isNaN(e))return A(`shortener filter Adapter at argument <1> expects a number`),e;if(!d(t))return A(`shortener filter Adapter at argument <2> expects a string`),e;var n=e;if(e>999&&e<999999)n=kc(e,[0,-3],[-3,-2],`K`);else if(e>1e6&&e<999999999)n=kc(e,[0,-6],[-6,-5],` Million`);else if(e>1e9&&e<999999999999)n=kc(e,[0,-9],[-9,-8],` Billion`);else if(e>0xe8d4a51000&&e<999999999999999)n=kc(e,[0,-12],[-12,-11],` Trillion`);else if(e>0x38d7ea4c68000){let t=String(e).slice(0,-15);n=Number(t).toExponential()+` E`}return t?n+` `+jc(e,t):n}function jc(e,t){var n=Number(e),r=String(t);return n>1&&(r+=`s`),r}function Mc(e,t,n){let r=Number(n),i=(100/e*t).toFixed(r),a=Number(i);return String(a)+`%`}function Nc(e,t=`$`){if(!se(e)||isNaN(e))return A(`currency filter Adapter at argument <1> expects a number`),e;if(!d(t))return A(`currency filter Adapter at argument <2> expects a string`),e;let n=String(e),r=[],i=[],a=()=>{r.push(i.toReversed().join(``)),i=[]};for(let e of x(n).toReversed())j(i)===3?a():i.push(e);return j(i)&&a(),t+r.toReversed().join(`,`)+`.00`}function Pc(e){return Oc(e,`upper`)?$t(e).toUpperCase():e}function Fc(e){if(!Oc(e,`title`))return e;let t=String(e).split(` `);for(let[e,n]of y(t))t[Number(e)]=n.charAt(0).toUpperCase()+n.slice(1);return t.join(` `)}function Ic(e){return Oc(e,`lower`)?String(e).toLowerCase():e}var Lc={upper:Pc,title:Fc,lower:Ic,shortener:Ac,percent:Mc,currency:Nc};function Rc(e,t,n,r,i){if(!j(n))return t;let a,o;for(let[i,s]of n.entries()){let n=s.trim()||null;if(!n){me(`undefined filter name
-
-Check template filter definition`,e);return}let i=zc(n,e,r);if(!i)break;[a,o]=i;let c=D(a)?{filter:a}:a;try{t=c.filter(t,...o)}catch(t){A(`Encountered an error when running the filter callback at >>>>>> ${n}`,e,!0),A(t,e);break}}return t}function zc(e,t,n){let r=[];if(e.includes(`(`)&&e.includes(`)`)){let i=e;e=Bc(e);let{content:a}=bo(i,e);r=Z(t,`((...args)=> args)(${a})`,n)}if(!Ec(t,e)){A(`Unrecognized  filter name "${e}"\n\n if this is a custom filter, make sure it's registered through the local filter option or global prototype 'filter' method`,t,!0);return}let i=Dc(t,e);if(!Y(i,[Function,Object])){A(`${e} filter receives an Invalid type definition\n\nExpects a filter function or a plain object type exposing a filter method which acts as the filter callable itself`,t,!0);return}else if(h(i)){if(!w(i,`filter`)){A(`"${e}" filter instance object does not expose a "filter" method which acts as the filter function`,t,!0);return}else if(!D(i.filter)){A(`"${e}".<filter> instance filter property value is not a method/callable  \n\n Expects a function type which acts as the filter function`,t,!0);return}}return[i,r]}function Bc(e){return e.match(/^([^(]+)/)[0]}var Vc=`if,else,else-if,html,text,for,raw,slot,model,bind,on,scoped,provide,transite,animate,clone`,Hc=e=>T(Vc,e);function Uc(e,t,n,r){if(/^(?:const|var|let|while|for|of|if|else|import|export|switch|case|try|catch|throw|continue|break|with|debugger|label|do|from|as|finally|delete|void|enum|implements|interface|package|protected;).*$/.test(t.replace(pe,()=>``))&&!Pt(t))throw Error(`Invalid expression: \n\n"${t}" Your binding seems to contain an unallowed expression as a statement\n Only single expressions are allowed.`,n,!0);let i=/\/\/.*$|\/\*[^]*?\*\//g,a=t.replace(i,``),o=/(?:\.\.|\bthrow\b|\bdelete\b|\bvoid\b|\bconst\b|\blet\b|\bvar\b|\bwhile\b|\bfor\b|\bof\b|\bif\b|\belse\b|\bimport\b|\bexport\b|\bswitch\b|\bcase\b|\btry\b|\bcatch\b|\bcontinue\b|\bbreak\b|\bwith\b|\bdebugger\b|\blabel\b|\bdo\b|\bfrom\b|\bas\b|\bfinally\b|\benum\b|\bimplements\b|\binterface\b|\bpackage\b|\bprotected\b)/,s=!1;try{Nt(a)}catch{s=!0}if(s&&o.test(a.replace(pe,()=>``)))throw Error(`Invalid expression: \n\nUnsupported constructs are not allowed.\n\n"${t}"`,n,!0);if(i.test(t)){A(`Template SyntaxError...\n\nComments not allowed in template expression\n\n"${t}"`,n,!0);return}let c;if(r&&h(r)&&_(r,Sn)){c=r[Sn];let n=c.syntaxArray;c.traverse=()=>Wc(n,c.sourcesArray,t,[e,r])}let l=Function(`obj`,`$$$ctx`,`dexTransform`,`
+      `)(mutate);
+		define(mutation_object, name, {
+			value: mutate,
+			enumerable
+		});
+	}
+	return mutation_object;
+}
+function _useAgent_(data, ModelInstance) {
+	const dataRead = () => data;
+	if (!validateCollectionArgs(arguments, {
+		min: 1,
+		max: 2,
+		validators: [Any, [Model]],
+		name: "useAgent"
+	})) return [dataRead, pass];
+	if (isHouxitBuild(this) && !isChar(data)) {
+		debugHandler(`data path at positional argument 1 expects a string/symbol value of an existing model path\n\n.>...$useAgent`);
+		return [dataRead, pass];
+	} else if (isModelInstance(ModelInstance) && !isChar(data)) {
+		debugHandler(`data property at positional argument 1 of "useAgent" expects a string/symbol value\n\nMust be a model valid path`);
+		return [dataRead, pass];
+	}
+	const self = isHouxitBuild(this) ? this : isModelInstance(ModelInstance) ? { __public_model__: ModelInstance } : null;
+	ModelInstance = self ? self.__public_model__ : null;
+	if (self && !isHouxitBuild(self)) delete self.__public_model__;
+	let prop = isModelInstance(ModelInstance) ? data : isToken(data) ? data[refInternalEffectKey].accessor : "";
+	if (isModelInstance(ModelInstance) && !object_Has_Path(ModelInstance, prop)) {
+		debugHandler(`"${prop}" property is not a valid model property`);
+		return [dataRead, pass];
+	}
+	data = isModelInstance(ModelInstance) && exists(prop) ? _$runModelBind(ModelInstance, prop || "") : data;
+	const mutateArgs = getAgentMutators(data, prop, ModelInstance);
+	let defineCount = 0;
+	const unwrappedGetter = () => read(data);
+	function mutate(mutation) {
+		if (isPFunction(mutation) && defineCount < 1) {
+			defineCount++;
+			define(mutateArgs, "data", { get() {
+				return unwrappedGetter();
+			} });
+		}
+		if (isPFunction(mutation)) try {
+			mutation(mutateArgs);
+		} catch (err) {
+			debugHandler(`Encountered an error during the call of the writer callback\n\n${err}`);
+			return false;
+		}
+		else if (!isPFunction(mutation)) {
+			set_Object_Value(isModelInstance(ModelInstance) ? ModelInstance : !isPrimitive(data) ? data : freeze(), prop, mutation);
+			return true;
+		}
+	}
+	function reader() {
+		return unwrappedGetter();
+	}
+	function writer(...args) {
+		return mutate(...args);
+	}
+	return [reader, writer];
+}
+function useAgent(data, ModelInstance) {
+	return _useAgent_(...arguments);
+}
+function WRITE(props) {
+	if (!validateCollectionArgs(arguments, {
+		name: "$write",
+		count: 1,
+		validators: [Object]
+	})) return false;
+	for (const [prop, value] of entries(props)) {
+		if (!object_Has_Path(this.__public_model__, prop)) {
+			debugHandler(`"${prop}" not found in model instance\n\n..............at......"$write"`, this, true);
+			return false;
+		}
+		this.__public_model__.$useAgent(prop)[1](({ write }) => write(value));
+	}
+	return true;
+}
+function getIterator(obj) {
+	return validateType(obj, [
+		Set,
+		Map,
+		Array,
+		Tuple
+	]) ? obj.entries() : isPObject(obj) ? entries(obj) : isIterator(obj) ? obj : [].entries();
+}
+var IterateController = class {
+	constructor(config) {
+		const { value, type } = config;
+		this.value = value;
+		this._type = type;
+	}
+	value = void 0;
+	_type = "";
+};
+var isIterateController = (value) => value instanceof IterateController;
+function Continue(value = void 0) {
+	return new IterateController({
+		value,
+		type: "continue"
+	});
+}
+function Break(value) {
+	return new IterateController({
+		value,
+		type: "break"
+	});
+}
+function Return(value) {
+	return new IterateController({
+		value,
+		type: "return"
+	});
+}
+function trigger_callback(value, callback, useOF) {
+	let index = 0;
+	if (isNumber(value)) for (let i = 0; i < value; i++) {
+		const response = callback(i, index);
+		index++;
+		if (isIterateController(response)) {
+			if (response._type === "continue") continue;
+			else if (response._type === "break") break;
+			else if (response._type === "return") return response.value;
+		}
+	}
+	else if (useOF) for (let [key, item] of getIterator(value)) {
+		const response = callback(item, key, index);
+		index++;
+		if (isIterateController(response)) {
+			if (response._type === "continue") continue;
+			else if (response._type === "break") break;
+			else if (response._type === "return") return response.value;
+		}
+	}
+	else for (let [key, item] in entries(value)) {
+		const response = callback(key, item, index);
+		index++;
+		if (isIterateController(response)) {
+			if (response._type === "continue") continue;
+			else if (response._type === "break") break;
+			else if (response._type === "return") return response.value;
+		}
+	}
+}
+function iterate_proto(value, type) {
+	if (!validateCollectionArgs(arguments, {
+		name: "iterate",
+		min: 1,
+		max: 2,
+		validators: [Object, String]
+	})) return false;
+	if (!type || !_makeMap_("of,in", type)) type = "of";
+	else if (!isIterable(value) && !isNumber(value)) {
+		debugHandler(`No iterable .value prop received at parameter 1 object of the "iterate" helper macro`);
+		return false;
+	}
+	const useOF = type && type.trim() === "of";
+	function each(callback) {
+		return trigger_callback(value, callback, useOF);
+	}
+	each.each = each;
+	return each;
+}
+function iterate(value, type) {
+	return iterate_proto(...arguments);
+}
+assign(iterate, {
+	Continue,
+	Break,
+	Return
+});
+var refGenreId = Symbol("[[[GenreIDType]]]");
+var refInternalEffectKey = Symbol();
+function __createReadonlyToken__(value, config = {}) {
+	if (!validateCollectionArgs(arguments, {
+		name: "readonly",
+		required: [true],
+		min: 1,
+		max: 2,
+		validators: [Any, Object]
+	})) return;
+	const metrics = config.metrics || [];
+	if (hasOwn(config, "metrics")) delete config.metrics;
+	if (isReactiveToken(value)) return toReadonly(value);
+	else if (isReadonly(value)) return value;
+	let [mutate = false, key] = metrics;
+	config.readonly = true;
+	return preventX(new readonly__Token({ data: value }, config));
+}
+function readonly(value, config) {
+	return __createReadonlyToken__(...arguments);
+}
+function __createShallowToken__(value, config = {}) {
+	if (!validateCollectionArgs(arguments, {
+		name: "shallow",
+		required: [true],
+		min: 1,
+		max: 2,
+		validators: [Any, Object]
+	})) return;
+	const metrics = config.metrics || [];
+	if (hasOwn(config, "metrics")) delete config.metrics;
+	if (isToken(value) && !isShallow(value)) return toShallow(value);
+	else if (isShallow(value)) return value;
+	let [mutate = false, key] = metrics;
+	config.shallow = true;
+	return preventX(new reactive__Token({ data: value }, config));
+}
+function shallow(value, config) {
+	return __createShallowToken__(...arguments);
+}
+function isToken(value) {
+	return value instanceof BaseToken;
+}
+function unwrap(value) {
+	if (!isToken(value)) return value;
+	return value[value[refInternalEffectKey].accessor];
+}
+function unToken(ref) {
+	return unwrap(ref);
+}
+function _toToken(object, path, config) {
+	if (!validateCollectionArgs(arguments, {
+		min: 2,
+		max: 3,
+		validators: [
+			[Object, Array],
+			[String, Symbol],
+			Object
+		],
+		name: "toToken",
+		required: [true, true]
+	}) || !object) return;
+	return token(object[path], config);
+}
+function toToken(object, path) {
+	return _toToken(...arguments);
+}
+function isReactiveToken(value) {
+	return isToken(value) && value[refGenreId] === "[[[reactive__Token]]]";
+}
+function isReadonly(value) {
+	return isToken(value) && "[[[readonly__Token]]]" === value[refGenreId];
+}
+function isShallow(value) {
+	return isToken(value) && isTrue(value[refInternalEffectKey].shallow);
+}
+function isShallowReadonly(value) {
+	return isReadonly(value) && isShallow(value);
+}
+function isComputed(value) {
+	return isReadonly(value) && value[refInternalEffectKey].isComputed;
+}
+function toShallow(ref, config = {}) {
+	if (!isShallow(ref)) return shallow(unwrap(ref), config);
+	return ref;
+}
+function toReadonly(ref, config = {}) {
+	if (!isReadonly(ref)) return readonly(unwrap(ref), config);
+	return ref;
+}
+var readonlyBypasser = class {
+	constructor(value = void 0) {
+		this[bypassSymbol] = value;
+	}
+};
+function _isProxyStream(stream) {
+	const res = validateCollectionArgs(arguments, {
+		count: 1,
+		name: "isStream"
+	});
+	if (!stream || !res && !validateType(stream, [
+		Object,
+		Set,
+		Tuple,
+		Map,
+		Array
+	])) return false;
+	const ReactiveMap = stream[$$$StreamProxyKey];
+	return hasOwn(stream, $$$StreamProxyKey) && isWeakMap(ReactiveMap) && isREffObj(ReactiveMap.get(stream));
+}
+function isStream(value) {
+	return _isProxyStream(...arguments);
+}
+function _isShallowStream_(stream) {
+	return isStream(stream) && stream[$$$StreamProxyKey].get(stream).shallow;
+}
+function isShallowStream(stream) {
+	return _isShallowStream_(...arguments);
+}
+function _isReadonlyStream(stream) {
+	return isStream(stream) && stream[$$$StreamProxyKey].get(stream).readonly;
+}
+function isReadonlyStream(stream) {
+	return _isReadonlyStream(stream);
+}
+function isShallowReadonlyStream(stream) {
+	return isShallowStream(stream) && isReadonlyStream(stream);
+}
+function genericStreamTransform(stream, config, types) {
+	if (isPrimitive(stream)) {
+		debugHandler(`Value Exception\nFailed to convert a primitive Value to a streamable object\n\nExpects a plain object or a collection`);
+		return;
+	} else {
+		types = new Tuple(...types);
+		if (types.contains("readonly", "shallow") && isShallowReadonlyStream(stream)) return stream;
+		else if (types.has("readonly") && isReadonlyStream(stream)) return stream;
+		else if (types.has("shallow") && isShallowStream(stream)) return stream;
+	}
+	if (isStream(stream)) stream = stream[$$$StreamProxyKey].get(stream).origin;
+	return _createStream(stream, {
+		readonly: types.has("readonly"),
+		shallow: types.has("shallow"),
+		...!isPObject(config) ? {} : config
+	});
+}
+function _toReadonlyStream(stream, config) {
+	return genericStreamTransform(stream, config, ["readonly"]);
+}
+function toReadonlyStream(stream, config) {
+	return _toReadonlyStream(...arguments);
+}
+function _toShallowStream(stream, config) {
+	return genericStreamTransform(stream, config, ["shallow"]);
+}
+function toShallowStream(stream, config) {
+	return _toShallowStream(...arguments);
+}
+function _toShallowReadonlyStream(stream, config) {
+	return dynamicStreamTransform(stream, config, ["readonly", "shallow"]);
+}
+function toShallowReadonlyStream(stream, config) {
+	return _toShallowReadonlyStream(...arguments);
+}
+var isReadonlyBypasser = (bypasser) => bypasser instanceof readonlyBypasser;
+var bypassSymbol = Symbol("Readonly_Bypass_Symbol");
+function useReadonlyBypasser(parent, key, value) {
+	return set_Object_Value(parent, key, new readonlyBypasser(value));
+}
+function objFreeze(obj, deep = false) {
+	if (!validateType(obj, [
+		Object,
+		Array,
+		Tuple
+	])) return obj;
+	if (isTuple(obj)) return obj.freeze();
+	if (isTrue(deep)) for (let [key, value] of getIterator(obj)) obj[key] = objFreeze(value, true);
+	return isTuple(obj) ? obj : freeze(obj);
+}
+function _trackEffectDeps(fn, config) {
+	if (!validateCollectionArgs(arguments, {
+		min: 1,
+		max: 2,
+		validators: [Function, Object],
+		name: "trackEffectDeps"
+	})) return [];
+	const effect = _createEffectBase(fn);
+	effectRunner(effect);
+	function reRunEffect() {
+		return effect.runEffect();
+	}
+	function getValue() {
+		return effect.value;
+	}
+	return [
+		[...arrSet(effect.dependencies)],
+		getValue,
+		reRunEffect
+	];
+}
+function trackEffectDeps(fn, config) {
+	return _trackEffectDeps(...arguments);
+}
+function _runGlobalEffectHook(fn, config) {
+	if (!validateCollectionArgs(arguments, {
+		name: "effectHook",
+		required: [true, false],
+		min: 1,
+		max: 2,
+		validators: [Function, Object]
+	})) return pass;
+	const self = getCurrentRunningEffect({ name: "effectHook" });
+	if (!self) {
+		debugHandler(`effectHook called out of scope`);
+		return pass;
+	}
+	return EffectAdapterHook.call(self, ...arguments);
+}
+function effectHook(fn, config) {
+	return _runGlobalEffectHook(...arguments);
+}
+function EffectAdapterHook(fn, config = {}) {
+	if (!validateCollectionArgs(arguments, {
+		name: "effectHook",
+		validators: [Function, Object],
+		min: 1,
+		max: 2,
+		required: [true]
+	})) return;
+	config.initial = false;
+	const effect = _createEffectBase(function() {
+		return fn();
+	}, this);
+	const { value, dependencies } = effectRunner(effect);
+	EffectObserver.call(this, dependencies, fn, config, effect);
+	return function stopEffect(...args) {
+		return stopEffect(...args);
+	};
+}
+var Type = class {
+	constructor(type, validator) {
+		this.type = type;
+		this.validator = validator;
+	}
+};
+var AnyType = class extends Type {
+	constructor() {
+		super([], (value) => true);
+	}
+};
+var NoneType = class extends Type {
+	constructor() {
+		super([], (value) => isNull(value) || isEmptyStr(value));
+	}
+};
+var isBaseType = (type) => type instanceof Type;
+var Any = new AnyType();
+var None = new NoneType();
+var $private_prop = Symbol();
+var ClassFunctionType = class extends Type {
+	constructor() {
+		super([Function], (value) => isClass(value));
+	}
+};
+var Class = new ClassFunctionType();
+var ArgumentType = class extends Type {
+	constructor() {
+		super([], (value) => isArgument(value));
+	}
+};
+var Arguments = new ArgumentType();
+var CollectionType = class extends Type {
+	constructor() {
+		super([
+			Array,
+			Set,
+			Arguments,
+			Tuple
+		], (value) => isCollection(value));
+	}
+};
+var Collections = new CollectionType();
+function getType(value) {
+	return isArray(value) ? "array" : isDate(value) ? "date" : isSet(value) ? "set" : isMap(value) ? "map" : isTuple(value) ? "tuple" : value instanceof AnyType ? "any" : value instanceof NoneType ? "none" : isToken(value) ? "_" + isReactiveToken(value) ? "reactive" : "readonly__Token" : typeof value;
+}
+var BaseTupleStream = class extends Tuple {
+	constructor() {
+		super(...arguments);
+	}
+};
+var BaseArrayStream = class extends Array {
+	constructor(array = []) {
+		const isSVA = len(array) === 1 && isNumber(array[0]);
+		if (isSVA) array.push(void 0);
+		if (len(arguments) > 1) array = arrSet(arguments);
+		else if (isCollection(array)) array = arrSet(array);
+		else if (len(arguments)) {
+			const arr = [];
+			arr.push(array);
+			array = arr;
+		}
+		super(...array);
+		if (isSVA) this.pop();
+	}
+};
+var BaseSetStream = class extends Set {
+	constructor() {
+		super(...arguments);
+	}
+};
+var BaseWeakSetStream = class extends WeakSet {
+	constructor(wSet) {
+		super();
+		this[$private_prop] = wSet;
+		for (let n of [
+			"has",
+			"add",
+			"delete"
+		].values()) this[n] = wSet[n];
+	}
+};
+var BaseWeakMapStream = class extends WeakMap {
+	constructor(wMap) {
+		super();
+		this[$private_prop] = wMap;
+		for (let n of [
+			"get",
+			"set",
+			"has",
+			"delete",
+			"getOrInsert",
+			"getOrInsertComputed"
+		].values()) this[n] = wMap[n];
+	}
+};
+function BaseDict(...args) {}
+BaseDict.prototype.set = function set(key, value) {};
+function isFrozenWarn(isFrozen, action, type) {
+	if (isFrozen) {
+		debugHandler(`cannot perfom ${action} on ${type}\n\ninstance may have been frozen or sealed from future possible mutations`);
+		return false;
+	}
+	return true;
+}
+var TupleSizeOverride = class {
+	value = 0;
+	constructor(value) {
+		this.value = Number(value);
+	}
+};
+var isTSO = (asset) => asset instanceof TupleSizeOverride;
+function setTupleSize(value) {
+	return new TupleSizeOverride(value);
+}
+function TupleConstructorManager(args) {
+	this[$$tupleStore] = {
+		array: [],
+		unique: /* @__PURE__ */ new Set(),
+		isFrozen: false
+	};
+	let size = 0;
+	define(this, "size", {
+		get() {
+			return size;
+		},
+		set(NS) {
+			if (!isTSO(NS)) {
+				debugHandler(`Mutation Exception\nCannot mutate the size property of a Tuple Object\n`);
+				return false;
+			}
+			size = NS.value;
+			return true;
+		}
+	});
+	let index = 0;
+	for (const item of args.values()) if (!this[$$tupleStore].unique.has(item)) {
+		this[$$tupleStore].unique.add(item);
+		this[$$tupleStore].array.push(item);
+		instanciate_tuple_indexes(this);
+		index++;
+	}
+	this.size = setTupleSize(len(this[$$tupleStore].array));
+}
+function instanciate_tuple_indexes(tuple) {
+	const oldListKeys = keys(tuple);
+	const newList = tuple.list();
+	for (const [key, value] of newList.entries()) if (value !== tuple[key] || key > len(this) - 1) tuple[key] = value;
+	let ind = 0;
+	for (let key of oldListKeys.values()) {
+		key = Number(key);
+		if (key !== ind) tuple[key] = ind;
+		if (ind > len(newList) - 1) delete tuple[ind];
+		ind++;
+	}
+}
+function BaseTuple(...args) {
+	TupleConstructorManager.call(this, args);
+}
+function Tuple_filter(fn) {
+	if (!validateCollectionArgs(arguments, {
+		count: 1,
+		validators: [Function],
+		name: "Tuple.filter()"
+	})) return;
+	return new Tuple(...this.list().filter(fn));
+}
+BaseTuple.prototype.filter = function filter(fn) {
+	return Tuple_filter(...arguments);
+};
+BaseTuple.prototype.find = function find(fn) {
+	return this.list().find(...arguments);
+};
+BaseTuple.prototype.shift = function shift() {
+	if (!isFrozenWarn(this[$$tupleStore].isFrozen, "Tuple.shift()", "tuple")) return false;
+	let firstValue;
+	if (this.size > 0) {
+		firstValue = this[$$tupleStore].array.shift();
+		this[$$tupleStore].unique.delete(firstValue);
+		this.size = setTupleSize(this.size - 1);
+		instanciate_tuple_indexes(this);
+	}
+	return firstValue;
+};
+BaseTuple.prototype.freeze = function freeze(deep = false) {
+	this[$$tupleStore].array = objFreeze(this[$$tupleStore].array, deep);
+	this[$$tupleStore].isFrozen = true;
+	return this;
+};
+BaseTuple.prototype.values = function values() {
+	return this.list().values();
+};
+BaseTuple.prototype.keys = function keys() {
+	return this.list().keys();
+};
+BaseTuple.prototype.entries = function entries() {
+	return this.list().entries();
+};
+BaseTuple.prototype.isTuple = function(tuple) {
+	return isTuple(tuple);
+};
+BaseTuple.prototype.has = function has(value) {
+	return this[$$tupleStore].unique.has(value);
+};
+BaseTuple.prototype.indexOf = function indexOf(value) {
+	return len(arguments) && this.has(value) ? this.list().indexOf(value) : -1;
+};
+BaseTuple.prototype.add = function add(value) {
+	if (isFalse(isFrozenWarn(this[$$tupleStore].isFrozen, "Tuple.add()", "tuple"))) return false;
+	if (len(arguments) && !this.has(value)) {
+		this[$$tupleStore].unique.add(value);
+		this[$$tupleStore].array.push(value);
+		this.size = setTupleSize(this.size + 1);
+		instanciate_tuple_indexes(this);
+		return true;
+	}
+	return false;
+};
+BaseTuple.prototype.delete = function Tuple_delete(value) {
+	if (isFalse(isFrozenWarn(this[$$tupleStore].isFrozen, "Tuple.delete()", "tuple"))) return false;
+	if (this.has(value)) return this.splice(this.indexOf(value), 1);
+	return false;
+};
+BaseTuple.prototype.replace = function replace(oldV, newV) {
+	if (isFalse(isFrozenWarn(this[$$tupleStore].isFrozen, "replace()", "tuple"))) return false;
+	if (!this.has(oldV) && this.has(newV)) return false;
+	return this.splice(this.indexOf(oldV), 1, newV);
+};
+BaseTuple.prototype.prepend = function prepend(value) {
+	if (isFalse(isFrozenWarn(this[$$tupleStore].isFrozen, "Tuple.prepend()", "tuple"))) return false;
+	if (!this.has(value)) {
+		this[$$tupleStore].array.unshift(value);
+		this[$$tupleStore].unique.add(value);
+		this.size = setTupleSize(this.size + 1);
+		instanciate_tuple_indexes(this);
+		return true;
+	}
+	return false;
+};
+BaseTuple.prototype.splice = function splice(start, deleteCount, ...insertElements) {
+	if (isFalse(isFrozenWarn(this[$$tupleStore].isFrozen, "Tuple.splice()", "tuple"))) return false;
+	if (!len(arguments)) return false;
+	if (!validateCollectionArgs(arguments, {
+		min: 0,
+		max: Infinity,
+		validators: [Number, Number],
+		name: "Tuple.splice()"
+	})) return false;
+	if (len(arguments) > 1 && start + deleteCount - 1 > this.size) {
+		debugHandler(`deleteCount argument 2 count at "Tuple.splice()" exceeds the tuple size`);
+		return false;
+	}
+	if (len(arguments) === 1) {
+		for (const [index, value] of this.list().entries()) if (index >= start) this[$$tupleStore].unique.delete(value);
+		this[$$tupleStore].array.splice(start);
+	} else if (len(arguments) === 2) {
+		let tuple_delete_count = deleteCount;
+		for (const [index, value] of this.list().entries()) if (index >= start && tuple_delete_count > 0) {
+			this[$$tupleStore].unique.delete(value);
+			tuple_delete_count--;
+		}
+		this[$$tupleStore].array.splice(start, deleteCount);
+	} else if (len(insertElements)) {
+		let tuple_delete_count = deleteCount;
+		for (const [index, value] of this.list().entries()) if (index >= start && tuple_delete_count > 0) {
+			this[$$tupleStore].unique.delete(value);
+			tuple_delete_count--;
+		}
+		for (const value of insertElements.values()) if (this.has(value)) insertElements.splice(insertElements.indexOf(value), 1);
+		else this[$$tupleStore].unique.add(value);
+		if (len(insertElements)) this[$$tupleStore].array.splice(start, deleteCount, ...insertElements);
+	}
+	this.size = setTupleSize(len(this.list()));
+	instanciate_tuple_indexes(this);
+	return true;
+};
+BaseTuple.prototype.map = function map(callback) {
+	return this.list().map(callback);
+};
+BaseTuple.prototype.exchange = function exchange(value1, value2) {
+	if (!(this.has(value1) && this.has(value2))) {
+		debugHandler(`argument ${!this.has(value1) ? "1" : "2"} not a member of this tuple`);
+		return false;
+	}
+	const index1 = this.indexOf(value1);
+	const index2 = this.indexOf(value2);
+	this[$$tupleStore].array[index1] = value2;
+	this[$$tupleStore].array[index2] = value1;
+	instanciate_tuple_indexes(this);
+	return true;
+};
+BaseTuple.prototype.arrange = function arrange(sort, start = 0) {
+	if (!validateCollectionArgs(arguments, {
+		name: "Tuple.arrange()",
+		min: 1,
+		max: 2,
+		validators: [Collections, Number]
+	})) return false;
+	else if (!len(sort) && !this.size) return;
+	else if (start > (this.size || 1) - 1) {
+		debugHandler(`Tuple.arrange()'s "start" argument @parameter 2 exceeds the tuple size\n"${start}"`);
+		return false;
+	}
+	const flowTuple = new Tuple();
+	const sortSet = new Set(arrSet(sort));
+	this.forEach((val) => {
+		if (!sortSet.has(val)) this.delete(val);
+	});
+	for (let [ind, sort_value] of getIterator(sort)) {
+		if (this.has(sort_value)) this[$$tupleStore].array.splice(this.indexOf(sort_value), 1);
+		else this[$$tupleStore].unique.add(sort_value);
+		flowTuple.add(sort_value);
+	}
+	this[$$tupleStore].array.splice(start, len(flowTuple), ...arrSet(flowTuple));
+	instanciate_tuple_indexes(this);
+	this.size = setTupleSize(len(this.list()));
+	return true;
+};
+BaseTuple.prototype.clear = function clear() {
+	if (isFalse(isFrozenWarn(this[$$tupleStore].isFrozen, "Tuple.clear()", "tuple"))) return false;
+	return this.splice(0);
+};
+BaseTuple.prototype.pop = function pop() {
+	if (isFalse(isFrozenWarn(this[$$tupleStore].isFrozen, "Tuple.pop()", "tuple"))) return false;
+	if (this.size <= 0) return;
+	const value = this[$$tupleStore].array.pop();
+	this[$$tupleStore].unique.delete(value);
+	this.size = setTupleSize(len(this.list()));
+	instanciate_tuple_indexes(this);
+	return value;
+};
+BaseTuple.prototype.at = function at(index) {
+	if (!validateCollectionArgs(arguments, {
+		count: 1,
+		validators: [Number],
+		name: "Tuple.at()"
+	})) return;
+	index = Number(index);
+	if (isNaN(index)) {
+		debugHandler(`index passed to Tuple.at() is not a number`);
+		return;
+	} else if (index < 0 && index > this.size) {
+		debugHandler(`index exceded Tuple limit.........\n"at()"`);
+		return null;
+	}
+	return this.list()[index];
+};
+BaseTuple.prototype.list = function list() {
+	return [...this[$$tupleStore].array];
+};
+BaseTuple.prototype.extend = function extend(collection) {
+	if (!validateCollectionArgs(arguments, {
+		count: 1,
+		validators: [Collections],
+		name: "Tuple.extend()"
+	})) return false;
+	for (let [index, value] of getIterator(collection)) this.add(value);
+	return true;
+};
+BaseTuple.prototype.forEach = function forEach(callback) {
+	return this.list().forEach(...arguments);
+};
+BaseTuple.prototype.contains = function contains(...args) {
+	if (!len(args)) return false;
+	for (let item of args.values()) if (!this.has(item)) return false;
+	return true;
+};
+var effectTuple = new Tuple();
+var previousRunningEffectBuild = void 0;
+var currentRunningEffectBuild = void 0;
+new Tuple();
+function installCurrentRunningEffect(self) {
+	effectTuple.add(self);
+	if (isHouxitBuild(currentRunningEffectBuild)) previousRunningEffectBuild = currentRunningEffectBuild;
+	currentRunningEffectBuild = self;
+}
+function reinstatePreviousRunningEffect() {
+	if (previousRunningEffectBuild) currentRunningEffectBuild = previousRunningEffectBuild;
+	else currentRunningEffectBuild = void 0;
+}
+function getCurrentRunningEffect(binding) {
+	const self = currentRunningEffectBuild;
+	const { name, silently } = binding;
+	if (!isHouxitBuild(self)) {
+		if (!silently) debugHandler(`"${name}()" Adapter method cannot be called outside of a build widget or function widget body.\n\n"${name}()" may have been called from an asynchronous thread from the origin or outside of the build option method/function based widget\n\nCheck if the widget instance build method is an arrow function`);
+		return false;
+	}
+	return self;
+}
+var activeRunningEffects = new Tuple();
+var Dependency = class {
+	effects = new Tuple();
+	property = void 0;
+	constructor(prop) {
+		this.property = prop;
+	}
+	subscribe() {
+		activeRunningEffects.list().toReversed().forEach((effect) => {
+			effect.depend(this);
+			this.effects.add(effect);
+		});
+	}
+	notifyEffects() {
+		this.effects.forEach((effect) => effect.notify());
+	}
+};
+var Effect = class {
+	effect = void 0;
+	self = void 0;
+	callbacks = new Tuple();
+	value = void 0;
+	active = true;
+	followers = new Tuple();
+	notified = false;
+	constructor(effect, self) {
+		assign(this, {
+			effect,
+			self
+		});
+	}
+	dependencies = new Tuple();
+	notified = false;
+	depend(dependency) {
+		this.dependencies.add(dependency);
+	}
+	notify(isReducer = false) {
+		if (this.notified || this.reducer && this.reducer.notified && !isReducer) return;
+		this.notified = true;
+		this.schedule();
+	}
+	schedule() {
+		if (isHouxitBuild(this.self)) {
+			for (let [callback, type, flush] of this.callbacks.values()) if (type === "effect") this.self[$$$operands]._OBSERVERS.add([callback, flush]);
+			else if (type === "priority") this.self[$$$compiler].VN_Tree.priority.add(callback);
+			this.self.__public_model__.$pushEffect().then(() => {
+				this.propagate();
+				this.notified = false;
+			});
+		} else if (this.flushType && this.flushType === "sync") {
+			this.callbacks.forEach(([fn]) => fn?.());
+			this.propagate();
+			this.notified = false;
+		} else tick(() => {
+			this.callbacks.forEach(([fn]) => fn?.());
+			this.propagate();
+			this.notified = false;
+		});
+	}
+	attachCallback(callback, type = "effect", flush = "sync") {
+		const { self } = this;
+		if (!this.reducer && !len(this.dependencies)) return;
+		this.callbacks.add([
+			callback,
+			type,
+			flush
+		]);
+	}
+	flushDeps() {
+		this.dependencies.forEach((dep) => {
+			dep.effects.delete(this);
+		});
+		this.dependencies.clear();
+	}
+	runEffect(value) {
+		if (this.reducer && !this.r_flag) return this;
+		this.flushDeps();
+		return effectRunner(this, value);
+	}
+	endLife() {
+		this.flushDeps();
+		this.callbacks.clear();
+		this.effect = pass;
+		this.active = false;
+		if (this.reducer) this.reducer.followers.delete(this);
+		this.__proto__ = {};
+	}
+	follow(me) {
+		this.followers.add(me);
+	}
+	propagate() {
+		this.followers.forEach((f) => f.notify(true));
+	}
+};
+var isDependency = (subscriber) => subscriber instanceof Dependency;
+var isEffect = (effect) => effect instanceof Effect;
+function _createEffectBase(effect, self) {
+	return new Effect(effect, self);
+}
+function effectRunner(effect, ...args) {
+	if (!activeRunningEffects.has(effect)) activeRunningEffects.add(effect);
+	effect.value = effect.effect(...args);
+	activeRunningEffects.delete(effect);
+	return effect;
+}
+function scopeEffectHook(fn, config) {
+	return _createEffectHookGlobal(...arguments);
+}
+function scopeObserve(deps, fn, conf) {
+	return _createObserverInstance(...arguments);
+}
+function easingConstructor(value) {
+	let css, fn, name;
+	if (value && !validateType(value, [
+		Function,
+		String,
+		Object
+	])) {
+		debugHandler(`easing Function argument 1 receives an invalid argument`);
+		return;
+	}
+	if (isPObject(value)) {
+		({css, fn, name} = value);
+		if (css && !isString(css)) {
+			debugHandler(`easing Function "css" property receives an invalid argument...\nexpects a css valid easing value`);
+			css = void 0;
+		}
+		if (fn && !isPFunction(fn)) {
+			debugHandler(`easing Function "fn" property receives an invalid argument...\nexpects a Function return a valid easing value`);
+			fn = void 0;
+		}
+	} else if (isString(value)) css = value;
+	else if (isPFunction(value)) fn = value;
+	if (!fn && css && css.startsWith("cubic-bezier")) fn = __cubicBezier(css);
+	assign(this, {
+		css,
+		fn,
+		name
+	});
+}
+var HouxitEasing = class {
+	css = void 0;
+	fn = void 0;
+	name = void 0;
+	constructor(value) {
+		easingConstructor.call(this, value);
+	}
+};
+var jsEasingMap = {
+	linear: (t) => t,
+	easeIn: (t) => t * t,
+	easeOut: (t) => 1 - (1 - t) * (1 - t),
+	easeInOut: (t) => t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2,
+	cubicIn: (t) => t * t * t,
+	cubicOut: (t) => 1 - Math.pow(1 - t, 3),
+	cubicInOut: (t) => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2,
+	quartIn: (t) => t ** 4,
+	quartOut: (t) => 1 - Math.pow(1 - t, 4),
+	quartInOut: (t) => t < .5 ? 8 * t ** 4 : 1 - Math.pow(-2 * t + 2, 4) / 2,
+	quintIn: (t) => t ** 5,
+	quintOut: (t) => 1 - Math.pow(1 - t, 5),
+	quintInOut: (t) => t < .5 ? 16 * t ** 5 : 1 - Math.pow(-2 * t + 2, 5) / 2,
+	sineIn: (t) => 1 - Math.cos(t * Math.PI / 2),
+	sineOut: (t) => Math.sin(t * Math.PI / 2),
+	sineInOut: (t) => -(Math.cos(Math.PI * t) - 1) / 2,
+	expoIn: (t) => t === 0 ? 0 : Math.pow(2, 10 * t - 10),
+	expoOut: (t) => t === 1 ? 1 : 1 - Math.pow(2, -10 * t),
+	expoInOut: (t) => {
+		if (t === 0 || t === 1) return t;
+		return t < .5 ? Math.pow(2, 20 * t - 10) / 2 : (2 - Math.pow(2, -20 * t + 10)) / 2;
+	},
+	circIn: (t) => 1 - Math.sqrt(1 - t * t),
+	circOut: (t) => Math.sqrt(1 - Math.pow(t - 1, 2)),
+	circInOut: (t) => t < .5 ? (1 - Math.sqrt(1 - Math.pow(2 * t, 2))) / 2 : (Math.sqrt(1 - Math.pow(-2 * t + 2, 2)) + 1) / 2,
+	backIn: (t) => {
+		return 2.70158 * t * t * t - 1.70158 * t * t;
+	},
+	backOut: (t) => {
+		return 1 + 2.70158 * Math.pow(t - 1, 3) + 1.70158 * Math.pow(t - 1, 2);
+	},
+	springSoft: (t) => {
+		return 1 - Math.cos(t * 3 * Math.PI) * Math.exp(-4 * t);
+	},
+	backInOut: (t) => {
+		const c2 = 1.70158 * 1.525;
+		return t < .5 ? Math.pow(2 * t, 2) * (3.5949095 * 2 * t - c2) / 2 : (Math.pow(2 * t - 2, 2) * (3.5949095 * (t * 2 - 2) + c2) + 2) / 2;
+	},
+	bounceOut: (t) => {
+		const n1 = 7.5625;
+		const d1 = 2.75;
+		if (t < 1 / d1) return n1 * t * t;
+		else if (t < 2 / d1) return n1 * (t -= 1.5 / d1) * t + .75;
+		else if (t < 2.5 / d1) return n1 * (t -= 2.25 / d1) * t + .9375;
+		else return n1 * (t -= 2.625 / d1) * t + .984375;
+	},
+	spring: (t) => {
+		return 1 - Math.cos(t * 4.5 * Math.PI) * Math.exp(-6 * t);
+	},
+	bounceIn: (t) => 1 - bounceOut(1 - t),
+	bounceInOut: (t) => t < .5 ? (1 - bounceOut(1 - 2 * t)) / 2 : (1 + bounceOut(2 * t - 1)) / 2,
+	elasticIn: (t) => {
+		const c4 = 2 * Math.PI / 3;
+		if (t === 0 || t === 1) return t;
+		return -Math.pow(2, 10 * t - 10) * Math.sin((t * 10 - 10.75) * c4);
+	},
+	elasticOut: (t) => {
+		const c4 = 2 * Math.PI / 3;
+		if (t === 0 || t === 1) return t;
+		return Math.pow(2, -10 * t) * Math.sin((t * 10 - .75) * c4) + 1;
+	},
+	elasticInOut: (t) => {
+		const c5 = 2 * Math.PI / 4.5;
+		if (t === 0 || t === 1) return t;
+		return t < .5 ? -(Math.pow(2, 20 * t - 10) * Math.sin((20 * t - 11.125) * c5)) / 2 : Math.pow(2, -20 * t + 10) * Math.sin((20 * t - 11.125) * c5) / 2 + 1;
+	},
+	ease: (t) => {
+		return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+	},
+	stepStart: (t) => t > 0 ? 1 : 0,
+	stepEnd: (t) => t < 1 ? 0 : 1,
+	smoothstep: (t) => t * t * (3 - 2 * t),
+	smootherstep: (t) => t * t * t * (t * (6 * t - 15) + 10),
+	anticipate: (t) => {
+		return t * t * (3.5523700000000002 * t - 1.70158 * 1.5);
+	},
+	overshoot: (t) => {
+		const s = 1.70158;
+		t -= 1;
+		return t * t * (2.70158 * t + s) + 1;
+	},
+	recoil: (t) => {
+		return Math.sin(t * Math.PI * 2) * (1 - t) * .2 + t;
+	},
+	snap: (t) => {
+		return t < .9 ? Math.pow(t / .9, 3) : 1;
+	},
+	springHeavy: (t) => {
+		return 1 - Math.cos(t * 6 * Math.PI) * Math.exp(-8 * t);
+	}
+};
+var cssEasingMap = {
+	springSoft: "cubic-bezier(0.2, 1.2, 0.4, 1)",
+	snap: "cubic-bezier(0.2, 1, 0.3, 1)",
+	recoil: "cubic-bezier(0.7, -0.4, 0.95, 0.9)",
+	anticipate: "cubic-bezier(0.68, -0.6, 0.32, 1.6)",
+	smootherstep: "cubic-bezier(0.4, 0, 0.2, 1)",
+	linear: "linear",
+	springHeavy: "cubic-bezier(0.3, 1.8, 0.4, 1)",
+	overshoot: "cubic-bezier(0.34, 1.56, 0.64, 1)",
+	smoothstep: "cubic-bezier(0.4, 0, 0.2, 1)",
+	easeIn: "cubic-bezier(0.55, 0.085, 0.68, 0.53)",
+	spring: "cubic-bezier(0.25, 1.5, 0.5, 1)",
+	easeOut: "cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+	easeInOut: "cubic-bezier(0.455, 0.03, 0.515, 0.955)",
+	cubicIn: "cubic-bezier(0.55, 0.055, 0.675, 0.19)",
+	cubicOut: "cubic-bezier(0.215, 0.61, 0.355, 1)",
+	cubicInOut: "cubic-bezier(0.645, 0.045, 0.355, 1)",
+	quartIn: "cubic-bezier(0.895, 0.03, 0.685, 0.22)",
+	quartOut: "cubic-bezier(0.165, 0.84, 0.44, 1)",
+	quartInOut: "cubic-bezier(0.77, 0, 0.175, 1)",
+	quintIn: "cubic-bezier(0.755, 0.05, 0.855, 0.06)",
+	quintOut: "cubic-bezier(0.23, 1, 0.32, 1)",
+	quintInOut: "cubic-bezier(0.86, 0, 0.07, 1)",
+	sineIn: "cubic-bezier(0.47, 0, 0.745, 0.715)",
+	sineOut: "cubic-bezier(0.39, 0.575, 0.565, 1)",
+	sineInOut: "cubic-bezier(0.445, 0.05, 0.55, 0.95)",
+	expoIn: "cubic-bezier(0.95, 0.05, 0.795, 0.035)",
+	expoOut: "cubic-bezier(0.19, 1, 0.22, 1)",
+	expoInOut: "cubic-bezier(1, 0, 0, 1)",
+	circIn: "cubic-bezier(0.6, 0.04, 0.98, 0.335)",
+	circOut: "cubic-bezier(0.075, 0.82, 0.165, 1)",
+	circInOut: "cubic-bezier(0.785, 0.135, 0.15, 0.86)",
+	backIn: "cubic-bezier(0.6, -0.28, 0.735, 0.045)",
+	backOut: "cubic-bezier(0.175, 0.885, 0.32, 1.275)",
+	backInOut: "cubic-bezier(0.68, -0.55, 0.265, 1.55)",
+	bounceIn: "cubic-bezier(0.6, -0.28, 0.735, 0.045)",
+	bounceOut: "cubic-bezier(0.175, 0.885, 0.32, 1.275)",
+	bounceInOut: "cubic-bezier(0.68, -0.55, 0.265, 1.55)",
+	elasticIn: "cubic-bezier(0.7, -0.75, 0.99, 0.01)",
+	elasticOut: "cubic-bezier(0.16, 1.5, 0.3, 1)",
+	elasticInOut: "cubic-bezier(0.87, -0.5, 0.13, 1.5)",
+	easeInOut: "ease-in-out",
+	ease: "ease",
+	stepStart: "step-start",
+	stepEnd: "step-end"
+};
+var easings = {};
+iterate(jsEasingMap).each((fn, name) => {
+	easings[name] = createEasing({
+		css: cssEasingMap[name],
+		fn,
+		name
+	});
+});
+function createEasing(value) {
+	return new HouxitEasing(value);
+}
+function isEasingObject(ease) {
+	return ease && ease instanceof HouxitEasing;
+}
+var SuspenseBoundary = class {
+	constructor(self, vNode) {
+		assign(this, {
+			$owner: self,
+			vNode
+		});
+	}
+	super = void 0;
+	fallbackElement = void 0;
+	errorElement = void 0;
+	activeElement = void 0;
+	rerenderObj = {};
+	timeout = Infinity;
+	hx_Element = void 0;
+	delay = 200;
+	triggerResolved = pass;
+	state = {
+		pending: false,
+		failed: false,
+		resolved: false,
+		postLoad: 0
+	};
+	errorCaptured(cb, err, fb) {
+		this.state.failed = true;
+		this.triggerFailure(cb, err, fb);
+	}
+	resolvedHook() {
+		this.state.resolved = true;
+		this.triggerResolved();
+	}
+	hooks = {
+		errorHooks: new Tuple(),
+		awaitHooks: new Tuple(),
+		resolvedHooks: new Tuple()
+	};
+	metrics = {
+		$owner: void 0,
+		vNodes: void 0,
+		priorities: new Tuple(),
+		vacuums: 0,
+		cashe: void 0,
+		res: void 0,
+		useFallback: false
+	};
+	triggerFailure = pass;
+	enterFallback() {
+		if (this.state.pending) {}
+	}
+	promise = void 0;
+	ref = void 0;
+	instance = void 0;
+	get activeAwaits() {
+		return this.state.postLoad;
+	}
+	set activeAwaits(nvalue) {
+		const postLoad = this.state.postLoad;
+		if (nvalue > postLoad) iterate(this.hooks.awaitHooks).each((callback) => callback());
+		else if (nvalue < postLoad) {}
+		this.state.postLoad = nvalue;
+		return true;
+	}
+	loadChain = new Tuple();
+};
+function _createAgent(value, config) {
+	if (!validateCollectionArgs(arguments, {
+		name: "agent",
+		required: [true, false],
+		min: 1,
+		max: 2,
+		validators: [Any, Object]
+	})) return pass;
+	if (!getCurrentRunningEffect({ name: "agent" })) return [pass, pass];
+	const parameters = [value, assign({ shallow: true }, config || {})];
+	return _useAgent_(!isToken(value) && !isPrimitive(value) ? stream(...parameters) : token(...parameters));
+}
+function agent(value, config) {
+	return _createAgent(...arguments);
+}
+function _pushEffect_(callback) {
+	let self = this;
+	if (!isHouxitBuild(this)) {
+		self = getCurrentRunningEffect({ name: "pushEffect" });
+		if (!isHouxitBuild(self)) return;
+	}
+	if (!validateCollectionArgs(arguments, {
+		max: 1,
+		validators: [Function],
+		name: "pushEffect",
+		self: this
+	})) return;
+	self[$$$operands].dependency.trigger();
+	return isFunction(callback) ? tick(callback) : Promise.resolve();
+}
+function pushEffect(callback) {
+	return _pushEffect_.call(this, ...arguments);
+}
+function cloneVElement(vnode) {
+	if (!isHouxitElement(vnode)) {
+		debugHandler(`cloneVElement() macro expects a houxit virtual node as it's first argument`);
+		return;
+	}
+	return vnode.compiler_options.createElement();
+}
+function _makeCloneVersion(value, deep = false, metrics = []) {
+	let cValue;
+	const [parent, key] = metrics;
+	if (isPrimitive(value) || isCollection(parent) && isNaN(Number(key))) return value;
+	if (validateType(value, [
+		HouxitElement,
+		BaseToken,
+		Function,
+		Symbol
+	]) || isPrimitive(value)) return value;
+	else if (isCollection(value)) {
+		let args = value.map((val, ky) => {
+			return deep ? _makeCloneVersion(val, deep, [value, ky]) : val;
+		});
+		let res = (arg = []) => new value.__proto__.constructor(...arg);
+		if (len(args) === 1 && isArray(value)) {
+			res = res();
+			res.push(args[0]);
+		} else res = res(args);
+		return res;
+	} else if (isObject(value)) {
+		if (isVNodeClass(parent)) {
+			if (_makeMap_("prototype_,type,GeneticProvider,children,hx_Element", key));
+			return value;
+		}
+		const isSVA = isArray(value) && len(value) === 1 && isNumber(value[0]);
+		if (isSVA) {
+			value = [...value];
+			value.push(void 0);
+		}
+		cValue = assign(new value.__proto__.constructor(), value);
+		if (isSVA) cValue.pop();
+		if (!deep) return cValue;
+		for (let [ky, vl] of getIterator(cValue)) if (!isPrimitive(vl)) cValue[ky] = _makeCloneVersion(vl, deep, [cValue, ky]);
+	}
+	return cValue;
+}
+var equalityChecker = (val1, val2) => {
+	return isEmptyStr(val1) && isEmptyStr(val2) || isUndefined(val1) && isUndefined(val2) || val1 === null && val2 === null;
+};
+function deepEqualityCheck(val1, val2) {
+	val1 = unwrap(val1);
+	val2 = unwrap(val2);
+	if (validateType(val1, None) && validateType(val2, None)) if (equalityChecker(val1, val2)) return true;
+	else return false;
+	if (getType(val1) !== getType(val2)) return false;
+	if (isPrimitive(val1) && isPrimitive(val2)) return val1 === val2;
+	if (isCollection(val1)) {
+		if (len(val1) !== len(val2)) return false;
+		val2 = validateType(val2, [Set, Tuple]) ? arrSet(val2) : val2;
+		for (const [key, value] of val1.entries()) if (!deepEqualityCheck(value, val2[key])) return false;
+		return true;
+	} else if (isMap(val1)) {
+		if (len(val1) !== len(val2)) return false;
+		let index = 0;
+		for (const [key, value] of val1.entries()) {
+			if (!deepEqualityCheck(key, val2.keys().next())) return false;
+			const value2 = val2.values().next();
+			if (!deepEqualityCheck(val2, value2)) return false;
+			index++;
+		}
+		return true;
+	} else if (isObject(val1)) {
+		if (len(val1) !== len(val2)) return false;
+		let index = 0;
+		for (const [key, value] of entries(val1)) {
+			if (key !== keys(val2)[index]) return false;
+			if (!deepEqualityCheck(value, val2[key])) return false;
+			index++;
+		}
+		return true;
+	}
+	return JSON.stringify(val1) === JSON.stringify(val2);
+}
+function _$compiler_engine_hydrator() {
+	let global = createObj("Houxit");
+	global[PRIVATE_PROPERTY_KEY] = {};
+	if (inBrowserCompiler) {}
+}
+createObj("Exceptions", { SE: (self) => debugHandler(``, self, isHouxitBuild(self)) });
+var ConfigValidator = {
+	debug: Boolean,
+	forwardSlot: Boolean,
+	forwardAttrs: Boolean,
+	delimiters: Array,
+	scopedStyle: Boolean,
+	forwardEvents: Boolean
+};
+var FrameworkCompilerOptions = class {
+	debug = true;
+	forwardSlot = true;
+	forwardAttrs = true;
+	forwardEvents = this.forwardAttrs;
+	delimiters = ["{{", "}}"];
+	scopedStyle = true;
+};
+var Compiler_Config_Options = new FrameworkCompilerOptions();
+var HouxitCompilerSetup = class {
+	debug(debug) {
+		if (isFalse(mapSettingCheck(this, "debug", debug))) return this;
+		Compiler_Config_Options.debug = debug;
+	}
+	forwardAttrs(forwardAttrs) {
+		if (isFalse(mapSettingCheck(this, "forwardAttrs", forwardAttrs))) return this;
+		Compiler_Config_Options.forwardAttrs = forwardAttrs;
+	}
+	forwardEvents(forwardEvents) {
+		if (isFalse(mapSettingCheck(this, "forwardEvents", forwardEvents))) return this;
+		Compiler_Config_Options.forwardEvents = forwardEvents;
+	}
+	forwardSlot(forwardSlot) {
+		if (isFalse(mapSettingCheck(this, "forwardSlot", forwardSlot))) return this;
+		Compiler_Config_Options.forwardSlot = forwardSlot;
+	}
+	delimiters(delimiters) {
+		if (isFalse(mapSettingCheck(this, "delimiters", delimiters))) return this;
+		Compiler_Config_Options.delimiters = delimiters;
+	}
+	scopedStyle(scopedStyle) {
+		if (isFalse(mapSettingCheck(this, "scopedStyle", scopedStyle))) return this;
+		Compiler_Config_Options.scopedStyle = scopedStyle;
+	}
+};
+function isXtruct(func, ...arg) {
+	try {
+		return Reflect.construct(Object, arrSet(args), func);
+	} catch (error) {
+		return false;
+	}
+}
+function hasSpecialCharacters(value) {
+	return /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/m.test(value);
+}
+var extractorArsterists = "*****";
+var reverseRegex = new RegExp(`(${escapeRegExp(extractorArsterists)}[\\d])`, "g");
+function ArgsExtractor(source, funcN, config = {}) {
+	const orgFName = funcN;
+	config = assign({
+		global: false,
+		block: "declare"
+	}, config);
+	const { global, block } = config;
+	if (hasSpecialCharacters(funcN)) funcN = escapeRegExp(funcN);
+	let flags = "mu";
+	if (global) flags += "g";
+	const fxRegex = new RegExp(`(${funcN} *\\()([\\S\\s]*)`, flags);
+	const drafts = [];
+	let draftCount = 0;
+	source = source.replace(stringsMonitorRegex, (match, rex, roll) => {
+		drafts.push(match);
+		let dataDraft = extractorArsterists + draftCount;
+		draftCount++;
+		return dataDraft;
+	});
+	let [match, context, rest] = source.match(fxRegex);
+	rest = rest.replace(reverseRegex, (match, rex, roll) => drafts[Number(rex.match(/\d/))]);
+	let value = "";
+	let callCount = 0;
+	let opQ = "";
+	let compile = true;
+	const isQo = (val) => /['"]/.test(val);
+	for (let [key, val] of entries(rest)) {
+		value += val;
+		if (isQo(val)) {
+			if (!opQ) {
+				compile = false;
+				opQ = val;
+			}
+			if (val === opQ) {
+				opQ = "";
+				compile = true;
+			}
+		}
+		if (!compile) continue;
+		if (val === "(") callCount++;
+		else if (val === ")") if (callCount === 0) break;
+		else callCount--;
+	}
+	return {
+		name: orgFName,
+		content: value.slice(0, -1),
+		source: orgFName + "(" + value
+	};
+}
+function validateType(val, type) {
+	if (isFunction(type)) {
+		if (new Set(DataFunctionMap).has(type)) return getType(val) === getType(type()) && !isNull(val);
+		else if (new Set(XtructDataCallableTypes).has(type)) {
+			let res = false;
+			try {
+				res = getType(val) === getType(new type()) && !isNull(val);
+			} catch (err) {
+				return res;
+			}
+			return res;
+		} else if (isDomSpecialConstructor(type) || isClass(type) || isXtruct(type)) {
+			let res = false;
+			try {
+				res = val instanceof type;
+			} catch (err) {
+				return res;
+			}
+			return res;
+		}
+	} else if (isArray(type)) {
+		let res = false;
+		for (let typeF of type.values()) {
+			if (!isFunction(typeF) && !isBaseType(typeF) && !isNull(typeF) && !isEmptyStr(typeF)) {
+				debugHandler(`type check value is not a function or class constructor type\n\n found "${typeF}"`);
+				return false;
+			}
+			res = validateType(val, typeF);
+			if (isTrue(res)) return res;
+		}
+		return res;
+	} else if (isBaseType(type)) {
+		if (type instanceof AnyType) return !validateType(val, None);
+		else if (type instanceof NoneType) return validateType(val, [
+			void 0,
+			null,
+			""
+		]);
+		let res;
+		if (type.validator) res = type.validator(val);
+		if (!isTrue(res) && type.type) res = validateType(val, type.type);
+		return res;
+	} else if ((/* @__PURE__ */ new Set([
+		void 0,
+		null,
+		""
+	])).has(type)) return isString(val) ? isEmptyStr(val) : isNull(val);
+	return false;
+}
+function createTextElement(self, text, hx_Element, isRerender, config) {
+	return _createTextElement(...arguments);
+}
+function _createTextElement(self, text, hx_Element, isRerender, config) {
+	if (!isPrimitive(text)) {
+		debugHandler(`cannot create a TEXT_NODE element from a none primitive value.......\n\n"${text}" value`, self);
+		text = "";
+	}
+	const isSSR = isSSRCompiler(self), is_hyperscript = hx_Element.is_hyperscript;
+	let node;
+	if (!isRerender && !isSSR) {
+		node = document.createTextNode(text);
+		node._hx_Element = {
+			hx_Element,
+			_vnode_key: void 0
+		};
+	}
+	if (!is_hyperscript && hasSpecialCharacters(text) || is_hyperscript && isFunction(text)) {
+		const effect = _createEffectBase(function() {
+			return is_hyperscript ? safeCall(text) : resolveAccessor(self, text, hx_Element);
+		}, self);
+		let { dependencies, value: textContent } = effectRunner(effect);
+		if (!isRerender && !isSSR) node.textContent = textContent;
+		else {
+			node = textContent;
+			hx_Element.$element = textContent;
+		}
+		if (!isRerender) {
+			if (isHouxitBuild(self) && (!isSSR || isHydration(self))) {
+				const flush = createPriorityFlush(effect, () => {
+					if (IS_TEXT_NODE(node)) node.textContent = effect?.runEffect?.().value;
+				});
+				hx_Element?.VN_Tree.FLUSHS.add(flush);
+			}
+		}
+	}
+	if ((isRerender || isSSR) && (is_hyperscript || !hasSpecialCharacters(text))) {
+		node = text;
+		hx_Element.$element = text;
+	}
+	return node;
+}
+var DEPENDENCY_FLAGS = {
+	[0]: "TEXT",
+	[16]: "CLASS",
+	[32]: "STYLE",
+	[48]: "ATTRS",
+	[64]: "EVENTS",
+	[80]: "PARAMS",
+	[96]: "FRAGMENT",
+	[112]: "SLOTS",
+	[128]: "CHILDREN"
+};
+"FRAGMENT,CLASS,STYLE,ATTRS,EVENTS,PARAMS,TEXT,SLOTS,CHILDREN".split(",");
+var BasevNodeClass = class {
+	constructor(type, props, children, configOptions = {}) {
+		this.type = type;
+		if (validHouxitWidget(type)) this.GeneticProvider = type;
+		this.props = isPObject(props) ? props : {};
+		if (hasOwn(this.props, "key")) {
+			this.key = this.props.key;
+			delete this.props.key;
+		}
+		if (!isNull(children)) this.children = new Tuple(...arrayInverter(children)).list();
+		let { subs, ctx, is_hyperscript, key, config, self, flags = [] } = configOptions;
+		this.ctx = ctx;
+		for (let fl of flags.values()) this.subscriptions[DEPENDENCY_FLAGS[fl]] = DEPENDENCY_FLAGS[fl].toString(2);
+		this.prototype_ = type;
+	}
+	type = null;
+	props = {};
+	compiler = {};
+	prototype_ = null;
+	children = null;
+	key = null;
+	config = null;
+	_is_VNodeClass = true;
+	filesFilter = {
+		$$$Events: {},
+		$Model_Event: null,
+		$Notifiers: null,
+		$ssr_kit: {
+			events: new Tuple(),
+			props: {},
+			hydrationFlushs: new Tuple()
+		},
+		parent: void 0
+	};
+	rawChildren = null;
+	rawProps = null;
+	children = null;
+	hx_Element = null;
+	is_hyperscript = false;
+	GeneticProvider = null;
+};
+var vNodeClass = class extends BasevNodeClass {
+	constructor() {
+		super(...arguments);
+	}
+};
+var wuf_class_prop = Symbol("wfu_class_prop");
+var __WUFClass__ = class {
+	constructor() {
+		this[wuf_class_prop] = void 0;
+	}
+};
+var isVNodeClass = (vnode) => vnode instanceof vNodeClass;
+var HouxitElement = class {
+	constructor() {
+		if (isNativeElement(this.$element)) define(this.$element, "houxitElement", {
+			value: this,
+			enumerable,
+			configurable
+		});
+	}
+	base_element = void 0;
+	get_parent_element() {
+		return this.$element.parentElement.houxitElement;
+	}
+	prototype_ = void 0;
+	$element = void 0;
+	slot_name = void 0;
+	widget_instance = void 0;
+	updated_hook = pass;
+	destroyed_hook = pass;
+	_vnode_key = void 0;
+	patch_tracks = /* @__PURE__ */ new Set();
+	conditional_record = {
+		src: void 0,
+		res: false,
+		passed: false
+	};
+	compiler_options = { context: {} };
+	VNodeManager = {
+		updateFlags: { active: false },
+		motion_object: {
+			transite: new Tuple(),
+			animate: new Tuple(),
+			config: {},
+			hooks: {
+				transition: {
+					in: new Tuple(),
+					out: new Tuple(),
+					stop: new Tuple(),
+					destroy: new Tuple()
+				},
+				animation: {
+					to: void 0,
+					from: void 0,
+					options: {},
+					play: new Tuple(),
+					pause: new Tuple(),
+					reverse: new Tuple(),
+					cancel: new Tuple(),
+					destroy: new Tuple(),
+					finish: new Tuple(),
+					restart: new Tuple()
+				}
+			},
+			create(dir, fn, obj) {
+				this[dir].add({
+					fn,
+					...obj
+				});
+			}
+		},
+		posix: [],
+		GeneticProvider: void 0,
+		vNodeClass: void 0,
+		factoryCompiler: pass,
+		LifeCycleHooks: {
+			init_hook: new Tuple(),
+			created_hook: new Tuple(),
+			mounted_hook: new Tuple(),
+			updated_hook: new Tuple(),
+			destroyed_hook: new Tuple()
+		},
+		patchFlags: {
+			subscriptions: new Tuple(),
+			PropFlags: new Tuple(),
+			shapeProps: {}
+		},
+		dexTransform: {
+			sourcesArray: [],
+			syntaxArray: []
+		},
+		SSRVnode: void 0
+	};
+	VN_Tree = {
+		KEYS_INDEXES: new Tuple(),
+		LEAGUE_TREE: {},
+		FLUSHS: new Tuple(),
+		ELEMENTS: void 0
+	};
+	hx_build = void 0;
+	is_hyperscript = false;
+	IS_RENDERLESS = false;
+	LabContext = void 0;
+	mounted = false;
+	isLoopWrappRenderer = false;
+	NodeList = new Tuple();
+	PATCH_FLAGS = new Tuple();
+};
+function isTagMatch(open, close) {
+	let res = false;
+	for (const items of [
+		["[", "]"],
+		["{", "}"],
+		["(", ")"],
+		["<", ">"]
+	].values()) if (items.includes(open) || items.includes(close)) {
+		if (open === items[0] && close === items[1] || open === items[1] && close === items[0]) return true;
+	}
+	return res;
+}
+function tagMachErr(self, metrics) {
+	let [op, cl, p1] = metrics;
+	if (!isTagMatch(op, cl)) {
+		debugHandler(`Unmaching tags for "for" directive loop data keys mapping\n opening tag does not match a closing tag\n\n found ${p1} Unmaching`, self, true);
+		return false;
+	}
+	return true;
+}
+var WrappedDestructuredRegex = /(((\(|\<)?(((\{|\[)(.*?[ ]*)*?(\}|\]))|([\w.\$]+))[ ]*(\,[ ]*(.*?))?(\)|\>)?)[ ]+([of|in]+)[ ]+)?([\w.\$\[\]\(\) \S\{\}]+)/;
+function get_Loop_Data(self, str, isBlock = false) {
+	const Loop_Data = {};
+	const match = str.match(WrappedDestructuredRegex);
+	if (!match || !match[14]) {
+		debugHandler(`Usupported Loop format in 'for' ${isBlock ? "block" : "directive"}\n\n"${str}" loop syntax is invalid or is not recognised`, self, true);
+		return;
+	}
+	const [matc, ig1, each, opening, value, isDestructure, ig2, ig3, ig4, isValueName, afterValue, key_index, closing, loopType, resource] = match;
+	if (opening && !tagMachErr(self, [
+		opening,
+		closing,
+		""
+	])) return;
+	if (!resource) {
+		debugHandler(`unable to alocate loop resource in loof 'for'`, self, true);
+		return;
+	}
+	assign(Loop_Data, {
+		obj: resource,
+		value,
+		type: loopType
+	});
+	if (opening && key_index) {
+		const [key, index] = key_index.split(",").map((v) => v.trim());
+		Loop_Data.key = key;
+		Loop_Data.index = index;
+	}
+	return Loop_Data;
+}
+function For_Loop(self, attr, hx_Element, isBlock = false, config, isRerender) {
+	const data = get_Loop_Data(self, attr, isBlock, isRerender);
+	if (!data) return;
+	let effect, dataObject;
+	try {
+		effect = isRerender ? config.effect : _createEffectBase(() => {
+			return unwrap(_$runModelBind(self, data.obj, hx_Element));
+		}, self);
+		dataObject = (isRerender ? effect.runEffect() : effectRunner(effect)).value;
+	} catch (error) {
+		debugHandler(`Trouble accessing '${data.obj}' object for for loop\n\nnot found on instance or is undefined\n\n${error}`, self, true);
+		return;
+	}
+	if (!isIterable(dataObject) && !isNumber(dataObject)) {
+		debugHandler(`Undefined scope for for, \n\n${data.obj} not iterable`, self, true);
+		return;
+	}
+	if (data.type && !_makeMap_("of,in", data.type)) {
+		debugHandler(`((Iteration issue))\n\n"${data.type}" is not an iterator\n "of" or "in" only supported by Houxit`, self, true);
+		return;
+	}
+	return {
+		effect,
+		obj: dataObject,
+		keyName: data.key?.trim(),
+		valToken: data.value?.trim(),
+		loopType: data.type?.trim(),
+		token: data.obj,
+		index: data.index?.trim()
+	};
+}
+function NormalizeDirGarbage(props) {
+	let has_conditional = false, has_loop = false, dataRecord = {}, index = 0;
+	for (const [key, val] of entries(props)) {
+		if (!has_conditional) has_conditional = isIfKey(key) || isElseKey(key) || isElseIfKey(key);
+		if (isIfKey(key)) assign(dataRecord, {
+			ifIndex: index,
+			hasIf: true,
+			getIf: val,
+			ifKey: key
+		});
+		if (isElseKey(key)) assign(dataRecord, {
+			elseIndex: index,
+			hasElse: true,
+			getElse: val,
+			elseKey: key
+		});
+		if (isElseIfKey(key)) assign(dataRecord, {
+			elseIfIndex: index,
+			getElseIf: val,
+			hasElseIf: true,
+			elseIfKey: key
+		});
+		if (isForKey(key)) {
+			has_loop = true;
+			assign(dataRecord, {
+				forIndex: index,
+				hasFor: true,
+				getFor: val,
+				forKey: key
+			});
+		}
+		index++;
+	}
+	assign(dataRecord, {
+		hasIFWithFor: has_conditional && has_loop,
+		has_conditional
+	});
+	return dataRecord;
+}
+var isRenderlessElement = (vnode) => isHouxitElement(vnode) && isTrue(vnode.IS_RENDERLESS);
+function hasMultiConditionals(hasIf, hasElseIf, hasElse) {
+	let count = 0;
+	for (let value of [...arguments].values()) if (value) count++;
+	return count;
+}
+function _$Conditional_Dir_Resolver(self, vnode, hx_Element, siblings, ctx, recordPatch, config) {
+	const [hasIf, hasElseIf, hasElse] = recordPatch[3];
+	if (hasMultiConditionals(hasIf, hasElse, hasElseIf) > 1) {
+		debugHandler(`((directive))>.....Overloaded Conditional directive found on element instance\n\n
+        "${hasIf ? "$$if" : hasElseIf ? "$$else-if" : "$$else"}"\nfailed to determine>>>>`, self, true);
+		return;
+	}
+	const isRerender = self[$$$operands].initializedRender;
+	const GIC = new _$Directive_$Conditional$_Renderer(self, vnode, hx_Element, siblings, recordPatch, ctx, config);
+	const createElement = (index) => {
+		if (hasIf) return GIC.Panel_If_Block();
+		else if (hasElseIf || hasElse) return GIC.Panel_elseif_Block(hasElse, index);
+	};
+	const render = createElement({ i: len(siblings) });
+	if (!isRerender) render.compiler_options.createElement = createElement;
+	return render;
+}
+var isConditionalVnode = (vnode, cond, { suspenseFlag }) => {
+	return isHouxitElement(vnode) || suspenseFlag && isVNodeClass(vnode) ? vnode.conditional_record.src === cond : false;
+};
+function isMemoElement(elem) {
+	return isHouxitWidgetElement(elem) && isPObject(elem.VNodeManager.isMemoChild);
+}
+var _$Directive_$Conditional$_Renderer = class {
+	options = void 0;
+	constructor(self, vnode, hx_Element, siblings, recordPatch, ctx, config) {
+		let { type, props, children, key } = vnode;
+		const [hasEx, propValue, srcKey] = recordPatch;
+		const LabContext = hx_Element ? assign({}, hx_Element.LabContext) : {};
+		ctx = assign(assign({}, ctx), LabContext);
+		assign(this, {
+			propValue,
+			srcKey,
+			self,
+			props: memMove(vnode.props, true),
+			vnode,
+			hx_Element,
+			siblings,
+			ctx,
+			config,
+			effect: void 0,
+			isRerender: self[$$$operands].initializedRender,
+			createElement: () => {
+				return createHouxitElement(this.vnode, self, false, hx_Element?.LabContext, siblings, ctx, hx_Element, config);
+			},
+			rf: []
+		});
+		this.vnode.props = assign({}, this.vnode.props);
+	}
+	Panel_If_Block(typeF = "if", previous, index) {
+		const { config, self, propValue, hx_Element, vnode, siblings, srcKey, ctx, isRerender } = this, isElse = typeF === "else";
+		let passed = !previous ? false : previous.conditional_record.passed, node;
+		const previousTypeF = previous?.conditional_record.src || typeF;
+		const effect = this.effect ?? _createEffectBase(() => {
+			return isElse ? true : _$runModelBind(self, propValue, ctx);
+		}, self);
+		this.effect ? effect.runEffect() : effectRunner(effect);
+		let data = effect.value;
+		delete this.vnode.props[srcKey];
+		if (passed || !data) node = $IfElseDirRenderLess(data, typeF, previous);
+		if (data && !passed && config.suspenseFlag) {
+			node = this.vnode;
+			node.conditional_record = {};
+		} else if (data && !passed) {
+			node = this.createElement();
+			assign(node.conditional_record, {
+				src: typeF,
+				res: data ? true : false,
+				passed: !passed && data
+			});
+		}
+		hx_Element?.NodeList.add(node);
+		if (!this.effect && !isRerender) {
+			this.effect = effect;
+			if (previous) {
+				previous.conditional_record.effect.follow(effect);
+				effect.reducer = previous.conditional_record.effect;
+			}
+			node.conditional_record.effect = effect;
+			createPriorityFlush(effect, (observer) => {
+				const c_ind = siblings.indexOf(node);
+				const EffectVNode = node.compiler_options.createElement({ i: c_ind });
+				EffectVNode.compiler_options.createElement = node.compiler_options.createElement;
+				if (config.memoVault && !checkMemoContentValidity(self, EffectVNode)) return;
+				let exch = renderVnodeDiffSequence(self, node, EffectVNode, observer, hx_Element || self.$build, {
+					args: [{ i: c_ind }],
+					config: {
+						FORCE: typeF !== previousTypeF,
+						...config
+					}
+				});
+				assign(node.conditional_record, EffectVNode.conditional_record);
+				if (exch) {
+					exch.compiler_options.createElement = EffectVNode.compiler_options.createElement;
+					node = exch;
+					assign(exch.conditional_record, EffectVNode.conditional_record);
+					siblings.splice(c_ind, 1, node);
+				}
+			}, self);
+		}
+		return node;
+	}
+	Panel_elseif_Block(isElse = false, index) {
+		const block = isElse ? "else" : "else-if";
+		const { config, self, propValue, hx_Element, siblings, vnode, srcKey, ctx } = this;
+		const isRerender = self[$$$operands].initializedRender;
+		let previous = siblings[index.i - 1], node;
+		if (previous) previous.conditional_record.passed;
+		delete vnode.props[srcKey];
+		if (!isRerender && !previous || !isConditionalVnode(previous, "if", config) && !isConditionalVnode(previous, "else-if", config)) {
+			debugHandler(`The "$$${block}" conditional rendering directive block expects a preceding "$$if" or "$$else-if" directive element\n\nMay return unexpected result during production\nDid you mean "$$if" directive instead?\n at>>>>>`, self, true);
+			node = $IfElseDirRenderLess(false, block, previous);
+			node.compiler_options.createElement = this.createElement;
+			return node;
+		}
+		return this.Panel_If_Block(block, previous, index);
+	}
+};
+function $IfElseDirRenderLess(data, block, previous) {
+	return createRenderlessElement((hx_Element) => {
+		assign(hx_Element.conditional_record, {
+			src: block,
+			res: data ? true : false,
+			passed: previous ? previous.conditional_record.passed : false
+		});
+	});
+}
+function has_Intersect_Prop(obj1, obj2) {
+	let res = false;
+	for (const [key, value] of entries(obj1)) {
+		if (isArray(obj1)) res = _makeMap_(obj2, value);
+		else if (isPObject(obj1)) res = _makeMap_(obj2, key);
+		if (isTrue(res)) break;
+	}
+	return res;
+}
+function destructWarn(ref, object, self) {
+	if (ref && objectDestructureRegex.test(ref) && !isObject(object)) {
+		debugHandler(`Invalid object destructuring from a none object value\n\nillegal destructuring found at "${object}" on "$$<...>" directive definition\nTarget value is not an object`, self, true);
+		return false;
+	} else if (ref && arrayDestructureRegex.test(ref) && !isArray(object)) {
+		debugHandler(`Invalid array destructuring from a none array value\n\nillegal destructuring found at "${object}" on $$*** directive definition\nTarget value is not an array iterable`, self, true);
+		return false;
+	}
+	return true;
+}
+function _$Directive_$For_Loop$_Renderer(self, vNode, hx_Element, siblings, ctx, renderPatch, saveGarbageContent, config) {
+	vNode = memMove(vNode, true);
+	const [check, propValue, srcKey] = renderPatch;
+	const isRerender = self[$$$operands].initializedRender;
+	const isER = isEffRerender(self);
+	const Instance = isER ? config.For_Loop_Instance : For_Loop(self, propValue, hx_Element, false, config, isRerender) || {};
+	if (!isER) config.For_Loop_Instance = Instance;
+	else Instance.obj = Instance.effect.runEffect().value;
+	let { obj, keyName, valToken, loopType, ref, index, effect } = Instance;
+	if (!isRerender) config.effect = effect;
+	vNode.props = assign({}, vNode.props);
+	delete vNode.props[srcKey];
+	if (!isER && loopType === "in" && valToken && validateType(obj, [Object, Collections])) {
+		$warn(`((Warning))\n\nWe recommend against the use of the 'for...in' loops type since it iterates over all of the object's enumerable and non-symbol properties \n\nLeaving the value data as "undefined"\nUse "for...of" instead......`, self);
+		$warn(`Many JavaScript style guides and linters recommend against the use of 'for...in', because it iterates over the entire prototype chain which is rarely what one wants, and may be a confusion with the more widely-used "for...of" loop\n\nIt's included in Houxit for completeness.`, self);
+	}
+	const NodeList = [];
+	iterate(obj, loopType).each(function(value, key, indexV) {
+		const vNodeClass = memMove(vNode, true);
+		ctx = assign({}, ctx);
+		if (!destructWarn(valToken, value, self)) return;
+		if (isNumber(obj)) {
+			if (valToken) ctx[valToken] = value + 1;
+			if (keyName) ctx[keyName] = valToken ? value : value + 1;
+			if (index) ctx[index] = index;
+			renderForConditional(self, vNodeClass, ctx, NodeList, key, value, hx_Element, saveGarbageContent, siblings, config);
+		} else {
+			const fallprops = {};
+			if (valToken) fallprops.valToken = valToken;
+			if (keyName) fallprops.keyName = keyName;
+			if (index) fallprops.index = index;
+			ctx = loopContextPropsMerger(self, {
+				valToken,
+				keyName,
+				index,
+				hx_Element
+			}, {
+				ky: key,
+				vl: value,
+				count: indexV
+			}, ctx);
+			renderForConditional(self, vNodeClass, ctx, NodeList, indexV, value, hx_Element, saveGarbageContent, siblings, config);
+		}
+	});
+	const lastElement = NodeList[len(NodeList) - 1];
+	const wrapper = new HouxitFragmentElement(NodeList, self, hx_Element);
+	if (lastElement) assign(wrapper.conditional_record, lastElement.conditional_record);
+	wrapper.isLoopWrappRenderer = true;
+	if (isHouxitElement(hx_Element)) hx_Element.NodeList.add(wrapper);
+	if (!isRerender) {
+		const flush = createPriorityFlush(effect, () => {
+			prioritize_list_effect(self, wrapper, vNode, obj, effect, config);
+		});
+		wrapper.VN_Tree.FLUSHS.add(flush);
+	}
+	return wrapper;
+}
+function loopContextPropsMerger(self, Loop_Data, it_Data, ctx) {
+	const { valToken, keyName, index, hx_Element } = Loop_Data;
+	const { ky, vl, count } = it_Data;
+	if (valToken && isDestructureSyntax(valToken)) {
+		if (!destructWarn(valToken, vl, self)) return ctx;
+		ctx = smartDextCtxMerging(ctx, { [$$dexTransformKey]: {
+			sourcesArray: [vl],
+			syntaxArray: [valToken]
+		} });
+	} else if (valToken) ctx[valToken] = vl;
+	if (keyName) ctx[keyName] = valToken ? ky : vl;
+	if (index) ctx[index] = count;
+	return assign({}, ctx);
+}
+function renderForConditional(self, vnode, ctx, NodeList, count, vl, hx_Element, saveGarbageContent, siblings, config) {
+	if (hx_Element?.LabContext) ctx = smartDextCtxMerging(hx_Element.LabContext, ctx || {});
+	const { has_conditional } = saveGarbageContent;
+	const createElement = () => createHouxitElement(vnode, self, false, ctx, has_conditional && count === 0 ? siblings : NodeList, null, hx_Element, config);
+	const loopNode = createElement();
+	loopNode.compiler_options.createElement = createElement;
+	if (loopNode) NodeList.push(loopNode);
+}
+function HX_ELEMENT_MANAGER(self, vnode, element, hx_Element, siblings, saveGarbageContent, ctx, config) {
+	const is_hyperscript = vnode.is_hyperscript;
+	const { type, props, children } = vnode;
+	const { hasIFWithFor, ifIndex, elseIndex, elseIfIndex, forIndex } = saveGarbageContent;
+	const { getIf, hasIf, hasElse, getElse, hasElseIf, getElseIf, hasFor, getFor } = saveGarbageContent;
+	const { ifKey, elseKey, elseIfKey, forKey } = saveGarbageContent;
+	const getValue = hasIf ? getIf : hasElse ? getElse : hasElseIf ? getElseIf : hasFor ? getFor : null;
+	const getEx = hasIf || hasElse || hasElseIf;
+	const conditionalArgs = [
+		getEx,
+		getValue,
+		hasIf ? ifKey : hasElse ? elseKey : hasElseIf ? elseIfKey : hasFor ? forKey : null,
+		[
+			hasIf,
+			hasElseIf,
+			hasElse
+		]
+	];
+	if (hasElse && hasFor && elseIndex > forIndex) {
+		debugHandler(`A "$$for" directive loop cannot take precedence in the presence of an "$$else" condition directive statements\n\ndirective scoping error`, self, true);
+		return;
+	}
+	vnode = memMove(vnode, true);
+	vnode.filesFilter.hasDir = true;
+	if (hasIFWithFor && (hasIf ? ifIndex : hasElse ? elseIndex : hasElseIf ? elseIfIndex : -1) < forIndex) return _$Conditional_Dir_Resolver(self, vnode, hx_Element, siblings, ctx, conditionalArgs, config);
+	else if (hasFor) return _$Directive_$For_Loop$_Renderer(self, vnode, hx_Element, siblings, ctx, [
+		getEx,
+		getFor,
+		forKey
+	], saveGarbageContent, config);
+	else if (getEx) return _$Conditional_Dir_Resolver(self, vnode, hx_Element, siblings, ctx, conditionalArgs, config);
+	return createHouxitElement(vnode, self, is_hyperscript, ctx, siblings, null, hx_Element, config);
+}
+function callSetHooks(self, hooks, element, bindObj = {}, hx_Element, Name = "") {
+	return (function Callback() {
+		for (let hook of hooks.values()) {
+			if (isPass(hook)) continue;
+			try {
+				const bindings = hook[lifeCiycleBinding];
+				const instance = isHouxitNativeElement(hx_Element) ? element : self.__public_model__;
+				hook.call(self.__public_model__, instance, bindings);
+			} catch (err) {
+				debugHandler("$$" + hook.name + "(" + Name.slice(0, -5) + ") >>\nUnresolved problem during the call of the " + Name.slice(0, -5) + " hook of custom " + (hook.dirName || "") + " directive\n", self, true);
+				debugHandler(err, self);
+				break;
+			}
+		}
+	})();
+}
+function HouxitElementLifeCircleHooks(self, element, hx_Element) {
+	const args = (hookN) => [
+		self,
+		hx_Element.VNodeManager.LifeCycleHooks[hookN],
+		element,
+		self.__public_model__,
+		hx_Element,
+		hookN
+	];
+	if (len(hx_Element.VNodeManager.LifeCycleHooks.created_hook)) callSetHooks(...args("created_hook"));
+	if (len(hx_Element.VNodeManager.LifeCycleHooks.mounted_hook)) self[$$$compiler].whenMountedHooks.add(function() {
+		whenMounted(self, element, () => {
+			callSetHooks(...args("mounted_hook"));
+		});
+	});
+	iterate(["updated_hook", "destroyed_hook"]).each((hookName) => {
+		if (len(hx_Element.VNodeManager.LifeCycleHooks[hookName])) $assignToHookFN(...args(hookName));
+	});
+	return element;
+}
+function $assignToHookFN(self, hookSet, element, model, hx_Element, hookN) {
+	hx_Element[hookN] = function hook() {
+		callSetHooks(self, hookSet, element, self.__public_model__, hx_Element, hookN);
+	};
+}
+function resolveElementToken(self, ref, element, hx_Element) {
+	try {
+		tick(() => ref[ref[refInternalEffectKey].accessor] = element);
+	} catch (err) {
+		debugHandler(`(ref) >>\nUresolved error when dilating the special ref prop>>>\n\n${err}`, self, true);
+		return;
+	}
+}
+function built_in_fragment_widget(vnode, self, is_hyperscript, ctx, siblings, ssc, hx_Element, config) {
+	installSuspense(vnode.children, getBoundary(vnode));
+	const fragment = new HouxitFragmentElement(vnode.children ? _HouxitCoreRenderer(vnode.children, self, null, hx_Element, ctx, config) : [], self, hx_Element, vnode.props?.key);
+	fragment._vnode_key = vnode.key;
+	return fragment;
+}
+function debug_self_prop_warn(props, self, args) {
+	const [WidgetName, propName, type] = args;
+	if (!props || !hasOwn(props, propName)) {
+		debugHandler(`"${WidgetName}" built-in widget expects a "${propName}" params\nMissing...`, self, true);
+		return false;
+	}
+	if (type && !validateType(props[propName], type)) {
+		debugHandler(`"${WidgetName}" validation for the "${propName}" param is invalid`, self, true);
+		return false;
+	}
+	return true;
+}
+function built_in_self_widget(vnode, self, is_hyperscript, ctx, siblings, ssc, hx_Element, config) {
+	if (isSelfRecursiveWidget(self)) return createRenderlessElement();
+	const prototype_ = self[$$$core].virtualNode.prototype_;
+	vnode = h(prototype_, memMove(vnode.props), memMove(vnode.children || []));
+	vnode[factoryHXSelfInstance] = true;
+	return createHouxitElement(vnode, self, is_hyperscript, ctx, siblings, ssc, hx_Element, config);
+}
+function getBuildSelf(self, value) {
+	if (isString(value)) if (IS_VALID_TAGNAME(value) || isCustomElementTagname(value)) return value;
+	else if (instance_Has_Widget(self, value)) return normalize_Widget(self, value);
+	else {
+		debug_unrecognized_tagname(value, self);
+		return;
+	}
+	else if (validHouxitWidget(value)) return value;
+	debugHandler(`<Bulld/>.self property value failed to compile\nunrecognized data type`, self, true);
+}
+function built_in_build_widget(vnode, self, is_hyperscript, ctx, siblings, ssc, hx_Element, config) {
+	if (!debug_self_prop_warn(vnode.props, self, ["hx:build", "self"])) return createRenderlessElement();
+	let props = vnode.props;
+	const isRerender = self[$$$operands].initializedRender;
+	props = memMove(props, true);
+	const effect = vnode.compiler[Build]?.self || {};
+	let prototype_ = getBuildSelf(self, props.self);
+	delete props.self;
+	props = dynamicPropRemover(vnode.rawProps, "self");
+	props.key = vnode.key;
+	const createElement = () => {
+		if (!prototype_) return createRenderlessElement();
+		vnode = h(prototype_, props, memMove(vnode.children || [], is_hyperscript));
+		return createHouxitElement(vnode, self, is_hyperscript, ctx, siblings, ssc, hx_Element, config);
+	};
+	let ELEMENT = createElement();
+	ELEMENT.compiler_options.createElement = createElement;
+	if (!isRerender) createPriorityFlush(effect, (obs) => {
+		prototype_ = getBuildSelf(self, effect.runEffect().value);
+		const EffectVNode = createElement();
+		EffectVNode.compiler_options.createElement = createElement;
+		let exch = renderVnodeDiffSequence(self, ELEMENT, EffectVNode, obs, isHouxitElement(hx_Element) ? hx_Element : null, { config });
+		if (exch) ELEMENT = exch;
+	});
+	return ELEMENT;
+}
+function createPortalEntryDisplay(self, props) {
+	const target = unToken(props.target);
+	const portalElement = target ? _GenerateRoot(target) : void 0;
+	if (!portalElement || !IS_ELEMENT_NODE(portalElement)) {
+		debugHandler(`Unable to generate portal element\n\n
+        Target not existing in the current document model layer\n\n
+        Mount target for Portal widget is not a valid element node`, self, true);
+		return;
+	}
+	return portalElement;
+}
+function built_in_portal_widget(vnode, self, is_hyperscript, ctx, siblings, ssc, hx_Element, config) {
+	if (!debug_self_prop_warn(vnode.props, self, ["hx:portal", "target"])) return createRenderlessElement();
+	const portal = createPortalEntryDisplay(self, vnode.props);
+	if (!portal) return createRenderlessElement();
+	installSuspense(vnode.children, getBoundary(vnode));
+	const wrapper = new HouxitFragmentElement(vnode.children ? _HouxitCoreRenderer(vnode.children, self, null, hx_Element, ctx, config) : [], self, hx_Element, vnode.key);
+	portal.append(wrapper.$element);
+	wrapper.$element = _createFragment();
+	wrapper._vnode_key = vnode.key;
+	return wrapper;
+}
+function unwrapFragment(render) {
+	if (isHouxitFragmentElement(render)) return render.NodeList.list();
+	return isCollection(render) ? arrSet(render) : [render];
+}
+function getMCC(self, render, effect_stabilizer, config) {
+	let count = new Tuple();
+	let buggy = false;
+	for (let r of render.values()) {
+		const res = checkMemoContentValidity(self, r, effect_stabilizer, config);
+		if (isHouxitWidgetElement(res)) count.add(res);
+		else if (!res) buggy = true;
+	}
+	return [count, buggy];
+}
+function checkMemoContentValidity(self, render, effect_stabilizer, config) {
+	const renderless = createRenderlessElement();
+	if (!render) return renderless;
+	const conf = config || { count: 0 };
+	render = unwrapFragment(render);
+	let element;
+	if (len(render) && (len(render) > 1 || !isHouxitWidgetElement(render[0]))) if (len(render) > 1) {
+		const [count, buggy] = getMCC(self, render, effect_stabilizer, conf);
+		if (buggy) return;
+		element = count.at(0);
+	} else {
+		if (isHouxitFragmentElement(render[0])) return checkMemoContentValidity(self, render[0], effect_stabilizer, conf);
+		else if (isRenderlessElement(render[0])) return renderless;
+		debugHandler(`"<Memo>" expects atleast a single child widget instance\n\n<Memo> validation failed...\nNot a widget Instance`, self, true);
+		debugHandler(`<Memo> expects a widget element instance...not a regular HTML element or unidentified DOM/Custom Wrapper`);
+		return;
+	}
+	else if (!len(render)) return renderless;
+	else if (len(render) && isHouxitWidgetElement(render[0])) {
+		conf.count++;
+		return render[0];
+	}
+	if (!config) {
+		if (conf.count > 1) {
+			debugHandler(`<Memo> child widget may have supassed the number of expected <Memo> container\n\n1 at most expected >>> ${conf.count} <<< found `, self, true);
+			return;
+		}
+	}
+	return isHouxitWidgetElement(element) ? element : renderless;
+}
+function built_in_memo_widget(vnode, self, is_hyperscript, ctx, siblings, ssc, hx_Element, config) {
+	self[$$$operands].initializedRender;
+	is_hyperscript = self[$$$core].map.is_hyperscript;
+	const children = vnode.children;
+	let { max, test } = vnode.props;
+	max = Number(max);
+	if (max && (max < 1 || isNaN(max))) {
+		debugHandler(`Failed validation of <Memo>.max param\n"${max}" ${isNaN(max) ? "is not a number" : "is less than 1"}`, self, true);
+		max = Infinity;
+	} else if (!max) max = Infinity;
+	if (test && !isPFunction(test)) debugHandler(`<Memo>.test prop expects a plain function returning Boolean\nINVALID <TEST> PROPERTY VALUE`, self);
+	const vault = {
+		storage: /* @__PURE__ */ new Map(),
+		keys: new Tuple(),
+		caches: [],
+		stableID: void 0,
+		stabilityChecker() {
+			return checkMemoContentValidity(self, this.Wrapper, true);
+		},
+		Wrapper: void 0,
+		max,
+		test
+	};
+	config.memoVault = vault;
+	const render = _HouxitCoreRenderer(children, self, null, hx_Element, ssc, config);
+	const res = checkMemoContentValidity(self, render);
+	if (!res) return createRenderlessElement();
+	const memoVault = self[$$$compiler].memoVault;
+	memoVault.add(vault);
+	const index = memoVault.indexOf(vault);
+	res.VNodeManager.isMemoChild = {
+		index,
+		vault
+	};
+	const Element = new HouxitFragmentElement(arrayInverter(render), self);
+	Element.VN_Tree.FLUSHS.add(() => memoVault.delete(vault));
+	vault.Wrapper = Element;
+	return Element;
+}
+function normalizeEarlySlotsCompile(self, vNode, hx_Element, metrics, slotNames = [], suspense, config) {
+	if (!new Set(slotNames).has("default")) slotNames.push("default");
+	self[$$$operands].initializedRender;
+	const _$$all_ = new Tuple();
+	const res = {};
+	iterate(slotNames).each((name, ind) => {
+		res[name + "X"] = new Tuple();
+	});
+	const [hx_Ele, siblings, type, ctx, ssc, op] = metrics;
+	if (op) op._$$all_ = _$$all_;
+	const is_hyperscript = self[$$$core].map.is_hyperscript;
+	let UnStableNodeList = [];
+	iterate(arrayInverter(vNode.children)).each((node, key) => {
+		if (isPrimitive(node)) {
+			res.defaultX.add(node);
+			_$$all_.add(node);
+			return iterate.Continue();
+		}
+		if (is_hyperscript) {
+			if (isSlotInstance(node)) iterate(node.slots).each((value, name) => {
+				iterate(slotNames).each((n) => {
+					if (name === n) {
+						if (n !== "default" && len(res[n])) {
+							debugHandler("\"" + n + "\" slot already defined...\nduplicated slot for \"" + n + "\" not allowed!!!", self, true);
+							return iterate.Continue();
+						}
+						res[n + "X"].add(value);
+						_$$all_.add(value);
+					}
+				});
+			});
+			else if (isChildrenNode(node)) {
+				res.defaultX.add(node);
+				_$$all_.add(node);
+			}
+		} else {
+			if (isHtmlComment(node)) return iterate.Continue();
+			const props = node.props;
+			hx_Element = memMove(hx_Element);
+			hx_Element.NodeList = new Tuple();
+			const stable = isHouxitElement(node) ? node : createHouxitElement(node, self, is_hyperscript, ctx, UnStableNodeList, ssc, hx_Element, {
+				suspenseFlag: true,
+				...config
+			});
+			if (isHouxitElement(stable) || isVNodeClass(stable)) {
+				UnStableNodeList.push(stable);
+				if (isVNodeClass(stable)) node = stable;
+				if (stable.conditional_record.src === "else") UnStableNodeList = [];
+			}
+			if (isFalse(stable)) UnStableNodeList = [];
+			else if (isRenderlessElement(stable)) return;
+			const { hasDir: hasSlot, getKey: getSlot, getDir: getSlotValue } = dirExistenceCheck(props || {}, "$$slot");
+			if (!hasSlot) {
+				if (isBlockTag(node.prototype_)) {
+					if (getBlockTagName(node.prototype_) === "await") {
+						res.defaultX.add(node);
+						_$$all_.add(node);
+						return iterate.Continue();
+					}
+					const NodeList = new Tuple();
+					if (suspense) node.filesFilter.suspense = suspense;
+					blockElementsPreProcessors(self, node, [
+						hx_Element,
+						NodeList,
+						node.type,
+						metrics[3],
+						metrics[4]
+					], { suspenseFlag: true });
+					iterate(normalizeEarlySlotsCompile(self, { children: NodeList.list() }, hx_Element, metrics, slotNames, suspense, config)).each((value, ky) => {
+						if (len(value)) res[ky].extend(value);
+					});
+				} else {
+					node = memMove(node, true);
+					res.defaultX.add(node);
+					_$$all_.add(node);
+				}
+				return;
+			}
+			const bindings = validateIncomingPropsKeys(self, {
+				key: getSlot,
+				attr: getSlotValue
+			}, is_hyperscript, hx_Element, { isRerender: self[$$$operands].initializedRender });
+			iterate(slotNames).each((n) => {
+				if (bindings.key === n) {
+					if (n !== "default" && len(res[n + "X"])) {
+						debugHandler("\"" + n + "\" slot already defined...\nduplicated/multiple slots for \"" + n + "\" slot not allowed!!!", self, true);
+						return;
+					}
+					res[n + "X"].add(node);
+					_$$all_.add(node);
+				}
+			});
+			node.filesFilter.bindings = bindings;
+			node.filesFilter.shouldRestore = true;
+			delete node.props?.[getSlot];
+			node.filesFilter.creatRestore = () => {
+				tick(() => {
+					if (node.filesFilter.shouldRestore && !node.filesFilter.slotsRestored) {
+						node.props[getSlot] = getSlotValue;
+						node.filesFilter.slotsRestored = true;
+						delete node.filesFilter.shouldRestore;
+					}
+				});
+			};
+		}
+	});
+	return res;
+}
+function createSuspenseFallback(self, suspense, [fallbackX, errorX], vnode, ssc, hx_Element, config) {
+	const is_hyperscript = self[$$$core].map.is_hyperscript;
+	const isRerender = self[$$$core].initializedRender;
+	if (len(fallbackX) || len(errorX)) {
+		const createFallBack = (nodeList, name, errMsg) => {
+			const toggler = isRerender ? pass : smart_render_toggler(self);
+			if (is_hyperscript) iterate(nodeList).each((node, key) => {
+				const arg = [];
+				if (name === "error") arg.push(errMsg);
+				nodeList.splice(key, 1, node?.(...arg));
+			});
+			else if (name === "error") ssc = wrapNamespaceBind(self, ssc, nodeList.at(0)?.filesFilter.bindings?.value || "error", memMove(errMsg));
+			if (!is_hyperscript) nodeList.forEach((n) => n.filesFilter?.creatRestore());
+			let tree = suspense[name + "Element"];
+			tree = tree || _HouxitCoreRenderer(nodeList, self, null, hx_Element, ssc, config);
+			tree = isHouxitFragmentElement(tree) ? tree : new HouxitFragmentElement(arrayInverter(tree), self, hx_Element);
+			toggler();
+			suspense[name + "Element"] = tree;
+			return tree;
+		};
+		return [() => createFallBack(fallbackX, "fallback"), (err) => createFallBack(errorX, "error", err)];
+	}
+	return [];
+}
+function installSuspense(list, suspense) {
+	if (!suspense) return;
+	iterate(list).each((node) => {
+		if (isVNodeClass(node)) node.filesFilter.suspense = suspense;
+		else if (isHouxitElement(node)) node.VNodeManager.suspense = suspense;
+	});
+}
+function smartSuspense(suspense) {
+	const superX = suspense?.super;
+	if (superX && !superX.state.resolved) return superX;
+	else return suspense;
+}
+function handleSuspenseHooks(self, suspense, vnode, isRerender) {
+	const hooks = vnode.filesFilter.$$$Events || {};
+	const obj = {};
+	iterate([
+		"pending",
+		"resolved",
+		"failed"
+	]).each((name) => {
+		obj["on" + name.at(0).toUpperCase() + name.slice(1)] = function(err) {
+			if (isRerender) return;
+			hooks[name]?.callbacks.list().forEach((fn) => fn(err));
+		};
+	});
+	return obj;
+}
+function built_in_suspense_widget(vnode, self, is_hyperscript, ctx, siblings, ssc, hx_Element, config) {
+	const isRerender = self[$$$operands].initializedRender;
+	is_hyperscript = self[$$$core].map.is_hyperscript;
+	let suspense = new SuspenseBoundary(self, vnode);
+	const superX = getBoundary(vnode);
+	if (superX) {
+		suspense.super = superX;
+		superX.metrics.priorities.add(suspense);
+	}
+	const suspenX = () => smartSuspense(suspense);
+	suspense.suspenX = suspenX;
+	const parent = vnode.filesFilter.parent;
+	suspense.hx_Element = isHouxitBuild(parent) ? parent.$build : parent;
+	let { timeout, delay } = vnode.props || {};
+	let awaitP = vnode.await;
+	iterate({
+		timeout,
+		delay
+	}).each((value, key) => {
+		if (!hasOwn(vnode.props || {}, key)) return iterate.Continue();
+		if (isNaN(Number(value))) {
+			debugHandler(`<Suspense> validation for "${key}" prop failed\n expects a Number value type`, self, true);
+			return iterate.Continue();
+		} else if (value < 0) {
+			debugHandler(`<Suspense>.[${key}] prop receives a negative value...`, self, true);
+			return iterate.Continue();
+		}
+		suspense[key] = value;
+	});
+	let awaitCallback;
+	if (hasOwn(vnode.props || {}, "await")) if (!isAsyncFunction(awaitP) && !isPromise(awaitP)) {
+		let throwE = true;
+		if (isPFunction(awaitP)) {
+			awaitCallback = awaitP();
+			if (isPromise(awaitCallback)) throwE = false;
+		}
+		if (throwE) debugHandler(`"await" <Suspense> prop expects an "async Function" , a "Promise object" or a callback that returns a "Promise object" object`, self, true);
+	} else awaitCallback = isAsyncFunction(awaitP) ? awaitP() : awaitP;
+	const oldProps = {};
+	const { defaultX, fallbackX, errorX } = normalizeEarlySlotsCompile(self, vnode, hx_Element, [
+		hx_Element,
+		siblings,
+		vnode.type,
+		ctx,
+		ssc,
+		oldProps
+	], [
+		"default",
+		"fallback",
+		"error"
+	], suspense);
+	installSuspense(oldProps._$$all_, suspense);
+	if (!isInfinity(suspenX().timeout)) setTimeout(() => {
+		if (!suspenX().state.resolved && !suspenX().state.failed) suspenX().errorCaptured(pass, { message: `<Suspense> render wait timed out` }, isRerender ? fallback : null);
+	}, suspenX().timeout);
+	suspense.promise = isPromise(awaitCallback) ? awaitCallback : Promise.resolve();
+	const { onPending, onResolved, onFailed } = handleSuspenseHooks(self, suspense, vnode, isRerender);
+	if (isPromise(awaitCallback)) suspense.activeAwaits++;
+	const [fallback, error] = createSuspenseFallback(self, suspense, [fallbackX, errorX], vnode, ssc, hx_Element, config);
+	if (superX) suspense.switchFallback = () => {
+		if (suspense.state.pending) HydrateSuspenseRender(self, suspense, fallback(), isRerender, config);
+	};
+	suspense.triggerFailure = function(cb = pass, err, fb) {
+		const errorEl = isFunction(fb) ? fb() : error(err);
+		HydrateSuspenseRender(self, suspense, errorEl, isRerender, config);
+		if (fb) return;
+		cb();
+		debugHandler(err?.message);
+		onFailed(err);
+	};
+	suspense.triggerResolved = () => {
+		iterate(suspense.metrics.priorities).each((sus) => {
+			if (!sus.super) return iterate.Return();
+			sus.switchFallback();
+		});
+		onResolved();
+	};
+	let render;
+	function createRender() {
+		const renderX = _HouxitCoreRenderer(defaultX.list(), self, null, hx_Element, ssc, config);
+		return isArray(renderX) ? new HouxitFragmentElement(renderX, self) : renderX;
+	}
+	if (isPromise(awaitCallback)) {
+		suspense.state.pending = true;
+		onPending();
+		awaitCallback.then((response) => {
+			if (!is_hyperscript) {
+				const bindings = vnode.filesFilter.$$dir_PROVIDE_bindings;
+				if (bindings) {
+					delete vnode.filesFilter.$$dir_PROVIDE_bindings;
+					ssc = wrapNamespaceBind(self, ssc || {}, bindings?.value, response);
+				}
+			}
+			suspense.activeAwaits--;
+			const toggler = isRerender ? pass : smart_render_toggler(self);
+			render = createRender();
+			toggler();
+		}).catch((err) => {
+			suspense.state.failed = true;
+			suspense.errorCaptured(pass, { message: err.message });
+		});
+	} else render = createRender();
+	if (suspense.state.postLoad) suspense.promise.then(() => {
+		(async function() {
+			await callLoadchains(suspense);
+			await callLoadchains(suspense);
+		})().then(BoundaryProcessLoader).catch((err) => {
+			suspense.state.failed = true;
+			suspense.errorCaptured(pass, { message: err.message });
+		}).then(() => {
+			if (!is_hyperscript) tick(() => {
+				iterate([
+					errorX,
+					fallbackX,
+					defaultX
+				]).each((item) => {
+					item.forEach((n) => delete n.filesFilter.slotsRestored);
+				});
+			});
+		});
+		function BoundaryProcessLoader() {
+			assign(suspense.state, {
+				pending: false,
+				resolved: true
+			});
+			suspense.triggerResolved();
+			HydrateSuspenseRender(self, suspense, render, isRerender, config);
+			if (!is_hyperscript) iterate([
+				errorX,
+				fallbackX,
+				defaultX
+			]).each((item) => {
+				item.forEach((n) => n.filesFilter.creatRestore?.());
+			});
+		}
+	});
+	else assign(suspense.state, {
+		pending: false,
+		resolved: true
+	});
+	let renderFallback;
+	if (!isRerender && suspense.state.pending && suspense.delay > 0) {
+		suspense.useFallback = true;
+		setTimeout(() => {
+			if (suspense.state.pending && !suspense.state.failed && !suspense.state.resolved) HydrateSuspenseRender(self, suspense, fallback(), isRerender, config);
+		}, suspense.delay);
+	} else if (suspense.state.pending) renderFallback = fallback();
+	if (suspense.useFallback && suspense.state.pending) renderFallback = new HouxitFragmentElement([], self);
+	else if (suspense.state.resolved) renderFallback = new HouxitFragmentElement(render, self);
+	suspense.activeElement = renderFallback;
+	renderFallback.VNodeManager[$suspenseElement] = suspense;
+	renderFallback._vnode_key = vnode.key;
+	return renderFallback;
+}
+async function callLoadchains(suspense) {
+	for (const prom of suspense.loadChain.list().values()) await prom.then(() => {
+		suspense.loadChain.delete(prom);
+		suspense.activeAwaits--;
+	}).catch((err) => {
+		throw new Error(err);
+	});
+}
+function HydrateSuspenseRender(self, suspense, element, isRerender, config) {
+	const { activeElement, vNode } = suspense;
+	const rObj = suspense.rerenderObj;
+	element._vnode_key = vNode.key;
+	if (isRerender) {
+		patchRenderNormalizerCall(self, rObj.activeElement, element, rObj.observer, config);
+		return;
+	}
+	let parent = vNode.filesFilter.parent;
+	parent = isHouxitBuild(parent) ? parent.$build : parent;
+	const ind = parent.NodeList.indexOf(activeElement);
+	const key = parent.VN_Tree.KEYS_INDEXES[ind];
+	parent.VN_Tree.LEAGUE_TREE[key][0] = element;
+	parent.NodeList.replace(activeElement, element);
+	const initPosix = resolveTargetElement(activeElement);
+	suspense.activeElement = element;
+	initPosix.before(element.$element);
+	unMountVNode(activeElement);
+	element.VNodeManager[$suspenseElement] = suspense;
+}
+var BUILT_IN_TRANSITIONS = {};
+var BUILT_IN_ANIMATIONS = {};
+var hasMotionInstance = (self, name, mode) => {
+	return _makeMap_(mode === "transitions" ? BUILT_IN_TRANSITIONS : BUILT_IN_ANIMATIONS, name) || _makeMap_(self[$$$register][mode], name);
+};
+function normalize_Motion(self, name, mode) {
+	const BUILT_IN_MOTION = mode === "transitions" ? BUILT_IN_TRANSITIONS : BUILT_IN_ANIMATIONS;
+	return _makeMap_(BUILT_IN_MOTION, name) ? BUILT_IN_MOTION[name] : self[$$$register][mode][name] || pass;
+}
+function generateMotion(self, { mode, value, key }) {
+	if (value && isString(value)) {
+		const mode = key === "transite" ? "transitions" : "animations";
+		if (!hasMotionInstance(self, value, mode)) {
+			debugHandler(`Unrecognized ${mode} name "${value}"\n\n if this is a custom ${mode}, make sure it's registered through the local ${mode} option or global prototype '.${mode}()' method`, self, true);
+			return;
+		}
+		return normalize_Motion(self, value, mode);
+	} else if (value && !isPFunction(value)) {
+		debugHandler(`<Motion> "${key}" prop expects ${key === "animate" ? "an animation" : "a transition"} function>>>>\nValidation failed...`, self, true);
+		return;
+	} else if (value) return value;
+}
+function built_in_motion_widget(vnode, self, is_hyperscript, ctx, siblings, ssc, hx_Element, config) {
+	const isRerender = self[$$$operands].initializedRender;
+	is_hyperscript = self[$$$core].map.is_hyperscript;
+	config = assign({
+		animate: void 0,
+		transite: void 0,
+		params: {},
+		mode: "both"
+	}, config);
+	let { animate, transite, params, mode } = vnode.props || {};
+	iterate({
+		animate,
+		transite,
+		params,
+		mode
+	}).each((value, key) => {
+		if (!hasOwn(vnode.props || {}, key)) return;
+		if (key === "animate" || key === "transite") value = generateMotion(self, {
+			mode,
+			value,
+			key
+		});
+		else if (key === "mode") {
+			if (mode && !isString(value)) {
+				debugHandler(`<Motion> "params" prop requires a string value>>>\nvalidation failed...`, self, true);
+				return;
+			} else if (mode && !_makeMap_("in,out,both", value)) {
+				debugHandler("<Motion>.mode params property receives an Invalid mode argument...\nreceives \"" + value + "\"", self, true);
+				return;
+			}
+		} else if (key === "params") {
+			if (value && !isPObject(value)) {
+				debugHandler(`<Motion> "params" prop requires a plain object>>>\nvalidation failed...`, self, true);
+				return;
+			} else if (params) config.params = assign(config.params, params);
+			return;
+		} else if (!value) return;
+		config[key] = value;
+	});
+	let render = _HouxitCoreRenderer(arrayInverter(vnode.children), self, null, hx_Element, ssc, config);
+	render = isArray(render) ? new HouxitFragmentElement(render, self) : render;
+	const create = (hx_Element) => {
+		iterate(["transite", "animate"]).each((type) => {
+			if (config[type]) createVnodeMotion(hx_Element, config[type], mode, type, config.params);
+		});
+		createElementMotionEffect(self, hx_Element, {
+			isRerender,
+			is_hyperscript
+		}, hx_Element.$element);
+	};
+	generateDeepReach(render, create, hx_Element, [
+		self,
+		null,
+		hx_Element,
+		ssc,
+		config
+	], isRerender);
+	render._vnode_key = vnode.key;
+	return render;
+}
+function beforeUnMountDelay(element, callback, self) {
+	let hx_Element;
+	if (isHouxitNativeElement(element)) hx_Element = element;
+	else if (isNativeElement(element)) hx_Element = element._hx_Element.hx_Element;
+	const x_hooks = hx_Element?.VNodeManager?.motion_object?.hooks;
+	const outHoots = x_hooks?.transition?.out;
+	if (hx_Element) x_hooks.animation.from = hx_Element.$element.getBoundingClientRect();
+	if (!hx_Element || !len(outHoots)) {
+		callback();
+		return;
+	}
+	async function out() {
+		for (let hk of outHoots.values()) await hk();
+	}
+	async function control() {
+		await out();
+		await tick(() => callback());
+	}
+	return control();
+}
+function generateDeepReach(render, callback = pass, parent, args, isRerender) {
+	if (isHouxitNativeElement(render)) callback(render);
+	else if (isHouxitFragmentElement(render)) iterate(render.VN_Tree.LEAGUE_TREE).each(([vNode, k], ind) => {
+		generateDeepReach(vNode, callback, render, args, isRerender);
+	});
+	else if (isHouxitWidgetElement(render)) generateDeepReach(render.widget_instance?.$build, callback, render, args, isRerender);
+	else if (isHouxitTextElement(render)) {
+		const span = _HouxitCoreRenderer([h("span")], ...args);
+		parent = isHouxitBuild(parent) ? parent.$build : parent;
+		if (!isRerender && parent.$element) {
+			const posix = document.createComment(c_str);
+			render.$element.before(posix);
+			callFlushs(render);
+			render.$element.remove();
+			posix.after(span.$element);
+			span.$element.style.display = "inline-block";
+			span.$element.append(render.$element);
+			posix.remove();
+		}
+		const ind = parent.NodeList.indexOf(render);
+		const key = parent.VN_Tree.KEYS_INDEXES[ind];
+		parent.VN_Tree.LEAGUE_TREE[key][0] = span;
+		parent.NodeList.replace(render, span);
+		span.NodeList.add(render);
+		span.VN_Tree.LEAGUE_TREE[key] = [render, 0];
+		span.VN_Tree.KEYS_INDEXES.add(key);
+		callback(span);
+		render = span;
+	}
+	return render;
+}
+function createVnodeMotion(hx_Element, motion, mode, type, params) {
+	hx_Element.VNodeManager.motion_object.create(type, motion, {
+		mode,
+		params,
+		element: hx_Element.$element
+	});
+}
+function prioritize_list_effect(self, Template, vnode, value, effect, config, observer) {
+	const EffectVNode = Template.compiler_options.createElement();
+	if (config.memoVault && !checkMemoContentValidity(self, EffectVNode)) return;
+	patchRenderNormalizerCall(self, Template, EffectVNode, observer, config);
+}
+function built_in_for_widget(vnode, self, is_hyperscript, ctx, siblings, ssc, hx_Element, config) {
+	if (!debug_self_prop_warn(vnode.props, self, ["hx:for", "each"])) return createRenderlessElement();
+	const { each } = vnode.props;
+	self[$$$operands].initializedRender;
+	const NodeList = new Tuple();
+	is_hyperscript = self[$$$core].map.is_hyperscript;
+	const context = smartDextCtxMerging(ssc || {}, ctx || {});
+	const provideBinding = vnode.filesFilter.$$dir_PROVIDE_bindings;
+	const effect = vnode.compiler[vnode.prototype_].each;
+	const metrics = [
+		hx_Element,
+		NodeList,
+		"hx:for",
+		context,
+		ssc,
+		effect.value,
+		provideBinding
+	];
+	const createElement = () => blockForProcessor(self, vnode, "For", metrics, [vnode.children], true, { effect });
+	let template = createElement();
+	template.compiler_options.createElement = createElement;
+	return template;
+}
+function safeCall(callback, ...args) {
+	return isXtruct(callback, ...arrSet(args)) || isPFunction(callback) ? callback(...arrSet(args)) : callback;
+}
+function built_in_if_widget(vnode, self, is_hyperscript, ctx, siblings, ssc, hx_Element, config) {
+	if (!debug_self_prop_warn(vnode.props, self, ["hx:if", "test"])) return createRenderlessElement();
+	const { test } = vnode.props;
+	const isRerender = self[$$$operands].initializedRender;
+	is_hyperscript = self[$$$core].map.is_hyperscript;
+	const context = smartDextCtxMerging(ssc || {}, ctx || {});
+	const effect = _createEffectBase(() => {
+		return unwrap(is_hyperscript || !isString(test) ? safeCall(test) : _$runModelBind(self, test, smartDextCtxMerging(context, ssc || {})));
+	});
+	let value = effectRunner(effect).value;
+	config.effect = effect;
+	const NodeList = new Tuple();
+	if (!isRerender && !is_hyperscript) vnode.compiler[If] = { test: effect };
+	const metrics = [
+		hx_Element,
+		NodeList,
+		"hx:if",
+		context,
+		ssc,
+		value
+	];
+	const createElement = () => blockIFPreprocessor(self, vnode, "If", metrics, [vnode.children], config, true);
+	config.createElement = createElement;
+	const { flush } = createElement();
+	const template = new HouxitFragmentElement(NodeList.list(), self, hx_Element);
+	config.ELEMENT = template;
+	template.VN_Tree.FLUSHS.add(flush);
+	return template;
+}
+function built_in_else_if_widget(vnode, self, is_hyperscript, ctx, siblings, ssc, hx_Element, config) {
+	blockElseIfPreprocessor(self, vnode, config, "hx:else" + (vnode.prototype_ === ElseIf ? "-if" : ""), true);
+	return createRenderlessElement();
+}
+function simulate_buitin_widget_syms(vnode, self, is_hyperscript, ctx, siblings, ssc, hx_Element, config) {
+	const { prototype_ } = vnode;
+	const props_object = {};
+	hx_Element = {
+		subscriptions: new Tuple(),
+		PropFlags: new Tuple(),
+		vNodeClass: vnode
+	};
+	if (_makeMap_([
+		Fragment,
+		Self,
+		Build,
+		Portal,
+		Suspense,
+		Motion,
+		If,
+		ElseIf,
+		For,
+		Memo
+	], prototype_)) {
+		if (prototype_ === Build) vnode.rawProps = memMove(vnode.props, is_hyperscript);
+		Props_dilation_compile(vnode, self, hx_Element, {
+			is_hyperscript,
+			ctx,
+			ssc
+		}, props_object, config);
+		vnode.props = props_object;
+	}
+	const resArgs = [
+		vnode,
+		self,
+		is_hyperscript,
+		ctx,
+		siblings,
+		ssc,
+		hx_Element,
+		config
+	];
+	if (prototype_ === Fragment) return built_in_fragment_widget(...resArgs);
+	else if (prototype_ === Self) return built_in_self_widget(...resArgs);
+	else if (prototype_ === Build) return built_in_build_widget(...resArgs);
+	else if (prototype_ === Portal) return built_in_portal_widget(...resArgs);
+	else if (prototype_ === Memo) return built_in_memo_widget(...resArgs);
+	else if (prototype_ === Suspense) return built_in_suspense_widget(...resArgs);
+	else if (prototype_ === Motion) return built_in_motion_widget(...resArgs);
+	else if (prototype_ === Provider) {
+		[...resArgs];
+		return;
+	} else if (prototype_ === For) return built_in_for_widget(...resArgs);
+	else if (prototype_ === If) return built_in_if_widget(...resArgs);
+	else if (_makeMap_([ElseIf, Else], prototype_)) return built_in_else_if_widget(...resArgs);
+}
+function createHouxitElement(vnode, self, is_hyperscript, ctx, siblings, ssc, hx_Element, config = {}) {
+	config = assign({}, config);
+	const isRerender = self[$$$operands].initializedRender;
+	if (isRerender && vnode.filesFilter.memMoved) delete vnode.filesFilter.memMoved;
+	if (!vnode.filesFilter.memMoved && !isRerender) {
+		vnode = memMove(vnode, true);
+		vnode.filesFilter.memMoved = true;
+	}
+	ctx = smartDextCtxMerging(assign({}, ctx || {}), ssc || {});
+	ssc = null;
+	const saveGarbageContent = NormalizeDirGarbage(vnode.props || {});
+	const { has_conditional, hasFor } = saveGarbageContent;
+	const hasDir = hasFor || has_conditional;
+	let ELEMENT;
+	const { prototype_ } = vnode;
+	const args = [
+		vnode,
+		self,
+		is_hyperscript,
+		ctx,
+		siblings,
+		ssc,
+		hx_Element,
+		config,
+		null
+	];
+	if (config.suspenseFlag && !hasDir && !hasFor) return;
+	if (!is_hyperscript && hasDir) {
+		const createElement = () => HX_ELEMENT_MANAGER(self, vnode, null, hx_Element, siblings, saveGarbageContent, ctx, config);
+		ELEMENT = createElement();
+		createElement_Smart(ELEMENT, createElement);
+	} else if (isHouxitBuiltinSymbolWidget(prototype_)) ELEMENT = simulate_buitin_widget_syms(...args);
+	else if (validHouxitWidget(prototype_)) ELEMENT = flattenWidgetAndAsyncBuild(...args);
+	else if (isString(prototype_)) if (IS_VALID_TAGNAME(prototype_)) ELEMENT = new HouxitNativeElement(...args);
+	else if (isCustomElementTagname(prototype_)) ELEMENT = new HouxitCustomNativeElement(...args);
+	else debug_unrecognized_tagname(prototype_, self);
+	else if (isCustomBuiltinSymWidget(prototype_)) return CUSTOM_BUILT_IN_WIDGETS_STORE.get(prototype_)(...args);
+	return ELEMENT;
+}
+function createElement_Smart(ELEMENT, fn) {
+	if (!ELEMENT.compiler_options.createElement) ELEMENT.compiler_options.createElement = fn;
+}
+function debug_unrecognized_tagname(tagname, self) {
+	debugHandler(`tagname "${tagname}" is not a valid html element, or a registered widget instance\n\n
+      if this is a customElement, make sure its defined through the "customElements.define()" method `, self, true);
+}
+function isCustomElementTagname(tagname) {
+	return isPFunction(customElements.get(tagname));
+}
+function getBoundary(instance) {
+	return isHouxitBuild(instance) ? instance[$$$core].virtualNode.filesFilter.suspense : instance?.[isVNodeClass(instance) ? "filesFilter" : "VNodeManager"]?.suspense;
+}
+function smart_render_toggler(self) {
+	const initializedRender = self[$$$operands].initializedRender;
+	const toggler = (cond = true) => {
+		if (initializedRender) self[$$$operands].initializedRender = cond;
+	};
+	toggler(false);
+	return toggler;
+}
+function createAsyncFallback(self, a_p, hx_Element, ssc, VN_Tree, boundary, config) {
+	const fallback = a_p.config.fallback;
+	let useFallback = false, ELEMENT;
+	if (fallback) {
+		const fall_content = () => {
+			if (boundary || a_p.resolved || a_p.failed) return;
+			if (!isChildrenNode(fallback)) {
+				debugHandler(`fallback content of "asyncWidget" is not a valid Houxit element`, self, true);
+				return;
+			}
+			const toggler = smart_render_toggler(self);
+			installSuspense(fallback, boundary);
+			let tree = _HouxitCoreRenderer(arrayInverter(fallback), self, null, hx_Element, ssc, config);
+			tree = new HouxitFragmentElement(arrayInverter(tree), self, hx_Element);
+			tree[AsyncHxElementTrackerKey] = {};
+			toggler();
+			useFallback = true;
+			const { activeElement } = a_p;
+			if (activeElement) {
+				resolveTargetElement(ELEMENT).before(tree.$element);
+				unMountVNode(ELEMENT);
+				reinstallFallbackResponses(self, tree, a_p.fallback[AsyncHxElementTrackerKey]);
+			}
+			ELEMENT = tree;
+			a_p.activeElement = ELEMENT;
+		};
+		if (!boundary && a_p.config.delay > 0) setTimeout(fall_content, a_p.config.delay);
+		else fall_content();
+	}
+	if (useFallback && !boundary) return ELEMENT;
+	ELEMENT = new HouxitFragmentElement([], self, hx_Element);
+	ELEMENT[AsyncHxElementTrackerKey] = {};
+	a_p.activeElement = ELEMENT;
+	return ELEMENT;
+}
+function normalize_lazy_return(self, ELEMENT, a_p, boundary) {
+	a_p.resolved = true;
+	ELEMENT[AsyncHxElementTrackerKey] = {};
+	const { activeElement } = a_p;
+	resolveTargetElement(activeElement).before(ELEMENT.$element);
+	unMountVNode(activeElement);
+	reinstallFallbackResponses(self, ELEMENT, a_p.fallback[AsyncHxElementTrackerKey]);
+}
+function asyncErrorElement(self, a_p, hx_Element, ssc, boundary, config) {
+	const toggler = smart_render_toggler(self);
+	installSuspense(a_p.config.error, suspense);
+	let FailedElement = _HouxitCoreRenderer(arrayInverter(a_p.config.error), self, null, hx_Element, ssc, config);
+	FailedElement = new HouxitFragmentElement(arrayInverter(FailedElement), self, hx_Element);
+	toggler();
+	FailedElement[AsyncHxElementTrackerKey] = {};
+	if (!boundary) {
+		resolveTargetElement(a_p.fallback).before(FailedElement.$element);
+		unMountVNode(a_p.fallback);
+	}
+	reinstallFallbackResponses(self, FailedElement, a_p.fallback[AsyncHxElementTrackerKey]);
+	a_p.failed = true;
+}
+function flattenWidgetAndAsyncBuild(vnode, self, is_hyperscript = false, ctx, siblings, ssc, hx_Element, config, isWidget = false) {
+	const { prototype_ } = vnode;
+	const boundary = getBoundary(vnode);
+	if (!isAsyncWidget(prototype_)) return new HouxitWidgetElement(...arguments);
+	let widget = prototype_;
+	const Oa_p = widget[$asyncVnodeKey];
+	const a_p = memMove(widget[$asyncVnodeKey]);
+	boundary?.state;
+	a_p.resolved = false;
+	a_p.pending = false;
+	a_p.failed = false;
+	a_p.activeElement = void 0;
+	const VN_Tree = () => hx_Element?.VN_Tree || self?.$build?.VN_Tree;
+	if (!a_p.postLoad && !Oa_p.cache) {
+		let future = a_p.load();
+		if (!isPromise(future)) {
+			debugHandler(`asyncWidget instance load callback expects a javascript Promise instance object as a return value`, self, true);
+			return;
+		}
+		const timeout = a_p.config.timeout;
+		if (!isInfinity(timeout)) setTimeout(() => {
+			if (!a_p.resolved && !a_p.failed) {
+				asyncErrorElement(self, a_p, hx_Element, ssc, boundary, config);
+				debugHandler(`"asyncWidget" resolving timed out`, self, true);
+			}
+		}, timeout);
+		const failureHandler = (er) => {
+			a_p.failed = true;
+			if (boundary) {
+				smartSuspense(boundary).errorCaptured(() => {
+					debugHandler(er, self, true);
+				}, { message: `Failed resolving state during an "async build()" process\n\nReason::"${er.message}"` });
+				return;
+			}
+			asyncErrorElement(self, a_p, hx_Element, ssc, boundary, config);
+			debugHandler(`Failed resolving state during an "async build()" process\n\nReason::"${er.message}"`, self, true);
+		};
+		future = future.then((res) => {
+			if (isObject(res) && isUndefined(res.prototype) && hasOwn(res, "default")) res = res.default;
+			a_p.cache = res;
+			Oa_p.cache = res;
+			a_p.postLoad++;
+			assign(vnode, {
+				prototype_: res,
+				GeneticProvider: res,
+				type: res
+			});
+			vnode.filesFilter[$asyncVnodeKey] = { prototype_ };
+			try {
+				const toggler = smart_render_toggler(self);
+				let ELEMENT = new HouxitWidgetElement(...arguments);
+				toggler();
+				const awaitReady = ELEMENT.widget_instance[$$$operands].awaitReady;
+				const awaitCallback = () => {
+					normalize_lazy_return(self, ELEMENT, a_p, boundary);
+				};
+				isPromise(awaitReady) ? awaitReady.then(() => {
+					awaitCallback();
+				}).catch(failureHandler) : awaitCallback();
+			} catch (err) {
+				failureHandler(err);
+			}
+		}).catch(failureHandler);
+		if (boundary) {
+			boundary.activeAwaits++;
+			boundary.loadChain.add(future);
+		}
+		const tree = createAsyncFallback(self, a_p, hx_Element, ssc, VN_Tree, boundary, config);
+		a_p.fallback = tree;
+		return tree;
+	} else {
+		widget = a_p.cache;
+		assign(vnode, {
+			prototype_: widget,
+			GeneticProvider: widget,
+			type: widget
+		});
+		const ELEMENT = new HouxitWidgetElement(...arguments);
+		ELEMENT[AsyncHxElementTrackerKey] = {};
+		a_p.activeElement = ELEMENT;
+		return ELEMENT;
+	}
+}
+function reinstallFallbackResponses(build, ELEMENT, fall_Element) {
+	const { hx_Element, key, self } = fall_Element;
+	if (self) self.$build = ELEMENT;
+	else if (hx_Element) {
+		hx_Element.VN_Tree.LEAGUE_TREE[key][0] = ELEMENT;
+		hx_Element.NodeList.replace(fall_Element, ELEMENT);
+	}
+}
+function smartDextCtxMerging(context, ssc, merge = false) {
+	if (!(context || ssc)) return merge ? context || ssc : assign({}, context || ssc || {});
+	context = merge ? context : assign({}, context);
+	if (hasOwn(ssc, $$dexTransformKey)) {
+		if (!hasOwn(context, $$dexTransformKey) && hasOwn(ssc, $$dexTransformKey)) context[$$dexTransformKey] = {
+			sourcesArray: [],
+			syntaxArray: []
+		};
+		else if (hasOwn(context, $$dexTransformKey)) {
+			if (!merge) context[$$dexTransformKey] = assign({}, context[$$dexTransformKey]);
+		}
+		context[$$dexTransformKey].syntaxArray = arrSet(/* @__PURE__ */ new Set([...context[$$dexTransformKey].syntaxArray, ...ssc[$$dexTransformKey].syntaxArray]));
+		context[$$dexTransformKey].sourcesArray = arrSet(/* @__PURE__ */ new Set([...context[$$dexTransformKey].sourcesArray, ...ssc[$$dexTransformKey].sourcesArray]));
+		ssc = assign({}, ssc);
+		delete ssc[$$dexTransformKey];
+	}
+	context = assign(context, ssc);
+	return context;
+}
+function evaluateKeyOnElement(hx_Element, key, self) {
+	if (!isHouxitElement(hx_Element)) return;
+	else if (!isNull(key) && !isPrimitive(key)) {
+		debugHandler(`key prop value expects primitive values`, self, true);
+		return;
+	} else if (!isNull(key)) hx_Element._vnode_key = key;
+}
+function HouxitTemplateGenerators(vnode, self, is_hyperscript = false, ctx, siblings, ssc, hx_Element, config, isWidget = false) {
+	vnode.hx_Element = this;
+	this.VNodeManager.vNodeClass = vnode;
+	is_hyperscript = vnode.is_hyperscript;
+	this.is_hyperscript = is_hyperscript;
+	const isRerender = self[$$$operands]?.initializedRender;
+	if (vnode.filesFilter.suspense) this.VNodeManager.suspense = vnode.filesFilter.suspense;
+	if (config.topLevelSlotContext && !isHouxitWidgetElement(vnode.filesFilter.parent)) delete config.topLevelSlotContext;
+	let { type, props, children, key } = vnode;
+	ctx = smartDextCtxMerging(ctx || {}, ssc || {});
+	this.LabContext = smartDextCtxMerging(this.LabContext, ctx);
+	vnode.hx_Element = this;
+	if (isWidget) this.VNodeManager.rawChildren = () => vnode.rawChildren;
+	this.compiler_options.parent = vnode.filesFilter.parent;
+	bufferDirSetups(self, props, this);
+	const customElementsArgs = [...arguments];
+	customElementsArgs.pop();
+	const element = _generateTemplateElement(vnode, self, this, siblings, vnode.IS_RENDERLESS, customElementsArgs, config);
+	if (!isRerender && isHouxitNativeElement(this)) HouxitElementLifeCircleHooks(self, element, this);
+	this.$element = element;
+	if (!isRerender) {
+		const ref_src = isHouxitWidgetElement(this) ? this.widget_instance[$$$ownProperties] : this.compiler_options;
+		if (!isRenderlessElement(this) && hasProp(ref_src, "ref_$$Prop")) resolveElementToken(self, ref_src["ref_$$Prop"], isHouxitWidgetElement(this) ? this.widget_instance : this.$element, this);
+	}
+	evaluateKeyOnElement(this, vnode.key, self);
+}
+var HouxitNativeElement = class extends HouxitElement {
+	constructor(vnode) {
+		super(...arguments);
+		this.VNodeManager.SSRVnode = new vNodeClass();
+		HouxitTemplateGenerators.call(this, ...arguments);
+		this.prototype_ = vnode.type;
+	}
+};
+var HouxitCustomNativeElement = class extends HouxitNativeElement {
+	constructor() {
+		super(...arguments);
+	}
+};
+var HouxitWidgetElement = class extends HouxitElement {
+	constructor(vnode) {
+		super(...arguments);
+		this.VNodeManager.SSRVnode = [];
+		HouxitTemplateGenerators.call(this, ...arguments, true);
+		this.prototype_ = vnode.prototype_;
+	}
+};
+var HouxitFragmentElement = class extends HouxitElement {
+	constructor(vnodes = [], self, hx_Element, key, resource) {
+		super();
+		if (!isHouxitBuild(self)) self = null;
+		vnodes = arrayInverter(vnodes);
+		let index = 0;
+		const isRerender = self ? self[$$$operands].initializedRender : void 0;
+		this.VNodeManager.SSRVnode = [];
+		isHydration(self) || isSSRCompiler(self);
+		const isSSR = isSSRCompiler(self);
+		const isHy = isHydration(self);
+		if (!isSSR && !isRerender) this.VNodeManager.posix = [document.createComment(c_str), document.createComment(c_str)];
+		const fragment = !isSSR && !isRerender ? _createFragment() : isSSR ? [] : isRerender ? void 0 : void 0;
+		const [start_el, end_el] = this.getSSRPosixEl();
+		if (start_el && !isSSR) fragment?.append(start_el);
+		for (let [key, node] of vnodes.entries()) {
+			if (!(node ?? isRerender) && !fragment) continue;
+			if (isHouxitElement(node) && !isSSR) this.NodeList.add(node);
+			fragment?.[isSSR ? "push" : "append"](smartSSRGrab(node, isSSR, isHy));
+			if (isAsyncTrackerElement(node)) node[AsyncHxElementTrackerKey] = {
+				key,
+				hx_Element: this
+			};
+			resolve_keyed_mapping(this, node, index, self, resource);
+			index++;
+		}
+		if (end_el && !isSSR) fragment?.append(end_el);
+		evaluateKeyOnElement(this, key, self);
+		if (!isRerender) this.VN_Tree.ELEMENTS = () => {
+			const recorder = new Tuple();
+			const [start, end] = this.getSSRPosixEl();
+			if (!isInDomNode(start)) return recorder;
+			let node = start;
+			while (node) {
+				let next = node.nextSibling;
+				recorder.add(node);
+				if (node === end) break;
+				node = next;
+			}
+			return recorder;
+		};
+		this.$element = isHy && !isRerender ? new SSRFragment(fragment) : fragment;
+		if (isSSR) {
+			if (isHy) this.$element.hx_Element = this;
+			this.VNodeManager.SSRVnode = this.$element;
+		}
+	}
+	getSSRPosixEl() {
+		return this.VNodeManager.posix;
+	}
+	upload(callback) {
+		return this.VN_Tree.ELEMENTS().forEach((el, ind) => callback(el, ind));
+	}
+};
+var HouxitRenderlessElement = class extends HouxitFragmentElement {
+	constructor() {
+		super();
+		this.IS_RENDERLESS = true;
+	}
+};
+var HouxitTextElement = class extends HouxitElement {
+	constructor(text, self, hx_Element, fall, config = {}) {
+		super();
+		const isRerender = self[$$$operands].initializedRender;
+		const isHy = isHydration(self);
+		this.is_hyperscript = self[$$$core].map.is_hyperscript;
+		if (hx_Element) this.LabContext = assign({}, hx_Element?.LabContext || {});
+		if (!this.is_hyperscript && fall) this.LabContext = smartDextCtxMerging(this.LabContext, fall);
+		this.$element = _createTextElement(self, text, this, isRerender, config);
+		this.prototype_ = isRerender || isSSRCompiler(self) ? this.$element : this.$element.textContent;
+		if (isSSRCompiler(self)) {
+			this.$element = isHy ? new SSRText(this.prototype_) : this.prototype_;
+			this.VNodeManager.SSRVnode = this.$element;
+			if (isHy) this.$element.hydrationFlushs.add((element) => this.$element = element);
+		}
+		if (this.is_hyperscript && config.lazy_effect && !isRerender) {
+			const flush = createPriorityFlush(config.lazy_effect, (obs) => {
+				if (IS_TEXT_NODE(this.$element)) this.$element.textContent = config.lazy_effect.runEffect().value;
+			});
+			this.VN_Tree.FLUSHS.add(flush);
+		}
+	}
+};
+function smartSSRGrab(node, isSSR, isHy) {
+	let collectings = !isSSR ? node.$element : !isHouxitElement(node) ? node : node.$element;
+	if ((isCollection(collectings) || isHouxitWidgetElement(node)) && isHy) if (!isCollection(collectings) && isHouxitWidgetElement(node)) collectings = node.widget_instance.$build.$element;
+	else {
+		collectings = new SSRFragment(collectings);
+		collectings.hx_Element = isHouxitWidgetElement(node) ? node.widget_instance.$build : node;
+	}
+	return collectings;
+}
+function createRenderlessElement(callback = pass) {
+	const renderlessElement = new HouxitRenderlessElement();
+	callback(renderlessElement);
+	return renderlessElement;
+}
+function isSameHouxitElementType(el1, el2) {
+	return isHouxitElement(el1) && isHouxitElement(el2) && isS(el1.__proto__.constructor, el2.__proto__.constructor);
+}
+function bufferDirSetups(self, props, hx_Element) {
+	if (!props || !props[dir$$__render] || !len(props[dir$$__render])) return;
+	for (let dir of props[dir$$__render].values()) if (isChar(dir.name) && !isHouxitDirective(dir.name)) {
+		if (!hasProp(self[$$$register].directives, dir.name) || !self[$$$register].directives[dir.name]) {
+			debugHandler(`"${dir.name}" is not a registered directive\n`, self, true);
+			return;
+		} else if (!validateType(self[$$$register].directives[dir.name], [Function, Object])) {
+			debugHandler(`directive resolved at "${dir.name}" is not a valid directive data value`, self, true);
+			return;
+		}
+		dirMap(self, dir, self[$$$register].directives[dir.name], hx_Element);
+		props[dir$$__render].delete(dir);
+	} else if (!isString(dir.name)) {
+		dirMap(self, dir, dir.name, hx_Element);
+		props[dir$$__render].delete(dir);
+	}
+}
+function dirMap(self, resolver, dir, hx_Element) {
+	if (isPObject(dir)) {
+		for (let [name, hook] of entries(dir)) if (_makeMap_(directivesHooksMap, name)) {
+			if (!isPFunction(hook)) {
+				debugHandler(`"${name} directive hook received at $$ is not a function`, self, true);
+				return;
+			}
+			hook.value = resolver.value;
+			hook.modifiers = resolver.modifiers;
+			hx_Element[name + "_hook"].add(hook);
+		}
+	} else if (isPFunction(dir)) {
+		dir.value = resolver.value;
+		dir.modifiers = resolver.modifiers;
+		hx_Element.created_hook.add(dir);
+	}
+}
+function __renderSlots__(options) {
+	if (!validateCollectionArgs(arguments, {
+		count: 1,
+		validators: [[Object, Function]],
+		required: [true],
+		name: "enSlot()"
+	})) return;
+	if (isClass(options)) {
+		debugHandler(`Uresolved function type ---- received at "enSlot"\n\nSeems to be a "class" instance value type`);
+		return;
+	} else if (isPFunction(options)) options = { default: options };
+	return new slotInstanceMap(options || {});
+}
+function enSlot(options) {
+	return __renderSlots__(...arguments);
+}
+var isHouxitWidgetElement = (vnode) => vnode instanceof HouxitWidgetElement;
+function transpileDirectiveShorhand(key) {
+	return (hasAsterisks_bind(key) ? "$$bind:" : hasAt_bind(key) ? "$$on:" : hasAsh_bind(key) ? "$$slot:" : key[0]) + key.slice(1);
+}
+function dirExistenceCheck(props, dir) {
+	let RawMap = { hasDir: false };
+	for (let [key, val] of entries(props)) {
+		const keyP = key;
+		key = transpileDirectiveShorhand(key);
+		if (key.startsWith(dir)) return {
+			hasDir: true,
+			getDir: val,
+			getKey: keyP
+		};
+	}
+	return RawMap;
+}
+function resolve_keyed_mapping(hx_Element, child, index, self, resource) {
+	let key = isHouxitTextElement(child) ? index : child._vnode_key;
+	key = !key ? null : isNaN(Number(key)) ? key : Number(key);
+	const KEYS_INDEXES = hx_Element.VN_Tree.KEYS_INDEXES;
+	if (!isNull(key) && KEYS_INDEXES.has(key)) {
+		debugHandler(`keyed element seemes to have been dublicated within this render siblings >>"${key}"<<<\n\nCheck for possible duplicates in special key props\n`, self, true);
+		return;
+	}
+	if (resource && isNull(key)) if (KEYS_INDEXES.has(key)) key = index;
+	else key = resource[index];
+	if (isNull(key)) key = index;
+	KEYS_INDEXES.add(key);
+	hx_Element.VN_Tree.LEAGUE_TREE[key] = [child, index];
+}
+function generateTemplateElement(vnode, self, hx_Element, siblings, IS_RENDERLESS, customElementsArgs, config) {
+	return _generateTemplateElement(...arguments);
+}
+function _generateTemplateElement(virtualNode, self, hx_Element, siblings, IS_RENDERLESS, customElementsArgs, config) {
+	const { prototype_ } = virtualNode;
+	if (isString(prototype_) && IS_VALID_TAGNAME(prototype_)) return _createNativeElement(...arguments);
+	else if (isString(prototype_)) return generateCustomNativeElement(...arguments);
+	else return _createWidgetElement(...arguments);
+}
+function generateCustomNativeElement(vnode, self, hx_Element, siblings, IS_RENDERLESS, customElementsArgs, config) {
+	let { type, props, children, key } = vnode;
+	len(arguments);
+	hx_Element?.is_hyperscript;
+	if (self[$$$operands]?.initializedRender) return;
+	const element = document.createElement(type);
+	element._set_compiler_options(...arguments);
+	return element;
+}
+function _createNativeElement(virtualNode, self, hx_Element, siblings, IS_RENDERLESS, customElementsArgs, config, o) {
+	config = assign({}, config);
+	let { type, props, children, key } = virtualNode;
+	len(arguments);
+	const isSSR = isSSRCompiler(self);
+	const isHy = isHydration(self);
+	let element;
+	const is_hyperscript = virtualNode.is_hyperscript;
+	const isRerender = self[$$$operands]?.initializedRender;
+	if (!isRerender && isString(type)) {
+		element = isSSR ? hx_Element.VNodeManager.SSRVnode : document.createElement(type);
+		if (isSSR) element.type = type;
+		if (hx_Element && isHouxitBuild(self)) {
+			hx_Element.hx_build = self[$$$ownProperties].hx_build;
+			if (self[$$$ownProperties].hx_build) if (isSSR) element.props["data-hx_build"] = self[$$$ownProperties].hx_build;
+			else element.setAttribute("data-hx_build", self[$$$ownProperties].hx_build);
+		}
+		if (!isRerender) {
+			element._hx_Element = {
+				hx_Element,
+				_vnode_key: virtualNode.key
+			};
+			if (hx_Element) whenMounted(self, element, () => {
+				hx_Element.VNodeManager.motion_object.hooks.animation.from = element.getBoundingClientRect();
+			});
+		}
+	}
+	if (isHy) element.filesFilter.$ssr_kit.hydrationFlushs.add((element) => {
+		hx_Element.$element = element;
+	});
+	const metrics = {
+		is_hyperscript,
+		isRerender
+	};
+	const { hasDir: hasSlot, getKey: getSlot, getDir: getSlotValue } = is_hyperscript ? {} : dirExistenceCheck(props || {}, "$$slot");
+	if (hasSlot) if (config.topLevelSlotContext) {
+		$$dir_SLOT(self, validateIncomingPropsKeys(self, {
+			key: getSlot,
+			attr: getSlotValue
+		}, is_hyperscript, hx_Element, metrics), virtualNode, hx_Element, metrics, {});
+		delete config.topLevelSlotContext;
+	} else debugHandler(`$$slot directive definitions are only allowed on a widgets top-level consumer scope instances\n\n"slot' directive on '${type}' element has failed to compile away...cross-check element render position`, self, true);
+	let childNodes;
+	if (children && !IS_HTML_VOID_TAG(type)) if (!isRerender && hasOwn(virtualNode.filesFilter, "dir--raw")) {
+		if (_$runModelBind(self, virtualNode.filesFilter["dir--raw"], hx_Element, true)) {
+			const content = escapeDecoder(virtualNode.rawChildren);
+			if (!isRerender) if (isSSR) element.props.innerHTML = content;
+			else element.innerHTML = content;
+			else hx_Element.$element = content;
+		}
+	} else {
+		config = {
+			...config,
+			slotTap: { parent: hx_Element }
+		};
+		installSuspense(children, getBoundary(virtualNode));
+		childNodes = _HouxitCoreRenderer(children, self, true, hx_Element, assign({}, hx_Element.LabContext), config);
+		childNodes = arrayInverter(childNodes);
+		let index = 0;
+		if (isSSR) element.children = [];
+		for (let [key, els] of childNodes.entries()) {
+			if (!els || !isRerender && (isSSR && isSSRText(els.$element) ? !els.$element.content : !els.$element)) continue;
+			if (els) hx_Element.NodeList.add(els);
+			if (isSSR) element.children.push(smartSSRGrab(els, isSSR, isHy));
+			else if (!isRerender && els.$element) element.append(els.$element);
+			if (isAsyncTrackerElement(els)) node[AsyncHxElementTrackerKey] = {
+				key,
+				hx_Element
+			};
+			resolve_keyed_mapping(hx_Element, els, index, self);
+			index++;
+		}
+	}
+	if (props) Props_dilation_compile(virtualNode, self, hx_Element, metrics, element, config);
+	if (!isRerender && virtualNode.prototype_ === "slot" && !(isSSR ? element?.props.name.trim() : element.name?.trim())) {
+		slotNamingTRANSITION(self, { value: "default" }, element, hx_Element, {
+			is_hyperscript,
+			isRerender,
+			vNode: virtualNode
+		});
+		childNodes?.forEach((node) => hx_Element.VNodeManager.patchFlags.subscriptions.extend(node.VNodeManager.patchFlags.subscriptions));
+	}
+	const { hasDir: hasModel } = dirExistenceCheck(props || {}, "$$model");
+	if (!isRerender) return element;
+}
+function createNativeElement(virtualNode, hx_Element, siblings, isRerender, IS_RENDERLESS) {
+	return _createNativeElement(...arguments);
+}
+function _createWidgetElement(virtualNode, self, hx_Element, siblings, IS_RENDERLESS, customElementsArgs, config) {
+	let { type, props, children, prototype_ } = virtualNode;
+	const is_hyperscript = hx_Element?.is_hyperscript;
+	self[$$$operands].initializedRender;
+	let buildInstance;
+	const slotsCompilerArgs = {
+		self,
+		hx_Element,
+		isRerender: self[$$$operands]?.initializedRender,
+		...config
+	};
+	if (validHouxitWidget(prototype_)) buildInstance = $compilerEngine(self, virtualNode, hx_Element, slotsCompilerArgs, config);
+	else debugHandler(`widget initializer failed to compile...`, true, self);
+	if (buildInstance) {
+		if (!is_hyperscript) hx_Element.hx_build = buildInstance[$$$ownProperties].hx_build;
+		if (buildInstance[$$$ownProperties]?.slot_name) hx_Element.slot_name = buildInstance[$$$ownProperties].slot_name;
+	}
+	return isHouxitBuild(buildInstance) ? buildInstance.$build?.$element : void 0;
+}
+function createWidgetElement(virtualNode, metrics) {
+	const { hx_Element, siblings, IS_RENDERLESS, config } = metrics;
+	return _createWidgetElement(virtualNode, config.hx_Element, siblings, IS_RENDERLESS, null, config);
+}
+var unsupportedDelimiters = "<,>";
+function includesUnsupported(delimiters) {
+	let response = false;
+	for (const deli of delimiters.values()) unsupportedDelimiters.split(",").forEach((v) => {
+		response = deli.includes(v);
+		if (response) return response;
+	});
+	return response;
+}
+function escapeRegExp(string) {
+	return string.replace(/[.!@#%_\,<>:;'"\-=*+?^${}()|[\]\\]/g, "\\$&");
+}
+function escapeDecoder(str, useReverse = false) {
+	return str.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/"/g, "&quot;").replace(/\\/g, "&#39;");
+}
+function escapeReverseDecoder(str) {
+	return str.replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, "\"").replace(/&#39;/g, "\\");
+}
+function RenderableContextManager(self, text, hasSafeString) {
+	text = compileToRenderable(unwrap(text));
+	return hasSafeString ? escapeDecoder(text) : text;
+}
+function validateDelimiterConstruct(self, delimiters) {
+	if (!isArray(delimiters)) {
+		debugHandler(`expects an arrah of character strings encoding\n\n.....delimiters config setup`, self, isHouxitBuild(self));
+		return false;
+	}
+	let [open, close] = delimiters;
+	if (open && close) {
+		if (!hasSpecialCharacters(open) || !hasSpecialCharacters(close)) {
+			debugHandler(`mustache customization error::\n\n delimeters must match value of special characters\n\ne.g !, @, #, $, %, ^, &, *, (, ),  [, ], {, }, ;, :, ?`, self, isHouxitBuild(self));
+			return false;
+		} else if (includesUnsupported([open, close])) {
+			debugHandler(`Invalid  delimiter value :: \n\n"${open} or ${close} is an unsupported delimiter constructs"\n cannot be used as a string mustache delimeter since this are javascript multiline string interpolation technic\n\n Delimeter Configuration failed`, self, isHouxitBuild(self));
+			return false;
+		}
+	}
+	return true;
+}
+function resolveAccessor(self, str, hx_Element, $$bind = false) {
+	let [open, close] = self[$$$core].settings.delimiters;
+	open = hasSpecialCharacters(open) ? escapeRegExp(open) : open;
+	close = hasSpecialCharacters(close) ? escapeRegExp(close) : close;
+	const pattern = new RegExp(`${open}([${open}]?.*?[${close}]*)${close}`, "mg");
+	if (str.match(pattern)) str = str.replace(pattern, (match, text) => {
+		text = escapeReverseDecoder(text.trim());
+		const drafts = [];
+		let draftCount = 0;
+		text = text.replace(stringsMonitorRegex, (match, rex, roll) => {
+			drafts.push(match);
+			let dataDraft = extractorArsterists + draftCount;
+			draftCount++;
+			return dataDraft;
+		});
+		const filters = text.split("%");
+		for (const [index, flt] of filters.entries()) filters[index] = flt.replace(reverseRegex, (match, rex, roll) => drafts[Number(rex.match(/\d/))]);
+		text = text.replace(reverseRegex, (match, rex, roll) => drafts[Number(rex.match(/\d/))]);
+		let hasSafeString;
+		text = _$runModelBind(self, filters.shift().trim(), hx_Element);
+		text = unwrap(text);
+		if (len(filters)) text = $Filter_HelpersService(self, text, filters, hx_Element, $$bind);
+		return RenderableContextManager(self, text, hasSafeString);
+	});
+	return str;
+}
+function _$runModelBind(self, ref, hx_Element, returnToken = false) {
+	let value;
+	const model = isHouxitBuild(self) ? self.__public_model__ : isModelInstance(self) ? self : Object.create(null);
+	const context = isHouxitElement(hx_Element) ? hx_Element?.LabContext || {} : isPObject(hx_Element) ? hx_Element : {};
+	try {
+		value = _Evaluate_THIS(model, ref, self, context);
+	} catch (err) {
+		console.error(err);
+		if (ref && !returnToken) {
+			debugHandler(`Accessor Error::\n\n"${ref}" property value was accessed during render, but not initialized on model or is undefined\n\nat at\n ..."${ref}" property \n\n${err}`, self, true);
+			return;
+		} else return ref;
+	}
+	return value;
+}
+function _useBind__(ref, config) {
+	if (!validateCollectionArgs(arguments, {
+		name: "useBind",
+		required: [true, false],
+		min: 1,
+		max: 2,
+		validators: [String, Object]
+	})) return null;
+	if (!getCurrentRunningEffect({ name: "useBind" })) return null;
+}
+function useBind(ref, config) {
+	return _useBind__(ref, config);
+}
+var hasFilterInstance = (self, name) => _makeMap_(BUILT_IN_FILTERS, name) || _makeMap_(self[$$$register].filters, name);
+var normalize_Filter = (self, name) => hasOwn(BUILT_IN_FILTERS, name) ? BUILT_IN_FILTERS[name] : self[$$$register].filters[name] || pass;
+function customFilterDebugger(value, filter) {
+	if (!canRender(value)) {
+		debugHandler(`"${filter}" template filter expects a plain string value`);
+		return false;
+	}
+	return true;
+}
+function evaluateShortener(defaultValue, digitsSlice, secondValueSlice, appendText, verboseText) {
+	let dValue = String(defaultValue).trim();
+	let digitsValue = digitsSlice;
+	let secondSlice = secondValueSlice;
+	let text = String(appendText);
+	let digits = dValue.slice(Number(digitsValue.at(0)), Number(digitsValue.at(-1)));
+	let secondValue = dValue.slice(secondSlice.at(0), secondSlice.at(-1));
+	let SConvert = Number(secondValue);
+	let res = digits + text;
+	if (SConvert > 0) res = digits + "." + secondValue + text;
+	if (verboseText) return res + " " + useVerbose(Number(dValue), verboseText);
+	else return res;
+}
+function SHORTENER_FILTER_SERVICE(value, verboseText = "") {
+	value = Number(value);
+	if (!isNumber(value) || isNaN(value)) {
+		debugHandler(`shortener filter Adapter at argument <1> expects a number`);
+		return value;
+	} else if (!isString(verboseText)) {
+		debugHandler(`shortener filter Adapter at argument <2> expects a string`);
+		return value;
+	}
+	var result = value;
+	if (value > 999 && value < 999999) result = evaluateShortener(value, [0, -3], [-3, -2], "K");
+	else if (value > 1e6 && value < 999999999) result = evaluateShortener(value, [0, -6], [-6, -5], " Million");
+	else if (value > 1e9 && value < 999999999999) result = evaluateShortener(value, [0, -9], [-9, -8], " Billion");
+	else if (value > 0xe8d4a51000 && value < 999999999999999) result = evaluateShortener(value, [0, -12], [-12, -11], " Trillion");
+	else if (value > 0x38d7ea4c68000) {
+		let digits = String(value).slice(0, -15);
+		result = Number(digits).toExponential() + " E";
+	}
+	if (verboseText) return result + " " + useVerbose(value, verboseText);
+	else return result;
+}
+function useVerbose(value, txt) {
+	var val = Number(value);
+	var result = String(txt);
+	if (val > 1) result = result + "s";
+	return result;
+}
+function PERCENTAGE_FILTER_SERVICE(value, arg, decimalIndex) {
+	let index = Number(decimalIndex);
+	let fix = (100 / value * arg).toFixed(index);
+	let result = Number(fix);
+	return String(result) + "%";
+}
+function CURRENCY_FILTER_SERVICE(value, currency = "$") {
+	if (!isNumber(value) || isNaN(value)) {
+		debugHandler(`currency filter Adapter at argument <1> expects a number`);
+		return value;
+	} else if (!isString(currency)) {
+		debugHandler(`currency filter Adapter at argument <2> expects a string`);
+		return value;
+	}
+	const stringifyNum = String(value);
+	const houxitBank = [];
+	let recorder = [];
+	const reInstate = () => {
+		houxitBank.push(recorder.toReversed().join(""));
+		recorder = [];
+	};
+	for (const val of values(stringifyNum).toReversed()) if (len(recorder) === 3) reInstate();
+	else recorder.push(val);
+	if (len(recorder)) reInstate();
+	return currency + houxitBank.toReversed().join(",") + ".00";
+}
+function UPPER_FILTER_SERVICE(value) {
+	if (!customFilterDebugger(value, "upper")) return value;
+	return compileToRenderable(value).toUpperCase();
+}
+function TITLE_FILTER_SERVICE(value) {
+	if (!customFilterDebugger(value, "title")) return value;
+	const splitted = String(value).split(" ");
+	for (let [ind, val] of entries(splitted)) splitted[Number(ind)] = val.charAt(0).toUpperCase() + val.slice(1);
+	return splitted.join(" ");
+}
+function LOWER_FILTER_SERVICE(value) {
+	if (!customFilterDebugger(value, "lower")) return value;
+	return String(value).toLowerCase();
+}
+var BUILT_IN_FILTERS = {
+	upper: UPPER_FILTER_SERVICE,
+	title: TITLE_FILTER_SERVICE,
+	lower: LOWER_FILTER_SERVICE,
+	shortener: SHORTENER_FILTER_SERVICE,
+	percent: PERCENTAGE_FILTER_SERVICE,
+	currency: CURRENCY_FILTER_SERVICE
+};
+function $Filter_HelpersService(self, value, filters, hx_Element, $$bind) {
+	if (!len(filters)) return value;
+	let filterInstance;
+	let parameters;
+	for (const [index, filter] of filters.entries()) {
+		let name = filter.trim() || null;
+		if (!name) {
+			$warn(`undefined filter name\n\nCheck template filter definition`, self);
+			return;
+		}
+		const VResponse = filterInstancesValidator(name, self, hx_Element);
+		if (!VResponse) break;
+		[filterInstance, parameters] = VResponse;
+		const filterCallback = isPFunction(filterInstance) ? { filter: filterInstance } : filterInstance;
+		try {
+			value = filterCallback.filter(value, ...parameters);
+		} catch (error) {
+			debugHandler(`Encountered an error when running the filter callback at >>>>>> ${name}`, self, true);
+			debugHandler(error, self);
+			break;
+		}
+	}
+	return value;
+}
+function filterInstancesValidator(name, self, hx_Element) {
+	let parameters = [];
+	if (name.includes("(") && name.includes(")")) {
+		const filter = name;
+		name = abstractFilterName(name);
+		let { content } = ArgsExtractor(filter, name);
+		parameters = _$runModelBind(self, `((...args)=> args)(${content})`, hx_Element);
+	}
+	if (!hasFilterInstance(self, name)) {
+		debugHandler(`Unrecognized  filter name "${name}"\n\n if this is a custom filter, make sure it's registered through the local filter option or global prototype 'filter' method`, self, true);
+		return;
+	}
+	const filterInstance = normalize_Filter(self, name);
+	if (!validateType(filterInstance, [Function, Object])) {
+		debugHandler(`${name} filter receives an Invalid type definition\n\nExpects a filter function or a plain object type exposing a filter method which acts as the filter callable itself`, self, true);
+		return;
+	} else if (isPObject(filterInstance)) {
+		if (!hasProp(filterInstance, "filter")) {
+			debugHandler(`"${name}" filter instance object does not expose a "filter" method which acts as the filter function`, self, true);
+			return;
+		} else if (!isPFunction(filterInstance.filter)) {
+			debugHandler(`"${name}".<filter> instance filter property value is not a method/callable  \n\n Expects a function type which acts as the filter function`, self, true);
+			return;
+		}
+	}
+	return [filterInstance, parameters];
+}
+function abstractFilterName(filter) {
+	return filter.match(/^([^(]+)/)[0];
+}
+var HouxitDirectives = "if,else,else-if,html,text,for,raw,slot,model,bind,on,scoped,provide,transite,animate,clone";
+var isHouxitDirective = (dir) => _makeMap_(HouxitDirectives, dir);
+function _Evaluate_THIS(obj, str, self, optional) {
+	if (/^(?:const|var|let|while|for|of|if|else|import|export|switch|case|try|catch|throw|continue|break|with|debugger|label|do|from|as|finally|delete|void|enum|implements|interface|package|protected;).*$/.test(str.replace(stringsMonitorRegex, () => "")) && !passableBlock(str)) throw new Error(`Invalid expression: \n\n"${str}" Your binding seems to contain an unallowed expression as a statement\n Only single expressions are allowed.`, self, true);
+	const commentRegex = /\/\/.*$|\/\*[^]*?\*\//g;
+	let expressionWithoutComments = str.replace(commentRegex, "");
+	const unsupportedRegex = /(?:\.\.|\bthrow\b|\bdelete\b|\bvoid\b|\bconst\b|\blet\b|\bvar\b|\bwhile\b|\bfor\b|\bof\b|\bif\b|\belse\b|\bimport\b|\bexport\b|\bswitch\b|\bcase\b|\btry\b|\bcatch\b|\bcontinue\b|\bbreak\b|\bwith\b|\bdebugger\b|\blabel\b|\bdo\b|\bfrom\b|\bas\b|\bfinally\b|\benum\b|\bimplements\b|\binterface\b|\bpackage\b|\bprotected\b)/;
+	let checkRegex = false;
+	try {
+		parseScript(expressionWithoutComments);
+	} catch (err) {
+		checkRegex = true;
+	}
+	if (checkRegex && unsupportedRegex.test(expressionWithoutComments.replace(stringsMonitorRegex, () => ""))) throw new Error(`Invalid expression: \n\nUnsupported constructs are not allowed.\n\n"${str}"`, self, true);
+	else if (commentRegex.test(str)) {
+		debugHandler(`Template SyntaxError...\n\nComments not allowed in template expression\n\n"${str}"`, self, true);
+		return;
+	}
+	let dexTransform;
+	if (optional && isPObject(optional) && hasOwn(optional, $$dexTransformKey)) {
+		dexTransform = optional[$$dexTransformKey];
+		let syntaxArray = dexTransform.syntaxArray;
+		dexTransform.traverse = () => transformDestructureContext(syntaxArray, dexTransform.sourcesArray, str, [obj, optional]);
+	}
+	const getValue = new Function("obj", "$$$ctx", "dexTransform", `
       with(obj){
         with($$$ctx){
           try{
-            return dexTransform ? dexTransform.traverse()  : ${t.trim()||`undefined`};
+            return dexTransform ? dexTransform.traverse()  : ${str.trim() || "undefined"};
           }catch(err){
             throw new Error(err);
           }
         }
       }
-    `),u;try{u=l.call(e,e,h(r)?r:{},c)}catch{}return u}function Wc(e,t,n,r=[]){e=e.toReversed().join(`,`);let i=new M(...qc(e,!0)),a=Gc(e,Oh({size:10},e=>i.has(e)?!1:(i.add(e),!0))),o=Function(`obj`,`$$$ctx`,`
+    `);
+	let value;
+	try {
+		value = getValue.call(obj, obj, isPObject(optional) ? optional : {}, dexTransform);
+	} catch (error) {}
+	return value;
+}
+function transformDestructureContext(props, sources, vv, metrics = []) {
+	props = props.toReversed().join(",");
+	const register = new Tuple(...extractArgumentsFromDext(props, true));
+	const syntax = dextNamespaceControler(props, tokenGENERATOR({ size: 10 }, (uuid) => {
+		if (!register.has(uuid)) {
+			register.add(uuid);
+			return true;
+		}
+		return false;
+	}));
+	const traverse = Function("obj", "$$$ctx", `
       with(obj){
         with($$$ctx){
           try{
-            return function transform(${a}){
-              return ${n}
+            return function transform(${syntax}){
+              return ${vv}
             }
           }catch(err){
             throw new Error(err)
           }
         }
       }
-    `),[s={},c={}]=r;return o.call(s,s,c).call(s,...t.toReversed())}function Gc(e,t=``){let n=qc(e),r=new M;for(let[i,{key:a,start:o,end:s}]of n.entries()){if(!r.has(a)){r.add(a);continue}e=e.substring(0,o)+t+e.substring(s+1),r.add(t)}return e}function Kc(e,t,n,r){if(j(e.ariel)){let i=e.ariel.join(``);i.trim()&&t.push(r?i:{start:n-j(e.ariel),end:n-1,key:i}),e.ariel=[]}}function qc(e,t=!1){let n={ariel:[],deff:void 0,op_str:!1,str_type:void 0,re_start:!1,deff_cage:{}},r={")":`(`,"]":`[`,"}":`{`},i=[],a=0;for(let o of x(e)){let s=a>0?e[a-1]:void 0;d(s)&&s.trim(),e[a+1],/[`'"]/.test(o)?n.op_str?o===n.str_type&&(n.op_str=!1,n.str_type=void 0):(n.op_str=!0,n.str_type=o):n.op_str||(o===`=`?(Kc(n,i,a,t),n.deff=!0):n.deff?/[[({]/.test(o)?(n.deff_cage[o]=(n.deff_cage[o]||0)+1,n.re_start=!0):/[\)}\]]/.test(o)?_(n.deff_cage,r[o])&&((n.deff_cage[r[o]]||0)<=1?delete n.deff_cage[r[o]]:n.deff_cage[r[o]]--):!j(n.deff_cage)&&/[{([\])},]/.test(o)&&(n.deff=!1):/[, \W]/.test(o)&&!/[$:]/.test(o)?Kc(n,i,a,t):/\w$/.test(o)?n.ariel.push(o):o===`:`&&(n.ariel=[])),a++}return i}var Jc=/\[(.*?)\]/;function Yc(e,t,n,r){let i=t;if(t=fl(t),e[I]?.initializedRender,Jc.test(t)){let r=t.match(Jc);t=J(q(function(){return r[0].replace(Jc,(t,r)=>G(Z(e.__public_model__,r,n,!0)))})).value,j(subscribers)}return d(t)?(i.replace(Jc,function(e,n){return t}),[effect,t]):(A(`Unexpected value at "${i}" as dynamically evaluated prop name binding is not a valId prop string`),i)}var Xc={slots:`compilation of slot element`,template:`template compile process`,hook:e=>`during the call of `+e.toUpperCase()+` hook`,build:`during the call of the build function`,register:e=>`the registration of a `+e,forloop:`during mapping of the for directive`,ifElse:e=>`during the consitional rendering of the `+e+` directive`};function Zc(e,t,n=!1){return Function(`obj`,`check`,`
+    `);
+	const [obj = {}, $$$ctx = {}] = metrics;
+	return traverse.call(obj, obj, $$$ctx).call(obj, ...sources.toReversed());
+}
+function dextNamespaceControler(src, replacement = "") {
+	const namespace = extractArgumentsFromDext(src);
+	const register = new Tuple();
+	for (const [index, { key, start, end }] of namespace.entries()) {
+		if (!register.has(key)) {
+			register.add(key);
+			continue;
+		}
+		src = src.substring(0, start) + replacement + src.substring(end + 1);
+		register.add(replacement);
+	}
+	return src;
+}
+function facadeArgsRegister(setup, namespace, index, traverse) {
+	if (len(setup.ariel)) {
+		const word = setup.ariel.join("");
+		if (word.trim()) namespace.push(traverse ? word : {
+			start: index - len(setup.ariel),
+			end: index - 1,
+			key: word
+		});
+		setup.ariel = [];
+	}
+}
+function extractArgumentsFromDext(src, traverse = false) {
+	const setup = {
+		ariel: [],
+		deff: void 0,
+		op_str: false,
+		str_type: void 0,
+		re_start: false,
+		deff_cage: {}
+	};
+	const rChar = {
+		")": "(",
+		"]": "[",
+		"}": "{"
+	};
+	const namespace = [];
+	let index = 0;
+	for (const val of values(src)) {
+		const prev = index > 0 ? src[index - 1] : void 0;
+		if (isString(prev) ? prev.trim() : prev) {}
+		src[index + 1];
+		if (/[`'"]/.test(val)) {
+			if (!setup.op_str) {
+				setup.op_str = true;
+				setup.str_type = val;
+			} else if (val === setup.str_type) {
+				setup.op_str = false;
+				setup.str_type = void 0;
+			}
+		} else if (setup.op_str);
+		else if (val === "=") {
+			facadeArgsRegister(setup, namespace, index, traverse);
+			setup.deff = true;
+		} else if (setup.deff) {
+			if (/[[({]/.test(val)) {
+				setup.deff_cage[val] = (setup.deff_cage[val] || 0) + 1;
+				setup.re_start = true;
+			} else if (/[\)}\]]/.test(val)) {
+				if (hasOwn(setup.deff_cage, rChar[val])) if ((setup.deff_cage[rChar[val]] || 0) <= 1) delete setup.deff_cage[rChar[val]];
+				else setup.deff_cage[rChar[val]]--;
+			} else if (!len(setup.deff_cage) && /[{([\])},]/.test(val)) setup.deff = false;
+		} else if (/[, \W]/.test(val) && !/[$:]/.test(val)) facadeArgsRegister(setup, namespace, index, traverse);
+		else if (/\w$/.test(val)) setup.ariel.push(val);
+		else if (val === ":") setup.ariel = [];
+		index++;
+	}
+	return namespace;
+}
+var dynamicAttrRegex = /\[(.*?)\]/;
+function _DynamicAttrNameResolver(self, attr, hx_Element, metrics) {
+	let iniAttr = attr;
+	attr = fall_AttrName(attr);
+	const isRerender = self[$$$operands]?.initializedRender;
+	if (dynamicAttrRegex.test(attr)) {
+		const matches = attr.match(dynamicAttrRegex);
+		attr = effectRunner(_createEffectBase(function() {
+			return matches[0].replace(dynamicAttrRegex, (match, text) => {
+				return unwrap(_$runModelBind(self.__public_model__, text, hx_Element, true));
+			});
+		})).value;
+		if (len(subscribers) && !isRerender) {} else if (isRerender) {}
+	}
+	if (!isString(attr)) {
+		debugHandler(`Unexpected value at "${iniAttr}" as dynamically evaluated prop name binding is not a valId prop string`);
+		return iniAttr;
+	}
+	iniAttr.replace(dynamicAttrRegex, function(match, space) {
+		return attr;
+	});
+	return [effect, attr];
+}
+var DebugFlags = {
+	slots: "compilation of slot element",
+	template: "template compile process",
+	hook: (name) => "during the call of " + name.toUpperCase() + " hook",
+	build: "during the call of the build function",
+	register: (name) => "the registration of a " + name,
+	forloop: "during mapping of the for directive",
+	ifElse: (name) => "during the consitional rendering of the " + name + " directive"
+};
+function get_Object_Value(obj, path, check = false) {
+	return Function("obj", "check", `
       let value;
       try{
-        value= obj.${t}
+        value= obj.${path}
       }catch(err){
         if(check) throw new Error(err)
         return
       }
       return value;
-    `)(e,n)}var Qc=/[.[\]]/,$c=/(\[(.*?)\])/g;function el(e,t,n){let i=!1,a=e;if(!xe(t)&&Qc.test(t)){let e=t.split(`.`);for(let t of e)if($c.test(t)){let e=[],n=t.replace($c,(t,n,r)=>(r=Number(r),isNaN(r)||e.push(r),``));if(!a)return!1;if(xe(n)||(a=a[n]),j(e))for(let[t,n]of e.entries()){if(!Y(a,[Object,Array,Function])&&r(a)&&isNaN(Number(n))&&Number(n)+1>j(a))return!1;a=a[n]}}else if(_(a||{},t))a=a[t],i=!0;else return!1}else{if(_(e,t))a=a[t];else return!1;return!0}return i}function tl(e,t,n,r=!1){return Function(`obj`,`value`,`check`,`metrics`,`
+    `)(obj, check);
+}
+var accessorsRegex = /[.[\]]/;
+var dynamicAccessorsRegex = /(\[(.*?)\])/g;
+function object_Has_Path(obj, str, getRes) {
+	let res = false;
+	let value = obj;
+	if (!isEmptyStr(str) ? accessorsRegex.test(str) : false) {
+		const navigation = str.split(".");
+		for (const key of navigation) if (dynamicAccessorsRegex.test(key)) {
+			let access = [];
+			let match = key.replace(dynamicAccessorsRegex, (match, p1, internal) => {
+				internal = Number(internal);
+				if (!isNaN(internal)) access.push(internal);
+				return "";
+			});
+			if (!value) return false;
+			if (!isEmptyStr(match)) value = value[match];
+			if (len(access)) for (let [index, keys] of access.entries()) {
+				if (!validateType(value, [
+					Object,
+					Array,
+					Function
+				]) && isArray(value) && isNaN(Number(keys)) && Number(keys) + 1 > len(value)) return false;
+				value = value[keys];
+			}
+		} else if (!hasOwn(value || {}, key)) return false;
+		else {
+			value = value[key];
+			res = true;
+		}
+	} else {
+		if (hasOwn(obj, str)) value = value[str];
+		else return false;
+		return true;
+	}
+	return res;
+}
+function set_Object_Value(obj, path, value, check = false) {
+	return Function("obj", "value", "check", "metrics", `
       try{
         const [ isToken, get_Object_Value, debug, unwrap ] = metrics;
-        const initVal=get_Object_Value(obj, "${t}" );
-        if(isToken(initVal)) obj.${t}[initVal[refInternalEffectKey].accessor]=unwrap(value);
-        else obj.${t}=value;
+        const initVal=get_Object_Value(obj, "${path}" );
+        if(isToken(initVal)) obj.${path}[initVal[refInternalEffectKey].accessor]=unwrap(value);
+        else obj.${path}=value;
       }catch(err){
         if(check) debug(err)
         return err
       }
       return obj;
-    `)(e,n,r,[W,Zc,A,G])}function nl(e){return e.replace(/-+([a-zA-Z])/g,(e,t)=>t.toUpperCase())}function rl(e){let t=nl(e);return t.at(0).toUpperCase()+t.slice(1)}function il(e){return e.replace(/([a-z])([A-Z])/g,`$1-$2`).toLowerCase()}function al(e,t){if(xr(e))for(let n of e.values())n=G(n),al(n,t);else if(h(e))y(e).forEach(([e,n])=>{if(n=G(n),n)for(let n of x(e.split(` `)))t.add(n)});else if(d(e))for(let n of x(e.split(` `)))t.add(n);return t.list()}function ol(e,t){if([t,e]=[new M(...si(t)),new M(...si(e))],uo(e,t))return[new M,new M];let n=new M,r=new M;return e.forEach(e=>{t.has(e)||n.add(e)}),t.forEach(t=>{e.has(t)||r.add(t)}),[n,r]}function sl(e,t,n,r,{is_hyperscript:i,bindings:a,forwardAttrs:o}){let s=Q(e),c=r.VNodeManager.patchFlags.shapeProps,l=e[I].initializedRender;if(!i&&j(a.deepKeys)){let e=a.value;if(e||d(e))t=a.deepKeys;else return}t=G(t);let u=al(t,new M);for(let[e,t]of u.entries())if(t=G(t),s||l){let e=l?c:r.VNodeManager.SSRVnode.props;_(e,`class`)||(e.class=new M),e.class.has(`cls`)||e.class.add(t)}else n.classList.contains(t)||cl(n,t);if(l&&!j(a.subscribers)||s)return;let f=np(a.effect,function(t){Tl(e,{element:n,mode:`class`,key:`class`,effect:a.effect,value:a.effect.value},t)});r.VN_Tree.FLUSHS.add(f)}function cl(e,t,n=!1){let r=n?`remove`:`add`;t.split(` `).forEach(t=>{t&&e.classList[r](t)})}function ll(e,t,n){if(n||={},h(t))y(t).forEach(([t,r])=>{if(!d(G(r))){A(`"${t}" style prop: Unrecognized style property value \nat at\n "${t}" style property\n\n${element?.outerHTML||``}`,e);return}n[nl(t)]=r});else if(r(t))t.forEach(t=>ll(e,t,n));else if(d(t)){let e=t.trim().split(`;`);for(let t of e.values())if(t&&t.includes(`:`)){let e=t.split(`:`);n[e[0]]=e[1]}}return n}function ul(e,t,n){let r={};return n?.forEach(e=>r[nl(e)]=t),r}function dl(e,t,n,r,i){let{is_hyperscript:a,bindings:o,forwardAttrs:s}=r,c,l=Q(e),u=r.bindings.deepKeys,d=i.VNodeManager.patchFlags.shapeProps,f=e[I].initializedRender;if(c=!a&&j(u)?ul(e,t,u):ll(e,t,{}),y(c).forEach(([e,t])=>{if(l||f){let n=f?d:i.VNodeManager.SSRVnode.props;_(n,`style`)||(n.style={}),n.style[il(G(e))]=t}else n.style[nl(G(e))]=t}),f&&!j(o.subscribers)||l)return;let{effect:p}=o,m=np(p,function(t){value=Tl(e,{element:n,mode:`style`,effect:p,value,key:style},t)});i.VN_Tree.FLUSHS.add(m)}function fl(e,t){let n={"*":1,"@":1,"...":3,$$:2,"#":1};if(!d(e)&&!e.trim()&&_o(t))return e;for(let[t,r]of y(n))if(e.startsWith(t))return Ce(e)?(e=e.split(`:`),e.shift(),e.join(`:`)):e.slice(r);return e}function pl(e){return Ee(e)&&d(e)&&/^on[A-Za-z]+\w+$/.test(e)}function ml(e){return e.includes(`:`)?e.split(`:`):[e]}var hl=/([\w$\-][\w$\-]*)|\[([^\]]+)\]/g;function gl(e,t,n){let r={modifiers:[],directive:void 0,key:void 0,deepKeys:[],src:e,value:t};if(Te(e,!0))e.slice(3),r.value=e.slice(3),r.directive=`bind`;else if(!e.includes(`:`)&&!e.includes(`|`)&&!Ce(e))r.key=e;else{let[t,i,a]=ml(e);if(Ee(a)&&A(`Error in directive saperator chain.\n\nExcessive directive chain, unable to determine\n >>>> "${a}"`,n,!0),r[e.startsWith(`$$`)?`directive`:`key`]=t,r.key?i=r.key:r.key=i,i?.includes(`|`)||t.includes(`|`)){r.modifiers=(i||t).split(`|`);let e=r.modifiers.shift();i?i=e:(t=e,r.directive=t),j(r.modifiers)&&U(r.modifiers).each((e,t)=>{e.trim()||r.modifiers.splice(t,1)})}r.key=i,r.directive=r.directive?.slice(2)}if(hl.test(r.key)){let e=[...r.key?.match(hl)||[]];j(e)&&(r.key=e.shift()),r.deepKeys=e}return r.src=e,r.directive&&!r.value&&T(`provide,html,text,model,clone,scoped,transite,animate,bind,slot`,r.directive)&&(r.value=r.key||r.directive),r}function _l(e,t){let{directive:n,modifiers:r,deepKeys:i,key:a,src:o}=e;return n||(j(r),j(i)),!0}function vl(e,{key:t,attr:n},r,i,a){if(r&&Ll(t,r))return A(`Illegal binding not allowed in build Adapter mode\n\n"${t}" property has a disallowed binding directive property`,!0,e),{};let{isRerender:o,patch:s}=a,c=[],l=[],u,d={},f;if(r)d={directive:u,key:t,modifiers:c,deepKeys:l,value:n};else{t=oc(t),d=gl(t,n,e),_l(d,e),c=d.modifiers,l=d.deepKeys,u=d.directive,t=d.key;let r=t=>Yc(e,t,i,a);if(t&&Jc.test(t)){let[e,n,i]=r(t);f=i,d.key=n,d.value=d.key}U(l).each((e,t)=>{if(l[t]&&Jc.test(l[t])){let[n,i,a]=r(e);l[t]=i}}),d.propertyKeyEffect=f}return d}function yl(e,t){let n=t.key,i=n===`dispatch`;!i&&E(t.value)&&(t.value=[t.value,t.value.options||{}]),H(t.value,{validators:i?[[String,Array],Function,[String,Array]]:[Function,[String,Array]],name:t.key,max:i?3:2,min:i?2:1,name:`<${n}> event`});let[a,o,s]=t.value;if(!i){let e=a;s=o,a=il(n).split(`-`),il(n).includes(`-`)&&a.shift(),o=e}return t.deepKeys=d(a)?a.split(`.`):r(a)?a:[],t.key=t.deepKeys.shift(),t.value=o,t.modifiers=d(s)?s.split(`|`):r(s)?s:[],!0}function bl(e,t,n,r,i){let{is_hyperscript:a,isRerender:o,vNode:s,forwardAttrs:c}=i,l=Q(r),{key:u,value:d,src:f}=t;if(Qe(u))zl(r,e,[u,d],{is_hyperscript:a,bindings:t,forwardAttrs:c},n);else if(u===`class`)sl(r,d,e,n,{is_hyperscript:a,bindings:t,forwardAttrs:c});else if(Xe(u))Il(r,[u,d],e,{is_hyperscript:a,bindings:t,forwardAttrs:c},n);else if(!o&&(pl(f)||Sl(u)||u===`dispatch`)){if(!Cl(r,[u,d,f],t,e,n,i))return}else if(!o&&u===`ref`)Kl(r,e,t,n,i);else if(!o&&u===`attach`)Al(r,t,e,n,i);else if(qt(n)&&u===`name`&&s.prototype_===`slot`)Pl(r,t,e,n,i);else if(u===`context`)Fl(r,t,e,n,i);else if(u===`motion`)xl(r,t,e,n,i);else{try{d=$t(G(d));let t=n?.VNodeManager?.patchFlags.shapeProps;if(l||o){let n=o?t:e.props;n[u]=d}else e.setAttribute(u,d)}catch(t){A(t),A(`Attribute Error::\n\n...unable to set node attribute "${u}\n\n ${t}`,r,!0,`When setting the attribute "${u}" on "${l?e.type:e.outerHTML}"`,r,!a);return}if(o&&!j(t.subscribers)||l)return;let i=np(t.effect,function(n){value=Tl(r,{element:e,key:u,value:$t(value),mode:void 0,effect:t.effect},n)});n?.VN_Tree.FLUSHS?.add?.(i)}}function xl(e,t,n,r,i){let{value:a,key:o}=t;if(!mt(a)){A(`<Element>.motion property receives an Invalid value...
-Not a <Houxit.Motion> Property`,e,!0);return}a.type,a=a[ot];let s=a[a.key],{params:c,mode:l}=a;r.VNodeManager.motion_object.create(a.key===`transition`?`transite`:`animate`,s,{params:c,mode:l,element:n}),vu(e,r,i,n)}function Sl(e){if(e.startsWith(`on`)){let t=e.slice(2);return Lt(t)?t:void 0}}function Cl(e,[t,n,i],a,o,s,c){if(n=G(n),t===`dispatch`&&!r(n)){A(`<dispatch> dispatcher expects an array value of events and method\n\nFound "${n}" of "${Sa(n)}" type`,e,!f(e));return}else if(pl(i)&&!Y(n,[Array,Function])){A(`<${t}> listener expects a function value or an array of valid methods functions\n\nFound "${n}" of "${Sa(n)}" type`,e,!f(e));return}Sl(t)&&(a.key=Sl(t));let l=n.options||{};if(a.value=n,c=v({options:l},c),yl(e,a))return $l(e,a,o,s,c),!0}function wl(e){if(Qe(e))return`bool`;if(Xe(e))return e===`style`?`style`:`idl`;if(e===`ref`)return ref;if(e===`class`)return`class`}function Tl(e,t,n,r){let{element:i,mode:a,effect:o,value:s,key:c,deepKeys:l=[]}=t,u=G(Ka(o)?o?.runEffect().value:s);if(uo(u,s))return s;if(a===`class`||a===`idl`&&c===`className`){u||=``;let[e,t]=ol(al(u,new M),al(s,new M));t.forEach(e=>cl(i,e,!0)),e.forEach(e=>cl(i,e))}else if(a===`bool`)(u||d(u))&&!(s||d(s))?Xe(c)?i[c]=u:i.setAttribute(c,u||``):!(u||d(u))&&(s||d(s))&&(Xe(c)?i[c]=!1:i.removeAttribute(c));else if(a===`style`){let t,n=n;u={},t=!is_hyperscript&&j(n)?ul(e,u,n):ll(e,u,{});let r;!is_hyperscript&&j(n)&&(r=ul(e,s,n)),r=ll(e,s,{});for(let[e,n]of y(t))n=G(n),(!uo(n,r[e])||!_(r,e))&&(i.style[e]=n);b(r).forEach(e=>{_(t,e)||(i.style[e]=``)})}else a===`idl`?(u=$t(u),i[c]=u):a===`ref`||p(a)&&(u=$t(u),i.setAttribute(c,u));return u}function El(e,t,n,r){let[i]=e;H(e,{count:1,validators:[Function],required:[!0],name:`attach=Function(ctx){ctx.`+n+`()}`})&&t.add(i)}function Dl(e,t,n,r,i){if(!H(t,{min:2,max:3,validators:[[String,Array],Function,[String,Array]],required:[!0,!0],name:`attach=Function(ctx){ctx.on()}`}))return;let[a,o,s]=t;a=d(a)?a.split(`.`):a,$l(e,{value:o,modifiers:d(s)?s.split(`|`):s||[],key:a.shift(),deepKeys:a,directive:void 0},n,r,i)}function Ol(e,t,n,r,i,a){let[o,s,c]=t;H(t,{min:2,max:3,validators:[[Object,Function],ga,[String,Array]],required:[!0,!0],name:`attach=Function(ctx){ctx.use()}`})&&Vl(e,{value:o,modifiers:d(c)?c.split(`|`):c||[],key:void 0,deepKeys:[],directive:void 0},n,r,i.vNode,i.is_hyperscript)}function kl(e,t,n,r,i){let[a,o]=t;H(t,{min:1,max:2,validators:[String,ga],required:[!0],name:`attach=Function(ctx){ctx.prop()}`})&&Nl({key:a,attr:o},e,r,i,n,i.config)}function Al(e,t,n,r,i){let{key:a,value:o}=t;if(!D(o)){A(`"attach" special property expects a plain Function type`,e,!0);return}let s=r.VNodeManager.LifeCycleHooks,c=new M(...zt.split(`,`)),l={use(t,a,o){return Ol(e,[...arguments],n,r,i,c)},on(t,a,o){return Dl(e,[...arguments],n,r,i)},addProp(t,a){return kl(e,[...arguments],n,r,i)},animate(t,a,o){return t=zu(...arguments),xl(e,{value:t,key:`motion`},n,r,i),t},transite(t,a,o){return t=Bu(...arguments),xl(e,{value:t,key:`motion`},n,r,i),t}};for(let e of c.values())l[e]=function(t){return El([...arguments],s[e+`_hook`],e,n)};o(l)}function jl(e,t,n){if(!P(e))return;let{value:r,effect:i,key:a}=t,o=i.runEffect().value,s=G(o),c=e[L].$params,l=e.__public_model__.$attrs,u=_(c,a)?`params`:_(l,a)?`attrs`:void 0;return uo(G(r),s)?r:(u===`params`?c[a].data=s:u===`attrs`&&aa(l,a,s,!0),s)}function Ml(e,t,n,r,i){let{key:a,value:o,src:s,deepKeys:c}=t,{is_hyperscript:l,vNode:u}=i,d=!1,f=r[I].initializedRender;if(pl(a)||a===`dispatch`?Cl(r,[a,o,s],t,e,n,i):!f&&a===`ref`?Xm(()=>Kl(r,e,t,n,i)):a===`attach`?Al(r,t,e,n,i):_(e,a)?_(e,a)&&(_(e,`__hx_keys__`)||(e.__hx_keys__=new M),e.__hx_keys__.add([a,o])):(e[a]=o,d=!0),!d||!(!tr(u.prototype_)&&!Q(r)))return;let p=np(t.effect,function(e){o=jl(n.widget_instance,{effect:t.effect,value:br(o),key:a},e)});n.VN_Tree.FLUSHS.add(p)}function Nl(e,t,n,r,i,a,o){let{key:s,attr:c,data:l,deepKeys:u,effect:d}=e,{isW:f,is_hyperscript:p,isRerender:m,patch:h,vNode:g}=r;r.config=a;let _=vl(t,{key:s,attr:c},p,n,r);if(_.src,_.data=l,_.effect=d,o&&(_.deepKeys=u),p&&!pl(_.key)&&(E(_.value)||T([$n,Xn,Zn,Wn],g.prototype_))){let e=_.value,n=q(()=>G(ks(e)),t);J(n),_.effect=n,_.value=n.value,Ql(g,s,n)}else v(_,r.patch);!p&&_.directive?Th(t,_,i,n,r):_.key===`key`?(n.VNodeManager.vNodeClass.key=_.value,n.VNodeManager.keyIdBinding=_):(f?Ml:bl)(i,_,n,t,r)}function Pl(e,t,n,r,i){let{value:a}=t,{isRerender:o,vNode:s,is_hyperscript:c}=i,l=Q(e);if(o){r.VNodeManager.element_slot_ref=a;return}if(!d(a)){A(`slot "name" atrribute value expects a "string" value data type
-
-untraceable data type found`,e,!0);return}let u=e[R].scopeSlotsBindings;if(_(u,a)){A(`slot with name "${a}" has been duplicated\n\nMore than one slot with same name mapping cannot be implemented to avoid dublicated renderimg of slots contents`,e,!0),me(`NOTE: Un-named slots elements shares the same naming scope with implicitly defined "name='default'" slots elements`,e);return}if(!o){let e=$t(G(a));l?n.props.name=e:n.setAttribute(`name`,e),u[a]={bindings:void 0,element:n}}}function Fl(e,t,n,r,i){let{isRerender:a,is_hyperscript:o,effect:s,vnode:c}=i,l=Q(e),u=r.VNodeManager.SSRVnode;if(!a&&(l?u.type:n.localName)!==`slot`){A(`"context" special property is only scoped to html "<slot>" element in Houxit
-<slot> element scope context property found on a none "<slot>" element
-
-Failed to resolve binding`);return}let d=a&&!l?r.VNodeManager.element_slot_ref:l?u.props.name:n.name,f=e[R].scopeSlotsBindings;if(!a&&!d&&!_(f,d)){A(`To specifically bind context scope to slots, they are obliged to be contextually named
-
-It's either this slot element was not named properly…
-Or that the "context" property precedes the special slot "name" attribute`,e,!0),me(`To resolve this, make sure the "name" attribute comes before the "context" key on this slot element`,e);return}let p=t.value;if(!h(p)){A(`"context" special scope property expects a plain object\nInvalid data type received\n\n@@ "${d}" <slot> element>>>>>`,e,!0);return}p=ei(p),a||(v(f[d],{get bindings(){return p.data}}),s.attachCallback(()=>{v(p.data,s.runEffect().value)}))}function Il(e,t,n,r,i){let[a,o]=t,{is_hyperscript:s,bindings:c}=r,l=Q(e),u=i.VNodeManager.patchFlags.shapeProps,d=e[I].initializedRender;if(a===`style`)return dl(e,o,n,r,i);if(a===`className`){let e=al(o,new M);if(l||d){let t=d?u:i.VNodeManager.SSRVnode.props;_(t,`className`)||(t.className=``),t.className=t.className+` `+e.join(` `)}else n.className=n.className+` `+e.join(` `)}else if(l||d){let e=d?u:i.VNodeManager.SSRVnode.props;e[T(`innerText,textContent`,a)?`innerText`:a]=yc($t(o))}else n[a]=$t(o);if(d&&!j(c.subscribers)||l)return;let f=np(c.effect,function(t){Tl(e,{element:n,mode:`idl`,value:c.effect.value,key:a,effect:c.effect},t)});i.VN_Tree.FLUSHS.add(f)}var Ll=(e,t)=>t&&(De(e)||Ce(e)||Se(e))||we(e);function Rl(e,t,n,r,i,a){let o=e.props,s=N(n)?null:n,c=Q(t);if(!h(o))return i;r.is_hyperscript;let l=t[I]?.initializedRender,u=r.ctx;r={isRerender:l,is_hyperscript:t?t[z].map.is_hyperscript:n?n.is_hyperscript:void 0,isW:!(c?d(i.type):Tt(i))&&jt(e.prototype_),shatteredFlags:s,ctx:u,vNode:e};let f=(e,o)=>Nl({key:e,attr:o},t,n,r,i,a);y(o).forEach(([e,t])=>{e===`__hx_keys__`?U(t).each(([e,t])=>f(e,t)):f(e,t)})}function zl(e,t,[n,r],{is_hyperscript:i,bindings:a,forwardAttrs:o},s){r=G(r);let c=Q(e),l=e[I].initializedRender;if((d(r)||r)&&(c?t.props[n]=r:l?s.patchFlags.shapeProps[n]=r:Xe(n)?t[n]=r:t.setAttribute(n,r||``)),l&&!j(a.subscribers)||c)return;let u=np(a.effect,function(r){Tl(e,{element:t,mode:`bool`,effect:a.effect,key:n,value:a.effect.value,effect:a.effect},r)});s.VN_Tree.FLUSHS.add(u)}function Bl(e,t,n){let{modifiers:r,deepKeys:i}=n;return{modifiers:r,deepKeys:i}}function Vl(e,t,n,r,i,a){let{key:o,value:s,modifiers:c,deepKeys:l,src:u,directive:d}=t,f=e[I].initializedRender,p;if(!a&&s&&(p=Z(e,s,r,!0)),j(c),!a&&!_(e[B].directives,d))return A(`((unrecognized directive reference))\n\n "${d}" directive was not registered as a directive on this widget\n\nat...........at>>>\n${n?.outerHTML||``}`,e,!0,`during directive resolving`),n;let m=a?s:e[B].directives[d],g={init:V,destroyed:V,created:V,updated:V,mounted:V};if(Bl(e,r,t),D(m))g.mounted=m;else if(h(m))if(Uo(zt.split(`,`),b(m))){for(let[t,r]of y(m))if(new Set(zt.split(`,`)).has(t))if(D(m[t]))r[Dn]={modifiers:new M(...b(c||[])),key:o,deepKeys:l,value:p},g[t]=r;else return A(`((Custom directive))\n\ncustom Directive "${d}" ${t}  hook is not a function`,e,!0),n}else return A(`((Directive Error))\n\ndirective ${typeof m} does not define any of widget Directive hook.\n  "created/mounted/updated/init/destroyed" method`,e,!0),n;if(!f){!Ct(n)&&jt(n.prototype_)&&S(n,On,{value:{init_hook:new M,created_hook:new M,mounted_hook:new M,updated_hook:new M,destroyed_hook:new M},enumerable:ve,configurable:ye});for(let e of zt.split(`,`).values())if(g[e]&&!Hl(g[e]))if(Ct(n)){if(e===`init`)continue;r.VNodeManager.LifeCycleHooks[e+`_hook`].add(g[e])}else jt(n.prototype_)&&n[On][e+`_hook`].add(g[e]);return n}}function Hl(e){return D(e)&&e.name===`pass`&&_(e,cr)}var Ul={enter:`Enter`,esc:`Escape`,tab:`Tab`,space:` `,delete:[`Delete`,`Backspace`],up:`ArrowUp`,down:`ArrowDown`,left:`ArrowLeft`,right:`ArrowRight`},Wl={ctrl:`ctrlKey`,shift:`shiftKey`,alt:`altKey`,meta:`metaKey`};function Gl(e,t,n,i){if(!D(i))return;n=r(n)?new M(...n):n;let a={};n.has(`once`)&&(a.once=!0,n.delete(`once`)),n.has(`passive`)&&(a.passive=!0,n.delete(`passive`)),n.has(`nonpassive`)&&(a.passive=!1,n.delete(`nonpassive`)),n.has(`capture`)&&(a.capture=!0,n.delete(`capture`)),n.has(`noncapture`)&&(a.capture=!1,n.delete(`noncapture`));function o(e){if(n.has(`prevent`)&&(e.preventDefault(),n.delete(`prevent`)),n.has(`stop`)&&(e.stopPropagation(),n.delete(`stop`)),n.has(`trusted`)&&(i=e.isTrusted?i:V,n.delete(`trusted`)),n.has(`self`)&&!t.isSameNode(e.target)){n.delete(`self`);return}for(let t of n.values())if(_(Ul,t)){let n=Ul[t],i=e.key;if(r(n)?!n.includes(i):n!==i)return}else if(_(Wl,t)&&!e[Wl[t]])return;i.call(this,...arguments)}return[o,a]}function Kl(t,n,i,a,o){let{key:s,value:c,src:l,data:u,effect:f}=i,p=ac(a);t[z].map.is_hyperscript;let m=f?f.value:c,h=t[I].templateRefsInputs,g=t.__public_model__,v;if(d(m)){if(!_(h,m)){e(m,o.vNode),A(`[templateRefs reference] not defined (${m})`,t,!0);return}v=h[m]}else if(W(m))v=m;else{A(`[templateRefs reference] not a token. templateRefs expects a token() instance.
-See [Template Refs] reference`,t,!0);return}let y=p?a.widget_instance.__public_model__:n,[b,x]=g.$useAgent(v);Ct(b())?x(qf([b()])):b()||x(y),r(b())&&b().push(y)}function ql(e,t,n,r,i,a){let{value:o,modifiers:s}=t;s=new Set(s);let c=Q(e);r.VNodeManager.SSRVnode;let l=r.is_hyperscript,u,d=o;l||(u=q(function(){return Z(e,d,r,!s.has(`bind`))},e),o=J(u).value),o=G(o);let f=a?`innerText`:`innerHTML`;g(o)&&(o=$t(o),(c?c(n.type):!Ct(n))?e.__public_model__.$attrs[f]=o:c?n.props[f]=o:n[f]=o);let p=np(u,function(t){o=Tl(e,{element:n,mode:`idl`,effect:u,value:o,key:f},t,i.vnode)});r.VN_Tree.FLUSHS.add(p)}function Jl(e,t,n,r){if(t=t?v({},t):{},n&&cn(n)){if(!Wo(n,r,e))return t;t=Ws(t,{[Sn]:{sourcesArray:[r],syntaxArray:[n]}})}else n&&(t[n]=r);return t}function Yl(e,t,n,r,i){let{value:a,modifiers:o,key:s}=t,{is_hyperscript:c,isRerender:l,config:u}=i;if(!s){A(`slot key error: "$$slot" directive has no key mapping name defined to the "slot" element
-
---failed-- to normalize slot --directive--`);return}o=new Set(o);let f=Q(e);Qf(e),!(f?d(n.type):Ct(n))&&jt(n?.prototype_),r.slot_name=s;let p=r.VNodeManager.vNodeClass.filesFilter.parent.widget_instance?.[R].scopeSlotsBindings,m=p?p[s]?.bindings:void 0;r.LabContext=Jl(e,r.LabContext,a,m)}function Xl(e,t,n,r){let{key:i,item:a,src:o}=t;return r||!pl(o)&&!Se(o)&&!o.startsWith(`$$on:`)||lr(e,n,a)?a:`($event)=>`+a}function Zl(e,t,n,r,i){let{is_hyperscript:a,shatteredFlags:o,ctx:s,vNode:c,config:l}=i,{key:u,value:f,modifiers:p,deepKeys:m,src:g}=t;f=Xl(e,{key:u,item:f,src:g},r,a);let _=q(function(){return d(f)?Z(e,f,r||s):ks(f)},e),{value:v}=J(_);e[I]?.initializedRender;let b=v;if(v=G(v),i.effect=_,!u&&!h(v)){A(`"$$bind" directive attributes binding expects a plain props object value when not chained to any key argument`,e,!0);return}else if(!u&&h(v))for(let[t,a]of y(v))Nl({key:t,attr:G(a),data:a,effect:_},e,r,i,n,l);else Nl({key:u,attr:v,data:b,deepKeys:m,effect:_},e,r,i,n,l,!0);r=N(r)?r:o,Ql(c,u,_)}function Ql(e,t,n){tr(e.prototype_)&&(e.compiler[e.prototype_]||(e.compiler[e.prototype_]={}),e.compiler[e.prototype_][t]=n)}function $l(e,t,n,r,i){let{key:a,value:o,deepKeys:s,modifiers:c,src:l}=t,u=i.options,f=e[I].initializedRender,p=N(r)?r.VNodeManager.vNodeClass:r.vNodeClass,m=Q(e),h=n&&jt(p.prototype_)&&!(m&&d(n.type)||Ct(n)),g;if(d(o)){o=Xl(e,{key:a,item:o,src:l},r,i.is_hyperscript);let t=o;g=q(()=>(o=Z(e,o,r),o=el(e.__public_model__,t)&&D(o)?o.bind(e.__public_model__):o,o),e);try{o=J(g).value}catch(t){return A(`${t}`,e,!0),n}if(o=G(o),!D(o))return A(`"${name}" event must be wrapped as or in a function \n\non.....on...\n  "${h?``:n?.localName}" \n`,e,!0),n}j(c)&&([o,u]=Gl(e,n,c,E(o)?o:V,s)),a&&(s=[a,...s]);let v=o;if(!f&&h){let e=p.filesFilter.$$$Events;for(let[t,n]of s.entries()){let t={callbacks:new M,event:n,effect:g};_(e,n)?t=e[n]:e[n]=t,o.options=u,t.callbacks.add(o)}}else if(!f&&Qf(e)&&Oo(n)||!m&&Tt(n))for(let t of s.values())if(!Lt(t))A(`"${t}" is not a valid event name`,e,!0);else{let r=e=>{e.addEventListener(t,(...e)=>{(E(v)?v:V)(...e)},u)};Qf(e)?n.filesFilter.$ssr_kit.hydrationFlushs.add(r):m||r(n)}return np(g,()=>{v=g.runEffect().value,v=D(v)?v:V}),n}function eu(e,t,n,r,i){let a=r.is_hyperscript,{key:o,value:s,modifiers:c,deepKeys:l,directive:u}=t;if(c=new Set(c),!el(e.__public_model__,s)){A(`value "${s}" property value was referenced during render, but not initialized on model or is undefined\n\nat at\n ..."${u} directive on ${isWidget?`$$clone`:n.localName} `,e,!0);return}let d,p;try{a||(p=q(function(){return Zc(e.__public_model__,s,c.has(`bind`))},e),d=J(p).value),d&&!f(d)&&(d=Zc(e.__public_model__,s,c.has(`bind`)))}catch(t){A(`There is a problem with accessing the path "${s}" property which was referenced during render, but seems not initialized on model or is undefined\n\nat at\n ..."${u} directive on ${isWidget?`$$ref`:n.localName} `,e,!0),A(t);return}if(W(d)){if(Ii(d)){A(`Path provided to the $$clone directive path "${s}" resolves to a readonly ref value\n\nFailed to mutate a readonly ref......at ......."${u}"`,e,!0);return}s+d[Di].accessor}}function tu(e,t,n,r,i,a,o){let{value:s,modifiers:c,key:l,directive:u,deepKeys:d}=t;c=new Set(c),r.is_hyperscript,s=J(q(function(){return Z(e,s,r,!c.has(`bind`))},e)).value,s=G(s);let f=r.VNodeManager.motion_object,p=c.has(`in`)?`in,`:c.has(`out`)?`out`:`both`,m=(t,r)=>{let i=Ss(e,{mode:p,value:t,key:r});f.create(r,i,{mode:p,params:s,element:n})};m(l,u),U(d||[]).each(e=>m(e,u)),vu(e,r,i,n)}function nu(e,t,n,r,i,a,o){tu(...arguments)}function ru(e,t,n,r,i,a,o){tu(...arguments)}function iu(e,t,n,r,i,a){let{value:o,modifiers:s,directive:c}=t;if(s=new Set(s),!(Ct(n)&&n.localName===`style`))return A(`"$$scoped" directive is only restricted to document <style> elements only`,e,!0),n;let l;return is_hyperscript?value=o:(l=q(function(){return Z(e,o,r,!s.has(`bind`))},e),value=J(l).value),G(value)&&(n.innerHTML=Rd(e,n.innerHTML)),n}function au(e,t,n,r){let{directive:i,value:a,key:o}=t;r.VNodeManager[Tn]={prop:a}}function ou(e,t,n,r,i){let{value:a,modifiers:o,key:s}=t,c=``,l,{config:u}=i,f=Q(e);try{l=q(function(){return Zc(e.__public_model__,a,!0)},e),c=$t(J(l).value)}catch(t){A(`undefined reference for directive "$$model"\n\n "${a}" is not defined on widget model instance\n\n${t}`,e,!0);return}if(f&&d(n.type)||Tt(n)){if(!(f?T(He,n.type):Ue(n))){A(`Compilation Error::
-
- cannot bind a data model to  a none form element
-
-`,e,!0),me(`widget root element is not a form element`,e);return}function t(t){t.value=G(c),t.addEventListener(Au(t),function(t){let n=t.target.value;try{c!==n&&(Promise.try(()=>tl(e.__public_model__,a,n)).catch(e=>{throw Error(e)}),c=n)}catch(t){A(`${t}`,e,!0)}})}Qf(e)?n.filesFilter.$ssr_kit.hydrationFlushs.add(t):f||t(n)}l.attachCallback(()=>{n.value=$t(l.runEffect().value)})}var su={bind:Zl,html:ql,text:ql,scoped:iu,model:ou,on:$l,transite:ru,animate:nu,clone:eu};function cu(e,t,n={},r={}){if(!e)return null;let{mode:i,motion_object:a}=r,o=t(e,gu(a.hooks.animation),n),s=mu(self,o,`animation`);if(m(s))o=s;else return;o=v({delay:0,duration:500,easing:$a.linear,iterations:1/0,direction:`normal`,fill:`both`,autoplay:!1},o||{});let{duration:c,delay:l,easing:u,iterations:f,direction:p,fill:h,autoplay:g,styles:_,keyframes:y,frame:b}=o;if(!b&&d(u.css)&&y&&!E(y.keyframes))return lu(e,o,n,r);let x=null,ee=!1;function S(){let t=null,n=!1,r=!1,i=null,a=!1;function o(){n=!0,t&&=(cancelAnimationFrame(t),null),t=null,onCancel?.()}let s=0,d,m=!1;function h(r){if(ee||n)return;i===null&&(i=r);let o=r-i-s;if(o<l){t=requestAnimationFrame(h);return}let d=o-l,g=f===1/0?1/0:f,v=d/c,x=Math.floor(v),S=v-x;a||(a=!0,onStart?.()),g!==1/0&&x>=g&&(x=g-1,S=1);let C=S;p===`reverse`&&(C=1-S),p===`alternate`&&(C=x%2==1?1-S:S);let w=u.fn(C),T=Math.max(0,Math.min(1,w));Su(_,b,y,e,T,1-T),m=g!==1/0&&d>=c*g,m?(t=null,onFinish?.()):t=requestAnimationFrame(h)}return{cancel:o,play(){m||(r&&(r=!1,s+=performance.now()-d),t=requestAnimationFrame(h))},pause(){r||(r=!0,d=performance.now(),cancelAnimationFrame(t))}}}function C(){let t=y(1,0,`waapi`);return x=e.animate(t,{duration:c,delay:l,easing:u.css,iterations:f,direction:p,fill:h}),x.onfinish=()=>{ee||onfinish?.()},x.oncancel=()=>{ee||oncancel?.()},onstart?.(),g||x.pause(),x}let w=null;return b||_?w=S():y&&C(),v({play(){x&&x.play()},pause(){x&&x.pause()},reverse(){x&&x.reverse()},finish(){x&&x.finish()},cancel(){x&&x.cancel(),w?.cancel?.()},destroy(){ee=!0,this.cancel()}},w||{})}function lu(e,t,n={},r={}){if(!e)return null;let{duration:i,delay:a,easing:o,iterations:s,direction:c,fill:l,autoplay:u,styles:d,keyframes:f,onStart:p,onFinish:m,onCancel:h,timing:g,playState:_}=t,v=`hx_animation_${Date.now()}`,y=E(d)?d(1,0):d,b=document.createElement(`style`);b.textContent=`
-      @keyframes ${v} {
-        ${f(1,0,`css`,y)}
+    `)(obj, value, check, [
+		isToken,
+		get_Object_Value,
+		debugHandler,
+		unwrap
+	]);
+}
+function toCamelCase(str) {
+	return str.replace(/-+([a-zA-Z])/g, (match, letter) => letter.toUpperCase());
+}
+function ToPascalCase(str) {
+	const camelCase = toCamelCase(str);
+	return camelCase.at(0).toUpperCase() + camelCase.slice(1);
+}
+function to_kebab_case(str) {
+	return str.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase();
+}
+function mapClassTypeTransform(item, transpiled) {
+	if (isCollection(item)) for (let value of item.values()) {
+		value = unwrap(value);
+		mapClassTypeTransform(value, transpiled);
+	}
+	else if (isPObject(item)) entries(item).forEach(([key, value]) => {
+		value = unwrap(value);
+		if (value) for (let val of values(key.split(" "))) transpiled.add(val);
+	});
+	else if (isString(item)) for (let val of values(item.split(" "))) transpiled.add(val);
+	return transpiled.list();
+}
+function resolveClassDiffing(newClass, oldClass) {
+	[oldClass, newClass] = [new Tuple(...arrSet(oldClass)), new Tuple(...arrSet(newClass))];
+	if (deepEqualityCheck(newClass, oldClass)) return [new Tuple(), new Tuple()];
+	const insert = new Tuple();
+	const remove = new Tuple();
+	newClass.forEach((klass) => {
+		if (!oldClass.has(klass)) insert.add(klass);
+	});
+	oldClass.forEach((klass) => {
+		if (!newClass.has(klass)) remove.add(klass);
+	});
+	return [insert, remove];
+}
+function parse_Class_Binding(self, item, element, hx_Element, { is_hyperscript, bindings, forwardAttrs }) {
+	const isSSR = isSSRCompiler(self);
+	const sp = hx_Element.VNodeManager.patchFlags.shapeProps;
+	const isRerender = self[$$$operands].initializedRender;
+	if (!is_hyperscript && len(bindings.deepKeys)) {
+		const value = bindings.value;
+		if (value || isString(value)) item = bindings.deepKeys;
+		else return;
+	}
+	item = unwrap(item);
+	const transform = mapClassTypeTransform(item, new Tuple());
+	for (let [index, cls] of transform.entries()) {
+		cls = unwrap(cls);
+		if (isSSR || isRerender) {
+			const props = isRerender ? sp : hx_Element.VNodeManager.SSRVnode.props;
+			if (!hasOwn(props, "class")) props.class = new Tuple();
+			if (!props.class.has("cls")) props.class.add(cls);
+		} else if (!element.classList.contains(cls)) toggleClassNames(element, cls);
+	}
+	if (isRerender && !len(bindings.subscribers) || isSSR) return;
+	const flush = createPriorityFlush(bindings.effect, function(observers) {
+		_createElementPropsEffectBlock_(self, {
+			element,
+			mode: "class",
+			key: "class",
+			effect: bindings.effect,
+			value: bindings.effect.value
+		}, observers);
+	});
+	hx_Element.VN_Tree.FLUSHS.add(flush);
+}
+function toggleClassNames(element, classes, remove = false) {
+	const toggler = remove ? "remove" : "add";
+	classes.split(" ").forEach((cls) => {
+		if (cls) element.classList[toggler](cls);
+	});
+}
+function compileStyleProps(self, item, styleProps) {
+	styleProps = styleProps || {};
+	if (isPObject(item)) entries(item).forEach(([key, style]) => {
+		if (!isString(unwrap(style))) {
+			debugHandler(`"${key}" style prop: Unrecognized style property value \nat at\n "${key}" style property\n\n${element?.outerHTML || ""}`, self);
+			return;
+		}
+		styleProps[toCamelCase(key)] = style;
+	});
+	else if (isArray(item)) item.forEach((value) => compileStyleProps(self, value, styleProps));
+	else if (isString(item)) {
+		let splited = item.trim().split(";");
+		for (let styling of splited.values()) if (styling && styling.includes(":")) {
+			const spread = styling.split(":");
+			styleProps[spread[0]] = spread[1];
+		}
+	}
+	return styleProps;
+}
+function stylePropsKeys_Normalizing(self, item, deepKeys) {
+	const styleProps = {};
+	deepKeys?.forEach((prop) => styleProps[toCamelCase(prop)] = item);
+	return styleProps;
+}
+function parse_Style_Binding(self, item, element, metrics, hx_Element) {
+	const { is_hyperscript, bindings, forwardAttrs } = metrics;
+	let styleProps;
+	const isSSR = isSSRCompiler(self);
+	const deepKeys = metrics.bindings.deepKeys;
+	const sp = hx_Element.VNodeManager.patchFlags.shapeProps;
+	const isRerender = self[$$$operands].initializedRender;
+	if (!is_hyperscript && len(deepKeys)) styleProps = stylePropsKeys_Normalizing(self, item, deepKeys);
+	else styleProps = compileStyleProps(self, item, {});
+	entries(styleProps).forEach(([prop, style]) => {
+		if (isSSR || isRerender) {
+			const props = isRerender ? sp : hx_Element.VNodeManager.SSRVnode.props;
+			if (!hasOwn(props, "style")) props.style = {};
+			props.style[to_kebab_case(unwrap(prop))] = style;
+		} else element.style[toCamelCase(unwrap(prop))] = style;
+	});
+	if (isRerender && !len(bindings.subscribers) || isSSR) return;
+	let { effect } = bindings;
+	const flush = createPriorityFlush(effect, function(observers) {
+		value = _createElementPropsEffectBlock_(self, {
+			element,
+			mode: "style",
+			effect,
+			value,
+			key: style
+		}, observers);
+	});
+	hx_Element.VN_Tree.FLUSHS.add(flush);
+}
+function fall_AttrName(key, attr) {
+	const Key_Binding = {
+		"*": 1,
+		"@": 1,
+		"...": 3,
+		"$$": 2,
+		"#": 1
+	};
+	if (!isString(key) && !key.trim() && hasSpecialCharacters(attr)) return key;
+	for (const [ky, sl] of entries(Key_Binding)) if (key.startsWith(ky)) {
+		if (has$$_bind(key)) {
+			key = key.split(":");
+			key.shift();
+			return key.join(":");
+		}
+		return key.slice(sl);
+	}
+	return key;
+}
+function isOnListener(key) {
+	return exists(key) && isString(key) && /^on[A-Za-z]+\w+$/.test(key);
+}
+function directive_sep(key) {
+	return key.includes(":") ? key.split(":") : [key];
+}
+var keysSeparatorRegex = /([\w$\-][\w$\-]*)|\[([^\]]+)\]/g;
+function AttrsKeyNormalizer(key, value, self) {
+	const binding = {
+		modifiers: [],
+		directive: void 0,
+		key: void 0,
+		deepKeys: [],
+		src: key,
+		value
+	};
+	if (hasSpread_bind(key, true)) {
+		key.slice(3);
+		binding.value = key.slice(3);
+		binding.directive = "bind";
+	} else if (!key.includes(":") && !key.includes("|") && !has$$_bind(key)) binding.key = key;
+	else {
+		let [dir, keys, unecessary] = directive_sep(key);
+		if (exists(unecessary)) debugHandler(`Error in directive saperator chain.\n\nExcessive directive chain, unable to determine\n >>>> "${unecessary}"`, self, true);
+		binding[key.startsWith("$$") ? "directive" : "key"] = dir;
+		if (!binding.key) binding.key = keys;
+		else keys = binding.key;
+		if (keys?.includes("|") || dir.includes("|")) {
+			binding.modifiers = (!keys ? dir : keys).split("|");
+			const fV = binding.modifiers.shift();
+			if (keys) keys = fV;
+			else {
+				dir = fV;
+				binding.directive = dir;
+			}
+			if (len(binding.modifiers)) iterate(binding.modifiers).each((value, key) => {
+				if (!value.trim()) binding.modifiers.splice(key, 1);
+			});
+		}
+		binding.key = keys;
+		binding.directive = binding.directive?.slice(2);
+	}
+	if (keysSeparatorRegex.test(binding.key)) {
+		const deeps = [...binding.key?.match(keysSeparatorRegex) || []];
+		if (len(deeps)) binding.key = deeps.shift();
+		binding.deepKeys = deeps;
+	}
+	binding.src = key;
+	if (binding.directive && !binding.value) {
+		if (_makeMap_("provide,html,text,model,clone,scoped,transite,animate,bind,slot", binding.directive)) binding.value = binding.key || binding.directive;
+	}
+	return binding;
+}
+function AttrsKeyNormalizerDebugging(bindings, self) {
+	const { directive, modifiers, deepKeys, key, src } = bindings;
+	let response = true;
+	if (!directive) len(modifiers), len(deepKeys);
+	return response;
+}
+function validateIncomingPropsKeys(self, { key, attr }, is_hyperscript, hx_Element, metrics) {
+	if (is_hyperscript && isillegalKeyBinding(key, is_hyperscript)) {
+		debugHandler(`Illegal binding not allowed in build Adapter mode\n\n"${key}" property has a disallowed binding directive property`, true, self);
+		return {};
+	}
+	let { isRerender, patch } = metrics, modifiers = [], deepKeys = [], directive, bindings = {}, effect;
+	if (!is_hyperscript) {
+		key = transpileDirectiveShorhand(key);
+		bindings = AttrsKeyNormalizer(key, attr, self);
+		AttrsKeyNormalizerDebugging(bindings, self);
+		modifiers = bindings.modifiers;
+		deepKeys = bindings.deepKeys;
+		directive = bindings.directive;
+		key = bindings.key;
+		const ResolveDAName = (kk) => _DynamicAttrNameResolver(self, kk, hx_Element, metrics);
+		if (key && dynamicAttrRegex.test(key)) {
+			let [subs, attribute, p] = ResolveDAName(key);
+			effect = p;
+			bindings.key = attribute;
+			bindings.value = bindings.key;
+		}
+		iterate(deepKeys).each((v, k) => {
+			if (deepKeys[k] && dynamicAttrRegex.test(deepKeys[k])) {
+				let [subs, attribute, patch] = ResolveDAName(v);
+				deepKeys[k] = attribute;
+			}
+		});
+		bindings.propertyKeyEffect = effect;
+	} else bindings = {
+		directive,
+		key,
+		modifiers,
+		deepKeys,
+		value: attr
+	};
+	return bindings;
+}
+function validateListenSpecialEvent(self, bindings) {
+	const key = bindings.key;
+	const is_dispatch_ev = key === "dispatch";
+	if (!is_dispatch_ev && isFunction(bindings.value)) bindings.value = [bindings.value, bindings.value.options || {}];
+	validateCollectionArgs(bindings.value, {
+		validators: is_dispatch_ev ? [
+			[String, Array],
+			Function,
+			[String, Array]
+		] : [Function, [String, Array]],
+		name: bindings.key,
+		max: is_dispatch_ev ? 3 : 2,
+		min: is_dispatch_ev ? 2 : 1,
+		name: `<${key}> event`
+	});
+	let [events, method, modifiers] = bindings.value;
+	if (!is_dispatch_ev) {
+		const func = events;
+		modifiers = method;
+		events = to_kebab_case(key).split("-");
+		if (to_kebab_case(key).includes("-")) events.shift();
+		method = func;
+	}
+	bindings.deepKeys = isString(events) ? events.split(".") : isArray(events) ? events : [];
+	bindings.key = bindings.deepKeys.shift();
+	bindings.value = method;
+	bindings.modifiers = isString(modifiers) ? modifiers.split("|") : isArray(modifiers) ? modifiers : [];
+	return true;
+}
+function HTMLAttrsMagnifier(element, bindings, hx_Element, self, metrics) {
+	let { is_hyperscript, isRerender, vNode, forwardAttrs } = metrics;
+	const isSSR = isSSRCompiler(self);
+	let { key, value: attr, src } = bindings;
+	if (isHTMLBooleanAttributes(key)) BooleanAttributesManager(self, element, [key, attr], {
+		is_hyperscript,
+		bindings,
+		forwardAttrs
+	}, hx_Element);
+	else if (key === "class") parse_Class_Binding(self, attr, element, hx_Element, {
+		is_hyperscript,
+		bindings,
+		forwardAttrs
+	});
+	else if (isHTMLIDLAttributes(key)) IDLPropsTransform(self, [key, attr], element, {
+		is_hyperscript,
+		bindings,
+		forwardAttrs
+	}, hx_Element);
+	else if (!isRerender && (isOnListener(src) || isInlineListener(key) || key === "dispatch")) {
+		if (!click_handler_facading(self, [
+			key,
+			attr,
+			src
+		], bindings, element, hx_Element, metrics)) return;
+	} else if (!isRerender && key === "ref") Special_REF_Modifier(self, element, bindings, hx_Element, metrics);
+	else if (!isRerender && key === "attach") transformAttachProp(self, bindings, element, hx_Element, metrics);
+	else if (isHouxitNativeElement(hx_Element) && key === "name" && vNode.prototype_ === "slot") slotNamingTRANSITION(self, bindings, element, hx_Element, metrics);
+	else if (key === "context") SlotContextBindingTRANSITON(self, bindings, element, hx_Element, metrics);
+	else if (key === "motion") motionPropFacade(self, bindings, element, hx_Element, metrics);
+	else {
+		try {
+			attr = compileToRenderable(unwrap(attr));
+			const sp = hx_Element?.VNodeManager?.patchFlags.shapeProps;
+			if (isSSR || isRerender) {
+				const props = isRerender ? sp : element.props;
+				props[key] = attr;
+			} else element.setAttribute(key, attr);
+		} catch (err) {
+			debugHandler(err);
+			debugHandler(`Attribute Error::\n\n...unable to set node attribute "${key}\n\n ${err}`, self, true, `When setting the attribute "${key}" on "${isSSR ? element.type : element.outerHTML}"`, self, !is_hyperscript);
+			return;
+		}
+		if (isRerender && !len(bindings.subscribers) || isSSR) return;
+		const flush = createPriorityFlush(bindings.effect, function(observers) {
+			value = _createElementPropsEffectBlock_(self, {
+				element,
+				key,
+				value: compileToRenderable(value),
+				mode: void 0,
+				effect: bindings.effect
+			}, observers);
+		});
+		hx_Element?.VN_Tree.FLUSHS?.add?.(flush);
+	}
+}
+function motionPropFacade(self, bindings, element, hx_Element, metrics) {
+	let { value, key } = bindings;
+	if (!isBaseMotion(value)) {
+		debugHandler(`<Element>.motion property receives an Invalid value...\nNot a <Houxit.Motion> Property`, self, true);
+		return;
+	}
+	value.type;
+	value = value[$motionKey];
+	const motion = value[value.key];
+	const { params, mode } = value;
+	hx_Element.VNodeManager.motion_object.create(value.key === "transition" ? "transite" : "animate", motion, {
+		params,
+		mode,
+		element
+	});
+	createElementMotionEffect(self, hx_Element, metrics, element);
+}
+function isInlineListener(key) {
+	if (key.startsWith("on")) {
+		const ev = key.slice(2);
+		if (!IS_VALID_EVENT_HANDLER(ev)) return;
+		return ev;
+	}
+}
+function click_handler_facading(self, [key, attr, src], bindings, element, hx_Element, metrics) {
+	attr = unwrap(attr);
+	if (key === "dispatch" && !isArray(attr)) {
+		debugHandler(`<dispatch> dispatcher expects an array value of events and method\n\nFound "${attr}" of "${getType(attr)}" type`, self, !isNull(self));
+		return;
+	} else if (isOnListener(src) && !validateType(attr, [Array, Function])) {
+		debugHandler(`<${key}> listener expects a function value or an array of valid methods functions\n\nFound "${attr}" of "${getType(attr)}" type`, self, !isNull(self));
+		return;
+	}
+	if (isInlineListener(key)) bindings.key = isInlineListener(key);
+	const options = attr.options || {};
+	bindings.value = attr;
+	metrics = assign({ options }, metrics);
+	if (!validateListenSpecialEvent(self, bindings)) return;
+	$$dir_ON(self, bindings, element, hx_Element, metrics);
+	return true;
+}
+function getPropMode(prop) {
+	if (isHTMLBooleanAttributes(prop)) return "bool";
+	else if (isHTMLIDLAttributes(prop)) return prop === "style" ? "style" : "idl";
+	else if (prop === "ref") return ref;
+	else if (prop === "class") return "class";
+}
+function _createElementPropsEffectBlock_(self, metrics, observer, vnode) {
+	const { element, mode, effect, value, key, deepKeys = [] } = metrics;
+	let newValue = unwrap(isEffect(effect) ? effect?.runEffect().value : value);
+	if (deepEqualityCheck(newValue, value)) return value;
+	if (mode === "class" || mode === "idl" && key === "className") {
+		newValue = newValue || "";
+		const [insert, remove] = resolveClassDiffing(mapClassTypeTransform(newValue, new Tuple()), mapClassTypeTransform(value, new Tuple()));
+		remove.forEach((klass) => toggleClassNames(element, klass, true));
+		insert.forEach((klass) => toggleClassNames(element, klass));
+	} else if (mode === "bool") {
+		if ((newValue || isString(newValue)) && !(value || isString(value))) if (isHTMLIDLAttributes(key)) element[key] = newValue;
+		else element.setAttribute(key, newValue || "");
+		else if (!(newValue || isString(newValue)) && (value || isString(value))) if (isHTMLIDLAttributes(key)) element[key] = false;
+		else element.removeAttribute(key);
+	} else if (mode === "style") {
+		let styleProps;
+		const deepKeys = deepKeys;
+		newValue = {};
+		if (!is_hyperscript && len(deepKeys)) styleProps = stylePropsKeys_Normalizing(self, newValue, deepKeys);
+		else styleProps = compileStyleProps(self, newValue, {});
+		let oldStyleProps;
+		if (!is_hyperscript && len(deepKeys)) oldStyleProps = stylePropsKeys_Normalizing(self, value, deepKeys);
+		oldStyleProps = compileStyleProps(self, value, {});
+		for (let [prop, style] of entries(styleProps)) {
+			style = unwrap(style);
+			if (!deepEqualityCheck(style, oldStyleProps[prop]) || !hasOwn(oldStyleProps, prop)) element.style[prop] = style;
+		}
+		keys(oldStyleProps).forEach((style) => {
+			if (!hasOwn(styleProps, style)) element.style[style] = "";
+		});
+	} else if (mode === "idl") {
+		newValue = compileToRenderable(newValue);
+		element[key] = newValue;
+	} else if (mode === "ref") {} else if (isUndefined(mode)) {
+		newValue = compileToRenderable(newValue);
+		element.setAttribute(key, newValue);
+	}
+	return newValue;
+}
+function genericLifecircleTransmitter(args, hooksTuple, name, el) {
+	const [callback] = args;
+	if (!validateCollectionArgs(args, {
+		count: 1,
+		validators: [Function],
+		required: [true],
+		name: "attach=Function(ctx){ctx." + name + "()}"
+	})) return;
+	hooksTuple.add(callback);
+}
+function attachOnListener(self, args, element, hx_Element, metrics) {
+	if (!validateCollectionArgs(args, {
+		min: 2,
+		max: 3,
+		validators: [
+			[String, Array],
+			Function,
+			[String, Array]
+		],
+		required: [true, true],
+		name: "attach=Function(ctx){ctx.on()}"
+	})) return;
+	let [events, callback, modifiers] = args;
+	events = isString(events) ? events.split(".") : events;
+	$$dir_ON(self, {
+		value: callback,
+		modifiers: isString(modifiers) ? modifiers.split("|") : modifiers || [],
+		key: events.shift(),
+		deepKeys: events,
+		directive: void 0
+	}, element, hx_Element, metrics);
+}
+function attachUseCallback(self, args, element, hx_Element, metrics, hooksList) {
+	const [directive, value, modifiers] = args;
+	if (!validateCollectionArgs(args, {
+		min: 2,
+		max: 3,
+		validators: [
+			[Object, Function],
+			Any,
+			[String, Array]
+		],
+		required: [true, true],
+		name: "attach=Function(ctx){ctx.use()}"
+	})) return;
+	_With_Custom_Directives(self, {
+		value: directive,
+		modifiers: isString(modifiers) ? modifiers.split("|") : modifiers || [],
+		key: void 0,
+		deepKeys: [],
+		directive: void 0
+	}, element, hx_Element, metrics.vNode, metrics.is_hyperscript);
+}
+function attachMultiProp(self, args, element, hx_Element, metrics) {
+	const [key, value] = args;
+	if (!validateCollectionArgs(args, {
+		min: 1,
+		max: 2,
+		validators: [String, Any],
+		required: [true],
+		name: "attach=Function(ctx){ctx.prop()}"
+	})) return;
+	attributes_hydration({
+		key,
+		attr: value
+	}, self, hx_Element, metrics, element, metrics.config);
+}
+function transformAttachProp(self, bindings, element, hx_Element, metrics) {
+	const { key, value } = bindings;
+	if (!isPFunction(value)) {
+		debugHandler(`"attach" special property expects a plain Function type`, self, true);
+		return;
+	}
+	const hooks = hx_Element.VNodeManager.LifeCycleHooks;
+	const hooksList = new Tuple(...directivesHooksMap.split(","));
+	const context_obj = {
+		use(directive, value, modifiers) {
+			return attachUseCallback(self, [...arguments], element, hx_Element, metrics, hooksList);
+		},
+		on(events, callback, modifiers) {
+			return attachOnListener(self, [...arguments], element, hx_Element, metrics);
+		},
+		addProp(key, value) {
+			return attachMultiProp(self, [...arguments], element, hx_Element, metrics);
+		},
+		animate(animation, params, mode) {
+			animation = animate(...arguments);
+			motionPropFacade(self, {
+				value: animation,
+				key: "motion"
+			}, element, hx_Element, metrics);
+			return animation;
+		},
+		transite(transition, params, mode) {
+			transition = transite(...arguments);
+			motionPropFacade(self, {
+				value: transition,
+				key: "motion"
+			}, element, hx_Element, metrics);
+			return transition;
+		}
+	};
+	for (let hk of hooksList.values()) context_obj[hk] = function(callback) {
+		return genericLifecircleTransmitter([...arguments], hooks[hk + "_hook"], hk, element);
+	};
+	value(context_obj);
+}
+function __widget_props_effect(app, metrics, observers) {
+	if (!isHouxitBuild(app)) return;
+	const { value, effect, key } = metrics;
+	const transform = effect.runEffect().value;
+	const newValue = unwrap(transform);
+	const params = app[$$$ownProperties].$params;
+	const attrs = app.__public_model__.$attrs;
+	const mode = hasOwn(params, key) ? "params" : hasOwn(attrs, key) ? "attrs" : void 0;
+	if (deepEqualityCheck(unwrap(value), newValue)) return value;
+	if (mode === "params") params[key].data = newValue;
+	else if (mode === "attrs") useReadonlyBypasser(attrs, key, newValue, true);
+	return newValue;
+}
+function widget_props_plugin(element, bindings, hx_Element, self, metrics) {
+	let { key, value, src, deepKeys } = bindings;
+	const { is_hyperscript, vNode } = metrics;
+	let re_evaluate = false;
+	const isRerender = self[$$$operands].initializedRender;
+	if (isOnListener(key) || key === "dispatch") click_handler_facading(self, [
+		key,
+		value,
+		src
+	], bindings, element, hx_Element, metrics);
+	else if (!isRerender && key === "ref") tick(() => Special_REF_Modifier(self, element, bindings, hx_Element, metrics));
+	else if (key === "attach") transformAttachProp(self, bindings, element, hx_Element, metrics);
+	else if (!hasOwn(element, key)) {
+		element[key] = value;
+		re_evaluate = true;
+	} else if (hasOwn(element, key)) {
+		if (!hasOwn(element, "__hx_keys__")) element.__hx_keys__ = new Tuple();
+		element.__hx_keys__.add([key, value]);
+	}
+	if (!re_evaluate || !(!isHouxitBuiltinSymbolWidget(vNode.prototype_) && !isSSRCompiler(self))) return;
+	const flush = createPriorityFlush(bindings.effect, function(observers) {
+		value = __widget_props_effect(hx_Element.widget_instance, {
+			effect: bindings.effect,
+			value: memMove(value),
+			key
+		}, observers);
+	});
+	hx_Element.VN_Tree.FLUSHS.add(flush);
+}
+function attributes_hydration(props, self, hx_Element, metrics, element, config, lexical) {
+	const { key, attr, data, deepKeys, effect } = props;
+	let { isW, is_hyperscript, isRerender, patch, vNode } = metrics;
+	metrics.config = config;
+	const bindings = validateIncomingPropsKeys(self, {
+		key,
+		attr
+	}, is_hyperscript, hx_Element, metrics);
+	bindings.src;
+	bindings.data = data;
+	bindings.effect = effect;
+	if (lexical) bindings.deepKeys = deepKeys;
+	if (is_hyperscript && !isOnListener(bindings.key) && (isFunction(bindings.value) || _makeMap_([
+		For,
+		If,
+		ElseIf,
+		Build
+	], vNode.prototype_))) {
+		const fn = bindings.value;
+		const effect = _createEffectBase(() => {
+			return unwrap(safeCall(fn));
+		}, self);
+		effectRunner(effect);
+		bindings.effect = effect;
+		bindings.value = effect.value;
+		defineKeyEffectOnVnode(vNode, key, effect);
+	} else assign(bindings, metrics.patch);
+	if (!is_hyperscript && bindings.directive) _Resolve_Directives_Hydration(self, bindings, element, hx_Element, metrics);
+	else if (bindings.key === "key") {
+		hx_Element.VNodeManager.vNodeClass.key = bindings.value;
+		hx_Element.VNodeManager.keyIdBinding = bindings;
+	} else (isW ? widget_props_plugin : HTMLAttrsMagnifier)(element, bindings, hx_Element, self, metrics);
+}
+function slotNamingTRANSITION(self, bindings, element, hx_Element, metrics) {
+	let { value } = bindings;
+	const { isRerender, vNode, is_hyperscript } = metrics;
+	const isSSR = isSSRCompiler(self);
+	if (isRerender) {
+		hx_Element.VNodeManager.element_slot_ref = value;
+		return;
+	}
+	if (!isString(value)) {
+		debugHandler(`slot "name" atrribute value expects a "string" value data type\n\nuntraceable data type found`, self, true);
+		return;
+	}
+	const SSBs = self[$$$compiler].scopeSlotsBindings;
+	if (hasOwn(SSBs, value)) {
+		debugHandler(`slot with name "${value}" has been duplicated\n\nMore than one slot with same name mapping cannot be implemented to avoid dublicated renderimg of slots contents`, self, true);
+		$warn(`NOTE: Un-named slots elements shares the same naming scope with implicitly defined "name='default'" slots elements`, self);
+		return;
+	}
+	if (!isRerender) {
+		const current_value = compileToRenderable(unwrap(value));
+		if (isSSR) element.props.name = current_value;
+		else element.setAttribute("name", current_value);
+		SSBs[value] = {
+			bindings: void 0,
+			element
+		};
+	}
+}
+function SlotContextBindingTRANSITON(self, bindings, element, hx_Element, metrics) {
+	const { isRerender, is_hyperscript, effect, vnode } = metrics;
+	const isSSR = isSSRCompiler(self);
+	const SSRVnode = hx_Element.VNodeManager.SSRVnode;
+	if (!isRerender && (isSSR ? SSRVnode.type : element.localName) !== "slot") {
+		debugHandler(`"context" special property is only scoped to html "<slot>" element in Houxit\n<slot> element scope context property found on a none "<slot>" element\n\nFailed to resolve binding`);
+		return;
+	}
+	const slotName = isRerender && !isSSR ? hx_Element.VNodeManager.element_slot_ref : isSSR ? SSRVnode.props.name : element.name;
+	const SSBs = self[$$$compiler].scopeSlotsBindings;
+	if (!isRerender && !slotName && !hasOwn(SSBs, slotName)) {
+		debugHandler(`To specifically bind context scope to slots, they are obliged to be contextually named\n\nIt's either this slot element was not named properly…\nOr that the "context" property precedes the special slot "name" attribute`, self, true);
+		$warn(`To resolve this, make sure the "name" attribute comes before the "context" key on this slot element`, self);
+		return;
+	}
+	let data_bind = bindings.value;
+	if (!isPObject(data_bind)) {
+		debugHandler(`"context" special scope property expects a plain object\nInvalid data type received\n\n@@ "${slotName}" <slot> element>>>>>`, self, true);
+		return;
+	}
+	data_bind = token(data_bind);
+	if (!isRerender) {
+		assign(SSBs[slotName], { get bindings() {
+			return data_bind.data;
+		} });
+		effect.attachCallback(() => {
+			assign(data_bind.data, effect.runEffect().value);
+		});
+	}
+}
+function IDLPropsTransform(self, props, element, metrics, hx_Element) {
+	let [key, attr] = props;
+	const { is_hyperscript, bindings } = metrics;
+	const isSSR = isSSRCompiler(self);
+	const sp = hx_Element.VNodeManager.patchFlags.shapeProps;
+	const isRerender = self[$$$operands].initializedRender;
+	if (key === "style") return parse_Style_Binding(self, attr, element, metrics, hx_Element);
+	else if (key === "className") {
+		const transform = mapClassTypeTransform(attr, new Tuple());
+		if (isSSR || isRerender) {
+			const props = isRerender ? sp : hx_Element.VNodeManager.SSRVnode.props;
+			if (!hasOwn(props, "className")) props.className = "";
+			props.className = props.className + " " + transform.join(" ");
+		} else element.className = element.className + " " + transform.join(" ");
+	} else if (isSSR || isRerender) {
+		const props = isRerender ? sp : hx_Element.VNodeManager.SSRVnode.props;
+		props[_makeMap_("innerText,textContent", key) ? "innerText" : key] = escapeDecoder(compileToRenderable(attr));
+	} else element[key] = compileToRenderable(attr);
+	if (isRerender && !len(bindings.subscribers) || isSSR) return;
+	const flush = createPriorityFlush(bindings.effect, function(observers) {
+		_createElementPropsEffectBlock_(self, {
+			element,
+			mode: "idl",
+			value: bindings.effect.value,
+			key,
+			effect: bindings.effect
+		}, observers);
+	});
+	hx_Element.VN_Tree.FLUSHS.add(flush);
+}
+var isillegalKeyBinding = (prop, is_hyperscript) => is_hyperscript && (hasAsterisks_bind(prop) || has$$_bind(prop) || hasAt_bind(prop)) || hasAsh_bind(prop);
+function Props_dilation_compile(vNode, self, hx_Element, metrics, element, config) {
+	const props = vNode.props;
+	const shatteredFlags = !isHouxitElement(hx_Element) ? hx_Element : null;
+	const isSSR = isSSRCompiler(self);
+	if (!isPObject(props)) return element;
+	metrics.is_hyperscript;
+	const isRerender = self[$$$operands]?.initializedRender;
+	const ctx = metrics.ctx;
+	metrics = {
+		isRerender,
+		is_hyperscript: self ? self[$$$core].map.is_hyperscript : hx_Element ? hx_Element.is_hyperscript : void 0,
+		isW: !(isSSR ? isString(element.type) : IS_ELEMENT_NODE(element)) && validHouxitWidget(vNode.prototype_),
+		shatteredFlags,
+		ctx,
+		vNode
+	};
+	const compileProps = (key, attr) => attributes_hydration({
+		key,
+		attr
+	}, self, hx_Element, metrics, element, config);
+	entries(props).forEach(([key, attr]) => {
+		if (key === "__hx_keys__") iterate(attr).each(([ky, vl]) => compileProps(ky, vl));
+		else compileProps(key, attr);
+	});
+}
+function BooleanAttributesManager(self, element, [key, attr], { is_hyperscript, bindings, forwardAttrs }, hx_Element) {
+	attr = unwrap(attr);
+	const isSSR = isSSRCompiler(self);
+	const isRerender = self[$$$operands].initializedRender;
+	if (isString(attr) || attr) if (isSSR) element.props[key] = attr;
+	else if (isRerender) hx_Element.patchFlags.shapeProps[key] = attr;
+	else if (isHTMLIDLAttributes(key)) element[key] = attr;
+	else element.setAttribute(key, attr || "");
+	if (isRerender && !len(bindings.subscribers) || isSSR) return;
+	const flush = createPriorityFlush(bindings.effect, function(observers) {
+		_createElementPropsEffectBlock_(self, {
+			element,
+			mode: "bool",
+			effect: bindings.effect,
+			key,
+			value: bindings.effect.value,
+			effect: bindings.effect
+		}, observers);
+	});
+	hx_Element.VN_Tree.FLUSHS.add(flush);
+}
+function generateCustomDirBinding(self, hx_Element, bindings) {
+	const { modifiers, deepKeys } = bindings;
+	return {
+		modifiers,
+		deepKeys
+	};
+}
+function _With_Custom_Directives(self, bindings, element, hx_Element, vNode, is_hyperscript) {
+	let { key, value: attr, modifiers, deepKeys, src, directive: Name } = bindings;
+	const isRerender = self[$$$operands].initializedRender;
+	let value;
+	if (!is_hyperscript && attr) value = _$runModelBind(self, attr, hx_Element, true);
+	len(modifiers);
+	if (!is_hyperscript && !hasOwn(self[$$$register].directives, Name)) {
+		debugHandler(`((unrecognized directive reference))\n\n "${Name}" directive was not registered as a directive on this widget\n\nat...........at>>>\n${element?.outerHTML || ""}`, self, true, "during directive resolving");
+		return element;
+	}
+	const directive = is_hyperscript ? attr : self[$$$register].directives[Name];
+	const CustomDir = {
+		init: pass,
+		destroyed: pass,
+		created: pass,
+		updated: pass,
+		mounted: pass
+	};
+	generateCustomDirBinding(self, hx_Element, bindings);
+	if (isPFunction(directive)) CustomDir.mounted = directive;
+	else if (isPObject(directive)) {
+		if (!has_Intersect_Prop(directivesHooksMap.split(","), keys(directive))) {
+			debugHandler(`((Directive Error))\n\ndirective ${typeof directive} does not define any of widget Directive hook.\n  "created/mounted/updated/init/destroyed" method`, self, true);
+			return element;
+		} else for (const [name, hook] of entries(directive)) if (new Set(directivesHooksMap.split(",")).has(name)) if (!isPFunction(directive[name])) {
+			debugHandler(`((Custom directive))\n\ncustom Directive "${Name}" ${name}  hook is not a function`, self, true);
+			return element;
+		} else {
+			hook[lifeCiycleBinding] = {
+				modifiers: new Tuple(...keys(modifiers || [])),
+				key,
+				deepKeys,
+				value
+			};
+			CustomDir[name] = hook;
+		}
+	}
+	if (isRerender) return;
+	if (!isNativeElement(element) && validHouxitWidget(element.prototype_)) define(element, $$$customDirs, {
+		value: {
+			init_hook: new Tuple(),
+			created_hook: new Tuple(),
+			mounted_hook: new Tuple(),
+			updated_hook: new Tuple(),
+			destroyed_hook: new Tuple()
+		},
+		enumerable,
+		configurable
+	});
+	for (let hook of directivesHooksMap.split(",").values()) if (CustomDir[hook] && !isPass(CustomDir[hook])) {
+		if (isNativeElement(element)) {
+			if (hook === "init") continue;
+			hx_Element.VNodeManager.LifeCycleHooks[hook + "_hook"].add(CustomDir[hook]);
+		} else if (validHouxitWidget(element.prototype_)) element[$$$customDirs][hook + "_hook"].add(CustomDir[hook]);
+	}
+	return element;
+}
+function isPass(func) {
+	return isPFunction(func) && func.name === "pass" && hasOwn(func, $passKey);
+}
+var KEYS_MODIFIERS = {
+	enter: "Enter",
+	esc: "Escape",
+	tab: "Tab",
+	space: " ",
+	delete: ["Delete", "Backspace"],
+	up: "ArrowUp",
+	down: "ArrowDown",
+	left: "ArrowLeft",
+	right: "ArrowRight"
+};
+var modifiers_keys = {
+	ctrl: "ctrlKey",
+	shift: "shiftKey",
+	alt: "altKey",
+	meta: "metaKey"
+};
+function _Run_With_Modifiers(self, element, modifiers, func) {
+	if (!isPFunction(func)) return;
+	modifiers = isArray(modifiers) ? new Tuple(...modifiers) : modifiers;
+	const options = {};
+	if (modifiers.has("once")) {
+		options.once = true;
+		modifiers.delete("once");
+	}
+	if (modifiers.has("passive")) {
+		options.passive = true;
+		modifiers.delete("passive");
+	}
+	if (modifiers.has("nonpassive")) {
+		options.passive = false;
+		modifiers.delete("nonpassive");
+	}
+	if (modifiers.has("capture")) {
+		options.capture = true;
+		modifiers.delete("capture");
+	}
+	if (modifiers.has("noncapture")) {
+		options.capture = false;
+		modifiers.delete("noncapture");
+	}
+	function __With_Modifiers($event) {
+		if (modifiers.has("prevent")) {
+			$event.preventDefault();
+			modifiers.delete("prevent");
+		}
+		if (modifiers.has("stop")) {
+			$event.stopPropagation();
+			modifiers.delete("stop");
+		}
+		if (modifiers.has("trusted")) {
+			func = $event.isTrusted ? func : pass;
+			modifiers.delete("trusted");
+		}
+		if (modifiers.has("self") && !element.isSameNode($event.target)) {
+			modifiers.delete("self");
+			return;
+		}
+		for (let modifier of modifiers.values()) if (hasOwn(KEYS_MODIFIERS, modifier)) {
+			const keyBind = KEYS_MODIFIERS[modifier];
+			const e_key = $event.key;
+			if (isArray(keyBind) ? !keyBind.includes(e_key) : keyBind !== e_key) return;
+		} else if (hasOwn(modifiers_keys, modifier)) {
+			if (!$event[modifiers_keys[modifier]]) return;
+		}
+		func.call(this, ...arguments);
+	}
+	return [__With_Modifiers, options];
+}
+function Special_REF_Modifier(self, node, binding, hx_Element, metrics) {
+	let { key, value, src, data, effect } = binding;
+	const isWidget = isHouxitWidgetElement(hx_Element);
+	self[$$$core].map.is_hyperscript;
+	let refKey = effect ? effect.value : value;
+	const templateRefs = self[$$$operands].templateRefsInputs;
+	const model = self.__public_model__;
+	let ref;
+	if (isString(refKey)) {
+		if (!hasOwn(templateRefs, refKey)) {
+			log(refKey, metrics.vNode);
+			debugHandler(`[templateRefs reference] not defined (${refKey})`, self, true);
+			return;
+		}
+		ref = templateRefs[refKey];
+	} else if (isToken(refKey)) ref = refKey;
+	else {
+		debugHandler(`[templateRefs reference] not a token. templateRefs expects a token() instance.\nSee [Template Refs] reference`, self, true);
+		return;
+	}
+	const current = isWidget ? hx_Element.widget_instance.__public_model__ : node;
+	const [getRef, setRef] = model.$useAgent(ref);
+	if (isNativeElement(getRef())) setRef(shallowStream([getRef()]));
+	else if (!getRef()) setRef(current);
+	if (isArray(getRef())) getRef().push(current);
+}
+function $$dir_HTML(self, bindings, element, hx_Element, metrics, text) {
+	let { value, modifiers } = bindings;
+	modifiers = new Set(modifiers);
+	const isSSR = isSSRCompiler(self);
+	hx_Element.VNodeManager.SSRVnode;
+	const is_hyperscript = hx_Element.is_hyperscript;
+	let effect, attr = value;
+	if (!is_hyperscript) {
+		effect = _createEffectBase(function() {
+			return _$runModelBind(self, attr, hx_Element, !modifiers.has("bind"));
+		}, self);
+		value = effectRunner(effect).value;
+	}
+	value = unwrap(value);
+	const innerProp = text ? "innerText" : "innerHTML";
+	if (isPrimitive(value)) {
+		value = compileToRenderable(value);
+		if (isSSR ? isSSR(element.type) : !isNativeElement(element)) self.__public_model__.$attrs[innerProp] = value;
+		else if (isSSR) element.props[innerProp] = value;
+		else element[innerProp] = value;
+	}
+	const flush = createPriorityFlush(effect, function(observers) {
+		value = _createElementPropsEffectBlock_(self, {
+			element,
+			mode: "idl",
+			effect,
+			value,
+			key: innerProp
+		}, observers, metrics.vnode);
+	});
+	hx_Element.VN_Tree.FLUSHS.add(flush);
+}
+function wrapNamespaceBind(self, LabContext, param, dataBind) {
+	if (!LabContext) LabContext = {};
+	else LabContext = assign({}, LabContext);
+	if (param && isDestructureSyntax(param)) {
+		if (!destructWarn(param, dataBind, self)) return LabContext;
+		LabContext = smartDextCtxMerging(LabContext, { [$$dexTransformKey]: {
+			sourcesArray: [dataBind],
+			syntaxArray: [param]
+		} });
+	} else if (param) LabContext[param] = dataBind;
+	return LabContext;
+}
+function $$dir_SLOT(self, bindings, vnode, hx_Element, metrics) {
+	let { value, modifiers, key } = bindings;
+	const { is_hyperscript, isRerender, config } = metrics;
+	if (!key) {
+		debugHandler(`slot key error: "$$slot" directive has no key mapping name defined to the "slot" element\n\n--failed-- to normalize slot --directive--`);
+		return;
+	}
+	modifiers = new Set(modifiers);
+	const isSSR = isSSRCompiler(self);
+	isHydration(self);
+	!(isSSR ? isString(vnode.type) : isNativeElement(vnode)) && validHouxitWidget(vnode?.prototype_);
+	hx_Element.slot_name = key;
+	const slotBindings = hx_Element.VNodeManager.vNodeClass.filesFilter.parent.widget_instance?.[$$$compiler].scopeSlotsBindings;
+	let dataBind = slotBindings ? slotBindings[key]?.bindings : void 0;
+	hx_Element.LabContext = wrapNamespaceBind(self, hx_Element.LabContext, value, dataBind);
+}
+function __dilateHandler(self, props, hx_Element, is_hyperscript) {
+	const { key, item, src } = props;
+	if (is_hyperscript || !isOnListener(src) && !hasAt_bind(src) && !src.startsWith("$$on:") || isContextMethodString(self, hx_Element, item)) return item;
+	return "($event)=>" + item;
+}
+function $$dir_BIND(self, binding, el, hx_Element, metrics) {
+	const { is_hyperscript, shatteredFlags, ctx, vNode, config } = metrics;
+	let { key, value: item, modifiers, deepKeys, src } = binding;
+	item = __dilateHandler(self, {
+		key,
+		item,
+		src
+	}, hx_Element, is_hyperscript);
+	const effect = _createEffectBase(function() {
+		return isString(item) ? _$runModelBind(self, item, hx_Element || ctx) : safeCall(item);
+	}, self);
+	let { value: transform } = effectRunner(effect);
+	self[$$$operands]?.initializedRender;
+	const response = transform;
+	transform = unwrap(transform);
+	metrics.effect = effect;
+	if (!key && !isPObject(transform)) {
+		debugHandler(`"$$bind" directive attributes binding expects a plain props object value when not chained to any key argument`, self, true);
+		return;
+	} else if (!key && isPObject(transform)) for (const [ky, attr] of entries(transform)) attributes_hydration({
+		key: ky,
+		attr: unwrap(attr),
+		data: attr,
+		effect
+	}, self, hx_Element, metrics, el, config);
+	else attributes_hydration({
+		key,
+		attr: transform,
+		data: response,
+		deepKeys,
+		effect
+	}, self, hx_Element, metrics, el, config, true);
+	hx_Element = !isHouxitElement(hx_Element) ? shatteredFlags : hx_Element;
+	defineKeyEffectOnVnode(vNode, key, effect);
+}
+function defineKeyEffectOnVnode(vNode, key, effect) {
+	if (isHouxitBuiltinSymbolWidget(vNode.prototype_)) {
+		if (!vNode.compiler[vNode.prototype_]) vNode.compiler[vNode.prototype_] = {};
+		vNode.compiler[vNode.prototype_][key] = effect;
+	}
+}
+function $$dir_ON(self, bindings, node, hx_Element, metrics) {
+	let { key, value: attr, deepKeys, modifiers, src } = bindings;
+	let options = metrics.options;
+	const isRerender = self[$$$operands].initializedRender;
+	const vNode = isHouxitElement(hx_Element) ? hx_Element.VNodeManager.vNodeClass : hx_Element.vNodeClass;
+	const isSSR = isSSRCompiler(self);
+	const isWidget = node && validHouxitWidget(vNode.prototype_) && !(isSSR && isString(node.type) || isNativeElement(node));
+	let effect;
+	if (isString(attr)) {
+		attr = __dilateHandler(self, {
+			key,
+			item: attr,
+			src
+		}, hx_Element, metrics.is_hyperscript);
+		const funcToken = attr;
+		effect = _createEffectBase(() => {
+			attr = _$runModelBind(self, attr, hx_Element);
+			attr = object_Has_Path(self.__public_model__, funcToken) && isPFunction(attr) ? attr.bind(self.__public_model__) : attr;
+			return attr;
+		}, self);
+		try {
+			attr = effectRunner(effect).value;
+		} catch (err) {
+			debugHandler(`${err}`, self, true);
+			return node;
+		}
+		attr = unwrap(attr);
+		if (!isPFunction(attr)) {
+			debugHandler(`"${name}" event must be wrapped as or in a function \n\non.....on...\n  "${isWidget ? "" : node?.localName}" \n`, self, true);
+			return node;
+		}
+	}
+	if (len(modifiers)) [attr, options] = _Run_With_Modifiers(self, node, modifiers, isFunction(attr) ? attr : pass, deepKeys);
+	if (key) deepKeys = [key, ...deepKeys];
+	let listenerHandle = attr;
+	if (!isRerender && isWidget) {
+		const board = vNode.filesFilter.$$$Events;
+		for (let [ind, ev] of deepKeys.entries()) {
+			let card = {
+				callbacks: new Tuple(),
+				event: ev,
+				effect
+			};
+			if (hasOwn(board, ev)) card = board[ev];
+			else board[ev] = card;
+			attr.options = options;
+			card.callbacks.add(attr);
+		}
+	} else if (!isRerender && isHydration(self) && isVNodeClass(node) || !isSSR && IS_ELEMENT_NODE(node)) for (let event of deepKeys.values()) if (!IS_VALID_EVENT_HANDLER(event)) debugHandler(`"${event}" is not a valid event name`, self, true);
+	else {
+		const callbackListen = (element) => {
+			element.addEventListener(event, (...args) => {
+				(isFunction(listenerHandle) ? listenerHandle : pass)(...args);
+			}, options);
+		};
+		if (isHydration(self)) node.filesFilter.$ssr_kit.hydrationFlushs.add(callbackListen);
+		else if (!isSSR) callbackListen(node);
+	}
+	createPriorityFlush(effect, () => {
+		listenerHandle = effect.runEffect().value;
+		listenerHandle = !isPFunction(listenerHandle) ? pass : listenerHandle;
+	});
+	return node;
+}
+function $$dir_CLONE(self, bindings, vnode, hx_Element, metrics) {
+	const is_hyperscript = hx_Element.is_hyperscript;
+	let { key, value: item, modifiers, deepKeys, directive: name } = bindings;
+	modifiers = new Set(modifiers);
+	if (!object_Has_Path(self.__public_model__, item)) {
+		debugHandler(`value "${item}" property value was referenced during render, but not initialized on model or is undefined\n\nat at\n ..."${name} directive on ${isWidget ? "$$clone" : vnode.localName} `, self, true);
+		return;
+	}
+	let ref, effect;
+	try {
+		if (!is_hyperscript) {
+			effect = _createEffectBase(function() {
+				return get_Object_Value(self.__public_model__, item, modifiers.has("bind"));
+			}, self);
+			ref = effectRunner(effect).value;
+		}
+		if (ref && !isNull(ref)) ref = get_Object_Value(self.__public_model__, item, modifiers.has("bind"));
+	} catch (err) {
+		debugHandler(`There is a problem with accessing the path "${item}" property which was referenced during render, but seems not initialized on model or is undefined\n\nat at\n ..."${name} directive on ${isWidget ? "$$ref" : vnode.localName} `, self, true);
+		debugHandler(err);
+		return;
+	}
+	if (isToken(ref)) {
+		if (isReadonly(ref)) {
+			debugHandler(`Path provided to the $$clone directive path "${item}" resolves to a readonly ref value\n\nFailed to mutate a readonly ref......at ......."${name}"`, self, true);
+			return;
+		}
+		item + ref[refInternalEffectKey].accessor;
+	}
+}
+function normalize_motion_directives(self, bindings, node, hx_Element, metrics, patchFlags, transit) {
+	let { value, modifiers, key, directive, deepKeys } = bindings;
+	modifiers = new Set(modifiers);
+	hx_Element.is_hyperscript;
+	value = effectRunner(_createEffectBase(function() {
+		return _$runModelBind(self, value, hx_Element, !modifiers.has("bind"));
+	}, self)).value;
+	value = unwrap(value);
+	const obj = hx_Element.VNodeManager.motion_object;
+	const mode = modifiers.has("in") ? "in," : modifiers.has("out") ? "out" : "both";
+	const activateMotion = (key, directive) => {
+		const motion = generateMotion(self, {
+			mode,
+			value: key,
+			key: directive
+		});
+		obj.create(directive, motion, {
+			mode,
+			params: value,
+			element: node
+		});
+	};
+	activateMotion(key, directive);
+	iterate(deepKeys || []).each((ky) => activateMotion(ky, directive));
+	createElementMotionEffect(self, hx_Element, metrics, node);
+}
+function $$dir_ANIMATE(self, bindings, node, hx_Element, metrics, patchFlags, animate) {
+	normalize_motion_directives(...arguments);
+}
+function $$dir_TRANSITE(self, bindings, node, hx_Element, metrics, patchFlags, transit) {
+	normalize_motion_directives(...arguments);
+}
+function $$dir_SCOPED(self, bindings, node, hx_Element, metrics, patchFlags) {
+	let { value: item, modifiers, directive: name } = bindings;
+	modifiers = new Set(modifiers);
+	if (!(isNativeElement(node) && node.localName === "style")) {
+		debugHandler(`"$$scoped" directive is only restricted to document <style> elements only`, self, true);
+		return node;
+	}
+	let effect;
+	if (!is_hyperscript) {
+		effect = _createEffectBase(function() {
+			return _$runModelBind(self, item, hx_Element, !modifiers.has("bind"));
+		}, self);
+		value = effectRunner(effect).value;
+	} else value = item;
+	if (!unwrap(value)) return node;
+	node.innerHTML = _stylesheet_hydration(self, node.innerHTML);
+	return node;
+}
+function $$dir_PROVIDE(self, Binding, vNode, hx_Element) {
+	let { directive, value, key } = Binding;
+	hx_Element.VNodeManager[$$$context] = { prop: value };
+}
+function $$dir_MODEL(self, bindings, element, hx_Element, metrics) {
+	let { value: item, modifiers, key } = bindings;
+	let initVal = "", effect;
+	const { config } = metrics;
+	const isSSR = isSSRCompiler(self);
+	try {
+		effect = _createEffectBase(function() {
+			return get_Object_Value(self.__public_model__, item, true);
+		}, self);
+		initVal = compileToRenderable(effectRunner(effect).value);
+	} catch (err) {
+		debugHandler(`undefined reference for directive "$$model"\n\n "${item}" is not defined on widget model instance\n\n${err}`, self, true);
+		return;
+	}
+	if (isSSR && isString(element.type) || IS_ELEMENT_NODE(element)) {
+		if (!(isSSR ? _makeMap_(HTML_FORM_ELEMENTS, element.type) : Is_Form_Element(element))) {
+			debugHandler(`Compilation Error::\n\n cannot bind a data model to  a none form element\n\n`, self, true);
+			$warn("widget root element is not a form element", self);
+			return;
+		}
+		function flushCallback(element) {
+			element.value = unwrap(initVal);
+			element.addEventListener(get_Model_Event(element), function($ev) {
+				const value = $ev.target.value;
+				try {
+					if (initVal !== value) {
+						Promise.try(() => set_Object_Value(self.__public_model__, item, value)).catch((err) => {
+							throw new Error(err);
+						});
+						initVal = value;
+					}
+				} catch (err) {
+					debugHandler(`${err}`, self, true);
+				}
+			});
+		}
+		if (isHydration(self)) element.filesFilter.$ssr_kit.hydrationFlushs.add(flushCallback);
+		else if (!isSSR) flushCallback(element);
+	}
+	effect.attachCallback(() => {
+		element.value = compileToRenderable(effect.runEffect().value);
+	});
+}
+var DirectiveMacros = {
+	bind: $$dir_BIND,
+	html: $$dir_HTML,
+	text: $$dir_HTML,
+	scoped: $$dir_SCOPED,
+	model: $$dir_MODEL,
+	on: $$dir_ON,
+	transite: $$dir_TRANSITE,
+	animate: $$dir_ANIMATE,
+	clone: $$dir_CLONE
+};
+function applyHouxitAnimation(node, animation, params = {}, options = {}) {
+	if (!node) return null;
+	const { mode, motion_object } = options;
+	let config = animation(node, createAminationCTX(motion_object.hooks.animation), params);
+	const isvalid = validateMotionResponses(self, config, "animation");
+	if (isObject(isvalid)) config = isvalid;
+	else return;
+	config = assign({
+		delay: 0,
+		duration: 500,
+		easing: easings.linear,
+		iterations: Infinity,
+		direction: "normal",
+		fill: "both",
+		autoplay: false
+	}, config || {});
+	const { duration, delay, easing, iterations, direction, fill, autoplay, styles, keyframes, frame } = config;
+	if (!frame && isString(easing.css) && keyframes && !isFunction(keyframes.keyframes)) return applyCSSBasedAnimation(node, config, params, options);
+	let player = null, destroyed = false;
+	function startRAF() {
+		let raf = null, stopped = false, paused = false, start = null, started = false;
+		function cancel() {
+			stopped = true;
+			if (raf) {
+				cancelAnimationFrame(raf);
+				raf = null;
+			}
+			raf = null;
+			onCancel?.();
+		}
+		let totalPausedTime = 0, pausedAt, finished = false;
+		function frameDriver(now) {
+			if (destroyed || stopped) return;
+			if (start === null) start = now;
+			const rawElapsed = now - start - totalPausedTime;
+			if (rawElapsed < delay) {
+				raf = requestAnimationFrame(frameDriver);
+				return;
+			}
+			const elapsed = rawElapsed - delay;
+			const totalIterations = iterations === Infinity ? Infinity : iterations;
+			const rawT = elapsed / duration;
+			let iterationIndex = Math.floor(rawT);
+			let iterationProgress = rawT - iterationIndex;
+			if (!started) {
+				started = true;
+				onStart?.();
+			}
+			if (totalIterations !== Infinity && iterationIndex >= totalIterations) {
+				iterationIndex = totalIterations - 1;
+				iterationProgress = 1;
+			}
+			let progress = iterationProgress;
+			if (direction === "reverse") progress = 1 - iterationProgress;
+			if (direction === "alternate") progress = iterationIndex % 2 === 1 ? 1 - iterationProgress : iterationProgress;
+			const eased = easing.fn(progress);
+			const finalProgress = Math.max(0, Math.min(1, eased));
+			createRAFInitialStyle(styles, frame, keyframes, node, finalProgress, 1 - finalProgress);
+			finished = totalIterations !== Infinity && elapsed >= duration * totalIterations;
+			if (!finished) raf = requestAnimationFrame(frameDriver);
+			else {
+				raf = null;
+				onFinish?.();
+			}
+		}
+		return {
+			cancel,
+			play() {
+				if (finished) return;
+				if (paused) {
+					paused = false;
+					totalPausedTime += performance.now() - pausedAt;
+				}
+				raf = requestAnimationFrame(frameDriver);
+			},
+			pause() {
+				if (paused) return;
+				paused = true;
+				pausedAt = performance.now();
+				cancelAnimationFrame(raf);
+			}
+		};
+	}
+	function startWAAPI() {
+		const kf = keyframes(1, 0, "waapi");
+		player = node.animate(kf, {
+			duration,
+			delay,
+			easing: easing.css,
+			iterations,
+			direction,
+			fill
+		});
+		player.onfinish = () => {
+			if (!destroyed) onfinish?.();
+		};
+		player.oncancel = () => {
+			if (!destroyed) oncancel?.();
+		};
+		onstart?.();
+		if (!autoplay) player.pause();
+		return player;
+	}
+	let controller = null;
+	if (frame || styles) controller = startRAF();
+	else if (keyframes) startWAAPI();
+	return assign({
+		play() {
+			if (player) player.play();
+		},
+		pause() {
+			if (player) player.pause();
+		},
+		reverse() {
+			if (player) player.reverse();
+		},
+		finish() {
+			if (player) player.finish();
+		},
+		cancel() {
+			if (player) player.cancel();
+			controller?.cancel?.();
+		},
+		destroy() {
+			destroyed = true;
+			this.cancel();
+		}
+	}, controller || {});
+}
+function applyCSSBasedAnimation(node, config, params = {}, options = {}) {
+	if (!node) return null;
+	let { duration, delay, easing, iterations, direction, fill, autoplay, styles, keyframes, onStart, onFinish, onCancel, timing, playState } = config;
+	const name = `hx_animation_${Date.now()}`;
+	let t = 1, u = 0;
+	const stylesP = isFunction(styles) ? styles(t, u) : styles;
+	const style = document.createElement("style");
+	style.textContent = `
+      @keyframes ${name} {
+        ${keyframes(t, u, "css", stylesP)}
       }
-    `,e.style.animationName=v,e.style.animationDuration=`${i}ms`,e.style.animationDelay=`${a}ms`,e.style.animationTimingFunction=o.css,e.style.animationIterationCount=ge(s)?`infinite`:iteration,e.style.animationDirection=c,e.style.animationFillMode=l,e.style.animationPlayState=_,document.head.appendChild(b);function x(t){t.target===e&&onstart?.()}function ee(t){t.target===e&&onfinish?.()}function S(t){t.target===e&&oncancel?.()}return e.addEventListener(`animationstart`,x),e.addEventListener(`animationend`,ee),e.addEventListener(`animationcancel`,S),{play(){e.style.animationPlayState=`running`},pause(){e.style.animationPlayState=`paused`},restart(){e.style.animation=`none`,e.offsetHeight,e.style.animationName=v},cancel(){e.style.animation=`none`,oncancel?.()},destroy(){e.removeEventListener(`animationstart`,x),e.removeEventListener(`animationend`,ee),e.removeEventListener(`animationcancel`,S),e.style.animation=``,b.remove()}}}function uu(e){return y(fu(e)).map(([e,t])=>`  ${e} {\n${y(t).map(([e,t])=>`  ${il(e)}: ${t};`).join(`
-`)}\n  }`).join(`
-
-`)}function du(e){let t=j(e);if(t===1)return[0];let n=100/(t-1);return e.map((e,t)=>+(t*n).toFixed(2))}function fu(e){if(r(e)){let t=du(e),n=0;return e.reduce((e,r)=>{let{offset:i,...a}=r,o=String(t[n])+`%`;return e[o]=a,n++,e},{})}return Object.fromEntries(y(e).map(([e,t])=>[pu(e),t]))}function pu(e){return e===`from`?`0%`:e===`to`?`100%`:!e.includes(`%`)&&!isNaN(Number(e))?`${Number(e)*100}%`:e}function mu(e,t,n){let r={keyframes:[Function,Array,Object],easing:[String,Function,Xa],frame:Function,delay:Number,duration:Number,styles:[String,Function,Object],iterations:Number,fill:String,direction:String,playState:String,autoplay:Boolean,onStart:Function,onfinish:Function,onCancel:Function},i=b(r).join(`,`);if(n===`transition`&&(i=b(r).flatMap(e=>T(`iterations,fill,direction,playState`,e)?[]:e).join(`,`)),!h(t))return A(`${n} function expects a plain object as a return value`,e,!0),!1;t=br(t,!0);for(let[a,o]of y(t)){if(!T(i,a)){A(`"${a}" prop of custom ${n} Function is not recognised`,e,!0),delete t[a];continue}if(!Y(o,r[a]))return A(`"${a}"" return prop of ${n} custom function is of an invalid type`,e,!0),!1;if(a===`keyframes`)t.keyframes=(e,t,n)=>{let r=D(o)?o(e,t):o;return n===`css`?uu(r):(r=h(r)?wu(r,n):Cu(r,n),n===`waapi`&&U(r).each((e,t)=>{delete e.offset}),r)},t.keyframes.keyframes=o;else if(a===`easing`&&!to(o))t.easing=eo(o);else if(a===`direction`&&!T(`alternate,reverse,normal`)){A(`${n} "direction" option receives am invalid value "${o}" argument\n\ncan only be "alternate,reverse,normal"`,e,!0);continue}else if(a===`fill`&&!T(`both,forwards,backwards`)){A(`${n} "fill" option receives am invalid value "${o}" argument\n\ncan only be "both,forwards,backwards"`,e,!0);continue}}return t}function hu(e,t,n,r,i){let a=t.VNodeManager.motion_object,o=[];U(a.transite).each(t=>{let{element:n,fn:r,params:i,mode:s}=t;y(Ou(n,r,i,{mode:s,self:e})||{}).forEach(([e,t])=>{a.hooks.transition[e].add(t),e===`in`&&o.push(t)})}),j(o)&&qm(e,r,()=>{o.forEach(e=>{e()})})}function gu(e){let{to:t,from:n}=e,r=Zt(`Context`,{to:t,from:n,delta:{x:n.left-t.left,y:n.top-t.top,width:n.width-t.width,height:n.height-t.height}});return r.distance=Math.hypot(r.delta.x,r.delta.y),r.direction={x:Math.sign(r.delta.x),y:Math.sign(r.delta.y)},r}function _u(e,t,n,r,i){let a=t.VNodeManager.motion_object,o=[];a.hooks.animation.to=r?.getBoundingClientRect(),U(a.animate).each(t=>{let{element:n,fn:r,params:i,mode:s}=t;y(cu(n,r,i,{mode:s,self:e,motion_object:a})||{}).forEach(([e,t])=>{a.hooks.animation[e].add(t),e===`play`&&o.push(t)})}),Xm(()=>{o.forEach(e=>{e()})})}function vu(e,t,n,r,i){e[I].initializedRenderBuild||(hu(e,t,n,r),qm(e,r,()=>_u(e,t,n,r)))}var yu=e=>e.match(/(cubic-bezier\s*\()?\s*([-\d.]+)\s*,\s*([-\d.]+)\s*,\s*([-\d.]+)\s*,\s*([-\d.]+)\s*(\))?/);function bu(e,t,n,r){return xu(d(e)?e:[...arguments])}function xu(e){let t=r(e)?e:yu(e);if(d(e)&&!t){if(T(`linear,ease,ease-in,ease-out,ease-in-out,step-start,step-end`,e.trim()))return $a[nl(e)].fn;A(`Invalid cubic-bezier: ${e}`,self,!0);return}let n=[];for(let i=0;i<=(d(e)?5:3);i++)(r(e)||d(e)&&i>=2)&&n.push(parseFloat(t[i]));let i=n[0],a=n[1],o=n[2],s=n[3];function c(e,t){return 1-3*t+3*e}function l(e,t){return 3*t-6*e}function u(e){return 3*e}function f(e,t,n){return((c(t,n)*e+l(t,n))*e+u(t))*e}function p(e,t,n){return 3*c(t,n)*e*e+2*l(t,n)*e+u(t)}function m(e){let t=e;for(let n=0;n<8;n++){let n=p(t,i,o);if(n===0)return t;let r=f(t,i,o)-e;t-=r/n}return t}return function(e){return e<=0?0:e>=1?1:f(m(e),a,s)}}function Su(e,t,n,r,i,a){if(e){let t=e(i,a);t&&U(ll(null,t)).each((e,t)=>{r.style[t]=e})}n&&Tu(r,n(i,a,`raf`),i,a),t&&t(i,a)}function Cu(e){let t=e.length-1;return e.map((e,n)=>({offset:(e.offset??n/t).toFixed(2),...e}))}function wu(e){let t=[];for(let n in e){let r=e[n],i=n.split(`,`);for(let e of i){e=e.trim();let n=parseFloat(e)/100;isNaN(n)||t.push({offset:n,...r})}}return t.sort((e,t)=>e.offset-t.offset),e&&!j(t)&&t.push({offsets:0,...e}),t}function Tu(e,t,n,r){let i,a;for(let e=0;e<t.length-1;e++){let r=t[e],o=t[e+1];if(n>=r.offset&&n<=o.offset){i=r,a=o;break}}if(!i||!a)return;let o=a.offset-i.offset,s=o===0?0:(n-i.offset)/o;for(let t in i){if(t===`offset`)continue;let n=i[t],r=a[t],o=Eu(n,r,s);e.style[t]=o}}function Eu(e,t,n){let r=parseFloat(e),i=parseFloat(t),a=String(t).replace(i,``);return!isNaN(r)&&!isNaN(i)?r+(i-r)*n+a:n<1?e:t}function Du(e,t={}){let n=null,{duration:r=300,delay:i=0,easing:a=$a.linear,keyframes:o}=t;function s(t=`in`){let s=t===`in`,c=o(+!s,+!!s,`waapi`);return s&&n?.cancel(),n=e.animate(c,{delay:i,duration:r,easing:a.css,iterations:1,fill:`both`,direction:t===`out`?`reverse`:`normal`}),n.finished}return{in(){s(`in`)},async out(){s(`out`)},destroy(){n?.cancel(),n=null}}}function Ou(e,t,n={},r={}){if(!e)return;let i=null,{mode:a,self:o}=r,s=t(e,n),c=mu(o,s,`transition`);if(m(c))s=c;else return;s=v({delay:0,duration:300,easing:$a.linear},s||{});let{delay:l,duration:u,easing:f,keyframes:p,frame:h,styles:g}=s;if(!h&&d(f.css)&&!p&&g)return ku(e,s,n,r);if(!h&&!g&&d(f.css)&&p&&!E(p.keyframes))return Du(e,{delay:l,duration:u,keyframes:p,easing:f.css});if(!h&&!p&&!g)return;function _(){i&&=(cancelAnimationFrame(i),null)}function y(t=`in`){_();let n=performance.now();Su(g,h,p,e,0,0);function r(a){let o=a-n;if(o<l){i=requestAnimationFrame(r);return}o-=l;let s=Math.min(o/u,1),c=f?.fn?f.fn(s):f?f(s):s,d=t===`out`?1-c:c,m=1-d;Su(g,h,p,e,d,m),i=s<1?requestAnimationFrame(r):null}i=requestAnimationFrame(r)}let b={destroy(){_()},stop:_};return(a===`both`||a===`in`)&&(b.in=function(){y(`in`)}),(a===`both`||a===`out`)&&(b.out=async function(){y(`out`)}),b}function ku(e,t,n={},r){let{duration:i=300,delay:a=0,easing:o,styles:s,keyframes:c}=t;if(!s)return null;let{mode:l}=r,u=!1;function d(t=`in`){if(u)return;let n=t===`in`?0:1,r=+(t===`in`),c=1-n,l=1-r,d=s(n,c),f=s(r,l);e.style.transition=`none`,U(ll(null,d)).each((t,n)=>{e.style.setProperty(n,t)}),e.offsetHeight,e.style.transition=`all ${i}ms ${o.css} ${a}ms`,U(ll(null,f)).each((t,n)=>{e.style.setProperty(n,t)});let p=()=>{e.removeEventListener(`transitionend`,()=>{p()}),!u&&(e.style.transition=``)};e.addEventListener(`transitionend`,()=>{p()})}let f={destroy(){u=!0}};return l===`both`||l===`in`?f.in=function(){d(`in`)}:(l===`both`||l===`out`)&&(f.out=async function(){d(`out`)}),f}function Au(e){let t=e.localName,n=e.type;if(Tt(e)&&Ue(e))return t===`input`?T([`file`],n)?`change`:T([`button`,`submit`,`reset`],n)?`click`:T([`image`,`hidden`],n)?`change`:`input`:t===`form`?`submit`:t===`select`?`change`:`input`}function ju(e,t,n=!1){let r=d(t)?Cg(t,[]):t;return j(r)&&j(r)>1?Iu(Hn,r):j(r)?r.pop():[]}function Mu(e,t){if(e=D(e)?e():e,Dt(e))g(e)&&!f(e)&&(e=String(e));else{A(`Illegal value type passed to scaffold `);return}return ju(this,e)}function Nu(e){let[t,n,r]=e;return j(e)>3?(A(`h render function cannot receive more than 3 arguments\n\n"...........${j(e)}" received" `),!1):!Y(t,[String,Number,Object,Function,...ne?[HTMLElement]:[]])&&!tr(t)?(A(`parameter 1 at h macro expects a native Element name or a widget options instance dataType `),!1):h(n)&&!Ot(n)&&h(r)&&!Ot(r)?(A(`Unintended plain object parsed at parameter 2 and 3 of h render macro
-
-plain objects are considered as props and cannot be duplicated`),!1):Ee(n)&&Dt(n)&&Ee(r)&&Dt(r)?(A(`arguments 2 and arguments 3 of h render receives duplicated identical Vnodes instance 
-
-Renderable Vnodes cannot be duplicated`),!1):!0}function Pu(e,t,n){if(!Nu([...arguments]))return{};let r,i=new Set;return h(t)&&!Dt(t)?(r=t,i.add(`propsOrChildren`)):h(n)&&!Dt(n)&&(r=n,i.add(`childrenOrProps`)),!i.has(`propsOrChildren`)&&Dt(t)&&(n=t),i.clear(),{type:e,props:r,children:n}}function Fu(){return j_(Pu(...arguments))}function Iu(e,t,n){return Fu(...arguments)}var Lu=class{constructor(e){if(!e){let e=new ln;this.model=e,S(this,`model`,{get(){return e},set(t){return h(t)?(e=t,!0):(A(`Unexpected assignment to the model instance object
-
-assignment expects a plain object`),!1)}})}else if(h(e))for(let[t,n]of y(e))this[t]=n;else if(D(e))this.build=e,opts&&h(opts)&&(w(opts,`build`)&&delete opts.build,v(this,opts));else if(Rt(e))if(e=new e,!kt(e))A(`class widget not an instance of the "Widget" base Widget`);else for(let[t,n]of y(e))this[t]=n}define(e){return m_(...arguments)}},Ru=class extends Lu{constructor(...e){super(...e)}};function zu(e,t){return new ct(e,t)}function Bu(e,t,n){return new lt(e,t,n)}var Vu=Symbol();function Hu(e){let t=Va({name:`useParams`});return!t&&!H(arguments,{name:`useParams`,validators:[[Array,Object]],count:1})||Od(t,e,t.__public_model__.$attrs,!0),Ip(t)}function Uu(e){return Hu(...arguments)}function Wu(e){let t=Va({name:`defineSlots`});if(!t&&!H(arguments,{name:`defineSlots`,count:1,validators:[Array]}))return dp(t,{slots:[]},t[z].slots),t[z].slots;for(let[n,r]of e.entries())if(!d(r)){A(`defineSlots() adapter macro array value expects a String value\n\nat array index ..........${n}`,t,!0);continue}return dp(t,{slots:e},[],t[z].slots),t[z].slots}function Gu(e){return Wu(...arguments)}function Ku(e){let t=Va({name:`defineSignals`});return!t&&!H(arguments,{name:`defineSignals`,count:1,validators:[Array]})?t.__public_model__.$signals:(mf(t,{signals:e},!0),ff(t,t[z].virtualNode,!0),t.__public_model__.$signals)}function qu(e){return Ku(...arguments)}function Ju(e){let t=Va({name:`defineConfig`});!t&&!H(arguments,{name:`defineConfig`,count:1,validators:[Object]})||Zd(t,{buildConfig:e})}function Yu(e){return Ju(...arguments)}function Xu(e){let t=Va({name:`useTransmit`});!t&&!H(arguments,{name:`useTransmit`,validators:[Function],count:1})||xp(t,{transmit:e},!0)}function Zu(e){let t=Va({name:`useReceiver`});if(!(!t&&!H(arguments,{name:`useReceiver`,validators:[[Array,Object]],count:1})))return Sp(t,{receive:e},!0)}function Qu(){return Zu(...arguments)}function $u(e){let t=Va({name:`useContext`});return!P(t)&&!H(arguments,{name:`useContext`,validators:[Function],count:1})?!1:(_(t[z].opts,`context`)||(t[z].opts.context=function(){return e.call(this,...arguments)}),!0)}function ed(e){return $u.call(this,...arguments)}function td(e,t){let n=Va({name:t}),r=H(e,{count:1,name:t,validators:[Function],required:[!0]});return!n&&!r?!1:(n[R][Vu][t].add([...e][0]),!0)}function nd(){}function rd(){}function id(e){return td(arguments,`postBuild`)}function ad(e){return td(arguments,`preMount`)}function od(e){return td(arguments,`postMount`)}function sd(e){return td(arguments,`preUpdate`)}function cd(e){return td(arguments,`onEffect`)}function ld(e){return td(arguments,`onCatch`)}function ud(e){return td(arguments,`onTracked`)}function dd(e){return td(arguments,`postUpdate`)}function fd(e){return td(arguments,`preDestroy`)}function pd(e){return td(arguments,`postDestroy`)}function md(e){return!self&&!H(arguments,{name:`useAdapter`,validators:[[Object,Function]],count:1})?V:Function(`adapter`,`
-      return function ${e.name||``}(propsOrChildren, childrenOrProps){
+    `;
+	node.style.animationName = name;
+	node.style.animationDuration = `${duration}ms`;
+	node.style.animationDelay = `${delay}ms`;
+	node.style.animationTimingFunction = easing.css;
+	node.style.animationIterationCount = isInfinity(iterations) ? "infinite" : iteration;
+	node.style.animationDirection = direction;
+	node.style.animationFillMode = fill;
+	node.style.animationPlayState = playState;
+	document.head.appendChild(style);
+	function handleStart(e) {
+		if (e.target !== node) return;
+		onstart?.();
+	}
+	function handleEnd(e) {
+		if (e.target !== node) return;
+		onfinish?.();
+	}
+	function handleCancel(e) {
+		if (e.target !== node) return;
+		oncancel?.();
+	}
+	node.addEventListener("animationstart", handleStart);
+	node.addEventListener("animationend", handleEnd);
+	node.addEventListener("animationcancel", handleCancel);
+	return {
+		play() {
+			node.style.animationPlayState = "running";
+		},
+		pause() {
+			node.style.animationPlayState = "paused";
+		},
+		restart() {
+			node.style.animation = "none";
+			node.offsetHeight;
+			node.style.animationName = name;
+		},
+		cancel() {
+			node.style.animation = "none";
+			oncancel?.();
+		},
+		destroy() {
+			node.removeEventListener("animationstart", handleStart);
+			node.removeEventListener("animationend", handleEnd);
+			node.removeEventListener("animationcancel", handleCancel);
+			node.style.animation = "";
+			style.remove();
+		}
+	};
+}
+function serializeKeyframes(keyframes) {
+	return entries(normalizeKeyframes(keyframes)).map(([stop, styles]) => {
+		return `  ${stop} {\n${entries(styles).map(([prop, val]) => `  ${to_kebab_case(prop)}: ${val};`).join("\n")}\n  }`;
+	}).join("\n\n");
+}
+function generateOffsets(keyframes) {
+	const size = len(keyframes);
+	if (size === 1) return [0];
+	const step = 100 / (size - 1);
+	return keyframes.map((_, i) => +(i * step).toFixed(2));
+}
+function normalizeKeyframes(keyframes) {
+	if (isArray(keyframes)) {
+		const perSet = generateOffsets(keyframes);
+		let index = 0;
+		return keyframes.reduce((acc, frameDriver) => {
+			const { offset, ...styles } = frameDriver;
+			const stop = String(perSet[index]) + "%";
+			acc[stop] = styles;
+			index++;
+			return acc;
+		}, {});
+	}
+	return Object.fromEntries(entries(keyframes).map(([stop, styles]) => [normalizeStop(stop), styles]));
+}
+function normalizeStop(stop) {
+	if (stop === "from") return "0%";
+	if (stop === "to") return "100%";
+	if (!stop.includes("%") && !isNaN(Number(stop))) return `${Number(stop) * 100}%`;
+	return stop;
+}
+function validateMotionResponses(self, config, type) {
+	const propsTypes = {
+		keyframes: [
+			Function,
+			Array,
+			Object
+		],
+		easing: [
+			String,
+			Function,
+			HouxitEasing
+		],
+		frame: Function,
+		delay: Number,
+		duration: Number,
+		styles: [
+			String,
+			Function,
+			Object
+		],
+		iterations: Number,
+		fill: String,
+		direction: String,
+		playState: String,
+		autoplay: Boolean,
+		onStart: Function,
+		onfinish: Function,
+		onCancel: Function
+	};
+	let motionPtops = keys(propsTypes).join(",");
+	if (type === "transition") motionPtops = keys(propsTypes).flatMap((t) => {
+		if (_makeMap_("iterations,fill,direction,playState", t)) return [];
+		return t;
+	}).join(",");
+	if (!isPObject(config)) {
+		debugHandler(`${type} function expects a plain object as a return value`, self, true);
+		return false;
+	}
+	config = memMove(config, true);
+	for (let [key, value] of entries(config)) {
+		if (!_makeMap_(motionPtops, key)) {
+			debugHandler(`"${key}" prop of custom ${type} Function is not recognised`, self, true);
+			delete config[key];
+			continue;
+		}
+		if (!validateType(value, propsTypes[key])) {
+			debugHandler(`"${key}"" return prop of ${type} custom function is of an invalid type`, self, true);
+			return false;
+		}
+		if (key === "keyframes") {
+			config.keyframes = (t, u, engine) => {
+				let kf = isPFunction(value) ? value(t, u) : value;
+				if (engine === "css") return serializeKeyframes(kf);
+				kf = isPObject(kf) ? normalizeKeyframesObject(kf, engine) : normalizeOffsets(kf, engine);
+				if (engine === "waapi") iterate(kf).each((item, index) => {
+					delete item.offset;
+				});
+				return kf;
+			};
+			config.keyframes.keyframes = value;
+		} else if (key === "easing" && !isEasingObject(value)) config.easing = createEasing(value);
+		else if (key === "direction" && !_makeMap_("alternate,reverse,normal")) {
+			debugHandler(`${type} "direction" option receives am invalid value "${value}" argument\n\ncan only be "alternate,reverse,normal"`, self, true);
+			continue;
+		} else if (key === "fill" && !_makeMap_(`both,forwards,backwards`)) {
+			debugHandler(`${type} "fill" option receives am invalid value "${value}" argument\n\ncan only be "both,forwards,backwards"`, self, true);
+			continue;
+		}
+	}
+	return config;
+}
+function createElementTransition(self, hx_Element, metrics, el, motion) {
+	const motion_object = hx_Element.VNodeManager.motion_object;
+	const transiteIn = [];
+	iterate(motion_object.transite).each((transition) => {
+		const { element, fn, params, mode } = transition;
+		entries(applyHouxitTransition(element, fn, params, {
+			mode,
+			self
+		}) || {}).forEach(([key, callback]) => {
+			motion_object.hooks.transition[key].add(callback);
+			if (key === "in") transiteIn.push(callback);
+		});
+	});
+	if (len(transiteIn)) whenMounted(self, el, () => {
+		transiteIn.forEach((fn) => {
+			fn();
+		});
+	});
+}
+function createAminationCTX(animator) {
+	const { to, from } = animator;
+	const ctx = createObj("Context", {
+		to,
+		from,
+		delta: {
+			x: from.left - to.left,
+			y: from.top - to.top,
+			width: from.width - to.width,
+			height: from.height - to.height
+		}
+	});
+	ctx.distance = Math.hypot(ctx.delta.x, ctx.delta.y);
+	ctx.direction = {
+		x: Math.sign(ctx.delta.x),
+		y: Math.sign(ctx.delta.y)
+	};
+	return ctx;
+}
+function createElementAnimation(self, hx_Element, metrics, el, motion) {
+	const motion_object = hx_Element.VNodeManager.motion_object;
+	const animatePlay = [];
+	motion_object.hooks.animation.to = el?.getBoundingClientRect();
+	iterate(motion_object.animate).each((animation) => {
+		const { element, fn, params, mode } = animation;
+		entries(applyHouxitAnimation(element, fn, params, {
+			mode,
+			self,
+			motion_object
+		}) || {}).forEach(([key, callback]) => {
+			motion_object.hooks.animation[key].add(callback);
+			if (key === "play") animatePlay.push(callback);
+		});
+	});
+	tick(() => {
+		animatePlay.forEach((fn) => {
+			fn();
+		});
+	});
+}
+function createElementMotionEffect(self, hx_Element, metrics, element, motion) {
+	if (self[$$$operands].initializedRenderBuild) return;
+	createElementTransition(self, hx_Element, metrics, element);
+	whenMounted(self, element, () => createElementAnimation(self, hx_Element, metrics, element));
+}
+var bezierRegexMatch = (bezier) => bezier.match(/(cubic-bezier\s*\()?\s*([-\d.]+)\s*,\s*([-\d.]+)\s*,\s*([-\d.]+)\s*,\s*([-\d.]+)\s*(\))?/);
+function cubicBezier(b1, b2, b3, b4) {
+	return __cubicBezier(isString(b1) ? b1 : [...arguments]);
+}
+function __cubicBezier(bezier) {
+	const match = isArray(bezier) ? bezier : bezierRegexMatch(bezier);
+	if (isString(bezier) && !match) {
+		if (_makeMap_("linear,ease,ease-in,ease-out,ease-in-out,step-start,step-end", bezier.trim())) return easings[toCamelCase(bezier)].fn;
+		debugHandler(`Invalid cubic-bezier: ${bezier}`, self, true);
+		return;
+	}
+	const stack = [];
+	for (let i = 0; i <= (isString(bezier) ? 5 : 3); i++) if (isArray(bezier) || isString(bezier) && i >= 2) stack.push(parseFloat(match[i]));
+	const x1 = stack[0];
+	const y1 = stack[1];
+	const x2 = stack[2];
+	const y2 = stack[3];
+	function A(a1, a2) {
+		return 1 - 3 * a2 + 3 * a1;
+	}
+	function B(a1, a2) {
+		return 3 * a2 - 6 * a1;
+	}
+	function C(a1) {
+		return 3 * a1;
+	}
+	function calcBezier(t, a1, a2) {
+		return ((A(a1, a2) * t + B(a1, a2)) * t + C(a1)) * t;
+	}
+	function getSlope(t, a1, a2) {
+		return 3 * A(a1, a2) * t * t + 2 * B(a1, a2) * t + C(a1);
+	}
+	function solveT(x) {
+		let t = x;
+		for (let i = 0; i < 8; i++) {
+			const currentSlope = getSlope(t, x1, x2);
+			if (currentSlope === 0) return t;
+			const currentX = calcBezier(t, x1, x2) - x;
+			t -= currentX / currentSlope;
+		}
+		return t;
+	}
+	return function easing(t) {
+		if (t <= 0) return 0;
+		if (t >= 1) return 1;
+		return calcBezier(solveT(t), y1, y2);
+	};
+}
+function createRAFInitialStyle(styles, frame, keyframes, node, progress, inverse) {
+	if (styles) {
+		const style = styles(progress, inverse);
+		if (style) iterate(compileStyleProps(null, style)).each((style, prop) => {
+			node.style[prop] = style;
+		});
+	}
+	if (keyframes) applyKeyframeStyles(node, keyframes(progress, inverse, "raf"), progress, inverse);
+	if (frame) frame(progress, inverse);
+}
+function normalizeOffsets(keyframes) {
+	const count = keyframes.length - 1;
+	return keyframes.map((frameDriver, i) => ({
+		offset: (frameDriver.offset ?? i / count).toFixed(2),
+		...frameDriver
+	}));
+}
+function normalizeKeyframesObject(obj) {
+	const result = [];
+	for (const selector in obj) {
+		const style = obj[selector];
+		const parts = selector.split(",");
+		for (let part of parts) {
+			part = part.trim();
+			const offset = parseFloat(part) / 100;
+			if (isNaN(offset)) continue;
+			result.push({
+				offset,
+				...style
+			});
+		}
+	}
+	result.sort((a, b) => a.offset - b.offset);
+	if (obj && !len(result)) result.push({
+		offsets: 0,
+		...obj
+	});
+	return result;
+}
+function applyKeyframeStyles(node, keyframes, t, u) {
+	let left;
+	let right;
+	for (let i = 0; i < keyframes.length - 1; i++) {
+		const a = keyframes[i];
+		const b = keyframes[i + 1];
+		if (t >= a.offset && t <= b.offset) {
+			left = a;
+			right = b;
+			break;
+		}
+	}
+	if (!left || !right) return;
+	const range = right.offset - left.offset;
+	const localT = range === 0 ? 0 : (t - left.offset) / range;
+	for (const prop in left) {
+		if (prop === "offset") continue;
+		const from = left[prop];
+		const to = right[prop];
+		const value = interpolate(from, to, localT);
+		node.style[prop] = value;
+	}
+}
+function interpolate(a, b, t) {
+	const na = parseFloat(a);
+	const nb = parseFloat(b);
+	const unit = String(b).replace(nb, "");
+	if (!isNaN(na) && !isNaN(nb)) return na + (nb - na) * t + unit;
+	return t < 1 ? a : b;
+}
+function createWAAPIBasedTransition(node, config = {}) {
+	let animation = null;
+	const { duration = 300, delay = 0, easing = easings.linear, keyframes } = config;
+	function play(direction = "in") {
+		const dirIn = direction === "in";
+		const kf = keyframes(dirIn ? 0 : 1, dirIn ? 1 : 0, "waapi");
+		if (dirIn) animation?.cancel();
+		animation = node.animate(kf, {
+			delay,
+			duration,
+			easing: easing.css,
+			iterations: 1,
+			fill: "both",
+			direction: direction === "out" ? "reverse" : "normal"
+		});
+		return animation.finished;
+	}
+	return {
+		in() {
+			play("in");
+		},
+		async out() {
+			play("out");
+		},
+		destroy() {
+			animation?.cancel();
+			animation = null;
+		}
+	};
+}
+function applyHouxitTransition(node, transition, params = {}, options = {}) {
+	if (!node) return;
+	let currentAnimation = null;
+	const { mode, self } = options;
+	let config = transition(node, params);
+	const isvalid = validateMotionResponses(self, config, "transition");
+	if (isObject(isvalid)) config = isvalid;
+	else return;
+	config = assign({
+		delay: 0,
+		duration: 300,
+		easing: easings.linear
+	}, config || {});
+	let { delay, duration, easing, keyframes, frame, styles } = config;
+	if (!frame && isString(easing.css) && !keyframes && styles) return cssBasedTransitionEngine(node, config, params, options);
+	else if (!frame && !styles && isString(easing.css) && keyframes && !isFunction(keyframes.keyframes)) return createWAAPIBasedTransition(node, {
+		delay,
+		duration,
+		keyframes,
+		easing: easing.css
+	});
+	else if (!frame && !keyframes && !styles) return;
+	function stop() {
+		if (currentAnimation) {
+			cancelAnimationFrame(currentAnimation);
+			currentAnimation = null;
+		}
+	}
+	function transite(direction = "in") {
+		stop();
+		const start = performance.now();
+		createRAFInitialStyle(styles, frame, keyframes, node, 0, 0);
+		function frameDriver(now) {
+			let elapsed = now - start;
+			if (elapsed < delay) {
+				currentAnimation = requestAnimationFrame(frameDriver);
+				return;
+			}
+			elapsed -= delay;
+			let t = Math.min(elapsed / duration, 1);
+			const eased = easing?.fn ? easing.fn(t) : easing ? easing(t) : t;
+			const progress = direction === "out" ? 1 - eased : eased;
+			const inverse = 1 - progress;
+			createRAFInitialStyle(styles, frame, keyframes, node, progress, inverse);
+			if (t < 1) currentAnimation = requestAnimationFrame(frameDriver);
+			else currentAnimation = null;
+		}
+		currentAnimation = requestAnimationFrame(frameDriver);
+	}
+	const response = {
+		destroy() {
+			stop();
+		},
+		stop
+	};
+	if (mode === "both" || mode === "in") response.in = function() {
+		transite("in");
+	};
+	if (mode === "both" || mode === "out") response.out = async function() {
+		transite("out");
+	};
+	return response;
+}
+function cssBasedTransitionEngine(node, config, params = {}, options) {
+	const { duration = 300, delay = 0, easing, styles, keyframes } = config;
+	if (!styles) return null;
+	const { mode } = options;
+	let disposed = false;
+	function run(direction = "in") {
+		if (disposed) return;
+		const fromT = direction === "in" ? 0 : 1;
+		const toT = direction === "in" ? 1 : 0;
+		const fromU = 1 - fromT;
+		const toU = 1 - toT;
+		const startStyle = styles(fromT, fromU);
+		const endStyle = styles(toT, toU);
+		node.style.transition = "none";
+		iterate(compileStyleProps(null, startStyle)).each((style, prop) => {
+			node.style.setProperty(prop, style);
+		});
+		node.offsetHeight;
+		node.style.transition = `all ${duration}ms ${easing.css} ${delay}ms`;
+		iterate(compileStyleProps(null, endStyle)).each((style, prop) => {
+			node.style.setProperty(prop, style);
+		});
+		const cleanup = () => {
+			node.removeEventListener("transitionend", () => {
+				cleanup();
+			});
+			if (disposed) return;
+			node.style.transition = "";
+		};
+		node.addEventListener("transitionend", () => {
+			cleanup();
+		});
+	}
+	const response = { destroy() {
+		disposed = true;
+	} };
+	if (mode === "both" || mode === "in") response.in = function() {
+		run("in");
+	};
+	else if (mode === "both" || mode === "out") response.out = async function() {
+		run("out");
+	};
+	return response;
+}
+function get_Model_Event(element) {
+	const tag = element.localName;
+	const type = element.type;
+	if (IS_ELEMENT_NODE(element) && Is_Form_Element(element)) {
+		if (tag === "input") return _makeMap_(["file"], type) ? "change" : _makeMap_([
+			"button",
+			"submit",
+			"reset"
+		], type) ? "click" : _makeMap_(["image", "hidden"], type) ? "change" : "input";
+		return tag === "form" ? "submit" : tag === "select" ? "change" : tag === "textarea" ? "input" : "input";
+	}
+}
+function _compileToStaticTemplateScaffold(self, render, recursive = false) {
+	const NodeList = isString(render) ? __HouxitHTMLParser__(render, []) : render;
+	return len(NodeList) && len(NodeList) > 1 ? h(Fragment, NodeList) : len(NodeList) ? NodeList.pop() : [];
+}
+function scaffold(render, ctx) {
+	render = isPFunction(render) ? render() : render;
+	if (!isChildrenNode(render)) {
+		debugHandler(`Illegal value type passed to scaffold `);
+		return;
+	} else if (isPrimitive(render) && !isNull(render)) render = String(render);
+	return _compileToStaticTemplateScaffold(this, render);
+}
+function hyperscriptElArgumentsValidator(args) {
+	const [type, propsOrChildren, childrenOrProps] = args;
+	if (len(args) > 3) {
+		debugHandler(`h render function cannot receive more than 3 arguments\n\n"...........${len(args)}" received" `);
+		return false;
+	} else if (!validateType(type, [
+		String,
+		Number,
+		Object,
+		Function,
+		...inBrowserCompiler ? [HTMLElement] : []
+	]) && !isHouxitBuiltinSymbolWidget(type)) {
+		debugHandler(`parameter 1 at h macro expects a native Element name or a widget options instance dataType `);
+		return false;
+	} else if (isPObject(propsOrChildren) && !isChildrenObj(propsOrChildren) && isPObject(childrenOrProps) && !isChildrenObj(childrenOrProps)) {
+		debugHandler(`Unintended plain object parsed at parameter 2 and 3 of h render macro\n\nplain objects are considered as props and cannot be duplicated`);
+		return false;
+	} else if (exists(propsOrChildren) && isChildrenNode(propsOrChildren) && exists(childrenOrProps) && isChildrenNode(childrenOrProps)) {
+		debugHandler(`arguments 2 and arguments 3 of h render receives duplicated identical Vnodes instance \n\nRenderable Vnodes cannot be duplicated`);
+		return false;
+	}
+	return true;
+}
+function propsAndChildrenGetter(type, propsOrChildren, childrenOrProps) {
+	if (!hyperscriptElArgumentsValidator([...arguments])) return {};
+	let props;
+	const lab = /* @__PURE__ */ new Set();
+	if (isPObject(propsOrChildren) && !isChildrenNode(propsOrChildren)) {
+		props = propsOrChildren;
+		lab.add("propsOrChildren");
+	} else if (isPObject(childrenOrProps) && !isChildrenNode(childrenOrProps)) {
+		props = childrenOrProps;
+		lab.add("childrenOrProps");
+	}
+	if (!lab.has("propsOrChildren") && isChildrenNode(propsOrChildren)) childrenOrProps = propsOrChildren;
+	lab.clear();
+	return {
+		type,
+		props,
+		children: childrenOrProps
+	};
+}
+function _hyperscriptCompiler_() {
+	return createVNode(propsAndChildrenGetter(...arguments));
+}
+function h(type, propsOrChildren, childrenOrProps) {
+	return _hyperscriptCompiler_(...arguments);
+}
+var BaseWidget = class {
+	constructor(options) {
+		if (!options) {
+			let model = new Model();
+			this.model = model;
+			define(this, "model", {
+				get() {
+					return model;
+				},
+				set(modelX) {
+					if (!isPObject(modelX)) {
+						debugHandler(`Unexpected assignment to the model instance object\n\nassignment expects a plain object`);
+						return false;
+					}
+					model = modelX;
+					return true;
+				}
+			});
+		} else if (isPObject(options)) for (const [key, value] of entries(options)) this[key] = value;
+		else if (isPFunction(options)) {
+			this.build = options;
+			if (opts && isPObject(opts)) {
+				if (hasProp(opts, "build")) delete opts.build;
+				assign(this, opts);
+			}
+		} else if (isClass(options)) {
+			options = new options();
+			if (!isBaseWidget(options)) debugHandler("class widget not an instance of the \"Widget\" base Widget");
+			else for (let [key, value] of entries(options)) this[key] = value;
+		}
+	}
+	define(widget) {
+		return defineWidget(...arguments);
+	}
+};
+var Widget = class extends BaseWidget {
+	constructor(...args) {
+		super(...args);
+	}
+};
+function animate(transition, params) {
+	return new Animation(transition, params);
+}
+function transite(animation, params, mode) {
+	return new Transition(animation, params, mode);
+}
+var garbageKey = Symbol();
+function _transformTheParamsInjectorHook(params) {
+	const self = getCurrentRunningEffect({ name: "useParams" });
+	if (!self && !validateCollectionArgs(arguments, {
+		name: "useParams",
+		validators: [[Array, Object]],
+		count: 1
+	})) return generateBuildParams(self);
+	paramsManager(self, params, self.__public_model__.$attrs, true);
+	return generateBuildParams(self);
+}
+function useParams(params) {
+	return _transformTheParamsInjectorHook(...arguments);
+}
+function _composersSlotsMappingHook(slots) {
+	const self = getCurrentRunningEffect({ name: "defineSlots" });
+	if (!self && !validateCollectionArgs(arguments, {
+		name: "defineSlots",
+		count: 1,
+		validators: [Array]
+	})) {
+		defineFallbackSlotsToken(self, { slots: [] }, self[$$$core].slots);
+		return self[$$$core].slots;
+	}
+	for (const [index, sl] of slots.entries()) if (!isString(sl)) {
+		debugHandler(`defineSlots() adapter macro array value expects a String value\n\nat array index ..........${index}`, self, true);
+		continue;
+	}
+	defineFallbackSlotsToken(self, { slots }, [], self[$$$core].slots);
+	return self[$$$core].slots;
+}
+function defineSlots(slots) {
+	return _composersSlotsMappingHook(...arguments);
+}
+function _defineSignalsEvents(signals) {
+	const self = getCurrentRunningEffect({ name: "defineSignals" });
+	if (!self && !validateCollectionArgs(arguments, {
+		name: "defineSignals",
+		count: 1,
+		validators: [Array]
+	})) return self.__public_model__.$signals;
+	$construct_With_Signals(self, { signals }, true);
+	map_Events_Fall(self, self[$$$core].virtualNode, true);
+	return self.__public_model__.$signals;
+}
+function defineSignals(signals) {
+	return _defineSignalsEvents(...arguments);
+}
+function _compilerOptionsConfigHook(config) {
+	const self = getCurrentRunningEffect({ name: "defineConfig" });
+	if (!self && !validateCollectionArgs(arguments, {
+		name: "defineConfig",
+		count: 1,
+		validators: [Object]
+	})) return;
+	setConfig(self, { buildConfig: config });
+}
+function defineConfig(config) {
+	return _compilerOptionsConfigHook(...arguments);
+}
+function useTransmit(transmit) {
+	const self = getCurrentRunningEffect({ name: "useTransmit" });
+	if (!self && !validateCollectionArgs(arguments, {
+		name: "useTransmit",
+		validators: [Function],
+		count: 1
+	})) return;
+	mapPublicationsTraverse(self, { transmit }, true);
+}
+function __useReceiver_(receive) {
+	const self = getCurrentRunningEffect({ name: "useReceiver" });
+	if (!self && !validateCollectionArgs(arguments, {
+		name: "useReceiver",
+		validators: [[Array, Object]],
+		count: 1
+	})) return;
+	return receivePublicationPrefix(self, { receive }, true);
+}
+function useReceiver() {
+	return __useReceiver_(...arguments);
+}
+function __useContext_Adapter(context) {
+	const self = getCurrentRunningEffect({ name: "useContext" });
+	if (!isHouxitBuild(self) && !validateCollectionArgs(arguments, {
+		name: "useContext",
+		validators: [Function],
+		count: 1
+	})) return false;
+	if (!hasOwn(self[$$$core].opts, "context")) self[$$$core].opts.context = function() {
+		return context.call(this, ...arguments);
+	};
+	return true;
+}
+function useContext(callback) {
+	return __useContext_Adapter.call(this, ...arguments);
+}
+function runLifeCircleHooksAdapter(args, name) {
+	const self = getCurrentRunningEffect({ name });
+	const response = validateCollectionArgs(args, {
+		count: 1,
+		name,
+		validators: [Function],
+		required: [true]
+	});
+	if (!self && !response) return false;
+	self[$$$compiler][garbageKey][name].add([...args][0]);
+	return true;
+}
+function onSlotEffect() {}
+function onSlotRender() {}
+function postBuild(callback) {
+	return runLifeCircleHooksAdapter(arguments, "postBuild");
+}
+function preMount(callback) {
+	return runLifeCircleHooksAdapter(arguments, "preMount");
+}
+function postMount(callback) {
+	return runLifeCircleHooksAdapter(arguments, "postMount");
+}
+function preUpdate(callback) {
+	return runLifeCircleHooksAdapter(arguments, "preUpdate");
+}
+function onEffect(callback) {
+	return runLifeCircleHooksAdapter(arguments, "onEffect");
+}
+function onCatch(callback) {
+	return runLifeCircleHooksAdapter(arguments, "onCatch");
+}
+function onTracked(callback) {
+	return runLifeCircleHooksAdapter(arguments, "onTracked");
+}
+function postUpdate(callback) {
+	return runLifeCircleHooksAdapter(arguments, "postUpdate");
+}
+function preDestroy(callback) {
+	return runLifeCircleHooksAdapter(arguments, "preDestroy");
+}
+function postDestroy(callback) {
+	return runLifeCircleHooksAdapter(arguments, "postDestroy");
+}
+function useAdapter(widget) {
+	if (!self && !validateCollectionArgs(arguments, {
+		name: "useAdapter",
+		validators: [[Object, Function]],
+		count: 1
+	})) return pass;
+	return Function("adapter", `
+      return function ${widget.name || ""}(propsOrChildren, childrenOrProps){
         return adapter(...arguments)
       }
-    `)((t,n)=>Iu(e,t,n))}async function hd(e){if(!H(arguments,{count:1,name:`use`,validators:[Function],required:[!0]}))return te();za(this);let t;return Xm(()=>{t=e()}).then(()=>Ba()),await t}async function gd(e){return await hd.call(this,...arguments)}function _d(e,t){}function vd(e,t){if(f(t.model))return;let n=kt(t)?t.model:new ln;if(_(t,`model`)&&D(t.model))try{t.model.call(n,Ip(e),e.__public_model__.$attrs)}catch(t){A(`There is an error when running the model method option\n\n${t}`,e,!0)}e.__public_model__=v(e.__public_model__,n)}function yd(e,t,n){if(!f(e.widgets)){let n=/^[_A-Z0-9\-]+/,r=/^[a-zA-Z_]+/;y(e.widgets).forEach(([e,i])=>{if(!r.test(e.at(0))&&!n.test(e)){A(`Widget registration failed,\nImproper widget namecasing found at "${e}"\n\nwidget names must atleast start with an uppercase letter or a multi-word string seperated by a hyphen or an underscore and not start with hyphen or a number`,t,!0);return}S(t[B].widgets,e,{value:i,enumerable:ve})})}}var bd=Symbol();function xd(e,t,n){e.handlers&&y(e.handlers).forEach(([e,n])=>{if(!D(n)){A(`widget method option's values must be a method or a function\n\n type of "${Sa(n)}" found`,t,!0);return}n[bd]=!0,S(t[B].handlers,e,{value:n,enumerable:ve,configurable:ye})})}function Sd(e,t,n,r){let[i,a,o]=n,s=!0;return O(a.required)&&w(a,`default`)?(A(`validation error  .......\n\nthe required validator should not be truthy alongside a default value\nat at\n\n"${o}" ${r}`,e,!0),s=!1):w(a,`required`)&&!ce(a.required)?(A(`The "required" validation options receives an unresolvable value \nat at \n"${o}" ${r}\n requires a boolean value`,e,!0),s=!1):w(a,`type`)?Y(a.type,[Function,Array,fa])?w(a,`validator`)&&!D(a.validator)?(A(`The "validator option must be a  function\n\nat ${o} ${r}`,e,!0),s=!1):O(a.required)&&!T(i||{},o)&&(A(`Params validation error........\n\nThe ${r+` of the "`+e[L].name+`" widget`} params is required and seems not to  be provided "\nrequired ${r} is missing\n\nat at\n  ....."${o}"  param`,e,!0),t[o]=void 0,s=!1):(A(`unexpected value passed as the type validator option
- expects a function or an Array of type function`,e,!0),s=!1):(A(`[Houxit Params validation Error] The type validator property is  required\n  Mising @ "${o}" param`,e,!0),s=!1),s}function Cd(e,t,n){let[i,a,o]=n;if(_(a,`default`)){let n=()=>E(a.default)?a.default.call(e.__public_model__):a.default;if(!_(i||{},o))if(Y(n(),a.type))t[o]=n();else return t[o]=void 0,A(`[Params validation error] ...property validation for widget default value failed, property "${o}" is of an invalid type\n\n"${r(a.type)?`"Matches no type in the validation list`:`typeof `+a.type.name+` expected`}`,e,!0),!1}return!0}function wd(e,t,n,i){let[a,o,s]=n,c=a?a[s]:void 0;if(_(a,s)&&Y(c,o.type)){if(_(o,`validator`)){let t=o.validator(c);if(!ce(t))return A(`${i} validator option method must return a Boolean value of true/false`,e,!0),!1;if(k(t))return A(`Validation for ${i} ${s} returned false`,e,!0),!1}t[s]=c}else if(_(a,s)&&!Y(c,o.type))return t[s]=void 0,A(`${i} validation error .....\n\nproperty validation for ${e?`widget`:`object`} ${i} value failed, property "${s}" is of an invalid type\n\n${r(o.type)?`Matches no type in the required validation list`:`typeof `+o.type.name+` expected`}`,e,!0),!1;return!0}function Td(e,t,n){let[r,i]=t;if(xn(e)&&!n){y(r).forEach(([t,n])=>{e.__public_model__.$attrs[t]=n});return}let a={};return i&&j(i)&&(a=e[L].$params,y(i).forEach(([t,n])=>{if(Ce(t)){A(`Params validation error "${t}" passed to widget as a houxit directive binding
+    `)((propsOrChildren, childrenOrProps) => {
+		return h(widget, propsOrChildren, childrenOrProps);
+	});
+}
+async function _use(callback) {
+	if (!validateCollectionArgs(arguments, {
+		count: 1,
+		name: "use",
+		validators: [Function],
+		required: [true]
+	})) return freeze();
+	installCurrentRunningEffect(this);
+	let program;
+	tick(() => {
+		program = callback();
+	}).then(() => reinstatePreviousRunningEffect());
+	return await program;
+}
+async function use(callback) {
+	return await _use.call(this, ...arguments);
+}
+function useStyleSheet(styles, config) {}
+function modelManager(self, opts) {
+	if (isNull(opts.model)) return;
+	const modelData = isBaseWidget(opts) ? opts.model : new Model();
+	if (hasOwn(opts, "model") && isPFunction(opts.model)) try {
+		opts.model.call(modelData, generateBuildParams(self), self.__public_model__.$attrs);
+	} catch (err) {
+		debugHandler(`There is an error when running the model method option\n\n${err}`, self, true);
+	}
+	self.__public_model__ = assign(self.__public_model__, modelData);
+}
+function widgetsSetup(opts, self, vnode) {
+	if (!isNull(opts.widgets)) {
+		const validNameRegex = /^[_A-Z0-9\-]+/;
+		const FirstCharRegex = /^[a-zA-Z_]+/;
+		entries(opts.widgets).forEach(([key, widget]) => {
+			if (!FirstCharRegex.test(key.at(0)) && !validNameRegex.test(key)) {
+				debugHandler(`Widget registration failed,\nImproper widget namecasing found at "${key}"\n\nwidget names must atleast start with an uppercase letter or a multi-word string seperated by a hyphen or an underscore and not start with hyphen or a number`, self, true);
+				return;
+			}
+			define(self[$$$register].widgets, key, {
+				value: widget,
+				enumerable
+			});
+		});
+	}
+}
+var $$isHandler = Symbol();
+function methodsManager(opts, self, vnode) {
+	if (!opts.handlers) return;
+	entries(opts.handlers).forEach(([ind, method]) => {
+		if (!isPFunction(method)) {
+			debugHandler(`widget method option's values must be a method or a function\n\n type of "${getType(method)}" found`, self, true);
+			return;
+		}
+		method[$$isHandler] = true;
+		define(self[$$$register].handlers, ind, {
+			value: method,
+			enumerable,
+			configurable
+		});
+	});
+}
+function runObjectifiedParamsValidation(self, paramsSet, objMetrics, PN) {
+	const [props, param, ind] = objMetrics;
+	let response = true;
+	if (isTrue(param.required) && hasProp(param, "default")) {
+		debugHandler(`validation error  .......\n\nthe required validator should not be truthy alongside a default value\nat at\n\n"${ind}" ${PN}`, self, true);
+		response = false;
+	} else if (hasProp(param, "required") && !isBoolean(param.required)) {
+		debugHandler(`The "required" validation options receives an unresolvable value \nat at \n"${ind}" ${PN}\n requires a boolean value`, self, true);
+		response = false;
+	} else if (!hasProp(param, "type")) {
+		debugHandler(`[Houxit Params validation Error] The type validator property is  required\n  Mising @ "${ind}" param`, self, true);
+		response = false;
+	} else if (!validateType(param.type, [
+		Function,
+		Array,
+		Type
+	])) {
+		debugHandler(`unexpected value passed as the type validator option\n expects a function or an Array of type function`, self, true);
+		response = false;
+	} else if (hasProp(param, "validator") && !isPFunction(param.validator)) {
+		debugHandler(`The "validator option must be a  function\n\nat ${ind} ${PN}`, self, true);
+		response = false;
+	} else if (isTrue(param.required) && !_makeMap_(props || {}, ind)) {
+		debugHandler(`Params validation error........\n\nThe ${PN + " of the \"" + self[$$$ownProperties].name + "\" widget"} params is required and seems not to  be provided "\nrequired ${PN} is missing\n\nat at\n  ....."${ind}"  param`, self, true);
+		paramsSet[ind] = void 0;
+		response = false;
+	}
+	return response;
+}
+function defaultParamBuffering(self, paramsSet, deferable) {
+	const [props, param, ind] = deferable;
+	if (hasOwn(param, "default")) {
+		const defaultValue = () => isFunction(param.default) ? param.default.call(self.__public_model__) : param.default;
+		if (!hasOwn(props || {}, ind)) if (!validateType(defaultValue(), param.type)) {
+			paramsSet[ind] = void 0;
+			debugHandler(`[Params validation error] ...property validation for widget default value failed, property "${ind}" is of an invalid type\n\n"${isArray(param.type) ? "\"Matches no type in the validation list" : "typeof " + param.type.name + " expected"}`, self, true);
+			return false;
+		} else paramsSet[ind] = defaultValue();
+	}
+	return true;
+}
+function paramsValidationCircle(self, paramsSet, deferable, pn) {
+	const [props, param, ind] = deferable;
+	const value = props ? props[ind] : void 0;
+	if (hasOwn(props, ind) && validateType(value, param.type)) {
+		if (hasOwn(param, "validator")) {
+			let valRes = param.validator(value);
+			if (!isBoolean(valRes)) {
+				debugHandler(`${pn} validator option method must return a Boolean value of true/false`, self, true);
+				return false;
+			}
+			if (isFalse(valRes)) {
+				debugHandler(`Validation for ${pn} ${ind} returned false`, self, true);
+				return false;
+			}
+		}
+		paramsSet[ind] = value;
+	} else if (hasOwn(props, ind) && !validateType(value, param.type)) {
+		paramsSet[ind] = void 0;
+		debugHandler(`${pn} validation error .....\n\nproperty validation for ${self ? "widget" : "object"} ${pn} value failed, property "${ind}" is of an invalid type\n\n${isArray(param.type) ? "Matches no type in the required validation list" : "typeof " + param.type.name + " expected"}`, self, true);
+		return false;
+	}
+	return true;
+}
+function resolveParamsPossibility(self, outlinedMetrics, in_build) {
+	let [props, params] = outlinedMetrics;
+	if (isFunctionBasedBuild(self) && !in_build) {
+		entries(props).forEach(([ind, attr]) => {
+			self.__public_model__.$attrs[ind] = attr;
+		});
+		return;
+	}
+	let paramsSet = {};
+	if (params && len(params)) {
+		paramsSet = self[$$$ownProperties].$params;
+		entries(params).forEach(([ind, param]) => {
+			if (has$$_bind(ind)) {
+				debugHandler(`Params validation error "${ind}" passed to widget as a houxit directive binding
             \n\n
-            The "$$" may not be appended or used on a params identifier key name`,e,!0);return}if(n=Ed(e,n),!Dd(e,i,a,{ind:t,props:r,param:n}))return a})),a}function Ed(e,t){let n={};if(Y(t,[Array,Function])||t instanceof fa)n.type=t;else if(d(t)||!t)n.type=ga;else if(h(t))return t;return n}function Dd(e,t,n,r){let{ind:i,props:a,param:o}=r;if(h(o)){if(!Sd(e,n,[a,o,i],`params`)||!Cd(e,n,[a,o,i])||!wd(e,n,[a,o,i],`params`))return!1;_(n,i)||(n[i]=void 0)}return!0}function Od(e,t,n,r=!1){if(n=v({},n),r||Zf(e[L],`$params`,new un),t&&!Y(t,[Object,Array])){A(`param option type validation failed, \n\n
-        unexpected data type of "${Sa(t)}"`,e,!0);return}let i=Td(e,[n,t],r);if(i){if(y(n||{}).forEach(([t,n])=>{_(i||{},t)?_(i||{},t)&&_(e.__public_model__.$attrs,t)&&delete e.__public_model__.$attrs[t]:e.__public_model__.$attrs[t]=n}),j(i))for(let[e,t]of y(i))Zf(i,e,ji(t));if(!Wi(e.__public_model__.$attrs)){let t=Yf(e.__public_model__.$attrs);S(e.__public_model__,`$attrs`,{get(){return t}})}}}function kd(e,t,n,r){if(t[I].initializedRender)return n;let{forwardAttrs:i,forwardEvents:a}=t[z].settings,o=Q(t),{$attrs:s,$events:c}=t.__public_model__,l=Sh(n).$element;if(!((i||a)&&!Ct(l)&&(j(s)||j(c))))return n;let u=v({},s);return j(c)&&a&&(u.attach=({on:e})=>{U(c).each((t,n)=>{Lt(n)&&e(n,t)})}),i&&j(s)&&U(u).each((e,r)=>{try{bl(l,{key:r,value:e},n,t,{is_hyperscript:t[z].map.is_hyperscript,isRerender:t[I].initializedRender,vNode:n.VNodeManager.vNodeClass,forwardAttrs:i})}catch{return A(`Encountered a road block during attributes fallthrough forwarding on element "<${n.$element[o?`type`:`localName`]} ... >"\n\n
-            Check warning details info on attribute "${r}"`,t,!0),Si()}}),ac(n),n}var Ad=e=>T(`props,children`,e),jd=Symbol(`<<<!@---initBuild---@>>>`),Md=Symbol(`[[[widget-typing-system]]]`);function Nd(e,t,n){if(_(t,`templateClasses`))for(let[n,r]of y(t.templateClasses)){if(!(D(r)||_t(r))){A(`"${n}" templateClass property value expects a plain function`,e,!0);return}S(e.__public_model__,n,{value:_t(r)?r:e_((...t)=>r.call(e.__public_model__,...t)),enumerable:ve})}}function Pd(e,t,n){if(!Ad(n))if(Re(n)&&!Ie(n)&&!Y(t,Oe[n])){if(bn(e)&&n===`model`&&!h(t)||!bn(e))return A(`${n} option is of an invalid type, \n\n "${n}" option cannot be of a "${Sa(t)}" type`,e,!0),!1}else Ie(n)&&ne?A(`"${n}" option is a nodejs only option, and cannot be used in houxit inbrowser compiler`,e,!0):Re(n)||(e[I]._OPTIONS[n]=t);return!0}function Fd(e,t,n){j(t),n&&_(n,jd)&&(e[L].isInitialBuild=n[jd],delete n[jd]),n&&_(n,Md)&&(e[L].widgetType=n[Md],delete n[Md]);for(let[r,i]of y(t))if(!n){for(let t of i.values())if(!Pd(e,t,r))return}else if(!Pd(e,i,r))return;n&&n.filesFilter.useSSRCompiler&&(e[R].useSSRCompiler=!0),n&&n.filesFilter.isHydration&&(e[R].SSRHydrationFlag=!0),n&&Cp(e,t)}function Id(e,t){let n=e.trim(),r=n,i=function(e,n){let r=e.split(n),i=r.shift();return i=`${i}${t}`,r.unshift(i),r.join(n)},a=function(e){let r=n.split(e);for(let[e,n]of y(r))n=n.trim(),n=Id(n,t),r[e]=n;return r.join(` ${e} `)},o=/\@ *g *\( *([ ]*.*?) *\)/;return o.test(n)?n.match(o)[1]:n.includes(`,`)?a(`,`):n.includes(`+`)?i(n,`+`):n.includes(`~`)?i(n,`~`):n.includes(`>`)?i(n,`>`):!n.startsWith(`@`)&&!n.startsWith(`body`)&&!n.includes(`:`)?n&&`${n}${t}`:n.includes(`::`)?i(n,`::`):n.includes(`:`)&&!n.startsWith(`@`)&&!n.startsWith(`:`)?i(n,`:`):r}var Ld=/([^\r\n{]+)\s*{/g;function Rd(e,t){return t.replace(Ld,(t,n)=>Id(n,`[data-hx_build=${e[L].hx_build}]`)+`{`)}function zd(e,t,n){let r=Q(t);if(Kt(n))return n;let i=t[z].settings.scopedStyle,a=e.styles?e.styles:null;if(a){let e=Iu(`style`,{type:`text/css`});r||(e=lc(e,t));let o=O(i)?Rd(t,a):a;r?e.props.textContent=o:e.textContent=o,n&&!Kt(n)&&(r?(n.$element.children||(n.$element.children=[]),n.$element.children?.push(e)):n.$element.append(e))}return n}function Bd(e,t){return!!(t==="default"&&(e.name===t||f(e.name)))}function Vd(e){return gt(e)||xr(e)}function Hd(e,t,n){if(!Vd(t.$element)&&Oo(t.$element)&&t.$element.type===`slot`)return n===t.$element.props.name||Bd(t.$element.props,n)?t.$element:void 0;if(Vd(t)){for(let[e,r]of t.$element.entries())if(Oo(r)&&r.type===`slot`&&(n===r.props.name||Bd(r.props,n)))return r}}function Ud(e,t,n,i,a,o,s){if(n&&N(n)&&!_(o,i)){if(Q(e))if(t=Hd(e,s,i),r(s.$element)&&t){let e=s.$element.indexOf(t);s.$element[e]=n.$element}else t&&(s.$element=n.$element);else t.replaceWith(n.$element);a.add(i),o[i]=n}}function Wd(e,t){let n={};for(let[t,r]of y(e[R].scopeSlotsBindings))n[t]=r.element;return n}var Gd=(e,t,n)=>j(t)?Q(n)?d(e.type)&&!j(e.children)&&e?.type!==`slot`:Tt(e)&&!e.innerHTML.trim()&&e?.localName!==`slot`:!1;function Kd(e,t,n){let r=e[z].slots;if(!j(r)||!n||!N(n)||Kt(n))return n;let i={},a=Wd(e,n),o=new M;for(let[t,s]of y(a))_(r,t)&&!o.has(t)&&Ud(e,s,r[t]?.(e),t,o,i,n);if(Gd(n?.$element,a,e)&&!j(n.NodeList)&&e[z].settings.forwardSlot){let t=_(r,`default`)?r.default(e):null;t&&(Q(e)?n.$element.children.append(t.$element):n.$element.append(t.$element)),o.add(`default`),i.default=t}if(!j(i))return n;for(let[t,n]of y(i))e[z].slotsFactory.renderedSlotsList[t]=n;return n}function qd(e,t,n){if(w(t,`directives`))for(let[n,r]of y(t.directives)){if(!Y(r,[Object,Function])){A(`a directive requires an object of directive hooks or a function to act as a "mounted" hook `,e,!0);return}S(e[B].directives,Ce(n)?n.slice(2):n,{value:r,enumerable:ve,configurable:ye,writable:be})}}function Jd(e,t,n){U([`transitions`,`animations`]).each(n=>{if(w(t,n))for(let[r,i]of y(t[n])){if(!D(i)){A(`An "${n}" expects a plain function...`,e,!0);return}S(e[B][n],r,{value:i,enumerable:ve,configurable:ye,writable:be})}})}var Yd=b(po).join(`,`);function Xd(e,t,n){return e=P(e)?e:null,T(Yd,t)?Y(n,po[t])?!(t===`delimiters`&&k(Sc(e,n))):(A(`${t} config option of buildConfig receives an invalid type\n\nExpects a/an "${po[t].name.toLowerCase()}" type`,e,P(e)),!1):(A(`unrecognised settings option found in buildConfig defineConfig  at   at\n"${t} name property`,e,P(e)),!1)}function Zd(e,t){return!t.buildConfig||!j(t.buildConfig)?!1:(y(t.buildConfig).forEach(([t,n])=>{if(k(Xd(e,t,n)))return!1;e[z].settings[t]=n}),!0)}var Qd=class{flushType=`post`;oldValue=void 0;constructor(e,t,n,r,i){let a=Ka(i);if(this.deps=t,this.callback=n,this.self=e,this.options=r,_(r,`flushType`)){let t=r.flushType;!d(t)&&!T(`post,sync`,t)?A(`unrecognised flushType options received\n\nvalue "${t}" is not a vailid flushType`,e,!0):this.flushType=t}this.effect=a?i:q(()=>of(e,t,this.effect),e);let{value:o,dependencies:s}=a?i:J(this.effect);this.oldValue=o;let c;this.effect.attachCallback(a?()=>{c=this.effect.runEffect(c).value}:()=>{c=this.callback.call(e?.__public_model__,...this.wrapValueArgs()),this.oldValue=this.effect.value},`effect`,this.flushType),e||(this.effect.flushType=this.flushType),r.initial&&!a&&this.effect.schedule()}wrapValueArgs(){let e=this.effect.runEffect().value;if(xr(this.deps)){let t=[],n=[];for(let[r,i]of this.oldValue.entries())t.push(G(i)),n.push(G(si(e)[r]));return[n,t]}return[G(e),G(this.oldValue)]}stopEffect(){this.effect.endLife()}};function $d(e,t){y(t.observers||{}).forEach(([t,n])=>{df.call(e,t,n)})}function ef(e){let t=[],n=e[I]._OBSERVERS;for(let[r,i]of n.values())i===`sync`?pp(e,r,`Encountered an error during an effect flush call`,!0):i===`post`&&t.push(r);return n.clear(),function(){for(let n of t.values())pp(e,n,`Encountered an error during an effect flush call`,!0)}}function tf(e,t,n){Zf(e.__public_model__,`$observe`,df.bind(e)),Zf(e.__public_model__,`$tick`,Xm.bind(e)),Zf(e.__public_model__,`$useAgent`,gi.bind(e)),Zf(e.__public_model__,`$write`,_i.bind(e)),Zf(e.__public_model__,`$effectHook`,da.bind(e)),Zf(e.__public_model__,`$pushEffect`,oo.bind(e)),Zf(e.__public_model__,`$trackEffectDeps`,sa.bind(e))}function nf(e){if(!H(arguments,{min:0,max:1,validators:[Object],required:[!1],name:`useModel`}))return;let t=P(this)?this:Va({name:`useModel`,silently:P(this)||_n(this)}),n;if(t)n=t.__public_model__;else if(n=_n(this)?this:void 0,!n)return null;if(!e||!j(e))return t.__public_model__;for(let[r,i]of y(e)){if(_(n,r)){A(`Error: Duplicate exposed property "${r}".\n
-          Declared in:\n - model()\n - build() <useModel()>\nRename one of them. model <prop> retained...`,t,!0);continue}W(i)?Tf(n,r,i):n[r]=i}return n}function rf(){return nf.call(this,...arguments)}function af(e,t,n){let i=[e,!0,`During the call of the "effect" macro`];if(!Y(t,[qr,Function,String,Array,M,Set,Ua])&&!Wi(t))return A(`error setting Effect observer for tracked dependency value "${t}"\n\n invalid type\nexpects a getter or collections of getter functions`,...i),!1;if(!D(n))return A(`effect observer callback expects a plain function method`),!1;if(d(t)&&!el(e.__public_model__,t))return A(`undefined property "${t}" accessed in effect  macro "EffectObserver"`,...i),!1;if(r(t)){for(let r of t.values())if(!af(e,r,n))return!1}return!0}function of(e,t,n){let i=$(t).map(r=>{if(E(r)||W(r))return mr(r);if(d(r))return P(e)?Zc(e.__public_model__,t):(A(`[[Deps Tracker $warn]] Effect global tracking faiked`),r);if(xr(r))return of(e,si(r),n);if(Ga(r))return n.dependencies.add(r),r.get_data()});return r(t)?i:i[0]}function sf(e,t,n){let r=Va({name:`observe`});if(!r&&!H(arguments,{name:`observe`,validators:[[Function,Array,String,qr],Function,Object],max:3,min:2,required:[!0,!0]})&&!r){A(`You can't use the "$observe()" adapter within a widget public model instance`);return}return df.call(r,...arguments)}function cf(e,t,n){if(H(arguments,{name:`scopeObserve`,validators:[[Function,Array,String,qr],Function,Object],min:2,max:3,required:[!0,!0]}))return df(e,t,n)}function lf(e,t){if(H(arguments,{name:`scopeObserve`,validators:[Function,Object],min:1,max:2,required:[!0]}))return da(e,t)}function uf(e,t,n){return sf(...arguments)}function df(e,t,n={},r){if(j(arguments)===3&&!h(n)){A(`Invalid Argument Type: parameter 3 arguments of effect observer expects a plain object`,this,!0);return}if(!af(this,e,t))return;let i=this,a=new Qd(i,e,t,n,r);function o(e){if(a.stopEffect(),j(arguments)&&D(e))return P(i)&&e.call(i.__public_model__,a.effect.value),!0;if(j(arguments)&&!D(e))return A(`unexpected args Type:: callback argument at effect stopper expects a plain function`,i,!0),!1}return function(e){return o(e)}}function ff(e,t,n=!1){let r=e.__public_model__.$attrs;if(vn(r)||(e.__public_model__.$attrs=new dn),j(t.filesFilter.$$$Events))for(let[n,r]of y(t.filesFilter.$$$Events))_(e.__public_model__.$signals,n)||(nl(`on-`+n),e.__public_model__.$events[n]=function(){r.callbacks.forEach(e=>e.call(this,...arguments))})}function pf(e,t){function n(){try{t.callbacks.forEach(e=>e.call(this,...arguments))}catch(t){A(`Signal traceBack error:: prevíous call on Signal events failed with an error`,e,!0),A(`${t}`,e);return}}return function(){return n.call(this,...arguments)}}function mf(e,t,n=!1,r){e.__public_model__.$events||Zf(e.__public_model__,`$events`,new hn),n&&(r=t);let i=e[z].virtualNode.filesFilter.$$$Events,a=new M(...t.signals||[]),o=e.__public_model__.$signals;for(let[t,n]of y(i))a.has(t)&&(o[t]=pf(e,n));for(let t of a.values())_(o,t)||(o[t]=pf(e,{callbacks:[]}))}function hf(e,t,n,r){if(!_(t,n)||!j(t[n]))return;let i=n.slice(0,-1);for(let[r,a]of y(t[n])){if(n===`blocks`?or(r):T(Lc,r)){A(`registration failure\nFailed to register the custom ${i} with the name "${r}\n\n Which collides with a BUILT_IN_${i.toUpperCase()} name\nregistration FAILED___`,e,!0);continue}else if(!Y(a,[Function,Object])){A(`${i.at(0).toUpperCase()+i.slice(1)} must be a function or an object exposing a "${i}" method option \n\nat        at\n "${r}" ${i} registration`,e,!0);continue}if(m(a)&&(!_(a,i)||!D(a[i]))){A(`"${r}" ${i} object must expose a ${i} method\n\nregistration FAILED___`,e,!0);continue}e[B][n][r]=a}}function gf(e,t,n){return yd(t,e,n),xd(t,e,n),U([`filters`,`blocks`]).each(r=>hf(e,t,r,n)),tf(e,t,n),qd(e,t,n),Jd(e,t,n),xf(e),t}var _f=`A,a,B,b,C,c,D,d,E,e,F,f,G,g,H,h,I,i,J,j,K,k,L,l,M,m,N,n,O,o,P,p,Q,q,R,r,S,s,T,t,U,u,V,v,W,w,X,x,Y,y,Z,z`,vf=`0,1,2,3,4,5,6,7,8,9`,yf=`A,a,B,b,C,c,D,d,E,e,F,f,G,g,H,h,I,i,J,j,K,k,L,l,M,m,N,n,O,o,P,p,Q,q,R,r,S,s,T,t,U,u,V,v,W,w,X,x,Y,y,Z,z,0,1,2,3,4,5,6,7,8,9`;function bf(e,t){let n=t===`alpha`,r=t===`num`,i=(n?_f:r?vf:yf).split(`,`),a=``,o=[];for(let e=0;e<j(i);e=e){let e=Math.floor(Math.random()*j(i));o.push(i[e]),i.splice(e,1)}for(let t=0;t<e;t++){let e=Math.floor(Math.random()*j(o));a+=o[e]}return r?Number(a):a}function xf(e){e[L].hx_build=`_hx_`+bf(10)}function Sf(e,t){let n=e[z].virtualNode;w(t,`buildConfig`)&&Zd(e,t),Od(e,t.params,n.props),vd(e,t),e.__public_model__=Xf(e),y(e[B].handlers).forEach(([t,n])=>{S(e.__public_model__,t,{value:n.bind(e.__public_model__),enumerable:ve})}),S(e.__public_model__,`$refs`,{value:new pn,enumerable:ve});let r=e[I].templateRefsInputs;for(let[t,n]of y(r))Tf(e.__public_model__.$refs,t,n);Nd(e,t,n),em(e,t),Sp(e,t),$d(e,t)}var Cf=class{callback=V;constructor(e){this.self=e,this.triggered=!1}trigger(){this.triggered||Km(this.self,this.callback())}};function wf(e,t){return v(new gn,{effectTrigger:V,trackZoom:!1,effectZoom:!1,origin:e,onEffectHook:()=>ks(t.onEffect),onTrackedHook:()=>ks(t.onTracked),readonly:!1,shallow:!1,thisArg:{},dependency:new WeakMap})}function Tf(e,t,n){S(e,t,{get(){return G(n)},set(r){return W(r)?(n=r,e[t]=G(r)):n[n[Di].accessor]=r,!0}})}function Ef(e,t,n,r){for(let[t,n]of vi(e))W(n)?Tf(e,t,n):Xt(t)||Ui(n)||yr(n)||D(n)&&n[bd]||g(n)||(e[t]=Af(n,r))}function Df(e,t,n,r,i,a){let{readonly:o=!1,shallow:s=!1}=i;e=[...e];let[c,l,u,d]=e,f=r===`defineProperty`?u.value:u;return l===En||!Reflect.has(c,l)?(Reflect[r](...e),!0):o&&(r===`deleteProperty`||!ra(f))?(A(`Cannot reassign/mutate a "readonly" stream prop\n\n___MUTATION FAILED___\n........"{}.${l}" property assignment/mutation using {##}.${r} method \n\n{##} object props are readonly \n.........>>>bypassKey verification failure`),!1):(o&&r===`defineProperty`&&ra(f)&&(f=f[ia],u.value=f),!g(f)&&!s&&!W(f)&&!Wi(f)&&(f=Af(f,{...i}),r===`defineProperty`?u.value=f:u=f),r===`set`&&(e[2]=f),Mf(a,l,t),Reflect[r](...e),!0)}function Of(e,t){return c(e)?Wf(e,t):s(e)?Hf(e,t):oi(e)?Bf(e,t):u(e)?Uf(e,t):l(e)?Gf(e,t):r(e)?Vf(e,t):e}function kf(e){return!(P(e)||N(e)||ne&&e instanceof HTMLElement)}function Af(e,t){if(!Ff(e)||Wi(e)||W(e)||bt(e))return W(e)&&A(`[stream parsing warning] token instance cannot be passed to stream`),e;if(!H(arguments,{max:3,min:1,validators:[[Object,Array,M,Set,Map],Object],name:`stream`}))return te();t=h(t)?t:{};let{shallow:n=!1,readonly:r=!1}=t,i=new WeakMap,a=!n&&k(n),o=wf(e,t);return o.shallow=n,o.readonly=r,e=Of(e,o),a&&kf(e)&&Ef(e,o,a,t),e=If(e,o,t),e[En]=i,i.set(e,o),o.stream=e,e}function jf(e,t,n){if(!j(Ha))return;let r=W(n)?e:e.get(n),i;return r.has(t)?i=r.get(t):(i=new Ua(t),r.set(t,i)),i.subscribe(),i}function Mf(e,t,n,r){let i=W(n)?e:e.get(n);i?.has(t)&&i.get(t)?.notifyEffects()}function Nf(e,t){let n=!0;return s(e)||u(e)?T(li,t)&&(n=!1):c(e)||l(e)?T(ui,t)&&(n=!1):oi(e)?T(di)&&(n=!1):r(e)?T(ci)&&(n=!1):t===En&&(n=!1),xr(e)&&(t=e),[n,t]}function Pf(e,t){let n=[`__proto__`,`prototype`,`constructor`];r(t)&&n.push(`length`);let i=[Symbol.toStringTag,Symbol.toPrimitive,Symbol.unscopables,Symbol.hasInstance,Symbol.isConcatSpreadable,Symbol.species,Symbol.match,Symbol.matchAll,Symbol.replace,Symbol.search,Symbol.split,Symbol.dispose,Symbol.asyncDispose];return T(n,e)||T(i,e)}function Ff(e){return g(e)||xr(e)||Y(e,[Object,Map,WeakMap,WeakSet])}function If(e,t,n){let r=t.dependency,i=new Proxy(e,{get(e,t){let n=()=>Reflect.get(...arguments);if(Pf(t,e))return n();let a=n(),o=!0;if([o,t]=Nf(i,t),o){let e=jf(r,t,i,a);e&&(e.get_data=n)}return a},set(e,a,o,s){return Df(arguments,i,t,`set`,n,r)},defineProperty(e,a,o,s){return Df(arguments,i,t,`defineProperty`,n,r)},deleteProperty(e,a,o,s){return Df(arguments,i,t,`deleteProperty`,n,r)}});return r.set(i,new Map),i}function Lf(e,t){for(e=e.prototype,t=t.prototype;e;){if(e===t)return!0;e=Object.getPrototypeOf(e)}return!1}function Rf(e,t,n,r){let i=r.stream,a=e.prototype[n].call(i,...t);return Mf(r.dependency,Y(i,[Map,WeakMap])?t[0]:i,i),a}function zf(e,t){return(Lf(e,Set)||Lf(e,WeakSet)?li:Lf(e,Array)?ci:Lf(e,M)?di:Lf(e,Map)||Lf(e,WeakMap)?ui:``).split(`,`).values().forEach(n=>{n&&(e.prototype[n]=Function(`streamReactiveHook`,`
-        return function ${n===`delete`?`del`:n}(){
+            The "$$" may not be appended or used on a params identifier key name`, self, true);
+				return;
+			}
+			param = transform_param_master(self, param);
+			if (!validationCoreManager(self, params, paramsSet, {
+				ind,
+				props,
+				param
+			})) return paramsSet;
+		});
+	}
+	return paramsSet;
+}
+function transform_param_master(self, param) {
+	const setup = {};
+	if (validateType(param, [Array, Function]) || param instanceof Type) setup.type = param;
+	else if (isString(param) || !param) setup.type = Any;
+	else if (isPObject(param)) return param;
+	return setup;
+}
+function validationCoreManager(self, params, paramsSet, metrics) {
+	const { ind, props, param } = metrics;
+	if (isPObject(param)) {
+		if (!runObjectifiedParamsValidation(self, paramsSet, [
+			props,
+			param,
+			ind
+		], "params")) return false;
+		if (!defaultParamBuffering(self, paramsSet, [
+			props,
+			param,
+			ind
+		])) return false;
+		if (!paramsValidationCircle(self, paramsSet, [
+			props,
+			param,
+			ind
+		], "params")) return false;
+		if (!hasOwn(paramsSet, ind)) paramsSet[ind] = void 0;
+	}
+	return true;
+}
+function paramsManager(self, params, props, in_build = false) {
+	props = assign({}, props);
+	if (!in_build) defineGetter(self[$$$ownProperties], "$params", new Params());
+	if (params && !validateType(params, [Object, Array])) {
+		debugHandler(`param option type validation failed, \n\n
+        unexpected data type of "${getType(params)}"`, self, true);
+		return;
+	}
+	const paramsSet = resolveParamsPossibility(self, [props, params], in_build);
+	if (!paramsSet) return;
+	entries(props || {}).forEach(([ind, value]) => {
+		if (!hasOwn(paramsSet || {}, ind)) self.__public_model__.$attrs[ind] = value;
+		else if (hasOwn(paramsSet || {}, ind) && hasOwn(self.__public_model__.$attrs, ind)) delete self.__public_model__.$attrs[ind];
+	});
+	if (len(paramsSet)) for (const [key, value] of entries(paramsSet)) defineGetter(paramsSet, key, shallow(value));
+	if (!isStream(self.__public_model__.$attrs)) {
+		let $attrs = shallowReadonlyStream(self.__public_model__.$attrs);
+		define(self.__public_model__, "$attrs", { get() {
+			return $attrs;
+		} });
+	}
+}
+function _hydrate_props_fallthrough(opts, self, vnode, metrics) {
+	if (self[$$$operands].initializedRender) return vnode;
+	const { forwardAttrs, forwardEvents } = self[$$$core].settings;
+	const isSSR = isSSRCompiler(self);
+	const { $attrs, $events } = self.__public_model__;
+	let element = WidgetElementUnwrap(vnode).$element;
+	if (!((forwardAttrs || forwardEvents) && !isNativeElement(element) && (len($attrs) || len($events)))) return vnode;
+	const forwardProps = assign({}, $attrs);
+	if (len($events) && forwardEvents) forwardProps.attach = ({ on }) => {
+		iterate($events).each((value, key) => {
+			if (!IS_VALID_EVENT_HANDLER(key)) {} else on(key, value);
+		});
+	};
+	if (forwardAttrs && len($attrs)) iterate(forwardProps).each((attr, key) => {
+		try {
+			HTMLAttrsMagnifier(element, {
+				key,
+				value: attr
+			}, vnode, self, {
+				is_hyperscript: self[$$$core].map.is_hyperscript,
+				isRerender: self[$$$operands].initializedRender,
+				vNode: vnode.VNodeManager.vNodeClass,
+				forwardAttrs
+			});
+		} catch (err) {
+			debugHandler(`Encountered a road block during attributes fallthrough forwarding on element "<${vnode.$element[isSSR ? "type" : "localName"]} ... >"\n\n
+            Check warning details info on attribute "${key}"`, self, true);
+			return Break();
+		}
+	});
+	if (isHouxitWidgetElement(vnode)) {}
+	return vnode;
+}
+var isHouxitProp = (prop) => _makeMap_("props,children", prop);
+var initBuildInstaceKey = Symbol("<<<!@---initBuild---@>>>");
+var widgetTypeKey = Symbol("[[[widget-typing-system]]]");
+function registerTemplateClasses(self, options, vnode) {
+	if (!hasOwn(options, "templateClasses")) return;
+	for (let [key, klass] of entries(options.templateClasses)) {
+		if (!(isPFunction(klass) || isTemplateClass(klass))) {
+			debugHandler(`"${key}" templateClass property value expects a plain function`, self, true);
+			return;
+		}
+		define(self.__public_model__, key, {
+			value: isTemplateClass(klass) ? klass : createTemplateClass((...args) => klass.call(self.__public_model__, ...args)),
+			enumerable
+		});
+	}
+}
+function recite_options_validation(self, opt, key) {
+	if (isHouxitProp(key)) {} else if (isValidWidgetOption(key) && !isNodeJSOnlyOption(key) && !validateType(opt, widgetOptionType[key])) {
+		if (isClassBasedBuild(self) && key === "model" && !isPObject(opt) || !isClassBasedBuild(self)) {
+			debugHandler(`${key} option is of an invalid type, \n\n "${key}" option cannot be of a "${getType(opt)}" type`, self, true);
+			return false;
+		}
+	} else if (isNodeJSOnlyOption(key) && inBrowserCompiler) debugHandler(`"${key}" option is a nodejs only option, and cannot be used in houxit inbrowser compiler`, self, true);
+	else if (!isValidWidgetOption(key)) self[$$$operands]._OPTIONS[key] = opt;
+	return true;
+}
+function sanitizedOptions(self, options, vnode) {
+	len(options);
+	if (vnode && hasOwn(vnode, initBuildInstaceKey)) {
+		self[$$$ownProperties].isInitialBuild = vnode[initBuildInstaceKey];
+		delete vnode[initBuildInstaceKey];
+	}
+	if (vnode && hasOwn(vnode, widgetTypeKey)) {
+		self[$$$ownProperties].widgetType = vnode[widgetTypeKey];
+		delete vnode[widgetTypeKey];
+	}
+	for (let [key, opt] of entries(options)) if (!vnode) {
+		for (let v of opt.values()) if (!recite_options_validation(self, v, key)) return;
+	} else if (!recite_options_validation(self, opt, key)) return;
+	if (vnode && vnode.filesFilter.useSSRCompiler) self[$$$compiler].useSSRCompiler = true;
+	if (vnode && vnode.filesFilter.isHydration) self[$$$compiler].SSRHydrationFlag = true;
+	if (vnode) traverseMixins_Inheritance(self, options);
+}
+function _hydrateHashToSelector(selector, $Data_Hash) {
+	const trimmed = selector.trim();
+	let modified = trimmed;
+	const _Manage_Hash_Class = function(sel, sep) {
+		const splited = sel.split(sep);
+		let fir = splited.shift();
+		fir = `${fir}${$Data_Hash}`;
+		splited.unshift(fir);
+		return splited.join(sep);
+	};
+	const $make_Tape = function(sep) {
+		const split = trimmed.split(sep);
+		for (let [key, sel] of entries(split)) {
+			sel = sel.trim();
+			sel = _hydrateHashToSelector(sel, $Data_Hash);
+			split[key] = sel;
+		}
+		return split.join(` ${sep} `);
+	};
+	const globalMRegex = /\@ *g *\( *([ ]*.*?) *\)/;
+	if (globalMRegex.test(trimmed)) return trimmed.match(globalMRegex)[1];
+	if (trimmed.includes(",")) return $make_Tape(",");
+	if (trimmed.includes("+")) return _Manage_Hash_Class(trimmed, "+");
+	if (trimmed.includes("~")) return _Manage_Hash_Class(trimmed, "~");
+	if (trimmed.includes(">")) return _Manage_Hash_Class(trimmed, ">");
+	if (!trimmed.startsWith("@") && !trimmed.startsWith("body") && !trimmed.includes(":")) return trimmed ? `${trimmed}${$Data_Hash}` : trimmed;
+	else if (trimmed.includes("::")) return _Manage_Hash_Class(trimmed, "::");
+	else if (trimmed.includes(":") && !trimmed.startsWith("@") && !trimmed.startsWith(":")) return _Manage_Hash_Class(trimmed, ":");
+	return modified;
+}
+var selectorPattern = /([^\r\n{]+)\s*{/g;
+function _stylesheet_hydration(self, styles) {
+	return styles.replace(selectorPattern, (match, text) => {
+		return _hydrateHashToSelector(text, `[data-hx_build=${self[$$$ownProperties].hx_build}]`) + "{";
+	});
+}
+function _preCompile_StyleSheet(opts, self, vnode) {
+	const isSSR = isSSRCompiler(self);
+	if (isHouxitTextElement(vnode)) return vnode;
+	const scopedConfig = self[$$$core].settings.scopedStyle;
+	const CssStylesheet = opts.styles ? opts.styles : null;
+	if (CssStylesheet) {
+		let styleEl = h("style", { type: "text/css" });
+		if (!isSSR) styleEl = generateTemplateElement(styleEl, self);
+		const ModifiedCssStylesheet = isTrue(scopedConfig) ? _stylesheet_hydration(self, CssStylesheet) : CssStylesheet;
+		if (isSSR) styleEl.props.textContent = ModifiedCssStylesheet;
+		else styleEl.textContent = ModifiedCssStylesheet;
+		if (vnode && !isHouxitTextElement(vnode)) if (isSSR) {
+			if (!vnode.$element.children) vnode.$element.children = [];
+			vnode.$element.children?.push(styleEl);
+		} else vnode.$element.append(styleEl);
+	}
+	return vnode;
+}
+function ssrSmartDefaultToggle(props, name) {
+	if (name === "default" && (props.name === name || isNull(props.name))) return true;
+	return false;
+}
+function isSSRCollection(vnode) {
+	return isSSRFragment(vnode) || isCollection(vnode);
+}
+function grabSSRVNodSlots(self, vnode, name) {
+	if (!isSSRCollection(vnode.$element) && isVNodeClass(vnode.$element) && vnode.$element.type === "slot") {
+		if (name === vnode.$element.props.name || ssrSmartDefaultToggle(vnode.$element.props, name)) return vnode.$element;
+		return;
+	} else if (!isSSRCollection(vnode)) return;
+	for (let [key, value] of vnode.$element.entries()) if (isVNodeClass(value) && value.type === "slot") {
+		if (name === value.props.name || ssrSmartDefaultToggle(value.props, name)) return value;
+	}
+}
+function assignSlot(self, slot, content, name, assynedSlots, renderedSlotsList, vnode) {
+	if (content && isHouxitElement(content) && !hasOwn(renderedSlotsList, name)) {
+		if (isSSRCompiler(self)) {
+			slot = grabSSRVNodSlots(self, vnode, name);
+			if (isArray(vnode.$element) && slot) {
+				const slotIndex = vnode.$element.indexOf(slot);
+				vnode.$element[slotIndex] = content.$element;
+			} else if (slot) vnode.$element = content.$element;
+		} else slot.replaceWith(content.$element);
+		assynedSlots.add(name);
+		renderedSlotsList[name] = content;
+	}
+}
+function resolveSlotsFilter(self, vnode) {
+	const scopedList = {};
+	for (const [key, slt] of entries(self[$$$compiler].scopeSlotsBindings)) scopedList[key] = slt.element;
+	return scopedList;
+}
+var shouldForwwardSlots = (element, slots, self) => {
+	if (!len(slots)) return false;
+	if (isSSRCompiler(self)) return isString(element.type) && !len(element.children) && element?.type !== "slot";
+	return IS_ELEMENT_NODE(element) && !element.innerHTML.trim() && element?.localName !== "slot";
+};
+function _$slotHydrationRenderer(self, opts, vnode_build) {
+	const slots = self[$$$core].slots;
+	if (!len(slots) || !vnode_build || !isHouxitElement(vnode_build) || isHouxitTextElement(vnode_build)) return vnode_build;
+	const renderedSlotsList = {};
+	const slot_elements = resolveSlotsFilter(self, vnode_build);
+	const assynedSlots = new Tuple();
+	for (const [slotN, slot_el] of entries(slot_elements)) if (hasOwn(slots, slotN) && !assynedSlots.has(slotN)) assignSlot(self, slot_el, slots[slotN]?.(self), slotN, assynedSlots, renderedSlotsList, vnode_build);
+	if (shouldForwwardSlots(vnode_build?.$element, slot_elements, self) && !len(vnode_build.NodeList)) {
+		if (self[$$$core].settings.forwardSlot) {
+			const slotContent = hasOwn(slots, "default") ? slots.default(self) : null;
+			if (slotContent) if (isSSRCompiler(self)) vnode_build.$element.children.append(slotContent.$element);
+			else vnode_build.$element.append(slotContent.$element);
+			assynedSlots.add("default");
+			renderedSlotsList["default"] = slotContent;
+		}
+	}
+	if (!len(renderedSlotsList)) return vnode_build;
+	for (const [name, content] of entries(renderedSlotsList)) self[$$$core].slotsFactory.renderedSlotsList[name] = content;
+	return vnode_build;
+}
+function injectCustomDirective(self, options, vnode) {
+	if (hasProp(options, "directives")) for (let [key, value] of entries(options.directives)) {
+		if (!validateType(value, [Object, Function])) {
+			debugHandler(`a directive requires an object of directive hooks or a function to act as a "mounted" hook `, self, true);
+			return;
+		}
+		define(self[$$$register].directives, has$$_bind(key) ? key.slice(2) : key, {
+			value,
+			enumerable,
+			configurable,
+			writable
+		});
+	}
+}
+function injectCustomAnimations_Transitions(self, options, vnode) {
+	iterate(["transitions", "animations"]).each((optName) => {
+		if (hasProp(options, optName)) for (let [key, value] of entries(options[optName])) {
+			if (!isPFunction(value)) {
+				debugHandler(`An "${optName}" expects a plain function...`, self, true);
+				return;
+			}
+			define(self[$$$register][optName], key, {
+				value,
+				enumerable,
+				configurable,
+				writable
+			});
+		}
+	});
+}
+var configOptionsSettings = keys(ConfigValidator).join(",");
+function mapSettingCheck(self, key, setting) {
+	self = !isHouxitBuild(self) ? null : self;
+	if (!_makeMap_(configOptionsSettings, key)) {
+		debugHandler(`unrecognised settings option found in buildConfig defineConfig  at   at\n"${key} name property`, self, isHouxitBuild(self));
+		return false;
+	} else if (!validateType(setting, ConfigValidator[key])) {
+		debugHandler(`${key} config option of buildConfig receives an invalid type\n\nExpects a/an "${ConfigValidator[key].name.toLowerCase()}" type`, self, isHouxitBuild(self));
+		return false;
+	}
+	if (key === "delimiters") {
+		if (isFalse(validateDelimiterConstruct(self, setting))) return false;
+	}
+	return true;
+}
+function setConfig(self, opts) {
+	if (!opts.buildConfig || !len(opts.buildConfig)) return false;
+	entries(opts.buildConfig).forEach(([key, setting]) => {
+		if (isFalse(mapSettingCheck(self, key, setting))) return false;
+		self[$$$core].settings[key] = setting;
+	});
+	return true;
+}
+var Observer = class {
+	flushType = "post";
+	oldValue = void 0;
+	constructor(self, deps, callback, options, EffectHook) {
+		const isEffectHook = isEffect(EffectHook);
+		this.deps = deps;
+		this.callback = callback;
+		this.self = self;
+		this.options = options;
+		if (hasOwn(options, "flushType")) {
+			const flushType = options.flushType;
+			if (!isString(flushType) && !_makeMap_("post,sync", flushType)) debugHandler(`unrecognised flushType options received\n\nvalue "${flushType}" is not a vailid flushType`, self, true);
+			else this.flushType = flushType;
+		}
+		this.effect = isEffectHook ? EffectHook : _createEffectBase(() => {
+			return getObsCurrentValue(self, deps, this.effect);
+		}, self);
+		const { value, dependencies } = isEffectHook ? EffectHook : effectRunner(this.effect);
+		this.oldValue = value;
+		let returnValue;
+		this.effect.attachCallback(isEffectHook ? () => {
+			returnValue = this.effect.runEffect(returnValue).value;
+		} : () => {
+			returnValue = this.callback.call(self?.__public_model__, ...this.wrapValueArgs());
+			this.oldValue = this.effect.value;
+		}, "effect", this.flushType);
+		if (!self) this.effect.flushType = this.flushType;
+		if (options.initial && !isEffectHook) this.effect.schedule();
+	}
+	wrapValueArgs() {
+		const newValue = this.effect.runEffect().value;
+		if (isCollection(this.deps)) {
+			const oldList = [];
+			const newList = [];
+			for (const [key, valueX] of this.oldValue.entries()) {
+				oldList.push(unwrap(valueX));
+				newList.push(unwrap(arrSet(newValue)[key]));
+			}
+			return [newList, oldList];
+		}
+		return [unwrap(newValue), unwrap(this.oldValue)];
+	}
+	stopEffect() {
+		this.effect.endLife();
+	}
+};
+function Observer_Track(self, opts) {
+	entries(opts.observers || {}).forEach(([name, method]) => {
+		EffectObserver.call(self, name, method);
+	});
+}
+function _EffectDependencyNotifier(self) {
+	const postEffList = [];
+	const observers = self[$$$operands]._OBSERVERS;
+	for (const [obs, flush] of observers.values()) if (flush === "sync") callbackHookWithCatch(self, obs, "Encountered an error during an effect flush call", true);
+	else if (flush === "post") postEffList.push(obs);
+	observers.clear();
+	return function() {
+		for (let hk of postEffList.values()) callbackHookWithCatch(self, hk, "Encountered an error during an effect flush call", true);
+	};
+}
+function RuntimeUtilitiesProvide(self, opts, vnode) {
+	defineGetter(self.__public_model__, "$observe", EffectObserver.bind(self));
+	defineGetter(self.__public_model__, "$tick", tick.bind(self));
+	defineGetter(self.__public_model__, "$useAgent", useAgent.bind(self));
+	defineGetter(self.__public_model__, "$write", WRITE.bind(self));
+	defineGetter(self.__public_model__, "$effectHook", EffectAdapterHook.bind(self));
+	defineGetter(self.__public_model__, "$pushEffect", pushEffect.bind(self));
+	defineGetter(self.__public_model__, "$trackEffectDeps", _trackEffectDeps.bind(self));
+}
+function __useModelAdapter__(props) {
+	if (!validateCollectionArgs(arguments, {
+		min: 0,
+		max: 1,
+		validators: [Object],
+		required: [false],
+		name: "useModel"
+	})) return;
+	let self = isHouxitBuild(this) ? this : getCurrentRunningEffect({
+		name: "useModel",
+		silently: isHouxitBuild(this) || isModelInstance(this)
+	});
+	let model;
+	if (!self) {
+		model = isModelInstance(this) ? this : void 0;
+		if (!model) return null;
+	} else model = self.__public_model__;
+	if (!props || !len(props)) return self.__public_model__;
+	for (let [key, value] of entries(props)) {
+		if (hasOwn(model, key)) {
+			debugHandler(`Error: Duplicate exposed property "${key}".\n
+          Declared in:\n - model()\n - build() <useModel()>\nRename one of them. model <prop> retained...`, self, true);
+			continue;
+		}
+		if (isToken(value)) auto_unwrapTokenRegistery(model, key, value);
+		else model[key] = value;
+	}
+	return model;
+}
+function useModel() {
+	return __useModelAdapter__.call(this, ...arguments);
+}
+function checkObserversValidations(self, deps, callback) {
+	const errArgs = [
+		self,
+		true,
+		"During the call of the \"effect\" macro"
+	];
+	if (!validateType(deps, [
+		BaseToken,
+		Function,
+		String,
+		Array,
+		Tuple,
+		Set,
+		Dependency
+	]) && !isStream(deps)) {
+		debugHandler(`error setting Effect observer for tracked dependency value "${deps}"\n\n invalid type\nexpects a getter or collections of getter functions`, ...errArgs);
+		return false;
+	} else if (!isPFunction(callback)) {
+		debugHandler(`effect observer callback expects a plain function method`);
+		return false;
+	} else if (isString(deps) && !object_Has_Path(self.__public_model__, deps)) {
+		debugHandler(`undefined property "${deps}" accessed in effect  macro "EffectObserver"`, ...errArgs);
+		return false;
+	}
+	if (isArray(deps)) {
+		for (let value of deps.values()) if (!checkObserversValidations(self, value, callback)) return false;
+	}
+	return true;
+}
+function getObsCurrentValue(self, deps, effect) {
+	let value = arrayInverter(deps).map((value) => {
+		if (isFunction(value) || isToken(value)) return read(value);
+		else if (isString(value)) {
+			if (!isHouxitBuild(self)) {
+				debugHandler(`[[Deps Tracker $warn]] Effect global tracking faiked`);
+				return value;
+			}
+			return get_Object_Value(self.__public_model__, deps);
+		} else if (isCollection(value)) return getObsCurrentValue(self, arrSet(value), effect);
+		else if (isDependency(value)) {
+			effect.dependencies.add(value);
+			return value.get_data();
+		}
+	});
+	return !isArray(deps) ? value[0] : value;
+}
+function _observeAdapter_(deps, callback, options) {
+	const self = getCurrentRunningEffect({ name: "observe" });
+	if (!self && !validateCollectionArgs(arguments, {
+		name: "observe",
+		validators: [
+			[
+				Function,
+				Array,
+				String,
+				BaseToken
+			],
+			Function,
+			Object
+		],
+		max: 3,
+		min: 2,
+		required: [true, true]
+	})) {
+		if (!self) {
+			debugHandler(`You can't use the "$observe()" adapter within a widget public model instance`);
+			return;
+		}
+	}
+	return EffectObserver.call(self, ...arguments);
+}
+function _createObserverInstance(deps, fn, config) {
+	if (!validateCollectionArgs(arguments, {
+		name: "scopeObserve",
+		validators: [
+			[
+				Function,
+				Array,
+				String,
+				BaseToken
+			],
+			Function,
+			Object
+		],
+		min: 2,
+		max: 3,
+		required: [true, true]
+	})) return;
+	return EffectObserver(deps, fn, config);
+}
+function _createEffectHookGlobal(fn, config) {
+	if (!validateCollectionArgs(arguments, {
+		name: "scopeObserve",
+		validators: [Function, Object],
+		min: 1,
+		max: 2,
+		required: [true]
+	})) return;
+	return EffectAdapterHook(fn, config);
+}
+function observe(deps, callback, options) {
+	return _observeAdapter_(...arguments);
+}
+function EffectObserver(deps, callback, options = {}, EffectHook) {
+	if (len(arguments) === 3 && !isPObject(options)) {
+		debugHandler(`Invalid Argument Type: parameter 3 arguments of effect observer expects a plain object`, this, true);
+		return;
+	}
+	if (!checkObserversValidations(this, deps, callback)) return;
+	const self = this;
+	const observer = new Observer(self, deps, callback, options, EffectHook);
+	function _stopEffect(callback) {
+		observer.stopEffect();
+		if (len(arguments) && isPFunction(callback)) {
+			if (isHouxitBuild(self)) callback.call(self.__public_model__, observer.effect.value);
+			return true;
+		} else if (len(arguments) && !isPFunction(callback)) {
+			debugHandler(`unexpected args Type:: callback argument at effect stopper expects a plain function`, self, true);
+			return false;
+		}
+	}
+	return function stopEffect(callback) {
+		return _stopEffect(callback);
+	};
+}
+function map_Events_Fall(self, vnode, in_build = false) {
+	const attrs = self.__public_model__.$attrs;
+	if (!isAttrsInstance(attrs)) self.__public_model__.$attrs = new Attrs();
+	if (!len(vnode.filesFilter.$$$Events)) return;
+	for (let [name, value] of entries(vnode.filesFilter.$$$Events)) {
+		if (hasOwn(self.__public_model__.$signals, name)) continue;
+		toCamelCase("on-" + name);
+		self.__public_model__.$events[name] = function() {
+			value.callbacks.forEach((callback) => callback.call(this, ...arguments));
+		};
+	}
+}
+function createSignalFromEventObject(self, event) {
+	function merger() {
+		try {
+			event.callbacks.forEach((callback) => callback.call(this, ...arguments));
+		} catch (err) {
+			debugHandler(`Signal traceBack error:: prevíous call on Signal events failed with an error`, self, true);
+			debugHandler(`${err}`, self);
+			return;
+		}
+	}
+	return function HouxitSignal() {
+		return merger.call(this, ...arguments);
+	};
+}
+function $construct_With_Signals(self, options, in_build = false, vnode) {
+	if (!self.__public_model__.$events) defineGetter(self.__public_model__, "$events", new Events());
+	if (in_build) vnode = options;
+	const $$events = self[$$$core].virtualNode.filesFilter.$$$Events;
+	const signals = new Tuple(...options.signals || []);
+	const $signals = self.__public_model__.$signals;
+	for (const [key, event] of entries($$events)) if (signals.has(key)) $signals[key] = createSignalFromEventObject(self, event);
+	for (const signal of signals.values()) if (!hasOwn($signals, signal)) $signals[signal] = createSignalFromEventObject(self, { callbacks: [] });
+}
+function resolveCustomFiltersOrBlocks(self, options, optName, vnode) {
+	if (!hasOwn(options, optName) || !len(options[optName])) return;
+	const sName = optName.slice(0, -1);
+	for (const [name, filter] of entries(options[optName])) {
+		if (optName === "blocks" ? isBuiltinBlocks(name) : _makeMap_(BUILT_IN_FILTERS, name)) {
+			debugHandler(`registration failure\nFailed to register the custom ${sName} with the name "${name}\n\n Which collides with a BUILT_IN_${sName.toUpperCase()} name\nregistration FAILED___`, self, true);
+			continue;
+		} else if (!validateType(filter, [Function, Object])) {
+			debugHandler(`${sName.at(0).toUpperCase() + sName.slice(1)} must be a function or an object exposing a "${sName}" method option \n\nat        at\n "${name}" ${sName} registration`, self, true);
+			continue;
+		}
+		if (isObject(filter) && (!hasOwn(filter, sName) || !isPFunction(filter[sName]))) {
+			debugHandler(`"${name}" ${sName} object must expose a ${sName} method\n\nregistration FAILED___`, self, true);
+			continue;
+		}
+		self[$$$register][optName][name] = filter;
+	}
+}
+function __Ensure_Renderer(self, options, vnode) {
+	widgetsSetup(options, self, vnode);
+	methodsManager(options, self, vnode);
+	iterate(["filters", "blocks"]).each((bl) => resolveCustomFiltersOrBlocks(self, options, bl, vnode));
+	RuntimeUtilitiesProvide(self, options, vnode);
+	injectCustomDirective(self, options, vnode);
+	injectCustomAnimations_Transitions(self, options, vnode);
+	__Generate_Widget_Hash(self);
+	return options;
+}
+var alpha = "A,a,B,b,C,c,D,d,E,e,F,f,G,g,H,h,I,i,J,j,K,k,L,l,M,m,N,n,O,o,P,p,Q,q,R,r,S,s,T,t,U,u,V,v,W,w,X,x,Y,y,Z,z";
+var num = "0,1,2,3,4,5,6,7,8,9";
+var alphaNum = "A,a,B,b,C,c,D,d,E,e,F,f,G,g,H,h,I,i,J,j,K,k,L,l,M,m,N,n,O,o,P,p,Q,q,R,r,S,s,T,t,U,u,V,v,W,w,X,x,Y,y,Z,z,0,1,2,3,4,5,6,7,8,9";
+function generateUUID(length, type) {
+	const isAlpha = type === "alpha";
+	const isNum = type === "num";
+	let letters = (isAlpha ? alpha : isNum ? num : alphaNum).split(",");
+	let id = "";
+	let stack = [];
+	for (let i = 0; i < len(letters); i = i) {
+		const randomIndex = Math.floor(Math.random() * len(letters));
+		stack.push(letters[randomIndex]);
+		letters.splice(randomIndex, 1);
+	}
+	for (let i = 0; i < length; i++) {
+		const randomIndex = Math.floor(Math.random() * len(stack));
+		id += stack[randomIndex];
+	}
+	return isNum ? Number(id) : id;
+}
+function __Generate_Widget_Hash(self) {
+	self[$$$ownProperties]["hx_build"] = "_hx_" + generateUUID(10);
+}
+function Hydrate_Network_Prefixes(self, options) {
+	const vnode = self[$$$core].virtualNode;
+	if (hasProp(options, "buildConfig")) setConfig(self, options);
+	paramsManager(self, options.params, vnode.props);
+	modelManager(self, options);
+	self.__public_model__ = Setup_State_Effect(self);
+	entries(self[$$$register].handlers).forEach(([key, handler]) => {
+		define(self.__public_model__, key, {
+			value: handler.bind(self.__public_model__),
+			enumerable
+		});
+	});
+	define(self.__public_model__, "$refs", {
+		value: new Refs(),
+		enumerable
+	});
+	const templateRefs = self[$$$operands].templateRefsInputs;
+	for (const [name, ref] of entries(templateRefs)) auto_unwrapTokenRegistery(self.__public_model__.$refs, name, ref);
+	registerTemplateClasses(self, options, vnode);
+	computedPropsCompiler(self, options);
+	receivePublicationPrefix(self, options);
+	Observer_Track(self, options);
+}
+var EffectFusion = class {
+	callback = pass;
+	constructor(self) {
+		this.self = self;
+		this.triggered = false;
+	}
+	trigger() {
+		if (this.triggered) return;
+		deferEventCircleThread(this.self, this.callback());
+	}
+};
+function defineProxyScopeProps(obj, config) {
+	return assign(new ReactiveEffectObject(), {
+		effectTrigger: pass,
+		trackZoom: false,
+		effectZoom: false,
+		origin: obj,
+		onEffectHook: () => safeCall(config.onEffect),
+		onTrackedHook: () => safeCall(config.onTracked),
+		readonly: false,
+		shallow: false,
+		thisArg: {},
+		dependency: /* @__PURE__ */ new WeakMap()
+	});
+}
+function auto_unwrapTokenRegistery(obj, key, value) {
+	define(obj, key, {
+		get() {
+			return unwrap(value);
+		},
+		set(newValue) {
+			if (isToken(newValue)) {
+				value = newValue;
+				obj[key] = unwrap(newValue);
+			} else value[value[refInternalEffectKey].accessor] = newValue;
+			return true;
+		}
+	});
+}
+function proxyEffectDeepConversion(obj, ReactiveEffect, deep, config) {
+	for (let [key, value] of getIterator(obj)) if (isToken(value)) auto_unwrapTokenRegistery(obj, key, value);
+	else if (isProxySkipped(key) || _isProxyStream(value) || isRaw(value) || isPFunction(value) && value[$$isHandler]) {} else if (!isPrimitive(value)) obj[key] = _createStream(value, config);
+}
+function streamMutationTransform(args, object, effObj, name, config, dependency) {
+	const { readonly = false, shallow = false } = config;
+	args = [...args];
+	let [target, prop, valueX, receiver] = args;
+	let value = name === "defineProperty" ? valueX.value : valueX;
+	if (prop === $$$StreamProxyKey || !Reflect.has(target, prop)) {
+		Reflect[name](...args);
+		return true;
+	}
+	if (readonly && (name === "deleteProperty" || !isReadonlyBypasser(value))) {
+		debugHandler(`Cannot reassign/mutate a "readonly" stream prop\n\n___MUTATION FAILED___\n........"{}.${prop}" property assignment/mutation using {##}.${name} method \n\n{##} object props are readonly \n.........>>>bypassKey verification failure`);
+		return false;
+	} else if (readonly && name === "defineProperty" && isReadonlyBypasser(value)) {
+		value = value[bypassSymbol];
+		valueX.value = value;
+	}
+	if (!isPrimitive(value) && !shallow && !isToken(value) && !isStream(value)) {
+		value = _createStream(value, { ...config });
+		if (name === "defineProperty") valueX.value = value;
+		else valueX = value;
+	}
+	if (name === "set") args[2] = value;
+	_notifyEffectSubs(dependency, prop, object);
+	Reflect[name](...args);
+	return true;
+}
+function createCollectionStream(obj, ReactiveEffect) {
+	if (isMap(obj)) return _createMapStream(obj, ReactiveEffect);
+	else if (isSet(obj)) return _createSetStream(obj, ReactiveEffect);
+	else if (isTuple(obj)) return _createTupleStream(obj, ReactiveEffect);
+	else if (isWeakSet(obj)) return _createWeakSetStream(obj, ReactiveEffect);
+	else if (isWeakMap(obj)) return _createWeakMapStream(obj, ReactiveEffect);
+	else if (isArray(obj)) return _createArrayStream(obj, ReactiveEffect);
+	return obj;
+}
+function deepableObj(obj) {
+	if (isHouxitBuild(obj) || isHouxitElement(obj) || inBrowserCompiler && obj instanceof HTMLElement) return false;
+	return true;
+}
+function _createStream(obj, config) {
+	if (!isStreamable(obj) || isStream(obj) || isToken(obj) || isDomSpecialConstructor(obj)) {
+		if (isToken(obj)) debugHandler(`[stream parsing warning] token instance cannot be passed to stream`);
+		return obj;
+	}
+	if (!validateCollectionArgs(arguments, {
+		max: 3,
+		min: 1,
+		validators: [[
+			Object,
+			Array,
+			Tuple,
+			Set,
+			Map
+		], Object],
+		name: "stream"
+	})) return freeze();
+	config = isPObject(config) ? config : {};
+	const { shallow = false, readonly = false } = config;
+	const streamMap = /* @__PURE__ */ new WeakMap();
+	const useDeep = !shallow && isFalse(shallow);
+	const ReactiveEffect = defineProxyScopeProps(obj, config);
+	ReactiveEffect.shallow = shallow;
+	ReactiveEffect.readonly = readonly;
+	obj = createCollectionStream(obj, ReactiveEffect);
+	if (useDeep && deepableObj(obj)) proxyEffectDeepConversion(obj, ReactiveEffect, useDeep, config);
+	obj = transformProxyStream(obj, ReactiveEffect, config);
+	obj[$$$StreamProxyKey] = streamMap;
+	streamMap.set(obj, ReactiveEffect);
+	ReactiveEffect.stream = obj;
+	return obj;
+}
+function _subscribeToEffect(dependency, prop, reactive) {
+	if (!len(activeRunningEffects)) return;
+	const record = isToken(reactive) ? dependency : dependency.get(reactive);
+	let subscriber;
+	if (!record.has(prop)) {
+		subscriber = new Dependency(prop);
+		record.set(prop, subscriber);
+	} else subscriber = record.get(prop);
+	subscriber.subscribe();
+	return subscriber;
+}
+function _notifyEffectSubs(dependency, prop, reactive, value) {
+	const record = isToken(reactive) ? dependency : dependency.get(reactive);
+	if (!record?.has(prop)) return;
+	record.get(prop)?.notifyEffects();
+}
+function collectionsPropAssertion(target, prop) {
+	let response = true;
+	if (isSet(target) || isWeakSet(target)) {
+		if (_makeMap_(setMM, prop)) response = false;
+	} else if (isMap(target) || isWeakMap(target)) {
+		if (_makeMap_(mapMM, prop)) response = false;
+	} else if (isTuple(target)) {
+		if (_makeMap_(tupleMM)) response = false;
+	} else if (isArray(target)) {
+		if (_makeMap_(arrayMM)) response = false;
+	} else if (prop === $$$StreamProxyKey) response = false;
+	if (isCollection(target)) prop = target;
+	return [response, prop];
+}
+function isInternalKeys(key, obj) {
+	const NON_TRACK_KEYS = [
+		"__proto__",
+		"prototype",
+		"constructor"
+	];
+	if (isArray(obj)) NON_TRACK_KEYS.push("length");
+	const NON_TRACK_SYMBOLS = [
+		Symbol.toStringTag,
+		Symbol.toPrimitive,
+		Symbol.unscopables,
+		Symbol.hasInstance,
+		Symbol.isConcatSpreadable,
+		Symbol.species,
+		Symbol.match,
+		Symbol.matchAll,
+		Symbol.replace,
+		Symbol.search,
+		Symbol.split,
+		Symbol.dispose,
+		Symbol.asyncDispose
+	];
+	return _makeMap_(NON_TRACK_KEYS, key) || _makeMap_(NON_TRACK_SYMBOLS, key);
+}
+function isStreamable(v) {
+	return isPrimitive(v) || isCollection(v) || validateType(v, [
+		Object,
+		Map,
+		WeakMap,
+		WeakSet
+	]);
+}
+function transformProxyStream(obj, ReactiveEffect, config) {
+	const dependency = ReactiveEffect.dependency;
+	const reactive = new Proxy(obj, {
+		get(target, prop) {
+			const getter = () => Reflect.get(...arguments);
+			if (isInternalKeys(prop, target)) return getter();
+			const value = getter();
+			let response = true;
+			[response, prop] = collectionsPropAssertion(reactive, prop);
+			if (response) {
+				const subscriber = _subscribeToEffect(dependency, prop, reactive, value);
+				if (subscriber) subscriber.get_data = getter;
+			}
+			return value;
+		},
+		set(target, prop, value, receiver) {
+			return streamMutationTransform(arguments, reactive, ReactiveEffect, "set", config, dependency);
+		},
+		defineProperty(target, prop, value, receiver) {
+			return streamMutationTransform(arguments, reactive, ReactiveEffect, "defineProperty", config, dependency);
+		},
+		deleteProperty(target, prop, value, receiver) {
+			return streamMutationTransform(arguments, reactive, ReactiveEffect, "deleteProperty", config, dependency);
+		}
+	});
+	dependency.set(reactive, /* @__PURE__ */ new Map());
+	return reactive;
+}
+function hasPrototype(obj, prototype) {
+	obj = obj.prototype;
+	prototype = prototype.prototype;
+	while (obj) {
+		if (obj === prototype) return true;
+		obj = Object.getPrototypeOf(obj);
+	}
+	return false;
+}
+function streamReactiveHook(X, args, name, ReactiveEffect) {
+	const stream = ReactiveEffect.stream;
+	const res = X.prototype[name].call(stream, ...args);
+	_notifyEffectSubs(ReactiveEffect.dependency, validateType(stream, [Map, WeakMap]) ? args[0] : stream, stream);
+	return res;
+}
+function CollectionsEffectMutationsTrap(BaseStream, ReactiveEffect) {
+	(hasPrototype(BaseStream, Set) || hasPrototype(BaseStream, WeakSet) ? setMM : hasPrototype(BaseStream, Array) ? arrayMM : hasPrototype(BaseStream, Tuple) ? tupleMM : hasPrototype(BaseStream, Map) || hasPrototype(BaseStream, WeakMap) ? mapMM : "").split(",").values().forEach((method) => {
+		if (!method) return;
+		BaseStream.prototype[method] = Function("streamReactiveHook", `
+        return function ${method === "delete" ? "del" : method}(){
           return streamReactiveHook(this, arguments);
-        }`)(function(r,i){return Rf.call(r,e.__proto__,i,n,t)}))}),e}function Bf(e,t){class n extends Ca{constructor(e){super(e)}}return new(zf(n,t))(e)}function Vf(e,t){class n extends wa{constructor(e){super(e)}}return new(zf(n,t))(e)}function Hf(e,t){class n extends Ta{constructor(e){super(e)}}return new(zf(n,t))(e)}function Uf(e,t){class n extends Ea{constructor(e){super(e)}}return new(zf(n,t))(e)}function Wf(e,t){class n extends BaseMapStream{constructor(e){super(e)}}return new(zf(n,t))(e)}function Gf(e,t){class n extends Da{constructor(e){super(e)}}return new(zf(n,t))(e)}function Kf(e,t){return Af(...arguments)}function qf(e,t){return Kf(e,{shallow:!0,...m(t)?t:{}})}function Jf(e,t){return Kf(e,{readonly:!0,...h(t)?t:{}})}function Yf(e,t){return Jf(e,{shallow:!0,...m(t)?t:{}})}function Xf(e){let t=e.__public_model__,n=new Cf(e);e[I].dependency=n;for(let[n,r]of y(e[L].$params))S(t,n,{get(){return r.data}});return t=Af(t,{}),t}function Zf(e,t,n,r={}){let{enumerable:i=!1,writable:a=!1,debug:o=!1}=r,s={get(){return n}};return(a||o)&&(s.set=function(e){a?n=e:o&&A(`"{}<${t}>" not writable!!!`)}),O(i)&&(s.enumerable=i),S(e,t,s)}function Q(e){return P(e)&&O(e[R].useSSRCompiler)}function Qf(e){return P(e)&&O(e[R].SSRHydrationFlag)}var $f=()=>({transitions:{},animations:{},directives:{},filters:{},widgets:{},handlers:{},agents:{},blocks:{},mixins:new M,properties:{},templateClasses:{}}),ep=(e,t)=>({name:e?.name?e.name:d(t.type)?t.type:`AnonymousWidget`,slot_name:void 0,isInitialBuild:!1,widgetType:void 0,hx_Element:void 0,isSelfRecursive:!1}),tp=(e,t)=>({GeneticProvider:e,virtualNode:t,utils:{},settings:mo,slots:new fn,rootNodesList:[],map:{is_hyperscript:t.is_hyperscript},slotsFactory:{renderedSlotsList:{}}});function np(e,t){return Ka(e)?(e.attachCallback(t,`priority`),function(){e.endLife()}):V}var rp=()=>({whenMountedHooks:new M,composedSlots:{},rawChildren:()=>void 0,VN_Tree:{KEYS_INDEXES:new M,LEAGUE_TREE:{},priority:new M},memoVault:new M,template:void 0,scopeSlotsBindings:{},SSRHydrationFlag:!1,useSSRCompiler:!1}),ip=()=>({installers_plugin:new M,applied_mixins:new M,_OBSERVERS:new M,_LIFECIRCLEHOOKS:{},_OPTIONS:{},garbageWatch:!1,awaitReady:null,initializedRender:!1,effectRerender:!1,onRenderTracked:!1,onEffectWatch:!1,modelMethods:{},templateRefsInputs:{}});function ap(e,t){e.__public_model__=new ln;let n=t;return Oo(t)&&(n=m_(t.prototype_)),e[L]=ep(n,t),Zf(e,B,$f()),Zf(e,I,ip()),Zf(e,z,tp(n,t)),Zf(e[z],`$globals`,{register:$f(),setupOptions:{},transmited:{},legalOptions:{},controller:new Set}),Zf(e,R,rp()),Zf(e.__public_model__,`$signals`,new mn),Op(e,n,t),[n,t]}function op(e){return(t,n)=>{A(`Problem when mapping slot element>>>\n\nMore than one vnode slot name seems to be pointing to the  same slot\nat at "${t}" slot Directive  of "${n.$element.outerHTML}" \n\nmaybe you should wrap them within a single template wrapper`,e,!0,`During the induction of slots contents`),me(`Note: unnamed contents will be automatically weapped as "default" slot
-Won't conflict with other default contents`,e)}}function sp(e,t,n,r,i,a){if(n==="default")r.push(t);else if(!_(i,n))i[n]=function(){return new X($(t),a)};else return op(e)(n,t)}var cp=e=>Jt(e)&&e.isLoopWrappRenderer;function lp(e){let t=new M;for(let n of e.values())cp(n)?t.extend(lp(n)):t.add(n);return t.list()}function up(e,t,n,r){e[I].initializedRender;let[i,a,o]=n,s=[],c=r||e[z].slots;if(!i||!j(i))return dp(e,t,s,c),r;i=lp(i),t.children?.hx_Element;let l=e[z].map.is_hyperscript;for(let t of(i||[])?.values())N(t)&&sp(e,t,t.slot_name||`default`,s,c,a);return j(s)&&(c.default=function(){return n_(s,a)}),l&&dp(e,t,s,c),r}function dp(e,t,n,r){function i(t){return function(n){return j(arguments)&&n&&!Dt(n)||nn(n)&&!Dt(n())?(A(`Render functions default slot content must be a render function also`,e,!0),null):n&&Dt(n)?(n=D(n)?n(e):n,j_({type:`slot`,props:{name:t},children:n})):j_({type:`slot`,props:{name:t}})}}let a=new M(...t.slots&&j(t.slots)?t.slots:[`default`]);a.has(`default`)||a.add(`default`);for(let t of a.values())_(e[R].composedSlots,t)||(e[R].composedSlots[t]=i(t))}function fp(e,t,n){let r={init_hook:`preBuild`,mounted_hook:`postMount`,created_hook:`postBuild`,updated_hook:`postUpdate`,destroyed_hook:`postDestroy`},i={};n[On]&&(y(n[On]).forEach(([t,n])=>{j(n)&&(i[r[t]]=function(){Yo(e,n,null,e.__public_model__)})}),delete n[On]),`preBuild,postBuild,postMount,preMount,postUpdate,preUpdate,preDestroy,postDestroy,onTracked,onEffect,onCatch,onSlotEffect,onSlotRender`.split(`,`).forEach(r=>{if(t[r]||j(i)){if(j(i)&&_(i,r)){let a=i[r],o=n[r]||V;t[r]=function(t){D(a)&&a(),o&&o.call(e.__public_model__,t)}}e[I]._LIFECIRCLEHOOKS[r]=t[r]||V}else e[I]._LIFECIRCLEHOOKS[r]=V}),k(e[I].initializedRender)&&pp(e,e[I]._LIFECIRCLEHOOKS.preBuild,`preBuild`)}function pp(e,t,n,r=!1){if(!Hl(t))try{t.call(e.__public_model__)}catch(t){A(t),A(r?n:`${n} hook \n\n`,e,!0,`during the call of the "${n}" LifeCycle hook`,e,!0),me(`${t}`)}}function mp(e,t,n){n.props&&w(n.props,Cn)&&(e[L].ref_$$Prop=n.props[Cn],delete n.props[Cn])}function hp(e,t,n,r,i,a){let o=[],s=new Set,c=e[R]?.scopeSlotsBindings,l=()=>e[z].map.$$$context;for(let[i,u]of t.entries()){if(f(u))continue;let t=u,i=()=>ks(t,l()?.value);if(u=i(),Gt(u))for(let[t,i]of y(u.slots)){if(i=i.call(l()?.value,c[t]?.bindings),!Dt(i)){A(`Element Recognition Error: unrecognised element/value passed to render`,e,!0);return}if(fs(i,Ls(n)),i=$(jg($(i),r,null,n,null,a)),t!=="default"&&s.has(t)){A(`Duplicate Slot Error: slot content with the name mapping "${t}" has already be defined\n\nUntraced slotting mapping\n"${t}" slot Duplicate found`,e,!0);return}else s.add(t),i.forEach(e=>{e.slot_name=t,o.push(e)})}else s.add(`default`),g(u)&&(u=i),fs(u,Ls(n)),$(jg(u,r,null,n,null,a)).forEach(e=>{e.slot_name=`default`,o.push(e)})}return s.clear(),o}function $(e,t=!0){if(!r(e)&&xr(e)&&t)return si(e);if(!f(e)&&(t?!xr(e):!r(e))){let t=[];return t.push(e),t}else if(f(e))return[];return e}function gp(e,t,n,r){if(!n.children)return;let i=n.children,a=bp(e)?{self:e,hx_Element:n?.hx_Element,config:{}}:n.filesFilter?.slotsCompilerArgs,{hx_Element:o,self:s,fall:c,config:l}=a,u=n.is_hyperscript;l||={},l.patchFlags=e;let d=()=>e[z].map.$$$context?.value||{},f;return l.slotTap={parent:a.hx_Element},l.topLevelSlotContext=!0,u?f=hp(e,i,o,s,r,l):(d=e[z].context,fs(i,Ls(n)),f=jg(i,s,null,o,d?.(),l)),[$(f),s,o,{hx_Element:o,patchFlags:s}]}function _p(e,t,n){if(!t.context)return;let r=q(function(){return t.context.call(e.__public_model__)},e);try{J(r)}catch(t){A(`Provider Method Error: Encountered an error while trying to run the context >> provider option method`,e,!0),A(`${t}`,e);return}if(!h(r.value)){A(`Context Return Error: The context option return value expects a plain object
-Returning a non plain object is invalid `,e,!0);return}let i=ei(r.value);e[z].map.$$$context={get value(){return i.data}},r.attachCallback(()=>{v(i.data,r.runEffect().value)})}function vp(e,t,n,r){let i=r.hx_Element?.VNodeManager[Tn];if(!(i&&i.prop))return;let a=()=>e[z].map?.$$$context.value,o=i?.prop;if(!_(e[z].map,`$$$context`))return;let{hx_Element:s,self:c}=r.filesFilter.slotsCompilerArgs;function l(){return Wo(o,a(),e)?cn(o)?{[Sn]:{sourcesArray:[a()],syntaxArray:[o]}}:{[o]:a()}:{}}e[z].context=l}function yp(e,t){N(t)&&rf.call(e,{$element:t.$element})}function bp(e){return P(e)&&O(e[L].isInitialBuild)}function xp(e,t,n){if(!_(t,`transmit`))return;let r=q(()=>t.transmit.call(e.__public_model__),e);if(!h(r.value)){A(`${n?`useTransmit method argument`:`transmit method option`} expects a plain object as a return value`,e,!0);return}let i=bp(e)?e[z].$globals.transmited:e[z].$root[z].$globals.transmited;for(let[e,t]of y(r.value))i[e]=t;r.endLife()}function Sp(e,t,n=!1){if(!_(t,`receive`))return;let i=bp(e)?e[z]?.$globals.transmited:(e[z].$root||{})[z]?.$globals.transmited;for(let[a,o]of vi(t.receive)){let s=r(t.receive)?o:a;if(!Y(s,[String,Symbol])){A(`Arrays value of receive option expects a string / Symbol values of transmited property names\n\n
-          ........"${s}"`,e,!0);return}let c;if(!_(i,s))if(h(o)&&w(o,`default`))c=D(o.default)?nn(o.default)?o.default():o.default.call(e.__public_model__):o.default;else{A(`No transmited props with the provided receive key "${s}"\n\n
-            Unrecognized receive property`,e,!0);return}let l=Zc(i,s);if(h(o)&&_(o,`receive`)){if(!D(o.receive)){A(`receive option of "${a}" receive property expects a function`,e,!0);return}l=nn(o.receive)?o.receive(l):o.receive.call(e.__public_model__,l)}!_(i,s)&&!Ee(l)&&w(o,`default`)&&Ee(c)&&(l=c);let u=s;if(h(o)){if(!_(o,`alias`)){A(`receive prop "${s}" object expects an "alias" property`,e,!0);return}else if(!Y(o.alias,[String,Symbol])){A(`"${s}" receive alias property expects a String or a Symbol`,e,!0);return}else if(Ee(o.alias))Y(o,[String,Symbol])&&(o={alias:o});else{A(`alias property of "${s}" receive property is an empty string or undefined prop naming`,e,!0);return}u=o.alias}if(el(e.__public_model__,u)){A(`"${u}" property of receive conflicts with an existing model property\n\n
-          Try configuring an alias property instead\n\n............at "${s}"`,e,!0);return}if(!n)S(e.__public_model__,u,{value:l,enumerable:ve,configurable:ye});else return l}}function Cp(e,t){let n=new M(...Bp(e).register.mixins.list(),...t.mixins||[]).list();j(n)&&wp(e,t,n)}function wp(e,t,n){let r=e[I].applied_mixins,i={};for(let a of n.toReversed().values()){if(!Y(a,[Function,Object])){A(`[Houxit Mixin Merge Warn] Mixins expects a plain fuction/object instance/valid Houxit widget instance`,e,!0);return}else if(r.has(a))continue;r.prepend(a),Tp(e,t,a,i)}Fd(e,i),Ep(e,i,t)}function Tp(e,t,n,r){for(let[t,i]of y(D(n)?{build:n}:n)){if(je(t)){me(`[Mixin Strategy Mismatch] Ignored "${D(n)?`Functional mixin as [build]`:t}" in mixin. UI-defining options are only allowed on widgets. \nSee [Mixins] guide and merge strategy reference.`,e,!0);continue}if(!r[t]||!oi(r[t])){let e=r[t];r[t]=new M,e&&!oi(e)&&r[t].add(e)}r[t].add(i)}}function Ep(e,t,n){for(let[e,r]of y(t))if(Ne(e)){let t={};r.forEach(n=>{Dp(e,n,t)}),n[e]=Dp(e,n[e]||{},t)}else if(ke(e)){let t=n[e];n[e]=function(...e){return r.list().toReversed().forEach(t=>t.call(this,...e)),t?.call?.(this,...e)}}else if(Ae(e)){let t={};r.list().toReversed().forEach(e=>{v(t,e)}),n[e]=v(n[e]||{},t)}else Me(e)?n[e]=[...n[e]||[],...r]:_(n,e)||(n[e]=r.at(0))}function Dp(e,t,n={}){for(let[i,a]of vi(t))r(t)?e===`params`?n[a]={type:ga}:e===`receive`&&(n[a]={}):n[i]=a;return n}function Op(e,t,n){_(n,An)&&(e[L].isSelfRecursive=!0,delete n[An]),!(!_(t,`hx_Element`)||!N(t.hx_Element))&&(e[L].hx_Element=t.hx_Element)}function kp(e){let[t,n]=ap(this,e);this[R].initialization=()=>{Fd(this,t,n),Hp(this),fp(this,t,n),Zd(this,t,n),mf(this,t,!1,n),ff(this,n),gf(this,t,n)},this[R].templateProcessor=function(e,r,i,a){return e[I].initializedRender||de(i)&&O(a)||(r=Kd(e,t,r)),r=kd(t,e,r),r=zd(t,e,r),mp(e,t,n),yp(e,r),r},Ap(this,t,n)}function Ap(e,t){e[z].build=t.build||t.template||t.markdown,e[z].opts=t}function jp(){}function Mp(e){let t={signals:e.__public_model__.$signals,attrs:e.__public_model__.$attrs,slots:e[R].composedSlots,events:e.__public_model__.$events,use:gd.bind(e)};for(let[n,r]of y(v(t,e[z].utils)))S(t,n,{value:r,enumerable:ve});return t}function Np(e,t,n,r,i){n||={},i&&(n=Ws(n,i));let a=V;Rp(e);let o=()=>e[I].initializedRender,s=()=>e[R].StarterTemplate,c=()=>o()?br(s(),!0):e[z].build;e[z].map.is_hyperscript=!1,!c()&&t&&bp(e)&&!Q(e)&&ne&&(e[z].build=bc(zp(t,e)?.innerHTML||``));let l=c();return(d(l)||xr(l))&&(a=t=>jg(c(),t,!1,r,n,{official:!0,self:e}),e[z].render=a),a}function Pp(e){e[R][Vu]={postBuild:new M,postUpdate:new M,postMount:new M,postDestroy:new M,preDestroy:new M,preUpdate:new M,preMount:new M,onEffect:new M,onTracked:new M,onCatch:new M}}function Fp(e){for(let[t,n]of y(e[R][Vu])){if(!j(n))continue;function r(){n.list().forEach(function(n){pp(e,n,t)})}let i=e[I]._LIFECIRCLEHOOKS[t];Hl(i)?e[I]._LIFECIRCLEHOOKS[t]=r:e[I]._LIFECIRCLEHOOKS[t]=function(){r(),pp(e,i,t)}}delete e[R][Vu]}function Ip(e){let t=e[L].$params,n=new un;for(let[e,r]of y(t))S(n,e,{get(){return r.data}});return n}function Lp(e,t){let n,i=e[z].build,a=e[I].initializedRender;if(e[z].$parent,E(i)){if(!a&&Mt(i))return e[z].build=()=>[],(async function(){za(e);let n=await i.call(void 0,Ip(e),Mp(e),jp);Ba(),e[z].build=function(){return n},Lp(e,t),e[L].asyncBuildCache})();let n,o;Pp(e);let s=!nn(i);try{s&&za(e),o=i.call(void 0,Ip(e),Mp(e),jp),s&&Ba(),n=o,nn(i)&&!D(o)&&(n=()=>o)}catch(t){A(`Error during the call of the build function`,e,!0,Xc.build),A(t),go(i)?A(`build options method seems to be a constructor function`,e):A(`${t}`,e);return}if(Fp(e),_n(o)&&(!xn(e)||bp(e))){let r=e[z].opts;if(_(r,`render`))n=()=>r.render.call(e.__public_model__);else return e[z].build=_(r,`template`)?r.template:null,Np(e,t,null,void 0,void 0)}if(!D(n)&&!nn(i)){A(`Error during the call of ${xn(e)?`functional widget`:`the build function`} context\n\nfailed to return a render function when returning the build method::\nCross-Check your returned build Data as This may lead to unexpected results during Houxit element nodes Compilation`,e,!0,Xc.build);return}else if(!Dt(n())){A(`value not a valid Houxit Element instance`,e,!0);return}return e[z].map.is_hyperscript=!0,e[z].render=function(e,t=!1){let i=n();return!r(i)&&Dt(i)?$(i):Dt(i)?i:[]},e[z].render}else if(_(e[z].opts,`render`))return e[z].map.is_hyperscript=!0,e[z].render=function(t,n=!1){let i=responseRender.call(e.__public_model__);return!r(i)&&Dt(i)?$(i):Dt(i)?i:[]},e[z].render;else return Np(e,t,void 0,void 0);return n=(t,n)=>e[z].render(t,n),e[z].render=n,n}function Rp(e){for(let[t,n]of y(e[B].widgets))xt(t)&&(e[B].widgets[il(t)]=n);for(let[t,n]of y(e[B].directives))xt(t)&&(e[B].directives[il(t)]=n)}function zp(e,t){if(f(e)){A(`No node model or selector value passed for deployment`,t,!0);return}let n;if(d(e)){if(n=document.querySelector(e),!Ct(n)){A(`Error generating element, target not a valid native element instance`,t,!0);return}}else(Ct(e)||e.isHouxit_Fragment||e===document)&&(n=e);return n}function Bp(e){return e[z].$globals}function Vp(e){y(e[z].$globals.register).forEach(([t,n])=>{for(let[r,i]of y(n))!w(e[B][t],r)&&r!==`$root`&&(e[B][t][r]=i)}),v(e.__public_model__,e[B].properties)}function Hp(e){let t=Bp(e),n=t.legalOptions,r=e[I]._OPTIONS;for(let[i,a]of y(r)){if(!T(n,i)){A(`Unrecognised option found\n\n
-          "${i}" option is not a valid widget option or not registered,
+        }`)(function(s, args) {
+			return streamReactiveHook.call(s, BaseStream.__proto__, args, method, ReactiveEffect);
+		});
+	});
+	return BaseStream;
+}
+function _createTupleStream(tuple, ReactiveEffect) {
+	class TupleStream extends BaseTupleStream {
+		constructor(tuple) {
+			super(tuple);
+		}
+	}
+	return new (CollectionsEffectMutationsTrap(TupleStream, ReactiveEffect))(tuple);
+}
+function _createArrayStream(array, ReactiveEffect) {
+	class ArrayStream extends BaseArrayStream {
+		constructor(array) {
+			super(array);
+		}
+	}
+	return new (CollectionsEffectMutationsTrap(ArrayStream, ReactiveEffect))(array);
+}
+function _createSetStream(setArg, ReactiveEffect) {
+	class SetStream extends BaseSetStream {
+		constructor(setArg) {
+			super(setArg);
+		}
+	}
+	return new (CollectionsEffectMutationsTrap(SetStream, ReactiveEffect))(setArg);
+}
+function _createWeakSetStream(setArg, ReactiveEffect) {
+	class WeakSetStream extends BaseWeakSetStream {
+		constructor(setArg) {
+			super(setArg);
+		}
+	}
+	return new (CollectionsEffectMutationsTrap(WeakSetStream, ReactiveEffect))(setArg);
+}
+function _createMapStream(map, ReactiveEffect) {
+	class MapStream extends BaseMapStream {
+		constructor(map) {
+			super(map);
+		}
+	}
+	return new (CollectionsEffectMutationsTrap(MapStream, ReactiveEffect))(map);
+}
+function _createWeakMapStream(map, ReactiveEffect) {
+	class WeakMapStream extends BaseWeakMapStream {
+		constructor(map) {
+			super(map);
+		}
+	}
+	return new (CollectionsEffectMutationsTrap(WeakMapStream, ReactiveEffect))(map);
+}
+function stream(obj, config) {
+	return _createStream(...arguments);
+}
+function shallowStream(obj, config) {
+	return stream(obj, {
+		shallow: true,
+		...isObject(config) ? config : {}
+	});
+}
+function readonlyStream(obj, config) {
+	return stream(obj, {
+		readonly: true,
+		...isPObject(config) ? config : {}
+	});
+}
+function shallowReadonlyStream(obj, config) {
+	return readonlyStream(obj, {
+		shallow: true,
+		...isObject(config) ? config : {}
+	});
+}
+function Setup_State_Effect(self) {
+	let obj = self.__public_model__;
+	const dependency = new EffectFusion(self);
+	self[$$$operands].dependency = dependency;
+	for (let [key, value] of entries(self[$$$ownProperties].$params)) define(obj, key, { get() {
+		return value.data;
+	} });
+	obj = _createStream(obj, {});
+	return obj;
+}
+function defineGetter(obj, prop, value, desc = {}) {
+	const { enumerable = false, writable = false, debug = false } = desc;
+	const descriptor = { get() {
+		return value;
+	} };
+	if (writable || debug) descriptor.set = function(valueX) {
+		if (writable) value = valueX;
+		else if (debug) debugHandler(`"{}<${prop}>" not writable!!!`);
+	};
+	if (isTrue(enumerable)) descriptor.enumerable = enumerable;
+	return define(obj, prop, descriptor);
+}
+function isSSRCompiler(self) {
+	return isHouxitBuild(self) && isTrue(self[$$$compiler].useSSRCompiler);
+}
+function isHydration(self) {
+	return isHouxitBuild(self) && isTrue(self[$$$compiler].SSRHydrationFlag);
+}
+var registra = () => ({
+	transitions: {},
+	animations: {},
+	directives: {},
+	filters: {},
+	widgets: {},
+	handlers: {},
+	agents: {},
+	blocks: {},
+	mixins: new Tuple(),
+	properties: {},
+	templateClasses: {}
+});
+var HXBuildOwnPropertiesInitial = (opts, vNode) => ({
+	name: opts?.name ? opts.name : isString(vNode.type) ? vNode.type : "AnonymousWidget",
+	slot_name: void 0,
+	isInitialBuild: false,
+	widgetType: void 0,
+	hx_Element: void 0,
+	isSelfRecursive: false
+});
+var HXBuildCoreInitial = (opts, vnode) => ({
+	GeneticProvider: opts,
+	virtualNode: vnode,
+	utils: {},
+	settings: Compiler_Config_Options,
+	slots: new Slots(),
+	rootNodesList: [],
+	map: { is_hyperscript: vnode.is_hyperscript },
+	slotsFactory: { renderedSlotsList: {} }
+});
+function createPriorityFlush(effect, callback) {
+	if (!isEffect(effect)) return pass;
+	effect.attachCallback(callback, "priority");
+	return function() {
+		effect.endLife();
+	};
+}
+var HXBuildCompilerInitial = () => ({
+	whenMountedHooks: new Tuple(),
+	composedSlots: {},
+	rawChildren: () => void 0,
+	VN_Tree: {
+		KEYS_INDEXES: new Tuple(),
+		LEAGUE_TREE: {},
+		priority: new Tuple()
+	},
+	memoVault: new Tuple(),
+	template: void 0,
+	scopeSlotsBindings: {},
+	SSRHydrationFlag: false,
+	useSSRCompiler: false
+});
+var HXBuildOperandInitial = () => ({
+	installers_plugin: new Tuple(),
+	applied_mixins: new Tuple(),
+	_OBSERVERS: new Tuple(),
+	_LIFECIRCLEHOOKS: {},
+	_OPTIONS: {},
+	garbageWatch: false,
+	awaitReady: null,
+	initializedRender: false,
+	effectRerender: false,
+	onRenderTracked: false,
+	onEffectWatch: false,
+	modelMethods: {},
+	templateRefsInputs: {}
+});
+function createCordinationProperties(self, vnode) {
+	self.__public_model__ = new Model();
+	let opts = vnode;
+	if (isVNodeClass(vnode)) opts = defineWidget(vnode.prototype_);
+	self[$$$ownProperties] = HXBuildOwnPropertiesInitial(opts, vnode);
+	defineGetter(self, $$$register, registra());
+	defineGetter(self, $$$operands, HXBuildOperandInitial());
+	defineGetter(self, $$$core, HXBuildCoreInitial(opts, vnode));
+	defineGetter(self[$$$core], "$globals", {
+		register: registra(),
+		setupOptions: {},
+		transmited: {},
+		legalOptions: {},
+		controller: /* @__PURE__ */ new Set()
+	});
+	defineGetter(self, $$$compiler, HXBuildCompilerInitial());
+	defineGetter(self.__public_model__, "$signals", new Signals());
+	getHouxitBuildInstance(self, opts, vnode);
+	return [opts, vnode];
+}
+function slotDebuger(self) {
+	return (slotName, slotContent) => {
+		debugHandler(`Problem when mapping slot element>>>\n\nMore than one vnode slot name seems to be pointing to the  same slot\nat at "${slotName}" slot Directive  of "${slotContent.$element.outerHTML}" \n\nmaybe you should wrap them within a single template wrapper`, self, true, "During the induction of slots contents");
+		$warn(`Note: unnamed contents will be automatically weapped as "default" slot\nWon't conflict with other default contents`, self);
+	};
+}
+function smartSlotMapping(self, slotContent, slotName, defaultSlotsRecord, slotsCore, patchFlags) {
+	if (slotName === "default") defaultSlotsRecord.push(slotContent);
+	else if (!hasOwn(slotsCore, slotName)) slotsCore[slotName] = function slotRender() {
+		return new HouxitFragmentElement(arrayInverter(slotContent), patchFlags);
+	};
+	else return slotDebuger(self)(slotName, slotContent);
+}
+var shouldUnwrap = (child) => isHouxitFragmentElement(child) && child.isLoopWrappRenderer;
+function unwrapLoopWrappers(children) {
+	const childrenRender = new Tuple();
+	for (const child of children.values()) if (shouldUnwrap(child)) childrenRender.extend(unwrapLoopWrappers(child));
+	else childrenRender.add(child);
+	return childrenRender.list();
+}
+function _induceSlotContents(self, options, setData, renderedSlotsList) {
+	self[$$$operands].initializedRender;
+	let [children, patchFlags, Flaghx_Element] = setData;
+	const defaultSlotsRecord = [];
+	const slotsCore = renderedSlotsList ? renderedSlotsList : self[$$$core].slots;
+	if (!children || !len(children)) {
+		defineFallbackSlotsToken(self, options, defaultSlotsRecord, slotsCore);
+		return renderedSlotsList;
+	}
+	children = unwrapLoopWrappers(children);
+	options.children?.hx_Element;
+	const is_hyperscript = self[$$$core].map.is_hyperscript;
+	for (let slotContent of (children || [])?.values()) if (isHouxitElement(slotContent)) smartSlotMapping(self, slotContent, slotContent.slot_name || "default", defaultSlotsRecord, slotsCore, patchFlags);
+	if (len(defaultSlotsRecord)) slotsCore.default = function slotRender() {
+		return _getNodeListResponse(defaultSlotsRecord, patchFlags);
+	};
+	if (is_hyperscript) defineFallbackSlotsToken(self, options, defaultSlotsRecord, slotsCore);
+	return renderedSlotsList;
+}
+function defineFallbackSlotsToken(self, options, defaultSlotsRecord, slotsCore) {
+	function factory(name) {
+		return function slotRender(def) {
+			if (len(arguments) && def && !isChildrenNode(def) || isArrowFunction(def) && !isChildrenNode(def())) {
+				debugHandler(`Render functions default slot content must be a render function also`, self, true);
+				return null;
+			} else if (def && isChildrenNode(def)) {
+				def = isPFunction(def) ? def(self) : def;
+				return createVNode({
+					type: "slot",
+					props: { name },
+					children: def
+				});
+			}
+			return createVNode({
+				type: "slot",
+				props: { name }
+			});
+		};
+	}
+	const o_slots = new Tuple(...options.slots && len(options.slots) ? options.slots : ["default"]);
+	if (!o_slots.has("default")) o_slots.add("default");
+	for (const sn of o_slots.values()) if (!hasOwn(self[$$$compiler].composedSlots, sn)) self[$$$compiler].composedSlots[sn] = factory(sn);
+}
+function $ensureLifeCircleHooks(self, options, vnode) {
+	const hooks = "preBuild,postBuild,postMount,preMount,postUpdate,preUpdate,preDestroy,postDestroy,onTracked,onEffect,onCatch,onSlotEffect,onSlotRender";
+	const dirHKAlibi = {
+		init_hook: "preBuild",
+		mounted_hook: "postMount",
+		created_hook: "postBuild",
+		updated_hook: "postUpdate",
+		destroyed_hook: "postDestroy"
+	};
+	let customDirHk = {};
+	if (vnode[$$$customDirs]) {
+		entries(vnode[$$$customDirs]).forEach(([key, dirhk]) => {
+			if (len(dirhk)) customDirHk[dirHKAlibi[key]] = function() {
+				callSetHooks(self, dirhk, null, self.__public_model__);
+			};
+		});
+		delete vnode[$$$customDirs];
+	}
+	hooks.split(",").forEach((hookN) => {
+		if (options[hookN] || len(customDirHk)) {
+			if (len(customDirHk) && hasOwn(customDirHk, hookN)) {
+				let thisHook = customDirHk[hookN];
+				const user_defined_callback = vnode[hookN] || pass;
+				options[hookN] = function(utils) {
+					if (isPFunction(thisHook)) thisHook();
+					if (user_defined_callback) user_defined_callback.call(self.__public_model__, utils);
+				};
+			}
+			self[$$$operands]._LIFECIRCLEHOOKS[hookN] = options[hookN] || pass;
+		} else self[$$$operands]._LIFECIRCLEHOOKS[hookN] = pass;
+	});
+	if (isFalse(self[$$$operands].initializedRender)) callbackHookWithCatch(self, self[$$$operands]._LIFECIRCLEHOOKS.preBuild, "preBuild");
+}
+function callbackHookWithCatch(self, hook, name, special = false) {
+	if (isPass(hook)) return;
+	try {
+		hook.call(self.__public_model__);
+	} catch (err) {
+		debugHandler(err);
+		debugHandler(special ? name : `${name} hook \n\n`, self, true, `during the call of the "${name}" LifeCycle hook`, self, true);
+		$warn(`${err}`);
+	}
+}
+function RuntimeTokenDir(self, options, vnode) {
+	if (!(vnode.props && hasProp(vnode.props, $$$$dir__ref$$$$))) return;
+	self[$$$ownProperties]["ref_$$Prop"] = vnode.props[$$$$dir__ref$$$$];
+	delete vnode.props[$$$$dir__ref$$$$];
+}
+function normalizeHyperscriptSlotting(self, children, hx_Element, patchFlags, isRerender, config) {
+	const renderSlotList = [];
+	const except = /* @__PURE__ */ new Set();
+	const slotBindings = self[$$$compiler]?.scopeSlotsBindings;
+	const $$$context = () => self[$$$core].map.$$$context;
+	for (let [key, value] of children.entries()) {
+		if (isNull(value)) continue;
+		const fn = value;
+		const callback = () => safeCall(fn, $$$context()?.value);
+		value = callback();
+		if (isSlotInstance(value)) for (let [slotN, slotRender] of entries(value.slots)) {
+			slotRender = slotRender.call($$$context()?.value, slotBindings[slotN]?.bindings);
+			if (!isChildrenNode(slotRender)) {
+				debugHandler(`Element Recognition Error: unrecognised element/value passed to render`, self, true);
+				return;
+			}
+			installSuspense(slotRender, getBoundary(hx_Element));
+			slotRender = arrayInverter(_HouxitCoreRenderer(arrayInverter(slotRender), patchFlags, null, hx_Element, null, config));
+			if (slotN !== "default" && except.has(slotN)) {
+				debugHandler(`Duplicate Slot Error: slot content with the name mapping "${slotN}" has already be defined\n\nUntraced slotting mapping\n"${slotN}" slot Duplicate found`, self, true);
+				return;
+			} else {
+				except.add(slotN);
+				slotRender.forEach((hx_el) => {
+					hx_el.slot_name = slotN;
+					renderSlotList.push(hx_el);
+				});
+			}
+		}
+		else {
+			except.add("default");
+			if (isPrimitive(value)) value = callback;
+			installSuspense(value, getBoundary(hx_Element));
+			arrayInverter(_HouxitCoreRenderer(value, patchFlags, null, hx_Element, null, config)).forEach((hx_el) => {
+				hx_el.slot_name = "default";
+				renderSlotList.push(hx_el);
+			});
+		}
+	}
+	except.clear();
+	return renderSlotList;
+}
+function arrayInverter(value, useCollections = true) {
+	if (!isArray(value) && isCollection(value) && useCollections) return arrSet(value);
+	if (!isNull(value) && (useCollections ? !isCollection(value) : !isArray(value))) {
+		const array = [];
+		array.push(value);
+		return array;
+	} else if (isNull(value)) return [];
+	return value;
+}
+function slotsGeneticProvider(self, options, vnode, isRerender) {
+	if (!vnode.children) return;
+	let children = vnode.children;
+	const slotsCompilerArgs = isInitialBuild(self) ? {
+		self,
+		hx_Element: vnode?.hx_Element,
+		config: {}
+	} : vnode.filesFilter?.slotsCompilerArgs;
+	let { hx_Element, self: patchFlags, fall, config } = slotsCompilerArgs;
+	const is_hyperscript = vnode.is_hyperscript;
+	if (!config) config = {};
+	config.patchFlags = self;
+	let context = () => self[$$$core].map.$$$context?.value || {};
+	let childrenRender;
+	config.slotTap = { parent: slotsCompilerArgs.hx_Element };
+	config.topLevelSlotContext = true;
+	if (is_hyperscript) childrenRender = normalizeHyperscriptSlotting(self, children, hx_Element, patchFlags, isRerender, config);
+	else {
+		context = self[$$$core].context;
+		installSuspense(children, getBoundary(vnode));
+		childrenRender = _HouxitCoreRenderer(children, patchFlags, null, hx_Element, context?.(), config);
+	}
+	return [
+		arrayInverter(childrenRender),
+		patchFlags,
+		hx_Element,
+		{
+			hx_Element,
+			patchFlags
+		}
+	];
+}
+function createContext_Parameters(self, options, vnode) {
+	if (!options.context) return;
+	const effect = _createEffectBase(function() {
+		return options.context.call(self.__public_model__);
+	}, self);
+	try {
+		effectRunner(effect);
+	} catch (err) {
+		debugHandler(`Provider Method Error: Encountered an error while trying to run the context >> provider option method`, self, true);
+		debugHandler(`${err}`, self);
+		return;
+	}
+	if (!isPObject(effect.value)) {
+		debugHandler(`Context Return Error: The context option return value expects a plain object\nReturning a non plain object is invalid `, self, true);
+		return;
+	}
+	const value = token(effect.value);
+	self[$$$core].map.$$$context = { get value() {
+		return value.data;
+	} };
+	effect.attachCallback(() => {
+		assign(value.data, effect.runEffect().value);
+	});
+}
+function runtimeSlotsContext_Manager(self, options, patch, vnode) {
+	const context = vnode.hx_Element?.VNodeManager[$$$context];
+	if (!(context && context.prop)) return;
+	const value = () => self[$$$core].map?.$$$context.value;
+	const prop = context?.prop;
+	if (!hasOwn(self[$$$core].map, "$$$context")) return;
+	const { hx_Element, self: patchFlags } = vnode.filesFilter.slotsCompilerArgs;
+	function contextPropsProvider() {
+		if (!destructWarn(prop, value(), self)) return {};
+		if (isDestructureSyntax(prop)) return { [$$dexTransformKey]: {
+			sourcesArray: [value()],
+			syntaxArray: [prop]
+		} };
+		else return { [prop]: value() };
+	}
+	self[$$$core].context = contextPropsProvider;
+}
+function defineLateGlobalProps(self, build) {
+	if (isHouxitElement(build)) useModel.call(self, { $element: build.$element });
+}
+function isInitialBuild(self) {
+	return isHouxitBuild(self) && isTrue(self[$$$ownProperties].isInitialBuild);
+}
+function mapPublicationsTraverse(self, opts, adapter) {
+	if (!hasOwn(opts, "transmit")) return;
+	const effect = _createEffectBase(() => {
+		return opts.transmit.call(self.__public_model__);
+	}, self);
+	if (!isPObject(effect.value)) {
+		debugHandler(`${adapter ? "useTransmit method argument" : "transmit method option"} expects a plain object as a return value`, self, true);
+		return;
+	}
+	const globalBoard = isInitialBuild(self) ? self[$$$core].$globals.transmited : self[$$$core].$root[$$$core].$globals.transmited;
+	for (const [key, valueX] of entries(effect.value)) globalBoard[key] = valueX;
+	effect.endLife();
+}
+function receivePublicationPrefix(self, opts, in_build = false) {
+	if (!hasOwn(opts, "receive")) return;
+	const globalBoard = isInitialBuild(self) ? self[$$$core]?.$globals.transmited : (self[$$$core].$root || {})[$$$core]?.$globals.transmited;
+	for (let [key, valueX] of getIterator(opts.receive)) {
+		let keyName = isArray(opts.receive) ? valueX : key;
+		if (!validateType(keyName, [String, Symbol])) {
+			debugHandler(`Arrays value of receive option expects a string / Symbol values of transmited property names\n\n
+          ........"${keyName}"`, self, true);
+			return;
+		}
+		let defaultValue;
+		if (!hasOwn(globalBoard, keyName)) if (isPObject(valueX) && hasProp(valueX, "default")) if (!isPFunction(valueX.default)) defaultValue = valueX.default;
+		else defaultValue = !isArrowFunction(valueX.default) ? valueX.default.call(self.__public_model__) : valueX.default();
+		else {
+			debugHandler(`No transmited props with the provided receive key "${keyName}"\n\n
+            Unrecognized receive property`, self, true);
+			return;
+		}
+		let received = get_Object_Value(globalBoard, keyName);
+		if (isPObject(valueX) && hasOwn(valueX, "receive")) {
+			if (!isPFunction(valueX.receive)) {
+				debugHandler(`receive option of "${key}" receive property expects a function`, self, true);
+				return;
+			}
+			received = !isArrowFunction(valueX.receive) ? valueX.receive.call(self.__public_model__, received) : valueX.receive(received);
+		}
+		if (!hasOwn(globalBoard, keyName) && !exists(received) && hasProp(valueX, "default") && exists(defaultValue)) received = defaultValue;
+		let aliasKey = keyName;
+		if (isPObject(valueX)) {
+			if (!hasOwn(valueX, "alias")) {
+				debugHandler(`receive prop "${keyName}" object expects an "alias" property`, self, true);
+				return;
+			} else if (!validateType(valueX.alias, [String, Symbol])) {
+				debugHandler(`"${keyName}" receive alias property expects a String or a Symbol`, self, true);
+				return;
+			} else if (!exists(valueX.alias)) {
+				debugHandler(`alias property of "${keyName}" receive property is an empty string or undefined prop naming`, self, true);
+				return;
+			} else if (validateType(valueX, [String, Symbol])) valueX = { alias: valueX };
+			aliasKey = valueX.alias;
+		}
+		if (object_Has_Path(self.__public_model__, aliasKey)) {
+			debugHandler(`"${aliasKey}" property of receive conflicts with an existing model property\n\n
+          Try configuring an alias property instead\n\n............at "${keyName}"`, self, true);
+			return;
+		}
+		if (!in_build) define(self.__public_model__, aliasKey, {
+			value: received,
+			enumerable,
+			configurable
+		});
+		else return received;
+	}
+}
+function traverseMixins_Inheritance(self, options) {
+	const mixins = new Tuple(...[...getGlobalRegistery(self).register.mixins.list(), ...options.mixins || []]).list();
+	if (!len(mixins)) return;
+	applyMixinMergeStrategy(self, options, mixins);
+}
+function applyMixinMergeStrategy(self, options, mixins) {
+	const applied_mixins = self[$$$operands].applied_mixins;
+	const store = {};
+	for (const mx of mixins.toReversed().values()) {
+		if (!validateType(mx, [Function, Object])) {
+			debugHandler(`[Houxit Mixin Merge Warn] Mixins expects a plain fuction/object instance/valid Houxit widget instance`, self, true);
+			return;
+		} else if (applied_mixins.has(mx)) continue;
+		applied_mixins.prepend(mx);
+		defineMixinStrategy(self, options, mx, store);
+	}
+	sanitizedOptions(self, store);
+	makeMerge(self, store, options);
+}
+function defineMixinStrategy(self, options, mixin, store) {
+	for (let [name, value] of entries(isPFunction(mixin) ? { build: mixin } : mixin)) {
+		if (isInvalidMixinOption(name)) {
+			$warn(`[Mixin Strategy Mismatch] Ignored "${isPFunction(mixin) ? "Functional mixin as [build]" : name}" in mixin. UI-defining options are only allowed on widgets. \nSee [Mixins] guide and merge strategy reference.`, self, true);
+			continue;
+		}
+		if (!store[name] || !isTuple(store[name])) {
+			const inn = store[name];
+			store[name] = new Tuple();
+			if (inn && !isTuple(inn)) store[name].add(inn);
+		}
+		store[name].add(value);
+	}
+}
+function makeMerge(self, store, options) {
+	for (let [name, values] of entries(store)) if (isMergeableArrays_Objects(name)) {
+		const mxStore = {};
+		values.forEach((vl) => {
+			smartArrayObjMerger(name, vl, mxStore);
+		});
+		options[name] = smartArrayObjMerger(name, options[name] || {}, mxStore);
+	} else if (isMergableMethods(name)) {
+		const insider = options[name];
+		options[name] = function(...args) {
+			values.list().toReversed().forEach((fn) => fn.call(this, ...args));
+			return insider?.call?.(this, ...args);
+		};
+	} else if (isMergableObjects(name)) {
+		let pack = {};
+		values.list().toReversed().forEach((obj) => {
+			assign(pack, obj);
+		});
+		options[name] = assign(options[name] || {}, pack);
+	} else if (isMergeableArrays(name)) options[name] = [...options[name] || [], ...values];
+	else if (!hasOwn(options, name)) options[name] = values.at(0);
+}
+function smartArrayObjMerger(name, values, compose = {}) {
+	for (let [key, item] of getIterator(values)) if (isArray(values)) {
+		if (name === "params") compose[item] = { type: Any };
+		else if (name === "receive") compose[item] = {};
+	} else compose[key] = item;
+	return compose;
+}
+function getHouxitBuildInstance(self, options, vnode) {
+	if (hasOwn(vnode, factoryHXSelfInstance)) {
+		self[$$$ownProperties].isSelfRecursive = true;
+		delete vnode[factoryHXSelfInstance];
+	}
+	if (!hasOwn(options, "hx_Element") || !isHouxitElement(options["hx_Element"])) return;
+	self[$$$ownProperties].hx_Element = options["hx_Element"];
+}
+function HouxitBuild(options) {
+	const [opts, vnode] = createCordinationProperties(this, options);
+	this[$$$compiler].initialization = () => {
+		sanitizedOptions(this, opts, vnode);
+		validateRegistryProvider(this);
+		$ensureLifeCircleHooks(this, opts, vnode);
+		setConfig(this, opts, vnode);
+		$construct_With_Signals(this, opts, false, vnode);
+		map_Events_Fall(this, vnode);
+		__Ensure_Renderer(this, opts, vnode);
+	};
+	this[$$$compiler].templateProcessor = function(self, build, buildFacade, slotter) {
+		if (!self[$$$operands].initializedRender) {
+			if (!(isPromise(buildFacade) && isTrue(slotter))) build = _$slotHydrationRenderer(self, opts, build);
+		}
+		build = _hydrate_props_fallthrough(opts, self, build);
+		build = _preCompile_StyleSheet(opts, self, build);
+		RuntimeTokenDir(self, opts, vnode);
+		defineLateGlobalProps(self, build);
+		return build;
+	};
+	resolveBuildLab(this, opts, vnode);
+}
+function resolveBuildLab(self, options) {
+	self[$$$core].build = options.build || options.template || options.markdown;
+	self[$$$core].opts = options;
+}
+function $$houxitPower() {}
+function getComposersContext(self) {
+	const adapters = {
+		signals: self.__public_model__.$signals,
+		attrs: self.__public_model__.$attrs,
+		slots: self[$$$compiler].composedSlots,
+		events: self.__public_model__.$events,
+		use: use.bind(self)
+	};
+	for (const [key, macro] of entries(assign(adapters, self[$$$core].utils))) define(adapters, key, {
+		value: macro,
+		enumerable
+	});
+	return adapters;
+}
+function trackTemplateSource(self, selector, fall, hx_Element, ssc) {
+	fall = fall || {};
+	if (ssc) fall = smartDextCtxMerging(fall, ssc);
+	let render = pass;
+	inDomCaveatRemodeling(self);
+	const isRerender = () => self[$$$operands].initializedRender;
+	const starter = () => self[$$$compiler].StarterTemplate;
+	const temp_build = () => isRerender() ? memMove(starter(), true) : self[$$$core].build;
+	self[$$$core].map.is_hyperscript = false;
+	if (!temp_build() && selector && isInitialBuild(self) && !isSSRCompiler(self) && inBrowserCompiler) self[$$$core].build = escapeReverseDecoder(_GenerateRoot(selector, self)?.innerHTML || "");
+	const temp = temp_build();
+	if (isString(temp) || isCollection(temp)) {
+		render = (instance) => {
+			return _HouxitCoreRenderer(temp_build(), instance, false, hx_Element, fall, {
+				official: true,
+				self
+			});
+		};
+		self[$$$core].render = render;
+	}
+	return render;
+}
+function createGarbageCollector(self) {
+	self[$$$compiler][garbageKey] = {
+		postBuild: new Tuple(),
+		postUpdate: new Tuple(),
+		postMount: new Tuple(),
+		postDestroy: new Tuple(),
+		preDestroy: new Tuple(),
+		preUpdate: new Tuple(),
+		preMount: new Tuple(),
+		onEffect: new Tuple(),
+		onTracked: new Tuple(),
+		onCatch: new Tuple()
+	};
+}
+function mapGarbargeHooks(self) {
+	for (const [name, tuple] of entries(self[$$$compiler][garbageKey])) {
+		if (!len(tuple)) continue;
+		function hook() {
+			tuple.list().forEach(function(fn) {
+				callbackHookWithCatch(self, fn, name);
+			});
+		}
+		const joinder = self[$$$operands]._LIFECIRCLEHOOKS[name];
+		if (isPass(joinder)) self[$$$operands]._LIFECIRCLEHOOKS[name] = hook;
+		else self[$$$operands]._LIFECIRCLEHOOKS[name] = function() {
+			hook();
+			callbackHookWithCatch(self, joinder, name);
+		};
+	}
+	delete self[$$$compiler][garbageKey];
+}
+function generateBuildParams(self) {
+	const params = self[$$$ownProperties].$params;
+	const obj = new Params();
+	for (let [key, value] of entries(params)) define(obj, key, { get() {
+		return value.data;
+	} });
+	return obj;
+}
+function handleBuildGenerator(self, selector) {
+	let render;
+	let widgetBuild = self[$$$core].build;
+	const isRerender = self[$$$operands].initializedRender;
+	self[$$$core].$parent;
+	if (isFunction(widgetBuild)) {
+		if (!isRerender && isAsyncFunction(widgetBuild)) {
+			self[$$$core].build = () => [];
+			return (async function() {
+				installCurrentRunningEffect(self);
+				const builder = await widgetBuild.call(void 0, generateBuildParams(self), getComposersContext(self), $$houxitPower);
+				reinstatePreviousRunningEffect();
+				self[$$$core].build = function() {
+					return builder;
+				};
+				handleBuildGenerator(self, selector);
+				self[$$$ownProperties].asyncBuildCache;
+			})();
+		}
+		let responseRender, renderer;
+		createGarbageCollector(self);
+		const useState = !isArrowFunction(widgetBuild);
+		try {
+			if (useState) installCurrentRunningEffect(self);
+			renderer = widgetBuild.call(void 0, generateBuildParams(self), getComposersContext(self), $$houxitPower);
+			if (useState) reinstatePreviousRunningEffect();
+			responseRender = renderer;
+			if (isArrowFunction(widgetBuild) && !isPFunction(renderer)) responseRender = () => renderer;
+		} catch (err) {
+			debugHandler(`Error during the call of the build function`, self, true, DebugFlags.build);
+			debugHandler(err);
+			if (isXtruct(widgetBuild)) debugHandler(`build options method seems to be a constructor function`, self);
+			else debugHandler(`${err}`, self);
+			return;
+		}
+		mapGarbargeHooks(self);
+		if (isModelInstance(renderer) && (!isFunctionBasedBuild(self) || isInitialBuild(self))) {
+			const options = self[$$$core].opts;
+			if (hasOwn(options, "render")) responseRender = () => options.render.call(self.__public_model__);
+			else {
+				self[$$$core].build = hasOwn(options, "template") ? options.template : null;
+				return trackTemplateSource(self, selector, null, void 0, void 0);
+			}
+		}
+		if (!isPFunction(responseRender) && !isArrowFunction(widgetBuild)) {
+			debugHandler(`Error during the call of ${!isFunctionBasedBuild(self) ? "the build function" : "functional widget"} context\n\nfailed to return a render function when returning the build method::\nCross-Check your returned build Data as This may lead to unexpected results during Houxit element nodes Compilation`, self, true, DebugFlags.build);
+			return;
+		} else if (!isChildrenNode(responseRender())) {
+			debugHandler(`value not a valid Houxit Element instance`, self, true);
+			return;
+		}
+		self[$$$core].map.is_hyperscript = true;
+		self[$$$core].render = function factoryRender(instance, update = false) {
+			let response = responseRender();
+			return !isArray(response) && isChildrenNode(response) ? arrayInverter(response) : isChildrenNode(response) ? response : [];
+		};
+		return self[$$$core].render;
+	} else if (hasOwn(self[$$$core].opts, "render")) {
+		self[$$$core].map.is_hyperscript = true;
+		self[$$$core].render = function factoryRender(instance, update = false) {
+			let response = responseRender.call(self.__public_model__);
+			return !isArray(response) && isChildrenNode(response) ? arrayInverter(response) : isChildrenNode(response) ? response : [];
+		};
+		return self[$$$core].render;
+	} else return trackTemplateSource(self, selector, void 0, void 0);
+	render = (sf, update) => self[$$$core].render(sf, update);
+	self[$$$core].render = render;
+	return render;
+}
+function inDomCaveatRemodeling(self) {
+	for (const [name, item] of entries(self[$$$register].widgets)) if (hasUpperCase(name)) self[$$$register].widgets[to_kebab_case(name)] = item;
+	for (const [name, item] of entries(self[$$$register].directives)) if (hasUpperCase(name)) self[$$$register].directives[to_kebab_case(name)] = item;
+}
+function _GenerateRoot(nodeSelector, self) {
+	if (isNull(nodeSelector)) {
+		debugHandler(`No node model or selector value passed for deployment`, self, true);
+		return;
+	}
+	let domRoot;
+	if (isString(nodeSelector)) {
+		domRoot = document.querySelector(nodeSelector);
+		if (!isNativeElement(domRoot)) {
+			debugHandler(`Error generating element, target not a valid native element instance`, self, true);
+			return;
+		}
+	} else if (isNativeElement(nodeSelector) || nodeSelector.isHouxit_Fragment || nodeSelector === document) domRoot = nodeSelector;
+	return domRoot;
+}
+function getGlobalRegistery(self) {
+	return self[$$$core].$globals;
+}
+function mergeRegisteries(self) {
+	entries(self[$$$core].$globals.register).forEach(([name, value]) => {
+		for (let [key, content] of entries(value)) if (!hasProp(self[$$$register][name], key) && key !== "$root") self[$$$register][name][key] = content;
+	});
+	assign(self.__public_model__, self[$$$register].properties);
+}
+function validateRegistryProvider(self) {
+	const gR = getGlobalRegistery(self);
+	const registeredOpts = gR.legalOptions;
+	const _opts = self[$$$operands]._OPTIONS;
+	for (let [key, opt] of entries(_opts)) {
+		if (!_makeMap_(registeredOpts, key)) {
+			debugHandler(`Unrecognised option found\n\n
+          "${key}" option is not a valid widget option or not registered,
           \n\n
-          You can register this option by passing an "optionRegistry" object prop to "build.controller({})" method as an object argument method`,e,!0);return}else if(!Y(a,n[i])){A(`The provided "${i}" option validation failed on the required type\n\n
-          Type of "${Sa(a)}"" found`,e,!0);return}t.setupOptions[i]?.()}}function Up(e,t,n){_p(e,t,n),vp(e,t,null,n),up(e,t,gp(e,t,n,e[I].initializedRender)||[]);for(let[t,n]of y(e[z].slots))e[R].composedSlots[t]=function(){return Iu(`slot`,{name:t})}}function Wp(e,t){!t.refs||!j(t.refs)||(e[I].templateRefsInputs,U(t.refs).each((t,n)=>{Gp(e,t)}))}function Gp(e,t,n=!1){if(!n&&!d(t)){A(`[Template Ref  Registration] refs option expects a string value`,e,!0);return}let r=new Xr(void 0,{shallow:!0});if(n||d(t)){let n=e[I].templateRefsInputs;_(n,t)||(n[t]=r)}return r}function Kp(e){let t=Va({name:`useRef`});return!P(t)&&!H(arguments,{validators:[String],max:1})?te():Gp(t,e,!0)}function qp(e){return Kp(...arguments)}function Jp(e){let t=e[z].opts;xp(e,t),Vp(e)}var Yp=e=>h(e)&&D(e.get)&&(_(e,`set`)?D(e.set):!1);function Xp(e,t){if(!H(arguments,{min:1,max:2,name:`computed`,validators:[[Function,Object],Object]})&&!D(e)&&!Yp(e)){A(`computed macro at Parameter 1 expects a getter function or a descriptor object of a required "get" and an optional "set" property methods`,self,!0);return}return $p(void 0,e,!0,t||{})}function Zp(e,t){return Xp.call(this,...arguments)}function Qp(e,t,n){return ni(function(r,i){function a(){r();let a=n.internals;if(a.Initial){if(a.updateFlags){let e=a.effect.runEffect().value;return a.updateFlags=0,a.cache=e,e}return a.cache}let o=()=>(Yp(t)?t?.get:t).call(e?.__public_model__,...arguments);a.effect.effect=o,a.Initial=!0;let s=J(a.effect).value;return a.effect.attachCallback(()=>{a.updateFlags++,i()}),a.cache=s,s}let o={get(){return a()},computed:!0,...n||{}};return Yp(t)&&_(t,`set`)&&D(t.set)?(o.set=function(){return i(),t?.set?.call(e?.__public_model__,...arguments)},_(o,`readonly`)&&delete o.readonly):o.readonly=!0,o})}function $p(e,t,n,r={}){r=v({},r);let i=Qp(e,t,r),a=i[Di],o=q();return o.flushType=`sync`,a.cache=o.values,a.effect=o,r.internals=a,i}function em(e,t){if(!t.computed||!j(t.computed))return;let n=e.__public_model__;for(let[r,i]of y(t.computed)){if(!D(i)&&!Yp(i)){A(`computed option  at "${r}" property expects a getter function method option or a descriptor object of a "get" and an optional "set" property methods`,e,!0);return}let t=$p(e,i);S(n,r,{get(){return G(t)}})}}function tm(e,t){for(let e of t.updated_hooks.values())e();t.updated_hooks.clear(),pp(e,e[I]._LIFECIRCLEHOOKS.postUpdate,`postUpdate`)}function nm(e,t,n,r=!1){let i=Q(e);if(dm(e,t,n,r),Tt(n)&&bp(e)&&!i&&(n.innerHTML=``),!i&&bp(e)&&!Tt(n)){A(`Initial entry Point mount root expects an element node`,e,!0);return}if(!i&&bp(e)&&O(n.IS_HOUXIT_MOUNTROOT)){A(`A Houxit widget has already been mounted on self element, cannot mount more than one Widget on a single root element`,e,!0,`When trying to mount this initialBuild instance to the target DOM`);return}mm(e,n)}function rm(e,t,n){this[R].initialization();let r=Q(this);if(r&&n===kn&&(this[R].SSRHydrationFlag=!0),!r&&!ne)return A(`Houxit failed to load Dom specific API(s) as it seems you are running Houxit from a server environment.....
-use "initSSRBuild" App builder instead.`,self,!0),this;let i=(Qf(this)||!r)&&ne?zp(e,this):null;um(this);let a=Lp(this,e);if(this.$build=de(a)?new X([],self):Jm(this,this[z].render,a,!0),de(a)){let t=Ls(this[z].virtualNode);this[I].awaitReady=a,a=a.then(()=>{let t=Rs(this),n=Rs(this[z].$owner),r=Jm(this,this[z].render,a);n(),mh(this.$build).before(r.$element),hh(this.$build),this.$build=r,nm(this,e,i,!0),t()}).catch(e=>{ps(t)?.errorCaptured(V,{message:`<async build>() process has failed to resolve...`})}),t&&(t.activeAwaits++,t.loadChain.add(a))}else nm(this,e,i);return this}function im(e){return!Q(e)}function am(e){return!1}function om(e,t){am(e)||A(`(((Hydration Mis-Match Error)))....\n\n${t}`,e,!0)}function sm(e,t,n){if(Tt(t)&&ht(n)||Oo(n)&&wt(t))om(e,`adjacent elements mismatches during "HydrationTypeMatch" ....of (${Tt(t)?`<`+t.localName+`>`:`"`+t.textContent+`"`} ... ${Oo(n)?`<`+n.type+`>`:`"`+n.content+`"`})`);else if(Tt(t)&&Oo(n))return t.localName===n.type?!0:(om(e,`tagnames do not match ....of (<`+t.localName+`> ... <`+n.type+`>)`),!1);else if(wt(t)&&ht(n))return t.textContent===n.content?!0:(om(e,`textContent does not match with hydration target----of(<"${t.textContent}"> ... <"${n.content}">)`),!1);else gt(n);return!1}function cm(e,t,n,r){let[i,a,o,s]=r||[],c=i||t.childNodes.values(),l=n;n=gt(n)?n.fragment:n;let u=am(e),d=new M;s||=new M,i&&s.add({});for(let[t,r]of n.entries()){let t;if(Oo(r)||ht(r)){if(t=c.next().value,!sm(e,t,r)){if(u)continue;break}o&&(o?.first||(o.first=t),o.last=t),i&&s.forEach(e=>{e.first||=t,e.last=t}),!Ke(r.type)&&!ht(r)&&r.children&&cm(e,t,r.children||[])}else(gt(r)||xr(r))&&cm(e,null,r,[c,l.hx_Element,o,s]);(ht(r)||gt(r)||Oo(r))&&(ht(r)||gt(r)?r:r.filesFilter.$ssr_kit).hydrationFlushs.forEach(e=>e(gt(r)?null:t))}d.forEach(e=>e()),i?lm(l.hx_Element,s.pop()):o&&bp(e)&&lm(a,o)}function lm(e,t){let{first:n,last:r}=t,i=document.createComment(wr),a=document.createComment(wr);n.before(i),r.after(a),N(e)&&(e.VNodeManager.posix=[i,a])}function um(e){let t=e[z].opts;Wp(e,t),Sf(e,t),Jp(e)}function dm(e,t,n,r){e[z].render,pm(e),Qf(e)&&cm(e,n,e.$build.$element,[null,e.$build,{}]),Zm(e.__public_model__,()=>Xm(async function(){Qf(e)&&(e[R].useSSRCompiler=!1,e[R].SSRHydrationFlag=!1);let n=ef(e);im(e)&&Qm(e,t),Xm(n)}),e,!0),pp(e,e[I]._LIFECIRCLEHOOKS.onTracked,`onTracked`),pp(e,e[I]._LIFECIRCLEHOOKS.postBuild,`postBuild`),Xm(()=>{e[I].onRenderTracked=!0}),e[I].initializedRender=!0,e[I].effectRerender=!0}function fm(e){return e[I].effectRerender}function pm(e){let t=e[I].installers_plugin;j(t)&&e.install(function(e){for(let e of t.values())e(...arguments)})}function mm(e,t){let n={IS_HOUXIT_MOUNTROOT:!0,__mountRootToken:`hx__`+bf(5)};pp(e,e[I]._LIFECIRCLEHOOKS.preMount,`preMount`),t=hm(e,t,n),Q(e)||qm(e,e.$build,()=>{for(let t of e[R].whenMountedHooks.values())pp(e,t,``);pp(e,e[I]._LIFECIRCLEHOOKS.postMount,`postMount`)}),e[I].hasMountProto=!0}function hm(e,t,n){return Ft(t)&&Tt(t)&&bp(e)&&!Q(e)?(t.innerHTML=``,t.append(e.$build?.$element||``),e.property(`$root`,e.$build),t.IS_HOUXIT_MOUNTROOT=!0,Xm(()=>{t.hasAttribute(`hx-cloak`)&&t.removeAttribute(`hx-cloak`)})):t=e.$build?.$element,t}function gm(){if(!ne)return;let e=document.createElement(`style`);e.append(`[hx-cloak]{ display:none;} `),document.head.appendChild(e)}gm();function _m(e,t){if(H(arguments,{name:`initBuild().widget()`,validators:[String,[Function,Object,ya]],count:2,required:[!0,!0]}))return j(new Set(arguments))===2&&(this[z].$globals.register.widgets[e]=t),this}function vm(e,t){return Y(e,[Object,Function])?h(e)&&!D(e.plugin)?(A(`plugin installation Error::
-
- plugin object did not expose a plugin installation method`,this,!0),this):((h(e)?e.plugin:e)?.(this,t),this):(A(`plugin installation Error::
-
- install argument must be an object value with  an exposed plugin installation method or a function which acts as the plugin method itself`,this,!0),this)}function ym(e,t){if(H(arguments,{name:`initBuild().handler()`,validators:[String,Function],count:2,required:[!0,!0]}))return j(arguments)===2&&(this[z].$globals.register.handlers[e]=t),this}function bm(e,t){if(H(arguments,{name:`initBuild().directive()`,validators:[String,[Function,Object]],count:2,required:[!0,!0]}))return j(arguments)===2&&(this[z].$globals.register.directives[e]=t),this}function xm(e){return Y(e,[Object,Function])?j(arguments)===1?(this[z].$globals.register.mixins.add(e),this):(A(`.mixin() expects not more than one formal argument`,this),this):(A(`unrecognised global mixin registration for\n ${$t(e)}`,this,!0),this)}function Sm(e,t){if(H(arguments,{name:`initBuild().filter()`,validators:[String,[Function,Object]],count:2,required:[!0,!0]}))return j(arguments)===2&&(this[z].$globals.register.filters[e]=t),this}function Cm(e,t){if(H(arguments,{name:`initBuild().block()`,validators:[String,[Function,Object]],count:2,required:[!0,!0]}))return j(arguments)===2&&(this[z].$globals.register.blocks[e]=t),this}function wm(e,t){if(H(arguments,{name:`initBuild().property()`,validators:[String,ga],count:2,required:[!0,!0]}))return j(arguments)===2&&(this[z].$globals.register.properties[e]=t),this}function Tm(e,t){if(H(arguments,{name:`initBuild().templateClass()`,validators:[String,ga],count:2,required:[!0,!0]}))return j(arguments)===2&&(this[z].$globals.register.templateClasses[e]=t),this}function Em(e,t){if(H(arguments,{name:`initBuild().transition()`,validators:[String,ga],count:2,required:[!0,!0]}))return j(arguments)===2&&(this[z].$globals.register.transitions[e]=t),this}function Dm(e,t){if(H(arguments,{name:`initBuild().animation()`,validators:[String,ga],count:2,required:[!0,!0]}))return j(arguments)===2&&(this[z].$globals.register.animations[e]=t),this}function Om(){if(j(arguments))A(`.destroy() method of initBuild accepts no formal parameters`,this);else if(!this[I].hasMountProto)return A(`instance of widget not yet mounted
-
-widget unmounting failure`),!1;try{hh(this.$build)}catch(e){return A(`widget instance destroy failed`,this,!0),A(e),!1}return te(this)}function km(){return Om.call(this,...arguments)}function Am(e,...t){let[n]=t;return k(Xd(this,e,n))||(this[z].settings[e]=n),this}function jm(e){return Am.call(this,`delimiters`,...arguments)}function Mm(e){return Am.call(this,`forwardAttrs`,...arguments)}function Nm(e){return Am.call(this,`forwardSlot`,...arguments)}function Pm(e){return Am.call(this,`scopedStyle`,...arguments)}function Fm(e,t){if(H(arguments,{count:2,required:[!0,!0],validators:[String,Function],name:`app.controller.optionsHook()`})&&!_(Bp(this).legalOptions,e)){A(`optionsHook plugin method called on an undefined/unregistered option...\n\n"${e}"`,this,!0);return}}function Im(e,t){if(!h(e)){A(`[Custom Option-Hook mixin] "applyMixin" callback expects a plain object`,this,!0);return}wp(this,t,[e])}function Lm(e,t){bp(this)&&Fm.call(this,...arguments);let n=this[I]._OPTIONS;if(!_(this[z].opts,e))return;let r=Bp(this),i=this;r.setupOptions[e]=function(){t?.(i.__public_model__,n[e],function(e){Im.call(i,e,i[z].opts)})}}function Rm(e){if(!h(e)){A(`argument at position 1 expects a plain object
-
-Type unaccepted`,this,!0);return}let t=this[z].$globals.controller;if(t.has(e))return this;t.add(e),Vm(this,e);let{setup:n,setupAdapter:r}=e;if(_(e,`setupAdapter`)&&!D(r))return A(`setupAdapter option of .controller({}) method expects a function/method type`,this,!0),this;!Ee(r)&&!D(r)&&(r=V);let i=this;function a(e,t){return Lm.call(i,e,t)}return r(this,a),this}function zm(e){return Rm.call(this,...arguments)}function Bm(e={}){return Zd(this,{buildConfig:e}),this}function Vm(e,t){if(!w(t,`optionsRegistery`))return;if(!h(t.optionsRegistery)){A(`The "optionsRegistery" property argument of controller expects a plain object
-
-Type Unexpected`,e,!0);return}t.optionsRegistery;let n=Bp(e);y(t.optionsRegistery).forEach(([t,r])=>{if(T(n.legalOptions,t)){A(`${t} custom optionsRegistery already exists in the registery record`,e,!0);return}S(n.legalOptions,t,{value:r,enumerable:ve})})}function Hm(e,t){return O(e[I].hasMountProto)?(e[z].map.mountWarn||(A(`This "mount" method has been called\n\ncalling of methods after the widget is mounted is prohibited\n\n call to ('.${t}') method is considered an invalid houxit syntax`,e,!0),e[z].map.mountWarn=!0),!1):!0}function Um(e,t){return Y(e,[String,Symbol])?(S(bp(this)?this[z].$globals.transmited:this[z].$root[z].$globals.transmited,e,{value:t,enumerable:ve}),this):(A(`Parameter 1 on .transmit() expects a string or a Symbol `,this,!0),this)}function Wm(e){return Q(this)?(this.mount(e,null,kn),this):(A(`Incompatibility when trying to call the .hydrate on a non SSR App build`),this)}function Gm(){return{mount:rm,widget:_m,mixin:xm,install:vm,handler:ym,directive:bm,property:wm,filter:Sm,animation:Dm,transition:Em,block:Cm,templateClass:Tm,configDelimiters:jm,configForwardSlot:Nm,configScopedStyle:Pm,controller:zm,configForwardAttrs:Mm,hydrate:Wm,configOptions:Bm,destroy:km,transmit:Um}}for(let[e,t]of y(Gm()))t=new Proxy(t,{apply(t,n,r){return O(e===`destroy`||Hm(n,e))&&Reflect.apply(...arguments),n}}),kp.prototype[e]=t;async function Km(e,t,n=!1){P(e)?(e[I].garbageWatch||(e[I].garbageWatch=!0,await queueMicrotask(()=>{t?.call(e.__public_model__),e[I].garbageWatch=!1})),n&&await new Promise(e=>e(queueMicrotask(t)))):await queueMicrotask(t)}function qm(e,t,n){return new Promise((e,n)=>{let r=N(t)?mh(t):t;if(document.body.contains(r)){e(r);return}new MutationObserver((t,n)=>{document.body.contains(r)&&(n.disconnect(),e(r))}).observe(document.body,{childList:!0,subtree:!0})}).then(()=>n()).catch(t=>{A(t),A(`${t}`,e,!0)})}function Jm(e,t,n,i){let a=e,o=e[I].initializedRender;return D(t)&&(t=t(a)),e[z].map.is_hyperscript&&(t=jg($(t),a,null,null,null,{official:!0})),(r(t)||!t)&&(t=new X(t||[],a,null)),e[R].template=t,o||de(n)&&O(i)||Up(e,e[z].opts,e[z].virtualNode),t=e[R].templateProcessor(e,t,n,i),t}function Ym(e){if(!H(arguments,{count:1,validators:[Function],name:`tick`}))return te();let t=this&&P(this)?this:null;return j(arguments)&&!D(e)&&(A(`positional argument 1 on "tick" is not a function
-
- callback argument 1 requires a function type`,t,!f(t)),e=V),new Promise((n,r)=>{n(Km(t,E(e)?e:V,P(t)))})}function Xm(e){return Ym(...arguments)}async function Zm(e,t,n,r=!1){function i(){try{t()}catch(e){A(`Encountered a Problem during DOM effect trigger phase
-
->>>>>`,n,!0),me(`${e}`,n);return}}n[I].dependency.callback=i}function Qm(e,t){$m(e,{updated_hooks:new M,active:!1,willMutate:!1,effectFlush:new M})}function $m(e,t){pp(e,e[I]._LIFECIRCLEHOOKS.onEffect,`onEffect`),e[z].map.is_hyperscript,e.__public_model__.$tick(()=>th(e,t)).then(function(){j(t.effectFlush)&&pp(e,e[I]._LIFECIRCLEHOOKS.preUpdate,`preUpdate`)}).then(()=>Yo(e,t.effectFlush)).then(function(){j(t.effectFlush)&&(tm(e,t),t.updated_hooks.clear())})}function eh(e,t){A(`----unable to complete the rerender effect circle patch
-
-this is likely a probable bug/error in the houxit's compiler level;
-please report any problem —— and open an issue on our github repo issue page`,e,!0),A(`${t}`,e),console.error(t)}function th(e,t){let n=e[z].map.is_hyperscript,r=e[I].initializedRender;try{Promise.try(()=>{nh(e,{isRerender:r,is_hyperscript:n,observer:t})}).catch(e=>A(e))}catch(t){eh(e,t)}}function nh(e,t){let n=e[R].VN_Tree.priority;j(n)&&(n.forEach(e=>e()),n.clear())}function rh(e,t,n,r,i){if(ec(t,n)){Jt(t)?ih(e,t,n,r,i):uh(e,t,n,r,null,{config:i});return}else Jt(n)&&(t=new X(e,[t],null));ih(e,t,n,r,i)}function ih(e,t,n,r,i={}){let{KEYS_INDEXES:a,LEAGUE_TREE:o}=t.VN_Tree,{KEYS_INDEXES:s,LEAGUE_TREE:c}=n.VN_Tree,l=[],u=[],d=[],f=[];a.forEach((e,t)=>{s.has(e)||d.push([e,o[e],t])}),new M;for(let[n,d]of s.entries()){let s=a.at(n);if(d===s){let a=o[d]?.[0],l=c[s]?.[0];uh(e,a,l,r,t,{index:n,key:d,config:i})}else if(d!==s)if(a.has(d)){let e=o[s],t=s?mh(e[0],null,!0):void 0,r=document.createComment(wr);s&&t&&t.after(r),f.push({elements:[o[d],e],keys:[d,s],index:[a.indexOf(d),n],parent:t?.parentNode,posixElem:r})}else{let r=c[d][0],f=i.memoVault?dh(e,null,r,i):void 0,p=f?f.hx_Element:lh(e,r);if(i.list?.add(p),n>=j(a))l.push([p,d,n,t,f]);else{let[e,t]=o[s],r=mh(e,null),a=document.createComment(wr);r.before(a),u.push({elements:[p,e],posixElem:a,parent:r.parentNode,index:[void 0,n],keys:[d,s]}),ah(i)}}}oh(e,f,t,n,a,o,c,s,r,l,u,d,i),a.arrange(s.list()),b(o).forEach(e=>{a.has(isNaN(Number(e))?e:Number(e))||delete o[e]})}function ah(e){e.memoVault&&e.memoVault?.stabilityChecker()}function oh(e,t,n,r,i,a,o,s,c,l,u,d,f){let p=[],m=new M;for(let{elements:r,index:s,keys:l,parent:u,posixElem:d}of t.values()){let[t,h]=r,[g,_]=l,[v,y]=s;_?(_h(t[0],t=>sh(e,u,t,d)),m.add(function(){a[g][1]=y,d.remove()}),uh(e,t[0],o[g][0],c,n,{index:s,key:g,config:f})):y>=j(i)&&p.push({elements:r,index:s,keys:l,posixElem:d})}m.forEach(e=>e()),m.clear();for(let{elements:e,index:t,keys:i,parent:o,posixElem:s}of u.values()){let[o,c]=e,[l,u]=t,[d,f]=i;a[d]=[o,u],s.after(o.$element),n.NodeList.splice(r.NodeList.indexOf(c),0,o),m.add(()=>s.remove())}u.splice(0),m.forEach(e=>e()),m.clear(),t.splice(0);for(let[e,t,n,r,i]of l.values()){let[o,c]=a[s.at(n-1)]||[];a[t]=[e,n];let l=mh(o||r,null,!0);r.NodeList.add(e),i?i.record.forEach(e=>l.before(e)):l?.after(e.$element),ah(f)}l.splice(0);for(let{elements:t,index:r,keys:i}of p.values()){let[l]=t,[u,d]=r,[p,h]=i,[g,_]=a[s.at(d-1)],v=mh(g,null,!0),y=v.parentNode,b=document.createComment(wr);v.after(b),_h(l[0],t=>sh(e,y,t,b)),m.add(function(){a[p][1]=d,b.remove()}),uh(e,l[0],o[p][0],c,n,{index:r,key:p,config:f})}for(let[t,r,i]of d.values())(Bo(r[0])||f.memoVault)&&(dh(e,r[0],null,f),_h(r[0],e=>{ws(e,()=>{e.remove()})})),n.NodeList.delete(r[0]),delete a[t],Bo(r[0])||f.memoVault||hh(r[0]),ah(f);p.splice(0),m.forEach(e=>e()),m.clear()}function sh(e,t,n,r){try{t.moveBefore(n,r)}catch(i){i.name===`HierarchyRequestError`?t.insertBefore(n,r):(A(`${i}`,e,!0),console.error(i))}}function ch(e,t,n,r,i,a){if(Kt(t)){xh(e,t,n,r,i);return}else if(ac(t)||Io(t))return;if((Jt(t)||qt(t)&&!Ke(t.prototype_))&&ih(e,t,n,r),qt(t)){let r=t.$element.attributes,i=n.VNodeManager.patchFlags.shapeProps,a={};for(let{name:n,value:o}of x(r))n!==`data-hx_build`&&(_(i,n)?a[n]=o:Tl(e,{value:o,element:t.$element,mode:wl(n.trim()),key:n}));for(let[n,r]of y(i))Tl(e,{value:a[n],element:t.$element,mode:wl(n.trim()),key:n})}}function lh(e,t,...n){if(Io(t))return t;let r=Rs(e),i=t.compiler_options.createElement(...n);return r(),i}function uh(e,t,n,r,i,a){let{index:o,key:s,config:c,args:l=[]}=a||{};if(e[z].map.is_hyperscript,Ln(t)&&Ln(n)){let a=n.VNodeManager[Nn];a.state.resolved?rh(e,t,n,r,c):v(a.rerenderObj,{activeElement:t,Rerender_Element:n,parent:i,observer:r});return}if(c?.FORCE||!bh(t,n)){let r=Io(n),a=dh(e,t,n,c),o=a?.hx_Element||(r?n:lh(e,n,...l));if(c.memoVault&&!a?.hx_Element&&(o.compiler_options.createElement=t.compiler_options.createElement,!Bo(o))){if(!cs(e,o))return;o.VNodeManager.isMemoChild=t.VNodeManager.isMemoChild}let s=document.createComment(wr);if(mh(t,null,!0).after(s),i){let e=i.NodeList.indexOf(t),n=i.VN_Tree.KEYS_INDEXES.at(e);i.VN_Tree.LEAGUE_TREE[n]=[o,e],i?.NodeList.replace(t,o)}else e.$build=o;return Bo(t)||c.memoVault?_h(t,e=>{ws(e,()=>{e.remove()})}):hh(t),a?a.record.forEach(e=>s.before(e)):s.before(o.$element),s.remove(),c?.list?.add(o),ah(c),o}else ch(e,t,n,r,i)}function dh(e,t,n,r){if(!(Bo(t)||r.memoVault))return;let i=t?.VNodeManager?.isMemoChild?.vault||r?.memoVault,{storage:a,state:o,caches:s,keys:c}=i,l=t?.prototype_,u=n?.prototype_;if(t&&fh(e,t,c.has(l),i),n&&c.has(u))return ph(e,n,i)}function fh(e,t,n=!1,r){let{storage:i,caches:a,keys:o,max:s,test:c}=r,l=t.prototype_;if(n=o.has(l)&&n,!n){if(c&&!c())return;if(!ge(s)&&!isNaN(Number(s))&&o.size===s){let e=o.shift();hh(i.get(e).hx_Element),i.delete(e)}o.add(l)}let u=new M;_h(t,e=>{u.add(e)}),n?i.get(l).record=u:i.set(l,{hx_Element:t,record:u})}function ph(e,t,n){let{storage:r,caches:i,keys:a}=n,o=t.prototype_;if(!a.has(o))return;let s=r.get(o);return j(a)<2?s:(a.delete(o),a.add(o),s)}function mh(e,t,n=!1){let r;return Ch(e)?r=e.$element:(ac(e)&&(e=Sh(e)),Jt(e)?r=e.VNodeManager?.posix[+!!n]:Ch(e)&&(r=e.$element)),Tt(r)||wt(r)||Et(r)?r:t}function hh(e){ac(e)?e.widget_instance.destroy():Jt(e)?(e.upload(e=>ws(e,()=>{gh(e._hx_Element?.hx_Element),e.remove()})),e.NodeList.forEach(e=>hh(e))):Io(e)||(ws(e,()=>{gh(e),e?.$element?.remove()}),e.NodeList.forEach(e=>hh(e)))}function gh(e){if(!N(e))return;let t=e.VN_Tree.FLUSHS;t.forEach(e=>ks(e)),t.clear()}function _h(e,t){ac(e)&&(e=Sh(e)),Jt(e)?e.upload(t):Io(e)||t(e.$element)}function vh(e,t){return g(e.prototype_)?g(e.prototype_):C(e.prototype_,t.prototype_)}function yh(e,t){return uo(e._vnode_key,t._vnode_key)}function bh(e,t){return!!(Kt(e)&&Kt(t)||yh(e,t)&&ec(e,t)&&uo(e.prototype_,t.prototype_)&&vh(e,t))}function xh(e,t,n,r,i){if(t.compiler_options.value,t?.prototype_!==n?.prototype_){let a=()=>{t.$element.textContent=n?.prototype_,t.prototype_=n.prototype_};n.VNodeManager.awaitTextReady?.then(a)||a(),i&&wh(e,i,r)}}function Sh(e){return ac(e)&&(e=e?.widget_instance?.$build,e=Sh(e)),e}var Ch=e=>Kt(e)||qt(e);function wh(e,t,n){Hl(t.updated_hook)||n.updated_hooks.add(t.updated_hook)}function Th(e,t,n,r,i){let{isRerender:a,is_hyperscript:o,vNode:s,config:c}=i,{directive:l,value:u,key:f}=t,p=Q(e);if(!p&&!Hc(l))return Vl(e,t,s,r,i);if(l===`provide`){if(!jt(s?.GeneticProvider)){A(`Illegal Provide Use: "$$provide" directive is only scoped to widget instances vnode only\n\n found on "${(p?d(n.type):Ct(n))?n.outerHTML+` element`:``}"`,e,!0);return}T([Jn,$n],s.prototype_)?s.filesFilter.$$dir_PROVIDE_bindings=t:au(e,t,s,r,i)}_(su,l)&&(!a||T(`bind`,l))&&su[l](e,t,n,r,i,l===`text`)}function Eh(e,t){for(let[n,r]of y(e)){if(!n.includes(t))continue;let r;if(n.startsWith(`$$bind`)||n.startsWith(`$$slot`)?r=n.slice(6):n.startsWith(`$$on`)&&(r=n.slice(4)),r=fl(n),n.includes(`|`)&&(r=r.split(`|`).shift()),t===r){delete e[n];break}}return e}function Dh(e,t,n){if(!Vn(n)&&!H(arguments,{validators:[Object,Function,Symbol],max:3,min:1,name:`tokenGENERATOR`}))return;Vn(n)||(e=v({size:10,type:`alpha`},e));let r=bf(e.size,e.type);return t(r)||(r=Dh(e,t,jn)),r}function Oh(e,t){return Dh(e,t)}var kh=/::@_\(([\w$.\-!:\#.%?&]+)\)_/;function Ah(e){return kh.test(e)}function jh(e){return Ah(e)?e.match(kh)[1]:void 0}function Mh(e,t,n,r){let i=bp(e)?e:e[z].$root;S(t[z],`$root`,{value:i}),S(t[z],`$parent`,{value:n.compiler_options.parent}),S(t[z],`$owner`,{value:e});for(let[e,n]of y(i[z].$globals.register))t[z].$globals.register[e]=v(t[z].$globals.register[e],n)}function Nh(e,t){let n=Ah(t.type)?jh(t.type):t.type,r;if(!Ah(t.type)&&!tg(t.type)&&!Bt(e,n)&&!(ne&&customElements.get(n)))return A(`Template Compilation Error::\n\nUnresolved tagname "<${n}>"\n\n   ...if this is a Houxit widget, make sure its registered through the "widgets" option or defined through the CustomElementsInstance.define() method if it's a customElement `,e,!0),!1;if(Ah(t.type)){if(or(n))return!0;if(Jg(e,n))t.GeneticProvider=Yg(e,n);else return A(`((Block Resolver Error))\n\n"${n}" block is not a registered block element`,e,!0),!1;return!0}else T(er,n)&&(r=er[n]);return r=Vt(e,n),!tg(n)&&!jt(r)&&!customElements.get(n)?(A(`>>>> "${n}\n\nCannot compile value as a Houxit widget\nMaybe an invalid houxit widget value type`,e,!0),!1):(jt(r)&&(t.GeneticProvider=r),t.prototype_=jt(r)?r:n,!0)}function Ph(e,t,n,r,i){let{rawChildren:a,GeneticProvider:o,props:s}=t,c=e?e[z]?.map.is_hyperscript:t.is_hyperscript,l=e?e[I].initializedRender:null,u={},{hasDir:d,getKey:f,getDir:p}=c?{}:sc(s||{},`$$slot`);if(d&&(i.topLevelSlotContext?(Yl(e,vl(e,{key:f,attr:p},c,n,{isRerender:l}),t,n,{is_hyperscript:c,isRerender:l,config:i}),delete i.topLevelSlotContext):A(`$$slot directive definitions are only allowed on a widgets top-level consumer scope instances
-
-"slot' directive on ... widget has failed to compile away...cross-check element render positioning`,e,!0)),j(s)&&e&&(Rl(t,e,n,{is_hyperscript:c},u,i),t.props=u),jt(o)&&(t[Md]=o[Md],t.widget_instance=o,t.filesFilter.slotsCompilerArgs=r,N(n)&&(t[ir]=n),!l))return Q(e)&&(t.filesFilter.useSSRCompiler=!0,Qf(e)&&(t.filesFilter.isHydration=!0)),Fh(e,n,t).mount(zh())}function Fh(e,t,n){let r=new kp(n);return Ih(r),t&&(t.widget_instance=r),e&&(Lh(e,r,t,n),r.install(Rh,{self:e})),r}function Ih(e){_(e[z].opts,`install`)&&e.install(e[z].opts.install)}function Lh(e,t,n,r){let i=Bp(e);if(Mh(e,t,n,r),!j(i.controller))return t;for(let e of i.controller.values())t.controller(e);return t}function Rh(e,t){let n=Bp(t.self).register;for(let[t,r]of y(n)){let n=t===`properties`?`property`:t===`transmited`?`transmit`:t===`templateClasses`?`templateClass`:t.slice(0,-1);for(let[i,a]of y(r)){let r=t===`mixins`?[a]:[i,a];e[n](...r)}}}function zh(){return ne?v(new DocumentFragment,{isHouxit_Fragment:!0,NodeList:[],PATCH_FLAGS:new M}):new M}var Bh=(e,t)=>T(e[B].animation,t),Vh=(e,t)=>e[B].templateClasses[t]||V,Hh=`You're running the development version of houxit `+n().slice(7)+`, make sure you switched to the minified  version with the (*.min.js) file extension when deploying to production`,Uh={widget:{has:Bt,get:Vt},block:{has:Jg,get:Yg},filter:{has:Ec,get:Dc},animation:{has:(e,t)=>bs(e,t,`animation`),get:(e,t)=>xs(e,t,`animation`)},transition:{has:(e,t)=>bs(e,t,`transition`),get:(e,t)=>xs(e,t,`transition`)},directive:{has:Ht,get:Ut},templateClass:{has:Bh,get:Vh}};function Wh(e,t){let n=Va({name:`resolve.`+t+`()`});if(!H(arguments,{validators:[String],max:1,name:`resolve.`+t+`()`}))return;let r;if(P(n)){if(Uh[t].has(n,e))r=Uh[t](n,e);else{A(`"resolve.${t}()" macro was unable to find a widget with the provided name "${e}"\n\n are you sure this is a builtIn/globaly/localy registered ${t}`,n,!0);return}return r}}function Gh(e){let t=Va({name:`resolve.()`});if(!H(arguments,{validators:[String],max:1,name:`resolve.()`})||!P(t))return;let n=rf();return _(n,e)?n[e]:void 0}function Kh(e){return Gh(...arguments)}U(`widget,directive,filter,templateClass,block,animation,transition`.split(`,`)).each(e=>{Kh[e]=Function(`__traverseRESOLVER`,`type`,`
-      return function resolve${rl(e)}(name){
+          You can register this option by passing an "optionRegistry" object prop to "build.controller({})" method as an object argument method`, self, true);
+			return;
+		} else if (!validateType(opt, registeredOpts[key])) {
+			debugHandler(`The provided "${key}" option validation failed on the required type\n\n
+          Type of "${getType(opt)}"" found`, self, true);
+			return;
+		}
+		gR.setupOptions[key]?.();
+	}
+}
+function widgetSlotsManager(self, options, vnode) {
+	createContext_Parameters(self, options, vnode);
+	runtimeSlotsContext_Manager(self, options, null, vnode);
+	_induceSlotContents(self, options, slotsGeneticProvider(self, options, vnode, self[$$$operands].initializedRender) || []);
+	for (const [key, content] of entries(self[$$$core].slots)) self[$$$compiler].composedSlots[key] = function slotRender() {
+		return h("slot", { name: key });
+	};
+}
+function activateTemplateTokenizedOptions(self, options) {
+	if (!options.refs || !len(options.refs)) return;
+	self[$$$operands].templateRefsInputs;
+	iterate(options.refs).each((keyName, index) => {
+		_AnchorRefAdapter_(self, keyName);
+	});
+}
+function _AnchorRefAdapter_(self, ref, ad = false) {
+	if (!ad && !isString(ref)) {
+		debugHandler(`[Template Ref  Registration] refs option expects a string value`, self, true);
+		return;
+	}
+	const tokenized = new Token(void 0, { shallow: true });
+	if (ad || isString(ref)) {
+		const t_ref = self[$$$operands].templateRefsInputs;
+		if (!hasOwn(t_ref, ref)) t_ref[ref] = tokenized;
+	}
+	return tokenized;
+}
+function _useRef(ref) {
+	const self = getCurrentRunningEffect({ name: "useRef" });
+	if (!isHouxitBuild(self) && !validateCollectionArgs(arguments, {
+		validators: [String],
+		max: 1
+	})) return freeze();
+	return _AnchorRefAdapter_(self, ref, true);
+}
+function useRef(ref) {
+	return _useRef(...arguments);
+}
+function prefixManagement(self) {
+	const options = self[$$$core].opts;
+	mapPublicationsTraverse(self, options);
+	mergeRegisteries(self);
+}
+var isGettersObject = (computed) => isPObject(computed) && isPFunction(computed.get) && (!hasOwn(computed, "set") ? false : isPFunction(computed.set));
+function _computed_(callback, config) {
+	if (!validateCollectionArgs(arguments, {
+		min: 1,
+		max: 2,
+		name: "computed",
+		validators: [[Function, Object], Object]
+	}) && !isPFunction(callback) && !isGettersObject(callback)) {
+		debugHandler(`computed macro at Parameter 1 expects a getter function or a descriptor object of a required "get" and an optional "set" property methods`, self, true);
+		return;
+	}
+	return hydrateComputedTokenTransform(void 0, callback, true, config || {});
+}
+function computed(callback, config) {
+	return _computed_.call(this, ...arguments);
+}
+function composedTokenHydration(self, computed, config) {
+	return factoryToken(function(track, effect) {
+		function getter() {
+			track();
+			const internals = config.internals;
+			if (internals.Initial) {
+				if (internals.updateFlags) {
+					const returnValue = internals.effect.runEffect().value;
+					internals.updateFlags = 0;
+					internals.cache = returnValue;
+					return returnValue;
+				}
+				return internals.cache;
+			}
+			const eff = () => (isGettersObject(computed) ? computed?.get : computed).call(self?.__public_model__, ...arguments);
+			internals.effect.effect = eff;
+			internals.Initial = true;
+			const returnValue = effectRunner(internals.effect).value;
+			internals.effect.attachCallback(() => {
+				internals.updateFlags++;
+				effect();
+			});
+			internals.cache = returnValue;
+			return returnValue;
+		}
+		const descriptor = {
+			get() {
+				return getter();
+			},
+			computed: true,
+			...config || {}
+		};
+		if (isGettersObject(computed) && hasOwn(computed, "set") && isPFunction(computed.set)) {
+			descriptor.set = function() {
+				effect();
+				return computed?.set?.call(self?.__public_model__, ...arguments);
+			};
+			if (hasOwn(descriptor, "readonly")) delete descriptor.readonly;
+		} else descriptor.readonly = true;
+		return descriptor;
+	});
+}
+function hydrateComputedTokenTransform(self, computed, composed, config = {}) {
+	config = assign({}, config);
+	const computed__Token = composedTokenHydration(self, computed, config);
+	const internals = computed__Token[refInternalEffectKey];
+	const effect = _createEffectBase();
+	effect.flushType = "sync";
+	internals.cache = effect.values;
+	internals.effect = effect;
+	config.internals = internals;
+	return computed__Token;
+}
+function computedPropsCompiler(self, opts) {
+	if (!opts.computed || !len(opts.computed)) return;
+	const model = self.__public_model__;
+	for (let [key, computed] of entries(opts.computed)) {
+		if (!isPFunction(computed) && !isGettersObject(computed)) {
+			debugHandler(`computed option  at "${key}" property expects a getter function method option or a descriptor object of a "get" and an optional "set" property methods`, self, true);
+			return;
+		}
+		const computedToken = hydrateComputedTokenTransform(self, computed);
+		define(model, key, { get() {
+			return unwrap(computedToken);
+		} });
+	}
+}
+function callUpdatedHook(self, obs) {
+	for (let fn of obs.updated_hooks.values()) fn();
+	obs.updated_hooks.clear();
+	callbackHookWithCatch(self, self[$$$operands]._LIFECIRCLEHOOKS.postUpdate, "postUpdate");
+}
+function finisherLazyRender(self, nodeSelector, domRoot, wait = false) {
+	const isSSR = isSSRCompiler(self);
+	activateWatchObserverPlugin(self, nodeSelector, domRoot, wait);
+	if (IS_ELEMENT_NODE(domRoot) && isInitialBuild(self) && !isSSR) domRoot.innerHTML = "";
+	if (!isSSR && isInitialBuild(self) && !IS_ELEMENT_NODE(domRoot)) {
+		debugHandler("Initial entry Point mount root expects an element node", self, true);
+		return;
+	}
+	if (!isSSR && isInitialBuild(self) && isTrue(domRoot.IS_HOUXIT_MOUNTROOT)) {
+		debugHandler(`A Houxit widget has already been mounted on self element, cannot mount more than one Widget on a single root element`, self, true, `When trying to mount this initialBuild instance to the target DOM`);
+		return;
+	}
+	adapterDOMMountingProduction(self, domRoot);
+}
+function mount(nodeSelector, config, HydrationFlag) {
+	this[$$$compiler].initialization();
+	const isSSR = isSSRCompiler(this);
+	if (isSSR && HydrationFlag === SSRHydrationSymbol) this[$$$compiler].SSRHydrationFlag = true;
+	if (!isSSR && !inBrowserCompiler) {
+		debugHandler(`Houxit failed to load Dom specific API(s) as it seems you are running Houxit from a server environment.....\nuse "initSSRBuild" App builder instead.`, self, true);
+		return this;
+	}
+	let domRoot = (isHydration(this) || !isSSR) && inBrowserCompiler ? _GenerateRoot(nodeSelector, this) : null;
+	pre_build_facading(this);
+	let buildFacade = handleBuildGenerator(this, nodeSelector);
+	this.$build = isPromise(buildFacade) ? new HouxitFragmentElement([], self) : Render_Template(this, this[$$$core].render, buildFacade, true);
+	if (isPromise(buildFacade)) {
+		const boundary = getBoundary(this[$$$core].virtualNode);
+		this[$$$operands].awaitReady = buildFacade;
+		buildFacade = buildFacade.then(() => {
+			const toggler = smart_render_toggler(this);
+			const toggleParent = smart_render_toggler(this[$$$core].$owner);
+			const lazyBuild = Render_Template(this, this[$$$core].render, buildFacade);
+			toggleParent();
+			resolveTargetElement(this.$build).before(lazyBuild.$element);
+			unMountVNode(this.$build);
+			this.$build = lazyBuild;
+			finisherLazyRender(this, nodeSelector, domRoot, true);
+			toggler();
+		}).catch((e) => {
+			smartSuspense(boundary)?.errorCaptured(pass, { message: "<async build>() process has failed to resolve..." });
+		});
+		if (boundary) {
+			boundary.activeAwaits++;
+			boundary.loadChain.add(buildFacade);
+		}
+	} else finisherLazyRender(this, nodeSelector, domRoot);
+	return this;
+}
+function shouldInstallRenderEffect(self) {
+	return !isSSRCompiler(self);
+}
+function ignoreHydrationMismatchError(self) {
+	return false;
+}
+function misMatchError(self, msg) {
+	if (!ignoreHydrationMismatchError(self)) debugHandler(`(((Hydration Mis-Match Error)))....\n\n${msg}`, self, true);
+}
+function hydration_match(self, el, vNode) {
+	if (IS_ELEMENT_NODE(el) && isSSRText(vNode) || isVNodeClass(vNode) && IS_TEXT_NODE(el)) misMatchError(self, `adjacent elements mismatches during "HydrationTypeMatch" ....of (${IS_ELEMENT_NODE(el) ? "<" + el.localName + ">" : "\"" + el.textContent + "\""} ... ${isVNodeClass(vNode) ? "<" + vNode.type + ">" : "\"" + vNode.content + "\""})`);
+	else if (IS_ELEMENT_NODE(el) && isVNodeClass(vNode)) {
+		if (el.localName !== vNode.type) {
+			misMatchError(self, "tagnames do not match ....of (<" + el.localName + "> ... <" + vNode.type + ">)");
+			return false;
+		}
+		return true;
+	} else if (IS_TEXT_NODE(el) && isSSRText(vNode)) {
+		if (el.textContent !== vNode.content) {
+			misMatchError(self, `textContent does not match with hydration target----of(<"${el.textContent}"> ... <"${vNode.content}">)`);
+			return false;
+		}
+		return true;
+	} else if (isSSRFragment(vNode)) {}
+	return false;
+}
+function perfomSSRHydration(self, domRoot, vNodeList, iter_tools) {
+	let [generator, parentVnode, metrics, trucker] = iter_tools || [];
+	const childList = generator || domRoot.childNodes.values();
+	const RawVnode = vNodeList;
+	vNodeList = isSSRFragment(vNodeList) ? vNodeList.fragment : vNodeList;
+	const ignoreWarn = ignoreHydrationMismatchError(self);
+	const flushs = new Tuple();
+	trucker = trucker || new Tuple();
+	if (generator) trucker.add({});
+	for (let [index, vNode] of vNodeList.entries()) {
+		let el;
+		if (isVNodeClass(vNode) || isSSRText(vNode)) {
+			el = childList.next().value;
+			if (!hydration_match(self, el, vNode)) if (ignoreWarn) continue;
+			else break;
+			if (metrics) {
+				if (!metrics?.first) metrics.first = el;
+				metrics.last = el;
+			}
+			if (generator) trucker.forEach((truck) => {
+				if (!truck.first) truck.first = el;
+				truck.last = el;
+			});
+			if (!IS_HTML_VOID_TAG(vNode.type) && !isSSRText(vNode) && vNode.children) perfomSSRHydration(self, el, vNode.children || []);
+		} else if (isSSRFragment(vNode) || isCollection(vNode)) perfomSSRHydration(self, null, vNode, [
+			childList,
+			RawVnode.hx_Element,
+			metrics,
+			trucker
+		]);
+		if (isSSRText(vNode) || isSSRFragment(vNode) || isVNodeClass(vNode)) (isSSRText(vNode) || isSSRFragment(vNode) ? vNode : vNode.filesFilter.$ssr_kit).hydrationFlushs.forEach((fn) => fn(isSSRFragment(vNode) ? null : el));
+	}
+	flushs.forEach((fn) => fn());
+	if (generator) installPosixComments(RawVnode.hx_Element, trucker.pop());
+	else if (metrics && isInitialBuild(self)) installPosixComments(parentVnode, metrics);
+}
+function installPosixComments(hx_Element, metrics) {
+	let { first, last } = metrics;
+	const start = document.createComment(c_str);
+	const end = document.createComment(c_str);
+	first.before(start);
+	last.after(end);
+	if (isHouxitElement(hx_Element)) hx_Element.VNodeManager.posix = [start, end];
+}
+function pre_build_facading(self) {
+	const opts = self[$$$core].opts;
+	activateTemplateTokenizedOptions(self, opts);
+	Hydrate_Network_Prefixes(self, opts);
+	prefixManagement(self);
+}
+function activateWatchObserverPlugin(self, nodeSelector, domRoot, wait) {
+	self[$$$core].render;
+	before_render_semantics(self);
+	if (isHydration(self)) perfomSSRHydration(self, domRoot, self.$build.$element, [
+		null,
+		self.$build,
+		{}
+	]);
+	_Reactive_Adapter_Plugin(self.__public_model__, () => tick(async function() {
+		if (isHydration(self)) {
+			self[$$$compiler].useSSRCompiler = false;
+			self[$$$compiler].SSRHydrationFlag = false;
+		}
+		const postEffCall = _EffectDependencyNotifier(self);
+		if (shouldInstallRenderEffect(self)) _ReconciliationTransformTrigger(self, nodeSelector);
+		tick(postEffCall);
+	}), self, true);
+	callbackHookWithCatch(self, self[$$$operands]._LIFECIRCLEHOOKS.onTracked, "onTracked");
+	callbackHookWithCatch(self, self[$$$operands]._LIFECIRCLEHOOKS.postBuild, "postBuild");
+	tick(() => {
+		self[$$$operands].onRenderTracked = true;
+	});
+	self[$$$operands].initializedRender = true;
+	self[$$$operands].effectRerender = true;
+}
+function isEffRerender(self) {
+	return self[$$$operands].effectRerender;
+}
+function before_render_semantics(self) {
+	const installers = self[$$$operands].installers_plugin;
+	if (len(installers)) self.install(function(build) {
+		for (const installer of installers.values()) installer(...arguments);
+	});
+}
+function adapterDOMMountingProduction(self, domRoot) {
+	const MoutRootToken = {
+		IS_HOUXIT_MOUNTROOT: true,
+		__mountRootToken: "hx__" + generateUUID(5)
+	};
+	callbackHookWithCatch(self, self[$$$operands]._LIFECIRCLEHOOKS.preMount, "preMount");
+	domRoot = activateBuildMount(self, domRoot, MoutRootToken);
+	if (!isSSRCompiler(self)) whenMounted(self, self.$build, () => {
+		for (const fn of self[$$$compiler].whenMountedHooks.values()) callbackHookWithCatch(self, fn, "");
+		callbackHookWithCatch(self, self[$$$operands]._LIFECIRCLEHOOKS.postMount, "postMount");
+	});
+	self[$$$operands].hasMountProto = true;
+}
+function activateBuildMount(self, domRoot, MoutRootToken) {
+	if (isInDomNode(domRoot) && IS_ELEMENT_NODE(domRoot) && isInitialBuild(self) && !isSSRCompiler(self)) {
+		domRoot.innerHTML = "";
+		domRoot.append(self.$build?.$element || "");
+		self.property("$root", self.$build);
+		domRoot.IS_HOUXIT_MOUNTROOT = true;
+		tick(() => {
+			if (domRoot.hasAttribute("hx-cloak")) domRoot.removeAttribute("hx-cloak");
+		});
+	} else domRoot = self.$build?.$element;
+	return domRoot;
+}
+function createCloakDirectiveHydrator() {
+	if (!inBrowserCompiler) return;
+	const styleEl = document.createElement("style");
+	styleEl.append(`[hx-cloak]{ display:none;} `);
+	document.head.appendChild(styleEl);
+}
+createCloakDirectiveHydrator();
+function widget(name, widget) {
+	if (!validateCollectionArgs(arguments, {
+		name: "initBuild().widget()",
+		validators: [String, [
+			Function,
+			Object,
+			Class
+		]],
+		count: 2,
+		required: [true, true]
+	})) return;
+	if (len(new Set(arguments)) === 2) this[$$$core].$globals.register.widgets[name] = widget;
+	return this;
+}
+function install(plugin, options) {
+	if (!validateType(plugin, [Object, Function])) {
+		debugHandler(`plugin installation Error::\n\n install argument must be an object value with  an exposed plugin installation method or a function which acts as the plugin method itself`, this, true);
+		return this;
+	} else if (isPObject(plugin) && !isPFunction(plugin.plugin)) {
+		debugHandler(`plugin installation Error::\n\n plugin object did not expose a plugin installation method`, this, true);
+		return this;
+	}
+	(isPObject(plugin) ? plugin.plugin : plugin)?.(this, options);
+	return this;
+}
+function handler(name, handler) {
+	if (!validateCollectionArgs(arguments, {
+		name: "initBuild().handler()",
+		validators: [String, Function],
+		count: 2,
+		required: [true, true]
+	})) return;
+	if (len(arguments) === 2) this[$$$core].$globals.register.handlers[name] = handler;
+	return this;
+}
+function directive(name, directive) {
+	if (!validateCollectionArgs(arguments, {
+		name: "initBuild().directive()",
+		validators: [String, [Function, Object]],
+		count: 2,
+		required: [true, true]
+	})) return;
+	if (len(arguments) === 2) this[$$$core].$globals.register.directives[name] = directive;
+	return this;
+}
+function mixin(mx) {
+	if (!validateType(mx, [Object, Function])) {
+		debugHandler(`unrecognised global mixin registration for\n ${compileToRenderable(mx)}`, this, true);
+		return this;
+	} else if (len(arguments) !== 1) {
+		debugHandler(`.mixin() expects not more than one formal argument`, this);
+		return this;
+	}
+	this[$$$core].$globals.register.mixins.add(mx);
+	return this;
+}
+function filter(name, filter) {
+	if (!validateCollectionArgs(arguments, {
+		name: "initBuild().filter()",
+		validators: [String, [Function, Object]],
+		count: 2,
+		required: [true, true]
+	})) return;
+	if (len(arguments) === 2) this[$$$core].$globals.register.filters[name] = filter;
+	return this;
+}
+function block(name, block) {
+	if (!validateCollectionArgs(arguments, {
+		name: "initBuild().block()",
+		validators: [String, [Function, Object]],
+		count: 2,
+		required: [true, true]
+	})) return;
+	if (len(arguments) === 2) this[$$$core].$globals.register.blocks[name] = block;
+	return this;
+}
+function property(name, value) {
+	if (!validateCollectionArgs(arguments, {
+		name: "initBuild().property()",
+		validators: [String, Any],
+		count: 2,
+		required: [true, true]
+	})) return;
+	if (len(arguments) === 2) this[$$$core].$globals.register.properties[name] = value;
+	return this;
+}
+function templateClass(name, value) {
+	if (!validateCollectionArgs(arguments, {
+		name: "initBuild().templateClass()",
+		validators: [String, Any],
+		count: 2,
+		required: [true, true]
+	})) return;
+	if (len(arguments) === 2) this[$$$core].$globals.register.templateClasses[name] = value;
+	return this;
+}
+function transition(name, value) {
+	if (!validateCollectionArgs(arguments, {
+		name: "initBuild().transition()",
+		validators: [String, Any],
+		count: 2,
+		required: [true, true]
+	})) return;
+	if (len(arguments) === 2) this[$$$core].$globals.register.transitions[name] = value;
+	return this;
+}
+function animation(name, value) {
+	if (!validateCollectionArgs(arguments, {
+		name: "initBuild().animation()",
+		validators: [String, Any],
+		count: 2,
+		required: [true, true]
+	})) return;
+	if (len(arguments) === 2) this[$$$core].$globals.register.animations[name] = value;
+	return this;
+}
+function _Build_destroy() {
+	if (len(arguments)) debugHandler(`.destroy() method of initBuild accepts no formal parameters`, this);
+	else if (!this[$$$operands].hasMountProto) {
+		debugHandler(`instance of widget not yet mounted\n\nwidget unmounting failure`);
+		return false;
+	}
+	try {
+		unMountVNode(this.$build);
+	} catch (err) {
+		debugHandler(`widget instance destroy failed`, this, true);
+		debugHandler(err);
+		return false;
+	}
+	return freeze(this);
+}
+function destroy() {
+	return _Build_destroy.call(this, ...arguments);
+}
+function createConfig_Constraint(name, ...args) {
+	const [argument] = args;
+	if (isFalse(mapSettingCheck(this, name, argument))) return this;
+	this[$$$core].settings[name] = argument;
+	return this;
+}
+function configDelimiters(delimiters) {
+	return createConfig_Constraint.call(this, "delimiters", ...arguments);
+}
+function configForwardAttrs(forwardAttrs) {
+	return createConfig_Constraint.call(this, "forwardAttrs", ...arguments);
+}
+function configForwardSlot(forwardSlot) {
+	return createConfig_Constraint.call(this, "forwardSlot", ...arguments);
+}
+function configScopedStyle(scopedStyle) {
+	return createConfig_Constraint.call(this, "scopedStyle", ...arguments);
+}
+function runOptionHookValidation(hookName, callback) {
+	if (!validateCollectionArgs(arguments, {
+		count: 2,
+		required: [true, true],
+		validators: [String, Function],
+		name: "app.controller.optionsHook()"
+	})) return;
+	else if (!hasOwn(getGlobalRegistery(this).legalOptions, hookName)) {
+		debugHandler(`optionsHook plugin method called on an undefined/unregistered option...\n\n"${hookName}"`, this, true);
+		return;
+	}
+}
+function _applyAdapterMixin(mixin, options) {
+	if (!isPObject(mixin)) {
+		debugHandler(`[Custom Option-Hook mixin] "applyMixin" callback expects a plain object`, this, true);
+		return;
+	}
+	applyMixinMergeStrategy(this, options, [mixin]);
+}
+function _optionsHookTransform(hookName, callback) {
+	if (isInitialBuild(this)) runOptionHookValidation.call(this, ...arguments);
+	const _OPTIONS = this[$$$operands]._OPTIONS;
+	if (!hasOwn(this[$$$core].opts, hookName)) return;
+	const gR = getGlobalRegistery(this);
+	const self = this;
+	gR.setupOptions[hookName] = function() {
+		callback?.(self.__public_model__, _OPTIONS[hookName], function applyMixin(mixin) {
+			_applyAdapterMixin.call(self, mixin, self[$$$core].opts);
+		});
+	};
+}
+function _controller_Adapter(options) {
+	if (!isPObject(options)) {
+		debugHandler(`argument at position 1 expects a plain object\n\nType unaccepted`, this, true);
+		return;
+	}
+	const controllers = this[$$$core].$globals.controller;
+	if (controllers.has(options)) return this;
+	controllers.add(options);
+	optionsRegistery(this, options);
+	let { setup, setupAdapter } = options;
+	if (hasOwn(options, "setupAdapter") && !isPFunction(setupAdapter)) {
+		debugHandler(`setupAdapter option of .controller({}) method expects a function/method type`, this, true);
+		return this;
+	}
+	if (!exists(setupAdapter) && !isPFunction(setupAdapter)) setupAdapter = pass;
+	const app = this;
+	function optionsHook(optionsName, callback) {
+		return _optionsHookTransform.call(app, optionsName, callback);
+	}
+	setupAdapter(this, optionsHook);
+	return this;
+}
+function controller(options) {
+	return _controller_Adapter.call(this, ...arguments);
+}
+function configOptions(buildConfig = {}) {
+	setConfig(this, { buildConfig });
+	return this;
+}
+function optionsRegistery(self, options) {
+	if (!hasProp(options, "optionsRegistery")) return;
+	else if (!isPObject(options.optionsRegistery)) {
+		debugHandler(`The "optionsRegistery" property argument of controller expects a plain object\n\nType Unexpected`, self, true);
+		return;
+	}
+	options.optionsRegistery;
+	const globals = getGlobalRegistery(self);
+	entries(options.optionsRegistery).forEach(([key, validator]) => {
+		if (_makeMap_(globals.legalOptions, key)) {
+			debugHandler(`${key} custom optionsRegistery already exists in the registery record`, self, true);
+			return;
+		}
+		define(globals.legalOptions, key, {
+			value: validator,
+			enumerable
+		});
+	});
+}
+function mountedWarning(self, name) {
+	if (isTrue(self[$$$operands].hasMountProto)) {
+		if (!self[$$$core].map.mountWarn) {
+			debugHandler(`This "mount" method has been called\n\ncalling of methods after the widget is mounted is prohibited\n\n call to ('.${name}') method is considered an invalid houxit syntax`, self, true);
+			self[$$$core].map.mountWarn = true;
+		}
+		return false;
+	}
+	return true;
+}
+function transmit(prop, value) {
+	if (!validateType(prop, [String, Symbol])) {
+		debugHandler(`Parameter 1 on .transmit() expects a string or a Symbol `, this, true);
+		return this;
+	}
+	define(isInitialBuild(this) ? this[$$$core].$globals.transmited : this[$$$core].$root[$$$core].$globals.transmited, prop, {
+		value,
+		enumerable
+	});
+	return this;
+}
+function hydrate(nodeSelector) {
+	if (!isSSRCompiler(this)) {
+		debugHandler("Incompatibility when trying to call the .hydrate on a non SSR App build");
+		return this;
+	}
+	this.mount(nodeSelector, null, SSRHydrationSymbol);
+	return this;
+}
+function buildMethods() {
+	return {
+		mount,
+		widget,
+		mixin,
+		install,
+		handler,
+		directive,
+		property,
+		filter,
+		animation,
+		transition,
+		block,
+		templateClass,
+		configDelimiters,
+		configForwardSlot,
+		configScopedStyle,
+		controller,
+		configForwardAttrs,
+		hydrate,
+		configOptions,
+		destroy,
+		transmit
+	};
+}
+for (let [key, fn] of entries(buildMethods())) {
+	fn = new Proxy(fn, { apply(target, self, args) {
+		if (isTrue(key === "destroy" ? true : mountedWarning(self, key))) Reflect.apply(...arguments);
+		return self;
+	} });
+	HouxitBuild.prototype[key] = fn;
+}
+async function deferEventCircleThread(self, fn, persist = false) {
+	if (isHouxitBuild(self)) {
+		if (!self[$$$operands].garbageWatch) {
+			self[$$$operands].garbageWatch = true;
+			await queueMicrotask(() => {
+				fn?.call(self.__public_model__);
+				self[$$$operands].garbageWatch = false;
+			});
+		}
+		if (persist) await new Promise((resolve) => resolve(queueMicrotask(fn)));
+	} else await queueMicrotask(fn);
+}
+function whenMounted(self, build, callback) {
+	return new Promise((resolve, reject) => {
+		const el = isHouxitElement(build) ? resolveTargetElement(build) : build;
+		if (document.body.contains(el)) {
+			resolve(el);
+			return;
+		}
+		new MutationObserver((mutations, obs) => {
+			if (document.body.contains(el)) {
+				obs.disconnect();
+				resolve(el);
+			}
+		}).observe(document.body, {
+			childList: true,
+			subtree: true
+		});
+	}).then(() => callback()).catch((err) => {
+		debugHandler(err);
+		debugHandler(`${err}`, self, true);
+	});
+}
+function Render_Template(self, initBuild, buildFacade, slotter) {
+	let instance = self;
+	const isRerender = self[$$$operands].initializedRender;
+	if (isPFunction(initBuild)) initBuild = initBuild(instance);
+	if (self[$$$core].map.is_hyperscript) initBuild = _HouxitCoreRenderer(arrayInverter(initBuild), instance, null, null, null, { official: true });
+	if (isArray(initBuild) || !initBuild) initBuild = new HouxitFragmentElement(initBuild || [], instance, null);
+	self[$$$compiler].template = initBuild;
+	if (!isRerender) {
+		if (!(isPromise(buildFacade) && isTrue(slotter))) widgetSlotsManager(self, self[$$$core].opts, self[$$$core].virtualNode);
+	}
+	initBuild = self[$$$compiler].templateProcessor(self, initBuild, buildFacade, slotter);
+	return initBuild;
+}
+function _tick(fn) {
+	if (!validateCollectionArgs(arguments, {
+		count: 1,
+		validators: [Function],
+		name: "tick"
+	})) return freeze();
+	const self = this && isHouxitBuild(this) ? this : null;
+	if (len(arguments) && !isPFunction(fn)) {
+		debugHandler(`positional argument 1 on "tick" is not a function\n\n callback argument 1 requires a function type`, self, !isNull(self));
+		fn = pass;
+	}
+	return new Promise((resolve, reject) => {
+		resolve(deferEventCircleThread(self, isFunction(fn) ? fn : pass, isHouxitBuild(self)));
+	});
+}
+function tick(fn) {
+	return _tick(...arguments);
+}
+async function _Reactive_Adapter_Plugin(data, callback, self, deep = false) {
+	function flush() {
+		try {
+			callback();
+		} catch (err) {
+			debugHandler(`Encountered a Problem during DOM effect trigger phase\n\n>>>>>`, self, true);
+			$warn(`${err}`, self);
+			return;
+		}
+	}
+	self[$$$operands].dependency.callback = flush;
+}
+function _ReconciliationTransformTrigger(self, selector) {
+	triggerHydrationCompile(self, {
+		updated_hooks: new Tuple(),
+		active: false,
+		willMutate: false,
+		effectFlush: new Tuple()
+	});
+}
+function triggerHydrationCompile(self, observer) {
+	callbackHookWithCatch(self, self[$$$operands]._LIFECIRCLEHOOKS.onEffect, "onEffect");
+	self[$$$core].map.is_hyperscript;
+	self.__public_model__.$tick(() => Render_Effect_Reactive_Transform(self, observer)).then(function() {
+		if (len(observer.effectFlush)) callbackHookWithCatch(self, self[$$$operands]._LIFECIRCLEHOOKS.preUpdate, "preUpdate");
+	}).then(() => callSetHooks(self, observer.effectFlush)).then(function() {
+		if (len(observer.effectFlush)) {
+			callUpdatedHook(self, observer);
+			observer.updated_hooks.clear();
+		}
+	});
+}
+function RenderEffect_$Warn(self, err) {
+	debugHandler(`----unable to complete the rerender effect circle patch\n\nthis is likely a probable bug/error in the houxit's compiler level;\nplease report any problem —— and open an issue on our github repo issue page`, self, true);
+	debugHandler(`${err}`, self);
+	console.error(err);
+}
+function Render_Effect_Reactive_Transform(self, observer) {
+	const is_hyperscript = self[$$$core].map.is_hyperscript;
+	const isRerender = self[$$$operands].initializedRender;
+	try {
+		Promise.try(() => {
+			priority_rerender_patch(self, {
+				isRerender,
+				is_hyperscript,
+				observer
+			});
+		}).catch((e) => debugHandler(e));
+	} catch (e) {
+		RenderEffect_$Warn(self, e);
+	}
+}
+function priority_rerender_patch(self, metrics) {
+	const priorities = self[$$$compiler].VN_Tree.priority;
+	if (!len(priorities)) return;
+	priorities.forEach((effect) => effect());
+	priorities.clear();
+}
+function patchRenderNormalizerCall(self, build, EffectVNode, observer, config) {
+	if (isSameHouxitElementType(build, EffectVNode)) {
+		if (isHouxitFragmentElement(build)) resolvePatchAlgorithm(self, build, EffectVNode, observer, config);
+		else renderVnodeDiffSequence(self, build, EffectVNode, observer, null, { config });
+		return;
+	} else if (isHouxitFragmentElement(EffectVNode)) build = new HouxitFragmentElement(self, [build], null);
+	resolvePatchAlgorithm(self, build, EffectVNode, observer, config);
+}
+function resolvePatchAlgorithm(self, Template, EffectVNode, observer, config = {}) {
+	const { KEYS_INDEXES: tempIndexes, LEAGUE_TREE: tempLeagues } = Template.VN_Tree;
+	const { KEYS_INDEXES, LEAGUE_TREE } = EffectVNode.VN_Tree;
+	const forAppending = [];
+	const forInsertion = [];
+	const forRemovals = [];
+	const exchangeRecorder = [];
+	tempIndexes.forEach((key, index) => {
+		if (!KEYS_INDEXES.has(key)) forRemovals.push([
+			key,
+			tempLeagues[key],
+			index
+		]);
+	});
+	new Tuple();
+	for (const [index, key] of KEYS_INDEXES.entries()) {
+		let tempK = tempIndexes.at(index);
+		if (key === tempK) {
+			const tempEl = tempLeagues[key]?.[0];
+			const effectEl = LEAGUE_TREE[tempK]?.[0];
+			renderVnodeDiffSequence(self, tempEl, effectEl, observer, Template, {
+				index,
+				key,
+				config
+			});
+		} else if (key !== tempK) if (tempIndexes.has(key)) {
+			const vnodeTM = tempLeagues[tempK];
+			let targetElem = tempK ? resolveTargetElement(vnodeTM[0], null, true) : void 0;
+			const posixElem = document.createComment(c_str);
+			if (tempK && targetElem) targetElem.after(posixElem);
+			exchangeRecorder.push({
+				elements: [tempLeagues[key], vnodeTM],
+				keys: [key, tempK],
+				index: [tempIndexes.indexOf(key), index],
+				parent: targetElem?.parentNode,
+				posixElem
+			});
+		} else {
+			const effectEl = LEAGUE_TREE[key][0];
+			let useMemoCache = config.memoVault ? installMemoInstance(self, null, effectEl, config) : void 0;
+			const Rerender_Element = useMemoCache ? useMemoCache.hx_Element : __createRerenderBlock(self, effectEl);
+			config.list?.add(Rerender_Element);
+			if (index >= len(tempIndexes)) forAppending.push([
+				Rerender_Element,
+				key,
+				index,
+				Template,
+				useMemoCache
+			]);
+			else {
+				const [targetBox, targetInd] = tempLeagues[tempK];
+				const targetElem = resolveTargetElement(targetBox, null);
+				const posixElem = document.createComment(c_str);
+				targetElem.before(posixElem);
+				forInsertion.push({
+					elements: [Rerender_Element, targetBox],
+					posixElem,
+					parent: targetElem.parentNode,
+					index: [void 0, index],
+					keys: [key, tempK]
+				});
+				stabilizeMemo(config);
+			}
+		}
+	}
+	fractional_diffing_transform(self, exchangeRecorder, Template, EffectVNode, tempIndexes, tempLeagues, LEAGUE_TREE, KEYS_INDEXES, observer, forAppending, forInsertion, forRemovals, config);
+	tempIndexes.arrange(KEYS_INDEXES.list());
+	keys(tempLeagues).forEach((key) => {
+		if (!tempIndexes.has(isNaN(Number(key)) ? key : Number(key))) delete tempLeagues[key];
+	});
+}
+function stabilizeMemo(config) {
+	if (config.memoVault) config.memoVault?.stabilityChecker();
+}
+function fractional_diffing_transform(self, exchangeRecorder, Template, EffectVNode, tempIndexes, tempLeagues, LEAGUE_TREE, KEYS_INDEXES, observer, forAppending, forInsertion, forRemovals, config) {
+	const waitForAddBeforMove = [];
+	const cleanup_zip = new Tuple();
+	for (const { elements, index, keys, parent, posixElem } of exchangeRecorder.values()) {
+		const [element, target] = elements;
+		let [key, tempK] = keys;
+		let [ind, tempInd] = index;
+		if (!tempK) {
+			if (tempInd >= len(tempIndexes)) waitForAddBeforMove.push({
+				elements,
+				index,
+				keys,
+				posixElem
+			});
+		} else {
+			generateWrapElementAction(element[0], (el) => smartMoveElement(self, parent, el, posixElem));
+			cleanup_zip.add(function() {
+				tempLeagues[key][1] = tempInd;
+				posixElem.remove();
+			});
+			renderVnodeDiffSequence(self, element[0], LEAGUE_TREE[key][0], observer, Template, {
+				index,
+				key,
+				config
+			});
+		}
+	}
+	cleanup_zip.forEach((cleanup) => cleanup());
+	cleanup_zip.clear();
+	for (const { elements, index, keys, parent, posixElem } of forInsertion.values()) {
+		const [Element, Target] = elements;
+		const [ind, tempInd] = index;
+		const [key, tempK] = keys;
+		tempLeagues[key] = [Element, tempInd];
+		posixElem.after(Element.$element);
+		Template.NodeList.splice(EffectVNode.NodeList.indexOf(Target), 0, Element);
+		cleanup_zip.add(() => posixElem.remove());
+	}
+	forInsertion.splice(0);
+	cleanup_zip.forEach((cleanup) => cleanup());
+	cleanup_zip.clear();
+	exchangeRecorder.splice(0);
+	for (const [Element, key, index, Template, useMemoCache] of forAppending.values()) {
+		const [targetBox, targetInd] = tempLeagues[KEYS_INDEXES.at(index - 1)] || [];
+		tempLeagues[key] = [Element, index];
+		const targetElem = resolveTargetElement(targetBox || Template, null, true);
+		Template.NodeList.add(Element);
+		if (useMemoCache) useMemoCache.record.forEach((el) => targetElem.before(el));
+		else targetElem?.after(Element.$element);
+		stabilizeMemo(config);
+	}
+	forAppending.splice(0);
+	for (const { elements, index, keys } of waitForAddBeforMove.values()) {
+		const [element] = elements;
+		const [ind, tempInd] = index;
+		const [key, targekey] = keys;
+		const [targetBox, targetInd] = tempLeagues[KEYS_INDEXES.at(tempInd - 1)];
+		const targetElem = resolveTargetElement(targetBox, null, true);
+		const parent = targetElem.parentNode;
+		const posixElem = document.createComment(c_str);
+		targetElem.after(posixElem);
+		generateWrapElementAction(element[0], (el) => smartMoveElement(self, parent, el, posixElem));
+		cleanup_zip.add(function() {
+			tempLeagues[key][1] = tempInd;
+			posixElem.remove();
+		});
+		renderVnodeDiffSequence(self, element[0], LEAGUE_TREE[key][0], observer, Template, {
+			index,
+			key,
+			config
+		});
+	}
+	for (const [key, Element, index] of forRemovals.values()) {
+		if (isMemoElement(Element[0]) || config.memoVault) {
+			installMemoInstance(self, Element[0], null, config);
+			generateWrapElementAction(Element[0], (el) => {
+				beforeUnMountDelay(el, () => {
+					el.remove();
+				});
+			});
+		}
+		Template.NodeList.delete(Element[0]);
+		delete tempLeagues[key];
+		if (!(isMemoElement(Element[0]) || config.memoVault)) unMountVNode(Element[0]);
+		stabilizeMemo(config);
+	}
+	waitForAddBeforMove.splice(0);
+	cleanup_zip.forEach((cleanup) => cleanup());
+	cleanup_zip.clear();
+}
+function smartMoveElement(self, parent, mover, target) {
+	try {
+		parent.moveBefore(mover, target);
+	} catch (err) {
+		if (err.name === "HierarchyRequestError") parent.insertBefore(mover, target);
+		else {
+			debugHandler(`${err}`, self, true);
+			console.error(err);
+		}
+	}
+}
+function effectiveElement_REUSE_PATCH(self, hx_Element, vNode, observer, parent, ignore) {
+	if (isHouxitTextElement(hx_Element)) {
+		RerenderTextElements(self, hx_Element, vNode, observer, parent);
+		return;
+	} else if (isHouxitWidgetElement(hx_Element) || isRenderlessElement(hx_Element)) return;
+	if (isHouxitFragmentElement(hx_Element) || isHouxitNativeElement(hx_Element) && !IS_HTML_VOID_TAG(hx_Element.prototype_)) resolvePatchAlgorithm(self, hx_Element, vNode, observer);
+	if (isHouxitNativeElement(hx_Element)) {
+		const attrs = hx_Element.$element.attributes;
+		const shapeProps = vNode.VNodeManager.patchFlags.shapeProps;
+		const s_a = {};
+		for (let { name, value } of values(attrs)) {
+			if (name === "data-hx_build") continue;
+			if (!hasOwn(shapeProps, name)) _createElementPropsEffectBlock_(self, {
+				value,
+				element: hx_Element.$element,
+				mode: getPropMode(name.trim()),
+				key: name
+			});
+			else s_a[name] = value;
+		}
+		for (let [name, value] of entries(shapeProps)) _createElementPropsEffectBlock_(self, {
+			value: s_a[name],
+			element: hx_Element.$element,
+			mode: getPropMode(name.trim()),
+			key: name
+		});
+	}
+}
+function __createRerenderBlock(self, vnode, ...args) {
+	if (isRenderlessElement(vnode)) return vnode;
+	const toggler = smart_render_toggler(self);
+	const NewNode = vnode.compiler_options.createElement(...args);
+	toggler();
+	return NewNode;
+}
+function renderVnodeDiffSequence(self, hx_Element, vNode, observer, parent, metrics) {
+	let { index, key, config, args = [] } = metrics || {};
+	self[$$$core].map.is_hyperscript;
+	if (isSuspenseElement(hx_Element) && isSuspenseElement(vNode)) {
+		const suspense = vNode.VNodeManager[$suspenseElement];
+		if (suspense.state.resolved) patchRenderNormalizerCall(self, hx_Element, vNode, observer, config);
+		else assign(suspense.rerenderObj, {
+			activeElement: hx_Element,
+			Rerender_Element: vNode,
+			parent,
+			observer
+		});
+		return;
+	}
+	if (config?.FORCE || !HouxitElementDiffingCheck(hx_Element, vNode)) {
+		const isRenderless = isRenderlessElement(vNode);
+		const useMemoCache = installMemoInstance(self, hx_Element, vNode, config);
+		const NewNode = useMemoCache?.hx_Element || (isRenderless ? vNode : __createRerenderBlock(self, vNode, ...args));
+		if (config.memoVault && !useMemoCache?.hx_Element) {
+			NewNode.compiler_options.createElement = hx_Element.compiler_options.createElement;
+			if (!isMemoElement(NewNode)) {
+				if (!checkMemoContentValidity(self, NewNode)) return;
+				NewNode.VNodeManager.isMemoChild = hx_Element.VNodeManager.isMemoChild;
+			}
+		}
+		const posixElem = document.createComment(c_str);
+		resolveTargetElement(hx_Element, null, true).after(posixElem);
+		if (parent) {
+			const index = parent.NodeList.indexOf(hx_Element);
+			const key = parent.VN_Tree.KEYS_INDEXES.at(index);
+			parent.VN_Tree.LEAGUE_TREE[key] = [NewNode, index];
+			parent?.NodeList.replace(hx_Element, NewNode);
+		} else self.$build = NewNode;
+		if (isMemoElement(hx_Element) || config.memoVault) generateWrapElementAction(hx_Element, (el) => {
+			beforeUnMountDelay(el, () => {
+				el.remove();
+			});
+		});
+		else unMountVNode(hx_Element);
+		if (useMemoCache) useMemoCache.record.forEach((el) => posixElem.before(el));
+		else posixElem.before(NewNode.$element);
+		posixElem.remove();
+		config?.list?.add(NewNode);
+		stabilizeMemo(config);
+		return NewNode;
+	} else effectiveElement_REUSE_PATCH(self, hx_Element, vNode, observer, parent);
+}
+function installMemoInstance(self, hx_Element, EffectVNode, config) {
+	if (!(isMemoElement(hx_Element) || config.memoVault)) return;
+	const vault = hx_Element?.VNodeManager?.isMemoChild?.vault || config?.memoVault;
+	const { storage, state, caches, keys } = vault;
+	const hx_Key = hx_Element?.prototype_;
+	const Eff_Key = EffectVNode?.prototype_;
+	if (hx_Element) addMEMOState(self, hx_Element, keys.has(hx_Key), vault);
+	if (EffectVNode && keys.has(Eff_Key)) return getMEMOState(self, EffectVNode, vault);
+}
+function addMEMOState(self, hx_Element, update = false, vault) {
+	const { storage, caches, keys, max, test } = vault;
+	const hx_Key = hx_Element.prototype_;
+	update = keys.has(hx_Key) && update;
+	if (!update) {
+		if (test && !test()) return;
+		if (!isInfinity(max) && !isNaN(Number(max)) && keys.size === max) {
+			const leastKey = keys.shift();
+			unMountVNode(storage.get(leastKey).hx_Element);
+			storage.delete(leastKey);
+		}
+		keys.add(hx_Key);
+	}
+	const record = new Tuple();
+	generateWrapElementAction(hx_Element, (el) => {
+		record.add(el);
+	});
+	if (update) storage.get(hx_Key).record = record;
+	else storage.set(hx_Key, {
+		hx_Element,
+		record
+	});
+}
+function getMEMOState(self, EffectVNode, vault) {
+	const { storage, caches, keys } = vault;
+	const Eff_Key = EffectVNode.prototype_;
+	if (!keys.has(Eff_Key)) return;
+	const state = storage.get(Eff_Key);
+	if (len(keys) < 2) return state;
+	keys.delete(Eff_Key);
+	keys.add(Eff_Key);
+	return state;
+}
+function resolveTargetElement(target, fallback, last = false) {
+	let targetElem;
+	if (isTextOrNativeElement(target)) targetElem = target.$element;
+	else {
+		if (isHouxitWidgetElement(target)) target = WidgetElementUnwrap(target);
+		if (isHouxitFragmentElement(target)) targetElem = target.VNodeManager?.posix[last ? 1 : 0];
+		else if (isTextOrNativeElement(target)) targetElem = target.$element;
+	}
+	return IS_ELEMENT_NODE(targetElem) || IS_TEXT_NODE(targetElem) || IS_COMMENT_NODE(targetElem) ? targetElem : fallback;
+}
+function unMountVNode(vnode) {
+	if (isHouxitWidgetElement(vnode)) vnode.widget_instance.destroy();
+	else if (isHouxitFragmentElement(vnode)) {
+		vnode.upload((el) => beforeUnMountDelay(el, () => {
+			callFlushs(el._hx_Element?.hx_Element);
+			el.remove();
+		}));
+		vnode.NodeList.forEach((el) => unMountVNode(el));
+	} else if (!isRenderlessElement(vnode)) {
+		beforeUnMountDelay(vnode, () => {
+			callFlushs(vnode);
+			vnode?.$element?.remove();
+		});
+		vnode.NodeList.forEach((el) => unMountVNode(el));
+	}
+}
+function callFlushs(vnode) {
+	if (!isHouxitElement(vnode)) return;
+	const fl = vnode.VN_Tree.FLUSHS;
+	fl.forEach((f) => safeCall(f));
+	fl.clear();
+}
+function generateWrapElementAction(vnode, callback) {
+	if (isHouxitWidgetElement(vnode)) vnode = WidgetElementUnwrap(vnode);
+	if (isHouxitFragmentElement(vnode)) vnode.upload(callback);
+	else if (!isRenderlessElement(vnode)) callback(vnode.$element);
+}
+function primate_check(node, vNode) {
+	if (!isPrimitive(node.prototype_)) return isS(node.prototype_, vNode.prototype_);
+	return isPrimitive(node.prototype_);
+}
+function keying_check(node, vnode) {
+	return deepEqualityCheck(node._vnode_key, vnode._vnode_key);
+}
+function HouxitElementDiffingCheck(node, vNode) {
+	if (isHouxitTextElement(node) && isHouxitTextElement(vNode) || keying_check(node, vNode) && isSameHouxitElementType(node, vNode) && deepEqualityCheck(node.prototype_, vNode.prototype_) && primate_check(node, vNode)) return true;
+	return false;
+}
+function RerenderTextElements(self, node, vNode, observer, parent) {
+	node.compiler_options.value;
+	if (node?.prototype_ !== vNode?.prototype_) {
+		const update = () => {
+			node.$element.textContent = vNode?.prototype_;
+			node.prototype_ = vNode.prototype_;
+		};
+		vNode.VNodeManager.awaitTextReady?.then(update) || update();
+		if (parent) linkUpdateHook(self, parent, observer);
+	}
+}
+function WidgetElementUnwrap(vnode) {
+	if (isHouxitWidgetElement(vnode)) {
+		vnode = vnode?.widget_instance?.$build;
+		vnode = WidgetElementUnwrap(vnode);
+	}
+	return vnode;
+}
+var isTextOrNativeElement = (vnode) => isHouxitTextElement(vnode) || isHouxitNativeElement(vnode);
+function linkUpdateHook(self, vnode, observer) {
+	if (!isPass(vnode.updated_hook)) observer.updated_hooks.add(vnode.updated_hook);
+}
+function _Resolve_Directives_Hydration(self, bindings, virtualNode, hx_Element, metrics) {
+	const { isRerender, is_hyperscript, vNode, config } = metrics;
+	let { directive, value, key } = bindings;
+	const isSSR = isSSRCompiler(self);
+	if (!isSSR && !isHouxitDirective(directive)) return _With_Custom_Directives(self, bindings, vNode, hx_Element, metrics);
+	if (directive === "provide") {
+		if (!validHouxitWidget(vNode?.GeneticProvider)) {
+			debugHandler(`Illegal Provide Use: "$$provide" directive is only scoped to widget instances vnode only\n\n found on "${(isSSR ? isString(virtualNode.type) : isNativeElement(virtualNode)) ? virtualNode.outerHTML + " element" : ""}"`, self, true);
+			return;
+		}
+		if (_makeMap_([Suspense, For], vNode.prototype_)) vNode.filesFilter.$$dir_PROVIDE_bindings = bindings;
+		else $$dir_PROVIDE(self, bindings, vNode, hx_Element, metrics);
+	}
+	if (hasOwn(DirectiveMacros, directive) && (isRerender ? _makeMap_("bind", directive) : true)) DirectiveMacros[directive](self, bindings, virtualNode, hx_Element, metrics, directive === "text");
+}
+function dynamicPropRemover(obj, propName) {
+	for (let [key, value] of entries(obj)) {
+		if (!key.includes(propName)) continue;
+		let keyCache;
+		if (key.startsWith("$$bind") || key.startsWith("$$slot")) keyCache = key.slice(6);
+		else if (key.startsWith("$$on")) keyCache = key.slice(4);
+		keyCache = fall_AttrName(key);
+		if (key.includes("|")) keyCache = keyCache.split("|").shift();
+		if (propName === keyCache) {
+			delete obj[key];
+			break;
+		}
+	}
+	return obj;
+}
+function _Houxit_token_GENERATOR_(config, FN, frkey) {
+	if (!isFRKey(frkey) && !validateCollectionArgs(arguments, {
+		validators: [
+			Object,
+			Function,
+			Symbol
+		],
+		max: 3,
+		min: 1,
+		name: "tokenGENERATOR"
+	})) return;
+	if (!isFRKey(frkey)) config = assign({
+		size: 10,
+		type: "alpha"
+	}, config);
+	let uuid = generateUUID(config.size, config.type);
+	if (!FN(uuid)) uuid = _Houxit_token_GENERATOR_(config, FN, $factoryTokenKey);
+	return uuid;
+}
+function tokenGENERATOR(config, Test_Callback) {
+	return _Houxit_token_GENERATOR_(config, Test_Callback);
+}
+var blockTagRegex = /::@_\(([\w$.\-!:\#.%?&]+)\)_/;
+function isBlockTag(tagName) {
+	return blockTagRegex.test(tagName);
+}
+function getBlockTagName(block) {
+	return isBlockTag(block) ? block.match(blockTagRegex)[1] : void 0;
+}
+function installTransformersArgumentations(self, child, hx_Element, vNode) {
+	const root = isInitialBuild(self) ? self : self[$$$core].$root;
+	define(child[$$$core], "$root", { value: root });
+	define(child[$$$core], "$parent", { value: hx_Element.compiler_options.parent });
+	define(child[$$$core], "$owner", { value: self });
+	for (let [prop, content] of entries(root[$$$core].$globals.register)) child[$$$core].$globals.register[prop] = assign(child[$$$core].$globals.register[prop], content);
+}
+function resolveInstanceWidgetNormalizer(self, vNode) {
+	const tagname = isBlockTag(vNode.type) ? getBlockTagName(vNode.type) : vNode.type;
+	let widget;
+	if (!isBlockTag(vNode.type) && !isDynamicPropTag(vNode.type) && !instance_Has_Widget(self, tagname) && !(inBrowserCompiler ? customElements.get(tagname) : false)) {
+		debugHandler(`Template Compilation Error::\n\nUnresolved tagname "<${tagname}>"\n\n   ...if this is a Houxit widget, make sure its registered through the "widgets" option or defined through the CustomElementsInstance.define() method if it's a customElement `, self, true);
+		return false;
+	} else if (isBlockTag(vNode.type)) {
+		if (isBuiltinBlocks(tagname)) return true;
+		if (!instance_Has_Block(self, tagname)) {
+			debugHandler(`((Block Resolver Error))\n\n"${tagname}" block is not a registered block element`, self, true);
+			return false;
+		} else vNode.GeneticProvider = normalize_Block(self, tagname);
+		return true;
+	} else if (_makeMap_(BUILT_IN_WIDGETS, tagname)) widget = BUILT_IN_WIDGETS[tagname];
+	widget = normalize_Widget(self, tagname);
+	if (!isDynamicPropTag(tagname) && !validHouxitWidget(widget) && !customElements.get(tagname)) {
+		debugHandler(`>>>> "${tagname}\n\nCannot compile value as a Houxit widget\nMaybe an invalid houxit widget value type`, self, true);
+		return false;
+	}
+	if (validHouxitWidget(widget)) vNode.GeneticProvider = widget;
+	vNode.prototype_ = validHouxitWidget(widget) ? widget : tagname;
+	return true;
+}
+function $compilerEngine(self, virtualNode, hx_Element, slotsCompilerArgs, config) {
+	let { rawChildren, GeneticProvider: widget, props } = virtualNode;
+	const is_hyperscript = self ? self[$$$core]?.map.is_hyperscript : virtualNode.is_hyperscript;
+	const isRerender = self ? self[$$$operands].initializedRender : null;
+	const propsElements = {};
+	const { hasDir: hasSlot, getKey: getSlot, getDir: getSlotValue } = is_hyperscript ? {} : dirExistenceCheck(props || {}, "$$slot");
+	if (hasSlot) if (config.topLevelSlotContext) {
+		$$dir_SLOT(self, validateIncomingPropsKeys(self, {
+			key: getSlot,
+			attr: getSlotValue
+		}, is_hyperscript, hx_Element, { isRerender }), virtualNode, hx_Element, {
+			is_hyperscript,
+			isRerender,
+			config
+		});
+		delete config.topLevelSlotContext;
+	} else debugHandler(`$$slot directive definitions are only allowed on a widgets top-level consumer scope instances\n\n"slot' directive on ... widget has failed to compile away...cross-check element render positioning`, self, true);
+	if (len(props) && self) {
+		Props_dilation_compile(virtualNode, self, hx_Element, { is_hyperscript }, propsElements, config);
+		virtualNode.props = propsElements;
+	}
+	if (!validHouxitWidget(widget)) return;
+	virtualNode[widgetTypeKey] = widget[widgetTypeKey];
+	virtualNode.widget_instance = widget;
+	virtualNode.filesFilter.slotsCompilerArgs = slotsCompilerArgs;
+	if (isHouxitElement(hx_Element)) virtualNode[$buildHx_ElementKey] = hx_Element;
+	if (isRerender) return;
+	if (isSSRCompiler(self)) {
+		virtualNode.filesFilter.useSSRCompiler = true;
+		if (isHydration(self)) virtualNode.filesFilter.isHydration = true;
+	}
+	return initializedRenderBuild(self, hx_Element, virtualNode).mount(_createFragment());
+}
+function initializedRenderBuild(self, hx_Element, virtualNode) {
+	const child = new HouxitBuild(virtualNode);
+	integrateUseInstallProto(child);
+	if (hx_Element) hx_Element.widget_instance = child;
+	if (self) {
+		controllerHydration(self, child, hx_Element, virtualNode);
+		child.install(controllerGlobalPlugin, { self });
+	}
+	return child;
+}
+function integrateUseInstallProto(self) {
+	if (hasOwn(self[$$$core].opts, "install")) self.install(self[$$$core].opts.install);
+}
+function controllerHydration(self, build, hx_Element, vNode) {
+	const globals = getGlobalRegistery(self);
+	installTransformersArgumentations(self, build, hx_Element, vNode);
+	if (!len(globals.controller)) return build;
+	for (let genre of globals.controller.values()) build.controller(genre);
+	return build;
+}
+function controllerGlobalPlugin(build, options) {
+	const registries = getGlobalRegistery(options.self).register;
+	for (const [key, value] of entries(registries)) {
+		const macroAdapter = key === "properties" ? "property" : key === "transmited" ? "transmit" : key === "templateClasses" ? "templateClass" : key.slice(0, -1);
+		for (const [name, data] of entries(value)) {
+			const args = key === "mixins" ? [data] : [name, data];
+			build[macroAdapter](...args);
+		}
+	}
+}
+function _createFragment() {
+	return inBrowserCompiler ? assign(new DocumentFragment(), {
+		isHouxit_Fragment: true,
+		NodeList: [],
+		PATCH_FLAGS: new Tuple()
+	}) : new Tuple();
+}
+var instance_Has_TemplateClass = (self, name) => _makeMap_(self[$$$register].animation, name);
+var normalize_TemplateClass = (self, name) => self[$$$register].templateClasses[name] || pass;
+var devInfo = "You're running the development version of houxit " + get_version().slice(7) + ", make sure you switched to the minified  version with the (*.min.js) file extension when deploying to production";
+var global_const = {
+	widget: {
+		has: instance_Has_Widget,
+		get: normalize_Widget
+	},
+	block: {
+		has: instance_Has_Block,
+		get: normalize_Block
+	},
+	filter: {
+		has: hasFilterInstance,
+		get: normalize_Filter
+	},
+	animation: {
+		has: (self, name) => hasMotionInstance(self, name, "animation"),
+		get: (self, name) => normalize_Motion(self, name, "animation")
+	},
+	transition: {
+		has: (self, name) => hasMotionInstance(self, name, "transition"),
+		get: (self, name) => normalize_Motion(self, name, "transition")
+	},
+	directive: {
+		has: instance_Has_Directive,
+		get: normalize_Directives
+	},
+	templateClass: {
+		has: instance_Has_TemplateClass,
+		get: normalize_TemplateClass
+	}
+};
+function __traverseRESOLVER(name, type) {
+	const self = getCurrentRunningEffect({ name: "resolve." + type + "()" });
+	if (!validateCollectionArgs(arguments, {
+		validators: [String],
+		max: 1,
+		name: "resolve." + type + "()"
+	})) return;
+	let instance;
+	if (!isHouxitBuild(self)) return;
+	if (global_const[type].has(self, name)) instance = global_const[type](self, name);
+	else {
+		debugHandler(`"resolve.${type}()" macro was unable to find a widget with the provided name "${name}"\n\n are you sure this is a builtIn/globaly/localy registered ${type}`, self, true);
+		return;
+	}
+	return instance;
+}
+function __resolve(name) {
+	const self = getCurrentRunningEffect({ name: "resolve.()" });
+	if (!validateCollectionArgs(arguments, {
+		validators: [String],
+		max: 1,
+		name: "resolve.()"
+	})) return;
+	if (!isHouxitBuild(self)) return;
+	const model = useModel();
+	return hasOwn(model, name) ? model[name] : void 0;
+}
+function resolve(name) {
+	return __resolve(...arguments);
+}
+iterate("widget,directive,filter,templateClass,block,animation,transition".split(",")).each((type) => {
+	resolve[type] = Function("__traverseRESOLVER", "type", `
+      return function resolve${ToPascalCase(type)}(name){
         return __traverseRESOLVER(name, type)
       }
-    `)(Wh,e)});function qh(e,t){let n=e.propValue.join(``),r=e.openPropName.join(``);j(e.propValue)||(n=d(n)?n:null),_(t,r)?t.__hx_keys__.push([r,n]):t[r]=n,e.openPropName=[],e.openPropQuote=null,e.isPropValue=!1,e.isPropName=!0,e.propValue=[],e.namingSpace=!1}var Jh=/(['"`])/;function Yh(e,t,n){if(e=(e||``).trim(),!e)return{};let r={__hx_keys__:[]},i={openPropName:[],openPropQuote:null,propValue:[],isPropValue:!1,isPropName:!0,prev:null,next:null,namingSpace:!1};for(let[t,n]of y(e)){t=Number(t),i.next=e[t+1];let a=()=>i.prev=n;if(i.isPropName){if(i.namingSpace&&(/\S/.test(n)||i.next+1==null||t+1>j(e)))if(!/=/.test(n)||i.next==null||t+1>j(e)){qh(i,r),(!/[=]/.test(n)||/\S/.test(n))&&i.openPropName.push(n),a();continue}else i.namingSpace=!1;if(/=/.test(n)&&!i.namingSpace)i.isPropName=!1,i.isPropValue=!0;else if(j(i.openPropName)<1&&/\s/.test(n)){a();continue}if(j(i.openPropName)&&/\s/.test(n))i.namingSpace=!0;else if(i.isPropName&&(i.next==null||t+1>j(e))){i.openPropName.push(n),qh(i,r),a();continue}else!i.namingSpace&&i.isPropName&&i.openPropName.push(n)}else if(i.isPropValue){if(/\s/.test(n)&&j(i.propValue)<1){a();continue}if(j(i.propValue)<1&&Jh.test(n)&&!i.openPropQuote){i.openPropQuote=n,a();continue}else if(i.openPropQuote&&Jh.test(n)&&n!==i.openPropQuote){i.propValue.push(n),a();continue}if(i.openPropQuote&&Jh.test(n)&&n===i.openPropQuote||!i.openPropQuote&&(/(\s$)/.test(n)||/(\s$)/.test(i.next)||t+1===j(e)||i.next==null)){(/(\s$)/.test(i.next)||t+1===j(e)||i.next==null)&&!(i.openPropQuote&&Jh.test(n)&&n===i.openPropQuote)&&i.propValue.push(n),qh(i,r),a();continue}else i.propValue.push(n)}else j(i.openPropName)&&qh(i,r);a()}return j(i.openPropName)&&qh(i,r),j(r.__hx_keys__)||delete r.__hx_keys__,r}function Xh(e){return Yh(e)}var Zh=e=>new Set(`script,style,title,textarea,code,noscript,iframe,xmp`.split(`,`)).has(e),Qh=class{constructor(e){e&&d(e)&&(this.content=e)}content=``},$h=e=>e instanceof Qh;function eg(e){let[t,n]=e||[`{{`,`}}`];return t=_o(t)?yc(t):t,n=_o(n)?yc(n):n,RegExp(`(${t} *(\\/|@)([\\w\\-$:]+)(.*?)(\\/*)? *${n})`,`mg`)}function tg(e){return/^::([\w-$:\-!\#\@.()[\]%?&]+)/.test(e)}var ng=e=>/(\<[ ]*\>)/.test(e),rg=e=>/(\<\/[ ]*\>)/.test(e),ig=/(\<[ ]*\>|\<\/[ ]*\>)|(<(\/)?([\w\-\$!:\#\@.()[\]%?\/&]+)(\s+[^>]*?(?:(?:[\w]+[_!@#$'"%^&*()+\-\[\]{};:\\|,.<\/?~`]*)|(?:'[^']*'[^>\s]*)|(?:"[^"]*"[^>\s]*)))*\s*(\/)?>)|([\w \s!@#$'"%^&*()+\-\[\]{};:\\|,.>=\/?`~]+)/gm,ag=/<([\w\-\$!:\#\@.()[\]%?&]+)(\s+[^>]*?(?:(?:[\w]+[_!@#$'"%^&*()+\-\[\]{};:\\|,.<\/?>=`~]*)|(?:'[^']*'[^>\s]*)|(?:"[^"]*"[^>\s]*)))*\s*(\/)?>/m,og=e=>ag.test(e),sg=/<[\/]([\w$.:\-\@()[\]%&?\\\/]+)[ ]*>/,cg=e=>sg.test(e),lg=e=>!ag.test(e)&&/([\w \s!@#$'"%^&*()+\-\[\]{};:\\|,.\/?`~]+)/m.test(e),ug=/^<[\w\-\$!\@:.()[\]%?&]+([\s\S]*[^\/>])?\s*(\/)?>\s*$/m,dg=/hx:\(\(__(\d)__\)\)/,fg=e=>/<!-->/.test(e),pg=e=>/<\/-->/.test(e),mg=/((<!--)|(-->))/g;function hg(e,t,n={}){if(P(e)&&d(t.type)&&!at(t.type))Nh(e,t);else if(n.JSXParser&&d(t.type)&&dg.test(t.type)){let e=vg(n,t.type);t.type=e,jt(e)&&(t.GeneticProvider=e,t.prototype_=e)}}function gg(e,t,n){if(Ah(t.type)||!d(t.type)||!tg(t.type)||!P(e)||n.JSXParser)return;let r=t.type;t.type=Wn,t.props?t.props[`$$bind:self`]=r.slice(2):t.props={"$$bind:self":r.slice(2)},t.prototype_=Wn,t.GeneticProvider=Wn}function _g(e,t,n,r,i,a){let{loaderList:o,trackNodes:s,child_src:c}=t,l=o[0][1];return l.rawChildren=c||``,Zh(e)?l.children=c:c?.trim()&&i.deep?(l.children=Cg(c,[],i,r),dg.test(l.rawChildren)&&(l.rawChildren=l.rawChildren.replace(dg,(e,t)=>{let n=i.JSXParser.sources[Number(t)];return Qt(n)?n:e}))):a.trim()&&(l.rawChildren+=a),hg(r,l,i),gg(r,l,i),n.push(l),o.splice(0),s.splice(0),``}function vg(e,t){let n=Number(t.match(dg)[1]);return e.JSXParser.sources[n]}function yg(e,t){return e.props}function bg(e,t){for(let[n,r]of y(e.props))if(dg.test(r))e.props[n]=vg(t,r);else if(dg.test(r)){let r=vg(t,n);if(!d(r)){A(`property key value passed to the "html" macro is not a valid prop name\n\ntype of "${typeof r}" found >>>> Expects a "string" value`);return}e.props[r]=e.props[n],delete e.props[n]}}function xg(e,t,n,r){let{config:i,self:a}=r,{loaderList:o,trackNodes:s,child_src:c,isComment:l}=n,u=i.is_hyperscript,[d,f]=og(e)?e.match(ag):[],p=new To(f);if(fg(e)&&(p=new Qh,l?c+=e.slice(0,-1):(l=!0,o.push([`comment`,p]))),e=fg(e)?e.slice(0,-1):e,l)return l=!0,c+=e,{child_src:c,isComment:l,response:!0};let[m,h,g]=e.match(ug)||[];p.props=Yh(h,null,a),i.JSXParser&&p.props&&bg(p,i),(!P(a)||i.jsx)&&(p.is_hyperscript=!0),!u&&P(a)&&(p.props=yg(p,a)),_(p.props,`key`)&&(p.key=p.props.key,delete p.props.key),h&&Ah(f)&&((!_(p.props,`exp`)||j(p.props)>1)&&(p.props={exp:h}),p.props.exp=bc(p.props.exp||``)),j(p.props)<1&&(p.props=null);let v=g?.trim()==`/`;return!j(o)&&(Ah(f)&&sr(jh(f))||Ke(f)||v)?(p.children=null,p.rawChildren=null,hg(a,p,i),gg(a,p,i),t.push(p),{child_src:c,isComment:!1,response:!1}):j(o)?(c+=e,s.push(f),{child_src:c,isComment:!1,response:!1}):(o.push([f,p]),{child_src:c,isComment:!1,response:!0})}function Sg(e,t){return e.replace(eg(P(t)?t[z].settings.delimiters:void 0),(e,t,n,r,i,a)=>`<${n===`/`?`/`:``}::@_(${r})_ ${n===`@`?`exp="`+yc(i)+`"`:``} ${a?`/`:``}>`).replace(mg,(e,t,n)=>/<!--/.test(e)?`<!-->`:/-->/.test(e)?`</-->`:e)}function Cg(e,t=[],n={},i){if(!d(e)&&!e.trim())return r(t)?t:[];n=v({deep:!0,trim:!0},n),e=Sg(e,i);let a=e.match(ig),o=``,s=!1,c=[],l=[],u=!1;t||=[];for(let[e,r]of(a||[]).entries()){if(n.trim&&!(j(c)&&Zh(c[0][0]))){if(r=r.trim(),r==``)continue}else!n.trim&&!(j(c)&&Zh(c[0][0]))&&(r=r.trim());if(r=ng(r)?`<hx:fragment>`:rg(r)?`</hx:fragment>`:r,fg(r)||og(r)){if(fg(r)&&j(c)){o+=r.slice(0,-1),s=!0;continue}let e=xg(r,t,{loaderList:c,trackNodes:l,child_src:o,isComment:u},{config:n,self:i});if(o=e.child_src,u=e.isComment,!e.response)continue}else if(pg(r)||cg(r)){if(pg(r)){if(s){o+=r.slice(2),s=!1;continue}if(u){let e=c[0][1];$h(e)&&(e.content=o+r.slice(2)),o=``,c.splice(0),u=!1,t.push(e)}continue}else if(u){o+=r;continue}let[e,a]=r.match(sg);if(l[j(l)-1],j(c))if(n.JSXParser&&a===`/`)o=_g(a,{loaderList:c,trackNodes:l,child_src:o},t,i,n,r);else if(j(l)&&new Set(l).has(a)){o+=r;let e=l.findLastIndex(e=>e==a);e>-1&&l.splice(e,1);continue}else a===c[0][0]?o=_g(a,{loaderList:c,trackNodes:l,child_src:o},t,i,n,``):o+=r}else if(lg(r)){let e;dg.test(r)&&(r=r.replace(dg,(t,r)=>{let i=n.JSXParser.sources[Number(r)];return Qt(i)?i:(e={srcValue:i},t)})),j(c)?o+=r:t.push(e?e.srcValue:r)}}if(j(c))if(u){let e=c[0][1];$h(e)&&(e.content=o),o=``,c=[],u=!1,l=[],t.push(e)}else o=_g(c[0][0],{loaderList:c,trackNodes:l,child_src:o},t,i,n,``);return t}function wg(e,t,n,r){return Cg(...arguments)}function Tg(e,t){if(!t.props)return;let{hasDir:n,getDir:r,getKey:i}=sc(t.props,`$$raw`);n&&P(e)&&(t.filesFilter[`dir--raw`]=r)}function Eg(e,t,n,r,i){let[a,o,s,c]=r,l;i=v({},i);let u=()=>e[I].initializedRender;if(!(i.if_Block&&!i.props?.status)){if(P(e)){Tg(e,n);let t=v({},n.props||{}),r=r=>(u()&&(n.props=v({},t)),Ns(n,e,!1,v({},a?.LabContext),o,v({},c),a,i));l=r(),D(l.compiler_options.createElement)||(l.compiler_options.createElement=r)}else{let e=null;n.children&&(e=Zh(s)?n.children:jg(n.rawChildren,null,!0,null,null)),l=j_({type:s,props:j(t)?t:null,children:e})}return o.add(l),l}}function Dg(e,t,n,r,i,a){r=v({},r);let{type:o,props:s,children:c,rawChildren:l,key:u}=t,f=s,p=Ws(n?.LabContext||{},a);t.hx_Element=n,t.ctx=p;let m=e[z].map.is_hyperscript,h=()=>[n,i,o,p,a];if(!m&&d(o)&&Ah(o))if(!P(e))A(`block tags Cannot be used in build/static templates mode`,e,!0);else return Xg(e,t,h(),r);else return Eg(e,f,t,h(),r)}function Og(e,t,n,r,i,a){if(r=v({},r),e[I].initializedRender,t){let o;j(r.ctx)&&(a=Ws(a||{},r.ctx||{})),a&&(o=Ws(n?.LabContext||{},a),n&&(n.LabContext=o,o=null));let s=t;if(P(e)){let i=[s,e,n,o,r],a=()=>new Zs(...i);t=a(),t.compiler_options.createElement=a}else t=s;return i.add(t),t}}function kg(e,t,n,i,a,o){let s;if(g(t)&&String(t).trim()){let r=()=>Og(e,String(t),n,i,a,o);s=r(),s.compiler_options.createElement=r}else if(!$h(t)){if(Oo(t))t.filesFilter.parent=i?.slotTap?.parent||n||e,s=Dg(e,t,n,i,a,o);else if(_t(t)){let s=t[ft](e,null,n,o,i);a[r(s)?`extend`:`add`](s)}else if(xr(t)){let r=new M;Ag(e,si(t),n,i,r,o),s=new X(r.list(),e,null),a.add(s)}}return s}function Ag(e,t,n,r,i,a){a=v({},a),r=v({},r),e[I].initializedRender;let o=e[z].map.is_hyperscript;for(let[s,c]of t.entries())if(t[s+1],N(c))i.add(c);else if(g(c)?String(c).trim():c||E(c)){if(o&&E(c)){let t=c,n=q(()=>G(t()),e),i=J(n).value;if(!g(i)){A(`lazy callback effect expects only a primitive node\n\n${typeof i} render not supported\nat ...."${t.toString()}"`,e,!0);return}r.lazy_effect=n,c=i}kg(e,c,n,r,i,a),delete r.lazy_effect}}function jg(e,t,n,r,i,a={}){if(!e&&!Y(e,[String,Array,Object]))return null;a=v({},a),t[z].map.is_hyperscript;let o=t[I]?.initializedRender,s=d(e)?Cg(e,[],{trim:!0,is_hyperscript:P(t)&&a.is_hyperscript},t):$(e);if(s=new M(...$(s)).list(),a.official&&!o){let e=Ls(t);e&&U($(s)).each(t=>{t.filesFilter.suspense=e})}let c=new M;return Ag(t,s,r,a,c,i),j(c)>1?c.list():j(c)===1?c.shift():null}function Mg(e,t,n,r,i){let[a,o,s,c,l]=r,u=()=>[e,t,n,r],d=t.children,f=t.props.exp,p=[],m=[d,f];if(n===`if`){let t=()=>Wg(...u(),m,i);i.createElement=t;let{eff_pack:n,flush:r,eff_place:a}=t(),s=new X(n?.[a]?.tuple.list()||[],e);s.compiler_options.createElement=t,s.VN_Tree.FLUSHS.add(r),i.ELEMENT=s,o.add(s)}else if(n===`else`||n===`else-if`)qg(e,t,i,n);else if(n===`for`){let e=()=>Hg(...u(),m,!1,i);p=e(),p.compiler_options.createElement=e}else if(n===`const`)Vg(...u(),m,i);else if(n===`class`)Lg(...u(),m);else if(n===`new`)p=Bg(...u(),m);else if(n===`html`)p=Ig(...u(),m,i);else if(n===`debugger`)Fg(e,t,n,r,[d,f],i);else if(n===`await`){let e=()=>Ng(...u(),m,i),t=e();t.compiler_options.createElement=e}return $(p)}function Ng(e,t,n,r,[i,a],o){let[s,c,l,u,d]=r,f=new Zs(``,e),p=e[I].initializedRender;s.LabContext=Ws(s.LabContext||{},d||{});async function m(){return await J(q(()=>Z(e,a,N(s)?s:d),e))}let h=m();f.VNodeManager.awaitTextReady=h;let g=Ls(t);return h=h.then(t=>{let n=n=>Pg(e,n,f,p,t);de(t.value)?value.then(e=>n(e)).catch(e=>{throw Error(e)}):n(t.value)}).catch(t=>{g&&ps(g).errorCaptured(()=>{A(t,e,!0)},{message:`{{@await}} block fails to resolve...`})}),g&&(g.activeAwaits++,g.loadChain.add(h)),c.add(f),f}function Pg(e,t,n,r,i){let a=new Zs($t(t),e);r?(n.$element=a.$element,n.prototype_=a.prototype_):(n.$element.textContent=a.$element,n.prototype_=a.prototype_,np(i,e=>{new Promise(e=>{e(n.compiler_options.createElement())}).then(e=>{Xm(()=>{n.$element.textContent=e.$element})})},e))}function Fg(e,t,n,r,[i,a],o){let[s,c,l,u,d]=r}function Ig(e,t,n,r,[i,a],o){let[s,c,l,u,d]=r;return q(()=>Z(e,Ee(a.trim())?a:`undefined`,s),e),[]}function Lg(e,t,n,r,[i,a],o){let[s,c,l,u,d]=r;if(!re.test(a)){A(`template "@class" block declaration failure 
-
-does not meet required name and args syntax rules`,e,!0);return}let[f,p,m]=a.match(re),h;if(m&&(h=m.match(ie)),h&&(m=m.slice(j(h[0])),h=h[1],h=Z(e,h,s),!D(h))){A(`@class: template "@class" block validator prop expects a plain function callback reference`,e,!0);return}if(m&&(m=m.trim(),!(m.startsWith(`(`)&&m.endsWith(`)`)))){A(`${p}: arguments of template class "${p}" does not meet required syntax\nmissing parenthesis in arguments enclosure  "(" and ")"`,e,!0);return}if(p||=f,!oe(p)){A(`template "@class" block name "${p}" is not a JavaScript valid identifier`,e,!0);return}function g(...t){let n=!h||h([...t]);return ce(n)?n?!0:(A(`validation method for template class "${p}" failed\nreturns falsy in its props validation check`,e,!0),!1):(A(`TemplateClass validator expects a Boolean return value
-validation proceses failed`,e,!0),!1)}m&&=m.slice(1).slice(0,-1);let v=zg(m);class y extends pt{constructor(...t){if(super(()=>i),!g(...t))return[];this[ft]=function(){let n=Ws(d,{[Sn]:{syntaxArray:[...v],sourcesArray:[...t]}});return fs(i,Ls(s)),o.suspenseFlag?i:jg(br(i,!0),e,null,s,n,o)}}}return _(e.__public_model__,p)||S(e.__public_model__,p,{value:y,enumerable:ve}),[]}function Rg(e,t,n){t===n?(e.open&&e.type===n?e.openCurlies++:e.open||(e.open=!0,e.type=n),e.single.push(t)):t===(n===`{`?`}`:`]`)&&(e.type===n&&e.openCurlies&&e.open?(e.openCurlies--,e.single.push(t)):e.type===n&&e.open&&!e.openCurlies?(e.single.push(t),e.record.push(e.single.join(``).trim()),e.single=[],e.open=!1,e.type=null):e.open&&e.type!==n&&e.single.push(t))}function zg(e){let t={record:[],single:[],open:!1,openCurlies:0,type:void 0,next:void 0,concat:void 0},n=e=>/['"`]+/.test(e),r=0;for(let i of x(e))if(r++,t.next=e[r],t.open&&n(i)&&!t.concat)t.concat=i,single.push(i);else if(n(i)&&i===t.concat)t.concat=null,single.push(i);else if(i===`{`||i===`}`&&!t.concat)Rg(t,i,`{`);else if(i===`,`||/\s/.test(i)){if(!t.concat)if(t.open)t.single.push(i);else continue}else i===`[`||i===`]`&&!t.concat?Rg(t,i,`[`):t.open?t.open&&!t.type&&(t.next===`,`||/\s/.test(t.next)||p(t.next))?(t.open=!1,t.single.push(i),t.record.push(t.single.join(``).trim()),t.single=[]):t.open&&t.single.push(i):(t.open=!0,t.single.push(i));return t.record}function Bg(e,t,n,r,[i,a],o){let[s,c,l,u,d]=r,f=Bc(a.trim()),p=j(f)<j(a.trim())?bo(a,f).content:void 0;p=p?Z(e,`[`+p+`]`,s||d):[];let m=Z(e,f,s),h=()=>A(`"${f}" reference is not a valid TemplateClass instance`,e,!0);if(!Rt(m))return h(),[];let g=new m(...p);return _t(g)?(g=g[ft](e,null,s,d,o),$(g)):(h(),[])}function Vg(e,t,n,r,[i,a],o){let[s,c,l,u,d]=r;if(a.trim()&&!re.test(a))return A(`"${a}" statement is not recognised or not a valid statement or expression`,e,!0),[];if(!a.trim())return[];let[f,p,m]=a.match(re);if(p=p.trim(),!cn(p)&&!oe(p))return A(`"${p}" is an invalid identifier`,e,!0),[];let h=Z(e,m?.trim(),s||u);if(cn(p)){if(k(Wo(p,h,e)))return[];Ws(d,{[Sn]:{sourcesArray:[h],syntaxArray:[p]}},!0)}else _(u,p)?_(u,p)&&A(`"${p}" const block namespace already declared\nor instance cannot be re-declared/re-assigned`,e,!0):d[p]=h}function Hg(e,t,n,r,[i,a],o=!1,s){let[c,l,u,d,f,p,m]=r,h=e[z].map.is_hyperscript,g=e[I].initializedRender,_=[],y=o?{obj:p,effect:s.effect}:Po(e,a,c,!0,s,g),b=o?s.effect:y.effect;if(g?y.obj=b.runEffect().value:s.effect=b,!_e(y.obj)&&!se(y.obj))return A(`${Sa(y.obj)} value passed to the "For" built-in ${o?`widget`:`block`} is not an iterable object`,e,!0),_;function x(t,n,r){return fs(r,Ls(c)),n.suspenseFlag?r:jg(br(r,!0),e,!0,c,t,n)}U(G(y.obj),y.loopType||`of`).each((t,n,r)=>{let a=Ws(c?.LabContext||{},v({},f||{})),l=v({},s),u=qf([t,n,r]);o?h||(sn.test(m.value)&&(m.value=`[`+m.value.slice(1,-1)+`]`),a=Jl(e,a,m.value,on.test(m.value)?u:u[0])):a=Ko(e,{valToken:y.valToken?.trim(),keyName:y.keyName?.trim(),index:y.index?.trim(),hx_Element:c},{ky:n,vl:t,count:r},a),l.loop_context=u;let d=()=>{let n=i.map(e=>x(a,l,ks(e,u))).filter(e=>N(e));return n=j(n)<2?n[0]:new X(n,e,c,null,t),n},p=d();p.compiler_options.createElement=d,_.push(p)});let ee=new X(_,e,c);return g||np(y.effect,n=>{Ds(e,ee,t,y.obj,y.effect,s)}),ee}var Ug=(e,t,n,r)=>{let i=e.conditional_Index;e.pack.push({name:`${t}${t===`else-if`&&i?i:``}`,tuple:new M,test:n,effect:r}),e.place++};function Wg(e,t,n,r,[i,a],o,s=!1){let[c,l,u,d,f,p]=r,m=t.children||[],h=e[z].map.is_hyperscript,g=e[I].initializedRender,_,y;o.subscribers=[],s&&!g?(y=t.compiler[Xn].test,_=h?p:y.value):g||(y=q(()=>Z(e,Ee(a.trim())?a:`undefined`,c),e),_=J(y).value,t.compiler[Xn]={test:y}),g&&(l=new M,_=t.compiler[Xn].test.runEffect().value);let b=!!G(_);o=v(o,{if_Block:!0,props:{status:b,prevBlock:void 0,activeBlock:s?`hx:if`:`@if`,shouldContinue:!b},ctx:{},keywordLists:[],pack:[],place:-1,reducers:new M}),o.reducers.add(y),o.props.status&&Ug(o,`if`,!0,y),o.conditional_Index=0;for(let[t,n]of m.entries())if(!Gg(e,n,r,o,n.props?.exp,s))break;let x;return g||(x=np(y,t=>{let{tuple:n,name:r}=o.pack?.[o.place]||{},{eff_pack:i,eff_place:a}=o.createElement()||{},s=i[a],l=o.ELEMENT,u=new X(s?.tuple?.list()||[],e,c);if(o.memoVault&&!cs(e,u))return;let d={list:new M,FORCE:r!==(s?.name||`if`),...o};ih(e,l,u,t,d),o.pack=[],o.place=-1,Ug(o,s?.name,s?.test,y),o.pack[o.place].tuple=d.list})),{eff_pack:o.pack,eff_place:o.place,flush:x}}function Gg(e,t,n,r,i,a){let[o,s,c,l,u,f]=n,p=e[I].initializedRender,m=e[z].map.is_hyperscript,h=a?c:d(t)?t:Ah(t.type)?jh(t.type):t.type,g=a?`hx:else-if`:`else-if`,_=a?`hx:else`:`else`,v=e=>a?e:`@`+e;if(a?t.prototype_===Zn:h===g){if(!Kg(e,r,g,a))return r.props.status=!1,r.props.shouldContinue=!1,!1;if(!r.props.shouldContinue)return!1;let n,s;r.props.prevBlock=r.props.activeBlock,r.props.activeBlock=v(g),t.prototype_=Zn;let c={};Rl(t,e,o,{is_hyperscript:m},c,r),t.props=c;let l=t.compiler[Zn].test;a&&!p?n=l.value:!a&&!p&&(s=Ka(l)?l:q(()=>Z(e,Ee(i?.trim())?i:`undefined`,o),e),n=s.runEffect().value,l&&!p&&(reducer=r.reducers.pop(),reducer?.follow(s),s.reducer=reducer,t.compiler[Zn]={test:s},r.reducer.add(s))),p&&(n=t.compiler[Zn].test.runEffect().value);let u=!!G(n);return Ug(r,`else-if`,u,s),r.conditional_Index++,r.props.status=u,r.props.shouldContinue=!u,!0}else if(a?t.prototype_===Qn:h===_)return Kg(e,r,_,a)?r.props.shouldContinue?(Ug(r,`else`,!0),r.props.prevBlock=r.props.activeBlock,r.props.activeBlock=v(_),r.props.status=!0,r.props.shouldContinue=!1,!0):!1:(r.props.status=!1,r.props.shouldContinue=!1,!1);if(!r.props.status)return!0;fs(t,Ls(o));let y=r.suspenseFlag?t:jg(t,e,!0,o,u,r);return!p&&a&&s.add(y),r.pack[r.place].tuple.add(y),!0}function Kg(e,t,n,r){let i=t.keywordLists[j(t.keywordLists)-1],a=r?`hx:else-if`:`else-if`,o=r?`hx:else`:`else`;return i===o&&(n===o||n===a)?(A(`An "${o}" ${r?`widget`:`block`} already existing\n\nUnresolved Error:: cannot precced with the "@${n}" block`,e,!0),falseP):(t.keywordLists.push(n),!0)}function qg(e,t,n,r,i){let a=i?`widget`:`block`;A(`The "${r}" ${a} cannot be used outside of the "${i?`hx:if`:`@if`}" template ${a} scope`,e,!0)}function Jg(e,t){return t=t.startsWith(`@`)?t.slice(1):t,T(e[B]?.blocks||{},t)}function Yg(e,t){return t=t.startsWith(`@`)?t.slice(1):t,T(e[B].blocks,t)?e[B].blocks[t]:null}function Xg(e,t,n,i){t.children,i=v({},i);let[a,o,s,c,l]=n,u=jh(s),d=[];if(or(u))d=Mg(e,t,u,n,i);else if(Jg(e,u))d=Zg(e,t,u,n,i);else{A(`((Block Resolver Error))\n\n"@${u}" block is not a registered block element`,e,!0);return}for(let[e,t]of(r(d)?d:Y(d,[Set,M])?[...si(d)]:[d]).entries())t&&o.add(t);return d}function Zg(e,t,n,r,i){let[a,o,s,c,l]=r,u=t.rawChildren,d={isVoid:!1,compileExp:!0},f=Yg(e,n),p;h(f)?_(f,`blockConfig`)?(h(f.blockConfig)?v(d,f.blockConfig):A(`"blockConfig" option of "${n}" custom block is not a valid type...\nExpects a plain object`,e,!0),iterator(f.blockConfig).each((t,n)=>{T(`isVoid,compileExp`,n)||(A(`blockConfig option of "${n}" is not a recognised config option`,e,!0),delete d[n])})):_(f,`block`)&&(p=f.block):p=f;let m=0,g=J(q(()=>Z(e,t.props.exp,a),e)).value;function y(t={}){return d.isVoid?$s():(h(t)||A(`context data passed to factoryRender expects a plain object`,e),fs(u,Ls(a)),i.suspenseFlag?$(u):jg(u,e,!0,a,Ws(l||{},t),i))}function b(t){return H(arguments,{count:1,validators:[Array,To],name:`factoryRender()`})||m++,t=$(t),fs(t,Ls(a)),jg(t,e,!0,a,Ws(l||{},ctx),i)}function x(e){return b(e)}let ee=y();return $(p.call(e.__public_model__,$(ee),g,x))}function Qg(e,...t){return function(n,r,i,a,o){let s=e(...t);return fs(s,Ls(i)),o.suspenseFlag?s:jg(s,n,r,i,a,o)}}function $g(e,t){return H(arguments,{min:1,max:2,validators:[Function,String],required:[!0],name:`createTemplateClass`})?class extends pt{constructor(...t){super(e),this[ft]=Qg(e,...t)}}:V}function e_(e,t){return $g(...arguments)}var t_=class extends pt{constructor(...e){super(e[0]),this[ft]=Qg(this.class.bind(this),...e)}};function n_(e,t=!1){if(e=s(e)?si(e):oi(e)?e.list():e,O(t)&&j(e)){let n=j(e)>1?e:e[0];return d(n)?new Zs(n,t):n}else if(j(e))return j(e)>1?new X(e,t):g(e[0])?new Zs(f(e[0])?``:e[0],t):e[0];else return null}function r_(e,t){let n=[],r=e=>`hx:((__${e}__))`;for(let[i,a]of e.entries())n.push(a),_(t,i)&&n.push(r(i));return Cg(n.join(``),[],{JSXParser:{sources:t}})}function i_(e,...t){return a_(e,t)}function a_(e,t){if(!E(e.reduce)){A(`html macro can only be called with backticks embeded directly to method name
-
-"html\`<templates>\`" instead of "html()"
-Check html macro call`);return}if(j(t))return r_(e,t);let n=e.reduce((e,n,r)=>{let i=f(t[r])?``:t[r];return e+n+i},``);return d(n)?Cg(n,[],{trim:!0},null):(A(`html parser macro expects strings values`),null)}function o_(e){}function s_(e,...t){if(!d(e))return A(`markdown helper expects strings values`),null}function c_(e){return d_.call({},...arguments)}function l_(){if(ne)return class extends HTMLElement{constructor(){super()}compiler_options={};_set_compiler_options(...e){this.compiler_options=e}}}function u_(e){if(e=rl(e),!oe(e)){A(`unable to parse the customElements tag name
-
-
-      seems to have been an invalid identifier`);return}return Function(`CustomNativeElement`,`
-      return class ${e} extends CustomNativeElement{
+    `)(__traverseRESOLVER, type);
+});
+function PropsParserContainment(setup, props) {
+	let value = setup.propValue.join("");
+	let key = setup.openPropName.join("");
+	if (!len(setup.propValue)) value = isString(value) ? value : null;
+	if (hasOwn(props, key)) props["__hx_keys__"].push([key, value]);
+	else props[key] = value;
+	setup.openPropName = [];
+	setup.openPropQuote = null;
+	setup.isPropValue = false;
+	setup.isPropName = true;
+	setup.propValue = [];
+	setup.namingSpace = false;
+}
+var QuoteRegex = /(['"`])/;
+function __HTMLPropsParser__(attrs, config, self) {
+	attrs = (attrs || "").trim();
+	if (!attrs) return {};
+	const props = { ["__hx_keys__"]: [] };
+	const setup = {
+		openPropName: [],
+		openPropQuote: null,
+		propValue: [],
+		isPropValue: false,
+		isPropName: true,
+		prev: null,
+		next: null,
+		namingSpace: false
+	};
+	for (let [index, str] of entries(attrs)) {
+		index = Number(index);
+		setup.next = attrs[index + 1];
+		const closure = () => setup.prev = str;
+		if (setup.isPropName) {
+			if (setup.namingSpace && (/\S/.test(str) || setup.next + 1 == null || index + 1 > len(attrs))) if (!/=/.test(str) || setup.next == null || index + 1 > len(attrs)) {
+				PropsParserContainment(setup, props);
+				if (!/[=]/.test(str) || /\S/.test(str)) setup.openPropName.push(str);
+				closure();
+				continue;
+			} else setup.namingSpace = false;
+			if (/=/.test(str) && !setup.namingSpace) {
+				setup.isPropName = false;
+				setup.isPropValue = true;
+			} else if (len(setup.openPropName) < 1 && /\s/.test(str)) {
+				closure();
+				continue;
+			}
+			if (len(setup.openPropName) && /\s/.test(str)) setup.namingSpace = true;
+			else if (setup.isPropName && (setup.next == null || index + 1 > len(attrs))) {
+				setup.openPropName.push(str);
+				PropsParserContainment(setup, props);
+				closure();
+				continue;
+			} else if (!setup.namingSpace && setup.isPropName) setup.openPropName.push(str);
+		} else if (setup.isPropValue) {
+			if (/\s/.test(str) && len(setup.propValue) < 1) {
+				closure();
+				continue;
+			}
+			if (len(setup.propValue) < 1 && QuoteRegex.test(str) && !setup.openPropQuote) {
+				setup.openPropQuote = str;
+				closure();
+				continue;
+			} else if (setup.openPropQuote && QuoteRegex.test(str) && str !== setup.openPropQuote) {
+				setup.propValue.push(str);
+				closure();
+				continue;
+			}
+			if (setup.openPropQuote && QuoteRegex.test(str) && str === setup.openPropQuote || !setup.openPropQuote && (/(\s$)/.test(str) || /(\s$)/.test(setup.next) || index + 1 === len(attrs) || setup.next == null)) {
+				if ((/(\s$)/.test(setup.next) || index + 1 === len(attrs) || setup.next == null) && !(setup.openPropQuote && QuoteRegex.test(str) && str === setup.openPropQuote)) setup.propValue.push(str);
+				PropsParserContainment(setup, props);
+				closure();
+				continue;
+			} else setup.propValue.push(str);
+		} else if (len(setup.openPropName)) PropsParserContainment(setup, props);
+		closure();
+	}
+	if (len(setup.openPropName)) PropsParserContainment(setup, props);
+	if (!len(props["__hx_keys__"])) delete props["__hx_keys__"];
+	return props;
+}
+function HTMLPropsParser(attrs) {
+	return __HTMLPropsParser__(attrs);
+}
+var isPlainTextChildrenTagElements = (txt) => new Set("script,style,title,textarea,code,noscript,iframe,xmp".split(",")).has(txt);
+var comment = class {
+	constructor(value) {
+		if (value && isString(value)) this.content = value;
+	}
+	content = "";
+};
+var isHtmlComment = (value) => value instanceof comment;
+function generateBlockTagRegex(delimiters) {
+	let [open, close] = !delimiters ? ["{{", "}}"] : delimiters;
+	open = hasSpecialCharacters(open) ? escapeDecoder(open) : open;
+	close = hasSpecialCharacters(close) ? escapeDecoder(close) : close;
+	return new RegExp(`(${open} *(\\/|@)([\\w\\-$:]+)(.*?)(\\/*)? *${close})`, "mg");
+}
+function isDynamicPropTag(tag) {
+	return /^::([\w-$:\-!\#\@.()[\]%?&]+)/.test(tag);
+}
+var isOpenEmptyTag = (tag) => /(\<[ ]*\>)/.test(tag);
+var isCloseEmptyTag = (tag) => /(\<\/[ ]*\>)/.test(tag);
+var openingTagsRegex = /(\<[ ]*\>|\<\/[ ]*\>)|(<(\/)?([\w\-\$!:\#\@.()[\]%?\/&]+)(\s+[^>]*?(?:(?:[\w]+[_!@#$'"%^&*()+\-\[\]{};:\\|,.<\/?~`]*)|(?:'[^']*'[^>\s]*)|(?:"[^"]*"[^>\s]*)))*\s*(\/)?>)|([\w \s!@#$'"%^&*()+\-\[\]{};:\\|,.>=\/?`~]+)/gm;
+var openingTagRegex = /<([\w\-\$!:\#\@.()[\]%?&]+)(\s+[^>]*?(?:(?:[\w]+[_!@#$'"%^&*()+\-\[\]{};:\\|,.<\/?>=`~]*)|(?:'[^']*'[^>\s]*)|(?:"[^"]*"[^>\s]*)))*\s*(\/)?>/m;
+var isOpeningTag = (source) => openingTagRegex.test(source);
+var closingTagRegex = /<[\/]([\w$.:\-\@()[\]%&?\\\/]+)[ ]*>/;
+var isClosingTag = (source) => closingTagRegex.test(source);
+var isText = (text) => !openingTagRegex.test(text) && /([\w \s!@#$'"%^&*()+\-\[\]{};:\\|,.\/?`~]+)/m.test(text);
+var openingTagAttrRegex = /^<[\w\-\$!\@:.()[\]%?&]+([\s\S]*[^\/>])?\s*(\/)?>\s*$/m;
+var JSXParserRegex = /hx:\(\(__(\d)__\)\)/;
+var isOpeningCommentTag = (tag) => /<!-->/.test(tag);
+var isClosingCommentTag = (tag) => /<\/-->/.test(tag);
+var commentRegex = /((<!--)|(-->))/g;
+function compelToResolveTagname(self, vNode, config = {}) {
+	if (isHouxitBuild(self) && isString(vNode.type) && !IS_VALID_TAGNAME(vNode.type)) resolveInstanceWidgetNormalizer(self, vNode);
+	else if (config.JSXParser && isString(vNode.type) && JSXParserRegex.test(vNode.type)) {
+		const instance = normalizeJSXPropValue(config, vNode.type);
+		vNode.type = instance;
+		if (validHouxitWidget(instance)) {
+			vNode.GeneticProvider = instance;
+			vNode.prototype_ = instance;
+		}
+	}
+}
+function createDynamicPropLoader(self, Vnode, config) {
+	if (isBlockTag(Vnode.type) || !isString(Vnode.type) || !isDynamicPropTag(Vnode.type) || !isHouxitBuild(self) || config.JSXParser) return;
+	const dTAG = Vnode.type;
+	Vnode.type = Build;
+	if (!Vnode.props) Vnode.props = { "$$bind:self": dTAG.slice(2) };
+	else Vnode.props["$$bind:self"] = dTAG.slice(2);
+	Vnode.prototype_ = Build;
+	Vnode.GeneticProvider = Build;
+}
+function finishTagLoader(tagName, setup, NodeList, self, config, tagMatch) {
+	let { loaderList, trackNodes, child_src } = setup;
+	let activeObj = loaderList[0][1];
+	activeObj.rawChildren = child_src || "";
+	if (isPlainTextChildrenTagElements(tagName)) activeObj.children = child_src;
+	else if (child_src?.trim() && config.deep) {
+		activeObj.children = __HouxitHTMLParser__(child_src, [], config, self);
+		if (JSXParserRegex.test(activeObj.rawChildren)) activeObj.rawChildren = activeObj.rawChildren.replace(JSXParserRegex, (match, num) => {
+			const instance = config.JSXParser.sources[Number(num)];
+			if (canRender(instance)) return instance;
+			return match;
+		});
+	} else if (tagMatch.trim()) activeObj.rawChildren = activeObj.rawChildren + tagMatch;
+	compelToResolveTagname(self, activeObj, config);
+	createDynamicPropLoader(self, activeObj, config);
+	NodeList.push(activeObj);
+	loaderList.splice(0);
+	trackNodes.splice(0);
+	return "";
+}
+function normalizeJSXPropValue(config, value) {
+	const index = Number(value.match(JSXParserRegex)[1]);
+	return config.JSXParser.sources[index];
+}
+function normalize_Props_State(vnode, self) {
+	return vnode.props;
+}
+function normalize_jsx_props(vnode, config) {
+	for (let [key, value] of entries(vnode.props)) if (JSXParserRegex.test(value)) vnode.props[key] = normalizeJSXPropValue(config, value);
+	else if (JSXParserRegex.test(value)) {
+		const instance = normalizeJSXPropValue(config, key);
+		if (!isString(instance)) {
+			debugHandler(`property key value passed to the "html" macro is not a valid prop name\n\ntype of "${typeof instance}" found >>>> Expects a "string" value`);
+			return;
+		}
+		vnode.props[instance] = vnode.props[key];
+		delete vnode.props[key];
+	}
+}
+function openingTagHydrate(tagMatch, NodeList, setup, metrics) {
+	const { config, self } = metrics;
+	let { loaderList, trackNodes, child_src, isComment } = setup;
+	const is_hyperscript = config.is_hyperscript;
+	let [match, tagName] = isOpeningTag(tagMatch) ? tagMatch.match(openingTagRegex) : [];
+	let vnode = new vNodeClass(tagName);
+	if (isOpeningCommentTag(tagMatch)) {
+		vnode = new comment();
+		if (isComment) child_src += tagMatch.slice(0, -1);
+		else {
+			isComment = true;
+			loaderList.push(["comment", vnode]);
+		}
+	}
+	tagMatch = isOpeningCommentTag(tagMatch) ? tagMatch.slice(0, -1) : tagMatch;
+	if (isComment) {
+		isComment = true;
+		child_src += tagMatch;
+		return {
+			child_src,
+			isComment,
+			response: true
+		};
+	}
+	const [attrsMatch, attrs, selfClosed] = tagMatch.match(openingTagAttrRegex) || [];
+	vnode.props = __HTMLPropsParser__(attrs, null, self);
+	if (config.JSXParser && vnode.props) normalize_jsx_props(vnode, config);
+	if (!isHouxitBuild(self) || config.jsx) vnode.is_hyperscript = true;
+	if (!is_hyperscript && isHouxitBuild(self)) vnode.props = normalize_Props_State(vnode, self);
+	if (hasOwn(vnode.props, "key")) {
+		vnode.key = vnode.props.key;
+		delete vnode.props.key;
+	}
+	if (attrs && isBlockTag(tagName)) {
+		if (!hasOwn(vnode.props, "exp") || len(vnode.props) > 1) vnode.props = { exp: attrs };
+		vnode.props.exp = escapeReverseDecoder(vnode.props.exp || "");
+	}
+	if (len(vnode.props) < 1) vnode.props = null;
+	const isSelfClosed = selfClosed?.trim() == "/";
+	if (!len(loaderList) && (isBlockTag(tagName) && isBuiltinVoidBlocks(getBlockTagName(tagName)) || IS_HTML_VOID_TAG(tagName) || isSelfClosed)) {
+		vnode.children = null;
+		vnode.rawChildren = null;
+		compelToResolveTagname(self, vnode, config);
+		createDynamicPropLoader(self, vnode, config);
+		NodeList.push(vnode);
+		return {
+			child_src,
+			isComment: false,
+			response: false
+		};
+	}
+	if (len(loaderList)) {
+		child_src += tagMatch;
+		trackNodes.push(tagName);
+		return {
+			child_src,
+			isComment: false,
+			response: false
+		};
+	}
+	loaderList.push([tagName, vnode]);
+	return {
+		child_src,
+		isComment: false,
+		response: true
+	};
+}
+function parserSourceInitializer(source, self) {
+	return source.replace(generateBlockTagRegex(isHouxitBuild(self) ? self[$$$core].settings.delimiters : void 0), (match, timing, ClosingTag, name, value, selfClosed) => {
+		return `<${ClosingTag === "/" ? "/" : ""}::@_(${name})_ ${ClosingTag === "@" ? "exp=\"" + escapeDecoder(value) + "\"" : ""} ${selfClosed ? "/" : ""}>`;
+	}).replace(commentRegex, (match, path, r) => /<!--/.test(match) ? "<!-->" : /-->/.test(match) ? "</-->" : match);
+}
+function __HouxitHTMLParser__(source, NodeList = [], config = {}, self) {
+	if (!isString(source) && !source.trim()) return !isArray(NodeList) ? [] : NodeList;
+	config = assign({
+		deep: true,
+		trim: true
+	}, config);
+	source = parserSourceInitializer(source, self);
+	let tag_matches = source.match(openingTagsRegex);
+	let child_src = "";
+	let skipComment = false;
+	let loaderList = [];
+	let trackNodes = [];
+	let isComment = false;
+	NodeList = NodeList || [];
+	for (let [index, tagMatch] of (tag_matches || []).entries()) {
+		if (config.trim && !(len(loaderList) && isPlainTextChildrenTagElements(loaderList[0][0]))) {
+			tagMatch = tagMatch.trim();
+			if (tagMatch == "") continue;
+		} else if (!config.trim && !(len(loaderList) && isPlainTextChildrenTagElements(loaderList[0][0]))) tagMatch = tagMatch.trim();
+		tagMatch = isOpenEmptyTag(tagMatch) ? "<hx:fragment>" : isCloseEmptyTag(tagMatch) ? "</hx:fragment>" : tagMatch;
+		if (isOpeningCommentTag(tagMatch) || isOpeningTag(tagMatch)) {
+			if (isOpeningCommentTag(tagMatch) && len(loaderList)) {
+				child_src += tagMatch.slice(0, -1);
+				skipComment = true;
+				continue;
+			}
+			let response = openingTagHydrate(tagMatch, NodeList, {
+				loaderList,
+				trackNodes,
+				child_src,
+				isComment
+			}, {
+				config,
+				self
+			});
+			child_src = response.child_src;
+			isComment = response.isComment;
+			if (!response.response) continue;
+		} else if (isClosingCommentTag(tagMatch) || isClosingTag(tagMatch)) {
+			if (isClosingCommentTag(tagMatch)) {
+				if (skipComment) {
+					child_src += tagMatch.slice(2);
+					skipComment = false;
+					continue;
+				}
+				if (isComment) {
+					const comment = loaderList[0][1];
+					if (isHtmlComment(comment)) comment.content = child_src + tagMatch.slice(2);
+					child_src = "";
+					loaderList.splice(0);
+					isComment = false;
+					NodeList.push(comment);
+				}
+				continue;
+			} else if (isComment) {
+				child_src += tagMatch;
+				continue;
+			}
+			let [match, tagName] = tagMatch.match(closingTagRegex);
+			trackNodes[len(trackNodes) - 1];
+			if (len(loaderList)) if (config.JSXParser && tagName === "/") child_src = finishTagLoader(tagName, {
+				loaderList,
+				trackNodes,
+				child_src
+			}, NodeList, self, config, tagMatch);
+			else if (len(trackNodes) && new Set(trackNodes).has(tagName)) {
+				child_src += tagMatch;
+				let mIndex = trackNodes.findLastIndex((f) => f == tagName);
+				if (mIndex > -1) trackNodes.splice(mIndex, 1);
+				continue;
+			} else if (tagName === loaderList[0][0]) child_src = finishTagLoader(tagName, {
+				loaderList,
+				trackNodes,
+				child_src
+			}, NodeList, self, config, "");
+			else child_src += tagMatch;
+		} else if (isText(tagMatch)) {
+			let useObjChild = void 0;
+			if (JSXParserRegex.test(tagMatch)) tagMatch = tagMatch.replace(JSXParserRegex, (match, num) => {
+				const srcValue = config.JSXParser.sources[Number(num)];
+				if (canRender(srcValue)) return srcValue;
+				useObjChild = { srcValue };
+				return match;
+			});
+			if (len(loaderList)) child_src += tagMatch;
+			else NodeList.push(useObjChild ? useObjChild.srcValue : tagMatch);
+		}
+	}
+	if (len(loaderList)) if (isComment) {
+		const comment = loaderList[0][1];
+		if (isHtmlComment(comment)) comment.content = child_src;
+		child_src = "";
+		loaderList = [];
+		isComment = false;
+		trackNodes = [];
+		NodeList.push(comment);
+	} else child_src = finishTagLoader(loaderList[0][0], {
+		loaderList,
+		trackNodes,
+		child_src
+	}, NodeList, self, config, "");
+	return NodeList;
+}
+function HTMLParser(html, NodeList, config, self) {
+	return __HouxitHTMLParser__(...arguments);
+}
+function negotiateRawDirective(self, node) {
+	if (!node.props) return;
+	const { hasDir, getDir, getKey } = dirExistenceCheck(node.props, "$$raw");
+	if (hasDir && isHouxitBuild(self)) node.filesFilter["dir--raw"] = getDir;
+}
+function specializedTemplateProductionProcessor(self, attributes, node, metrics, config) {
+	let [hx_Element, NodeList, tagName, fall] = metrics;
+	let Vnode;
+	config = assign({}, config);
+	const isRerender = () => self[$$$operands].initializedRender;
+	if (config.if_Block && !config.props?.status) return;
+	if (isHouxitBuild(self)) {
+		negotiateRawDirective(self, node);
+		let re = assign({}, node.props || {});
+		const createElement = (conf) => {
+			if (isRerender()) node.props = assign({}, re);
+			return createHouxitElement(node, self, false, assign({}, hx_Element?.LabContext), NodeList, assign({}, fall), hx_Element, config);
+		};
+		Vnode = createElement();
+		if (!isPFunction(Vnode.compiler_options.createElement)) Vnode.compiler_options.createElement = createElement;
+	} else {
+		let children = null;
+		if (node.children) children = isPlainTextChildrenTagElements(tagName) ? node.children : _HouxitCoreRenderer(node.rawChildren, null, true, null, null);
+		Vnode = createVNode({
+			type: tagName,
+			props: len(attributes) ? attributes : null,
+			children
+		});
+	}
+	NodeList.add(Vnode);
+	return Vnode;
+}
+function templateElementNodeCompiler(self, vNode, hx_Element, config, NodeList, fall) {
+	config = assign({}, config);
+	let { type: tagName, props, children, rawChildren, key } = vNode;
+	let attributes = props;
+	let context = smartDextCtxMerging(hx_Element?.LabContext || {}, fall);
+	vNode.hx_Element = hx_Element;
+	vNode.ctx = context;
+	const is_hyperscript = self[$$$core].map.is_hyperscript;
+	const args = () => [
+		hx_Element,
+		NodeList,
+		tagName,
+		context,
+		fall
+	];
+	if (!is_hyperscript && isString(tagName) && isBlockTag(tagName)) if (!isHouxitBuild(self)) debugHandler(`block tags Cannot be used in build/static templates mode`, self, true);
+	else return blockElementsPreProcessors(self, vNode, args(), config);
+	else return specializedTemplateProductionProcessor(self, attributes, vNode, args(), config);
+}
+function templateTextNodeCompiler(self, node, hx_Element, config, NodeList, fall) {
+	config = assign({}, config);
+	self[$$$operands].initializedRender;
+	if (node) {
+		let LabContext;
+		if (len(config.ctx)) fall = smartDextCtxMerging(fall || {}, config.ctx || {});
+		if (fall) {
+			LabContext = smartDextCtxMerging(hx_Element?.LabContext || {}, fall);
+			if (hx_Element) {
+				hx_Element.LabContext = LabContext;
+				LabContext = null;
+			}
+		}
+		let value = node;
+		if (isHouxitBuild(self)) {
+			const args = [
+				value,
+				self,
+				hx_Element,
+				LabContext,
+				config
+			];
+			const createElement = () => new HouxitTextElement(...args);
+			node = createElement();
+			node.compiler_options.createElement = createElement;
+		} else node = value;
+		NodeList.add(node);
+		return node;
+	}
+}
+function createElementRenderBlock(self, node, hx_Element, config, NodeList, fall) {
+	let childNodes;
+	if (isPrimitive(node) && String(node).trim()) {
+		const createElement = () => templateTextNodeCompiler(self, String(node), hx_Element, config, NodeList, fall);
+		childNodes = createElement();
+		childNodes.compiler_options.createElement = createElement;
+	} else if (isHtmlComment(node)) {} else if (isVNodeClass(node)) {
+		node.filesFilter.parent = config?.slotTap?.parent || hx_Element || self;
+		const createElement = () => templateElementNodeCompiler(self, node, hx_Element, config, NodeList, fall);
+		childNodes = createElement();
+	} else if (isTemplateClass(node)) {
+		const childNodes = node[TemplateClassKey](self, null, hx_Element, fall, config);
+		NodeList[isArray(childNodes) ? "extend" : "add"](childNodes);
+	} else if (isCollection(node)) {
+		const FragmentNodes = new Tuple();
+		renderTemplateClasses(self, arrSet(node), hx_Element, config, FragmentNodes, fall);
+		childNodes = new HouxitFragmentElement(FragmentNodes.list(), self, null);
+		NodeList.add(childNodes);
+	}
+	return childNodes;
+}
+function renderTemplateClasses(self, parser, hx_Element, config, NodeList, fall) {
+	fall = assign({}, fall);
+	config = assign({}, config);
+	self[$$$operands].initializedRender;
+	const is_hyperscript = self[$$$core].map.is_hyperscript;
+	for (let [index, node] of parser.entries()) {
+		parser[index + 1];
+		if (isHouxitElement(node)) NodeList.add(node);
+		else if (isPrimitive(node) ? String(node).trim() : node || isFunction(node)) {
+			if (is_hyperscript && isFunction(node)) {
+				const fn = node;
+				const effect = _createEffectBase(() => {
+					return unwrap(fn());
+				}, self);
+				let value = effectRunner(effect).value;
+				if (!isPrimitive(value)) {
+					debugHandler(`lazy callback effect expects only a primitive node\n\n${typeof value} render not supported\nat ...."${fn.toString()}"`, self, true);
+					return;
+				}
+				config.lazy_effect = effect;
+				node = value;
+			}
+			createElementRenderBlock(self, node, hx_Element, config, NodeList, fall);
+			delete config.lazy_effect;
+		}
+	}
+}
+function _HouxitCoreRenderer(html, self, parent, hx_Element, fall, config = {}) {
+	if (!html && !validateType(html, [
+		String,
+		Array,
+		Object
+	])) return null;
+	config = assign({}, config);
+	self[$$$core].map.is_hyperscript;
+	const isRerender = self[$$$operands]?.initializedRender;
+	let templateRender = isString(html) ? __HouxitHTMLParser__(html, [], {
+		trim: true,
+		is_hyperscript: isHouxitBuild(self) && config.is_hyperscript
+	}, self) : arrayInverter(html);
+	templateRender = new Tuple(...arrayInverter(templateRender)).list();
+	if (config.official && !isRerender) {
+		const boundary = getBoundary(self);
+		if (boundary) iterate(arrayInverter(templateRender)).each((node) => {
+			node.filesFilter.suspense = boundary;
+		});
+	}
+	const NodeList = new Tuple();
+	renderTemplateClasses(self, templateRender, hx_Element, config, NodeList, fall);
+	return len(NodeList) > 1 ? NodeList.list() : len(NodeList) === 1 ? NodeList.shift() : null;
+}
+function controlBuiltInBlocks(self, node, blockN, metrics, config) {
+	const [hx_Element, NodeList, tagName, context, fall] = metrics;
+	const args = () => [
+		self,
+		node,
+		blockN,
+		metrics
+	];
+	const children = node.children;
+	const exp = node.props.exp;
+	let template = [];
+	const ctx = [children, exp];
+	if (blockN === "if") {
+		const createElement = () => blockIFPreprocessor(...args(), ctx, config);
+		config.createElement = createElement;
+		const { eff_pack, flush, eff_place } = createElement();
+		const ELEMENT = new HouxitFragmentElement(eff_pack?.[eff_place]?.tuple.list() || [], self);
+		ELEMENT.compiler_options.createElement = createElement;
+		ELEMENT.VN_Tree.FLUSHS.add(flush);
+		config.ELEMENT = ELEMENT;
+		NodeList.add(ELEMENT);
+	} else if (blockN === "else" || blockN === "else-if") blockElseIfPreprocessor(self, node, config, blockN);
+	else if (blockN === "for") {
+		const createElement = () => blockForProcessor(...args(), ctx, false, config);
+		template = createElement();
+		template.compiler_options.createElement = createElement;
+	} else if (blockN === "const") blockConstPreprocessor(...args(), ctx, config);
+	else if (blockN === "class") blockClassTransformer(...args(), ctx);
+	else if (blockN === "new") template = blockNewRenderProcessor(...args(), ctx);
+	else if (blockN === "html") template = blockHtmlEmbedder(...args(), ctx, config);
+	else if (blockN === "debugger") blockInstallDebugger(self, node, blockN, metrics, [children, exp], config);
+	else if (blockN === "await") {
+		const createElement = () => createAwaitBlockNode(...args(), ctx, config);
+		const element = createElement();
+		element.compiler_options.createElement = createElement;
+	}
+	return arrayInverter(template);
+}
+function createAwaitBlockNode(self, node, blockN, metrics, [children, exp], config) {
+	const [hx_Element, NodeList, tagName, context, fall] = metrics;
+	const Node = new HouxitTextElement("", self);
+	const isRerender = self[$$$operands].initializedRender;
+	hx_Element.LabContext = smartDextCtxMerging(hx_Element.LabContext || {}, fall || {});
+	async function getResp() {
+		return await effectRunner(_createEffectBase(() => {
+			return _$runModelBind(self, exp, isHouxitElement(hx_Element) ? hx_Element : fall);
+		}, self));
+	}
+	let response = getResp();
+	Node.VNodeManager.awaitTextReady = response;
+	const boundary = getBoundary(node);
+	response = response.then((effect) => {
+		const callback = (vl) => awaitBlockUpdateFrame(self, vl, Node, isRerender, effect);
+		if (isPromise(effect.value)) value.then((v) => callback(v)).catch((err) => {
+			throw new Error(err);
+		});
+		else callback(effect.value);
+	}).catch((err) => {
+		if (boundary) smartSuspense(boundary).errorCaptured(() => {
+			debugHandler(err, self, true);
+		}, { message: `{{@await}} block fails to resolve...` });
+	});
+	if (boundary) {
+		boundary.activeAwaits++;
+		boundary.loadChain.add(response);
+	}
+	NodeList.add(Node);
+	return Node;
+}
+function awaitBlockUpdateFrame(self, value, Node, isRerender, effect) {
+	const N = new HouxitTextElement(compileToRenderable(value), self);
+	if (isRerender) {
+		Node.$element = N.$element;
+		Node.prototype_ = N.prototype_;
+	} else {
+		Node.$element.textContent = N.$element;
+		Node.prototype_ = N.prototype_;
+		createPriorityFlush(effect, (observer) => {
+			new Promise((resolve) => {
+				resolve(Node.compiler_options.createElement());
+			}).then((effect_vn) => {
+				tick(() => {
+					Node.$element.textContent = effect_vn.$element;
+				});
+			});
+		}, self);
+	}
+}
+function blockInstallDebugger(self, node, blockN, metrics, [children, exp], config) {
+	const [hx_Element, NodeList, tagName, context, fall] = metrics;
+}
+function blockHtmlEmbedder(self, node, blockN, metrics, [children, exp], config) {
+	const [hx_Element, NodeList, tagName, context, fall] = metrics;
+	_createEffectBase(() => {
+		return _$runModelBind(self, exists(exp.trim()) ? exp : "undefined", hx_Element);
+	}, self);
+	return [];
+}
+function blockClassTransformer(self, node, blockN, metrics, [children, exp], config) {
+	const [hx_Element, NodeList, tagName, context, fall] = metrics;
+	if (!variableDeclarationRegex.test(exp)) {
+		debugHandler(`template "@class" block declaration failure \n\ndoes not meet required name and args syntax rules`, self, true);
+		return;
+	}
+	let [match, var_name, var_params] = exp.match(variableDeclarationRegex);
+	let validator;
+	if (var_params) validator = var_params.match(templateClassValidatorRegex);
+	if (validator) {
+		var_params = var_params.slice(len(validator[0]));
+		validator = validator[1];
+		validator = _$runModelBind(self, validator, hx_Element);
+		if (!isPFunction(validator)) {
+			debugHandler(`@class: template "@class" block validator prop expects a plain function callback reference`, self, true);
+			return;
+		}
+	}
+	if (var_params) {
+		var_params = var_params.trim();
+		if (!(var_params.startsWith("(") && var_params.endsWith(")"))) {
+			debugHandler(`${var_name}: arguments of template class "${var_name}" does not meet required syntax\nmissing parenthesis in arguments enclosure  "(" and ")"`, self, true);
+			return;
+		}
+	}
+	var_name = var_name || match;
+	if (!isValidIdentifier(var_name)) {
+		debugHandler(`template "@class" block name "${var_name}" is not a JavaScript valid identifier`, self, true);
+		return;
+	}
+	function templateKlassGenerator(...props) {
+		const isValid = validator ? validator([...props]) : true;
+		if (!isBoolean(isValid)) {
+			debugHandler(`TemplateClass validator expects a Boolean return value\nvalidation proceses failed`, self, true);
+			return false;
+		} else if (!isValid) {
+			debugHandler(`validation method for template class "${var_name}" failed\nreturns falsy in its props validation check`, self, true);
+			return false;
+		}
+		return true;
+	}
+	if (var_params) var_params = var_params.slice(1).slice(0, -1);
+	const parameters = separateArgsLiterals(var_params);
+	class TemplateClass extends BaseTemplateClass {
+		constructor(...args) {
+			super(() => children);
+			if (!templateKlassGenerator(...args)) return [];
+			this[TemplateClassKey] = function factory() {
+				const ssc = smartDextCtxMerging(fall, { [$$dexTransformKey]: {
+					syntaxArray: [...parameters],
+					sourcesArray: [...args]
+				} });
+				installSuspense(children, getBoundary(hx_Element));
+				return config.suspenseFlag ? children : _HouxitCoreRenderer(memMove(children, true), self, null, hx_Element, ssc, config);
+			};
+		}
+	}
+	if (!hasOwn(self.__public_model__, var_name)) define(self.__public_model__, var_name, {
+		value: TemplateClass,
+		enumerable
+	});
+	return [];
+}
+function createCatacombs(setup, val, char) {
+	const rChar = char === "{" ? "}" : "]";
+	if (val === char) {
+		if (setup.open && setup.type === char) setup.openCurlies++;
+		else if (!setup.open) {
+			setup.open = true;
+			setup.type = char;
+		}
+		setup.single.push(val);
+	} else if (val === rChar) {
+		if (setup.type === char && setup.openCurlies && setup.open) {
+			setup.openCurlies--;
+			setup.single.push(val);
+		} else if (setup.type === char && setup.open && !setup.openCurlies) {
+			setup.single.push(val);
+			setup.record.push(setup.single.join("").trim());
+			setup.single = [];
+			setup.open = false;
+			setup.type = null;
+		} else if (setup.open && setup.type !== char) setup.single.push(val);
+	}
+}
+function separateArgsLiterals(syntax) {
+	const setup = {
+		record: [],
+		single: [],
+		open: false,
+		openCurlies: 0,
+		type: void 0,
+		next: void 0,
+		concat: void 0
+	};
+	const isStrRegex = (val) => /['"`]+/.test(val);
+	let i = 0;
+	for (const val of values(syntax)) {
+		i++;
+		setup.next = syntax[i];
+		if (setup.open && isStrRegex(val) && !setup.concat) {
+			setup.concat = val;
+			single.push(val);
+		} else if (isStrRegex(val) && val === setup.concat) {
+			setup.concat = null;
+			single.push(val);
+		} else if (val === "{" || val === "}" && !setup.concat) createCatacombs(setup, val, "{");
+		else if (val === "," || /\s/.test(val)) if (setup.concat);
+		else if (!setup.open) continue;
+		else setup.single.push(val);
+		else if (val === "[" || val === "]" && !setup.concat) createCatacombs(setup, val, "[");
+		else if (!setup.open) {
+			setup.open = true;
+			setup.single.push(val);
+		} else if (setup.open && !setup.type && (setup.next === "," || /\s/.test(setup.next) || isUndefined(setup.next))) {
+			setup.open = false;
+			setup.single.push(val);
+			setup.record.push(setup.single.join("").trim());
+			setup.single = [];
+		} else if (setup.open) setup.single.push(val);
+	}
+	return setup.record;
+}
+function blockNewRenderProcessor(self, node, blockN, metrics, [children, exp], config) {
+	const [hx_Element, NodeList, tagName, context, fall] = metrics;
+	const name = abstractFilterName(exp.trim());
+	let args = len(name) < len(exp.trim()) ? ArgsExtractor(exp, name).content : void 0;
+	args = args ? _$runModelBind(self, "[" + args + "]", hx_Element || fall) : [];
+	const templateKlass = _$runModelBind(self, name, hx_Element);
+	const deb = () => debugHandler(`"${name}" reference is not a valid TemplateClass instance`, self, true);
+	if (!isClass(templateKlass)) {
+		deb();
+		return [];
+	}
+	let template = new templateKlass(...args);
+	if (!isTemplateClass(template)) {
+		deb();
+		return [];
+	}
+	template = template[TemplateClassKey](self, null, hx_Element, fall, config);
+	return arrayInverter(template);
+}
+function blockConstPreprocessor(self, node, blockN, metrics, [children, exp], config) {
+	const [hx_Element, NodeList, tagName, context, fall] = metrics;
+	if (exp.trim() && !variableDeclarationRegex.test(exp)) {
+		debugHandler(`"${exp}" statement is not recognised or not a valid statement or expression`, self, true);
+		return [];
+	} else if (!exp.trim()) return [];
+	let [match, variable, expression] = exp.match(variableDeclarationRegex);
+	variable = variable.trim();
+	if (!isDestructureSyntax(variable) && !isValidIdentifier(variable)) {
+		debugHandler(`"${variable}" is an invalid identifier`, self, true);
+		return [];
+	}
+	const data = _$runModelBind(self, expression?.trim(), hx_Element || context);
+	if (isDestructureSyntax(variable)) {
+		if (isFalse(destructWarn(variable, data, self))) return [];
+		smartDextCtxMerging(fall, { [$$dexTransformKey]: {
+			sourcesArray: [data],
+			syntaxArray: [variable]
+		} }, true);
+	} else if (!hasOwn(context, variable)) fall[variable] = data;
+	else if (hasOwn(context, variable)) debugHandler(`"${variable}" const block namespace already declared\nor instance cannot be re-declared/re-assigned`, self, true);
+}
+function blockForProcessor(self, node, blockN, metrics, [children, exp], isWidget = false, conf) {
+	const [hx_Element, NodeList, tagName, context, fall, value, provide] = metrics;
+	const is_hyperscript = self[$$$core].map.is_hyperscript;
+	const isRerender = self[$$$operands].initializedRender;
+	let template = [];
+	let Loop_Data = isWidget ? {
+		obj: value,
+		effect: conf.effect
+	} : For_Loop(self, exp, hx_Element, true, conf, isRerender);
+	const effect = isWidget ? conf.effect : Loop_Data.effect;
+	if (!isRerender) conf.effect = effect;
+	else Loop_Data.obj = effect.runEffect().value;
+	if (!isIterable(Loop_Data.obj) && !isNumber(Loop_Data.obj)) {
+		debugHandler(`${getType(Loop_Data.obj)} value passed to the "For" built-in ${isWidget ? "widget" : "block"} is not an iterable object`, self, true);
+		return template;
+	}
+	function factoryRender(option, config, children) {
+		installSuspense(children, getBoundary(hx_Element));
+		return config.suspenseFlag ? children : _HouxitCoreRenderer(memMove(children, true), self, true, hx_Element, option, config);
+	}
+	iterate(unwrap(Loop_Data.obj), Loop_Data.loopType || "of").each((value, key, index) => {
+		let options = smartDextCtxMerging(hx_Element?.LabContext || {}, assign({}, fall || {}));
+		const config = assign({}, conf);
+		const loopState = shallowStream([
+			value,
+			key,
+			index
+		]);
+		if (!isWidget) options = loopContextPropsMerger(self, {
+			valToken: Loop_Data.valToken?.trim(),
+			keyName: Loop_Data.keyName?.trim(),
+			index: Loop_Data.index?.trim(),
+			hx_Element
+		}, {
+			ky: key,
+			vl: value,
+			count: index
+		}, options);
+		else if (!is_hyperscript) {
+			if (isForLoopDestructureRegex.test(provide.value)) provide.value = "[" + provide.value.slice(1, -1) + "]";
+			options = wrapNamespaceBind(self, options, provide.value, arrayDestructureRegex.test(provide.value) ? loopState : loopState[0]);
+		}
+		config.loop_context = loopState;
+		const createElement = () => {
+			let src = children.map((child) => factoryRender(options, config, safeCall(child, loopState))).filter((v) => isHouxitElement(v));
+			src = len(src) < 2 ? src[0] : new HouxitFragmentElement(src, self, hx_Element, null, value);
+			return src;
+		};
+		let source = createElement();
+		source.compiler_options.createElement = createElement;
+		template.push(source);
+	});
+	const render = new HouxitFragmentElement(template, self, hx_Element);
+	if (!isRerender) createPriorityFlush(Loop_Data.effect, (observer) => {
+		prioritize_list_effect(self, render, node, Loop_Data.obj, Loop_Data.effect, conf);
+	});
+	return render;
+}
+var createPack = (config, typeF, test, effect) => {
+	const ind = config.conditional_Index;
+	config.pack.push({
+		name: `${typeF}${typeF === "else-if" && ind ? ind : ""}`,
+		tuple: new Tuple(),
+		test,
+		effect
+	});
+	config.place++;
+};
+function blockIFPreprocessor(self, node, blockN, metrics, [rawChildren, exp], config, isWidget = false) {
+	let [hx_Element, NodeList, tagName, context, fall, value] = metrics;
+	const children = node.children || [];
+	const is_hyperscript = self[$$$core].map.is_hyperscript;
+	const isRerender = self[$$$operands].initializedRender;
+	let data, effect;
+	config.subscribers = [];
+	if (isWidget && !isRerender) {
+		effect = node.compiler[If].test;
+		data = is_hyperscript ? value : effect.value;
+	} else if (!isRerender) {
+		effect = _createEffectBase(() => {
+			return _$runModelBind(self, exists(exp.trim()) ? exp : "undefined", hx_Element);
+		}, self);
+		data = effectRunner(effect).value;
+		node.compiler[If] = { test: effect };
+	}
+	if (isRerender) {
+		NodeList = new Tuple();
+		data = node.compiler[If].test.runEffect().value;
+	}
+	const condition = unwrap(data) ? true : false;
+	config = assign(config, {
+		if_Block: true,
+		props: {
+			status: condition,
+			prevBlock: void 0,
+			activeBlock: isWidget ? "hx:if" : "@if",
+			shouldContinue: !condition
+		},
+		ctx: {},
+		keywordLists: [],
+		pack: [],
+		place: -1,
+		reducers: new Tuple()
+	});
+	config.reducers.add(effect);
+	if (config.props.status) createPack(config, "if", true, effect);
+	config.conditional_Index = 0;
+	for (let [index, vNode] of children.entries()) if (!conditionalBlockCompile(self, vNode, metrics, config, vNode.props?.exp, isWidget)) break;
+	let flush;
+	if (!isRerender) flush = createPriorityFlush(effect, (observer) => {
+		const { tuple, name } = config.pack?.[config.place] || {};
+		const { eff_pack, eff_place } = config.createElement() || {};
+		const pack = eff_pack[eff_place];
+		const Element = config.ELEMENT;
+		const EffectVNode = new HouxitFragmentElement(pack?.tuple?.list() || [], self, hx_Element);
+		if (config.memoVault && !checkMemoContentValidity(self, EffectVNode)) return;
+		let tracker = {
+			list: new Tuple(),
+			FORCE: name !== (pack?.name || "if"),
+			...config
+		};
+		resolvePatchAlgorithm(self, Element, EffectVNode, observer, tracker);
+		config.pack = [];
+		config.place = -1;
+		createPack(config, pack?.name, pack?.test, effect);
+		config.pack[config.place].tuple = tracker.list;
+	});
+	return {
+		eff_pack: config.pack,
+		eff_place: config.place,
+		flush
+	};
+}
+function conditionalBlockCompile(self, vNode, metrics, config, exp, isWidget) {
+	let [hx_Element, NodeList, tagName, context, fall, value] = metrics;
+	const isRerender = self[$$$operands].initializedRender;
+	const is_hyperscript = self[$$$core].map.is_hyperscript;
+	const blockN = isWidget ? tagName : !isString(vNode) ? isBlockTag(vNode.type) ? getBlockTagName(vNode.type) : vNode.type : vNode;
+	const elif = isWidget ? "hx:else-if" : "else-if";
+	const els = isWidget ? "hx:else" : "else";
+	const typeF = (n) => isWidget ? n : "@" + n;
+	if (isWidget ? vNode.prototype_ === ElseIf : blockN === elif) {
+		if (!conditionTagOrderCheck(self, config, elif, isWidget)) {
+			config.props.status = false;
+			config.props.shouldContinue = false;
+			return false;
+		}
+		if (!config.props.shouldContinue) return false;
+		let data, effect;
+		config.props.prevBlock = config.props.activeBlock;
+		config.props.activeBlock = typeF(elif);
+		vNode.prototype_ = ElseIf;
+		const props = {};
+		Props_dilation_compile(vNode, self, hx_Element, { is_hyperscript }, props, config);
+		vNode.props = props;
+		const devOpts = vNode.compiler[ElseIf].test;
+		if (isWidget && !isRerender) data = devOpts.value;
+		else if (!isWidget && !isRerender) {
+			effect = isEffect(devOpts) ? devOpts : _createEffectBase(() => {
+				return _$runModelBind(self, exists(exp?.trim()) ? exp : "undefined", hx_Element);
+			}, self);
+			data = effect.runEffect().value;
+			if (devOpts && !isRerender) {
+				reducer = config.reducers.pop();
+				reducer?.follow(effect);
+				effect.reducer = reducer;
+				vNode.compiler[ElseIf] = { test: effect };
+				config.reducer.add(effect);
+			}
+		}
+		if (isRerender) data = vNode.compiler[ElseIf].test.runEffect().value;
+		const condition = unwrap(data) ? true : false;
+		createPack(config, "else-if", condition, effect);
+		config.conditional_Index++;
+		config.props.status = condition;
+		config.props.shouldContinue = !condition;
+		return true;
+	} else if (isWidget ? vNode.prototype_ === Else : blockN === els) {
+		if (!conditionTagOrderCheck(self, config, els, isWidget)) {
+			config.props.status = false;
+			config.props.shouldContinue = false;
+			return false;
+		}
+		if (!config.props.shouldContinue) return false;
+		createPack(config, "else", true);
+		config.props.prevBlock = config.props.activeBlock;
+		config.props.activeBlock = typeF(els);
+		config.props.status = true;
+		config.props.shouldContinue = false;
+		return true;
+	}
+	if (!config.props.status) return true;
+	installSuspense(vNode, getBoundary(hx_Element));
+	let vNodes = config.suspenseFlag ? vNode : _HouxitCoreRenderer(vNode, self, true, hx_Element, fall, config);
+	if (!isRerender && isWidget) NodeList.add(vNodes);
+	config.pack[config.place].tuple.add(vNodes);
+	return true;
+}
+function conditionTagOrderCheck(self, config, tag, isWidget) {
+	const prev = config.keywordLists[len(config.keywordLists) - 1];
+	const elif = isWidget ? "hx:else-if" : "else-if";
+	const els = isWidget ? "hx:else" : "else";
+	if (prev === els && (tag === els || tag === elif)) {
+		debugHandler(`An "${els}" ${isWidget ? "widget" : "block"} already existing\n\nUnresolved Error:: cannot precced with the "@${tag}" block`, self, true);
+		return falseP;
+	}
+	config.keywordLists.push(tag);
+	return true;
+}
+function blockElseIfPreprocessor(self, node, config, blockN, isWidget) {
+	const b = isWidget ? "widget" : "block";
+	debugHandler(`The "${blockN}" ${b} cannot be used outside of the "${isWidget ? "hx:if" : "@if"}" template ${b} scope`, self, true);
+}
+function instance_Has_Block(self, name) {
+	name = name.startsWith("@") ? name.slice(1) : name;
+	return _makeMap_(self[$$$register]?.blocks || {}, name);
+}
+function normalize_Block(self, name) {
+	name = name.startsWith("@") ? name.slice(1) : name;
+	return _makeMap_(self[$$$register].blocks, name) ? self[$$$register].blocks[name] : null;
+}
+function blockElementsPreProcessors(self, vNode, metrics, config) {
+	vNode.children;
+	config = assign({}, config);
+	const [hx_Element, NodeList, tagName, context, fall] = metrics;
+	const blockN = getBlockTagName(tagName);
+	let renderedNodes = [];
+	if (isBuiltinBlocks(blockN)) renderedNodes = controlBuiltInBlocks(self, vNode, blockN, metrics, config);
+	else if (instance_Has_Block(self, blockN)) renderedNodes = customBlocksTraverse(self, vNode, blockN, metrics, config);
+	else {
+		debugHandler(`((Block Resolver Error))\n\n"@${blockN}" block is not a registered block element`, self, true);
+		return;
+	}
+	for (const [index, vnode] of (!isArray(renderedNodes) ? validateType(renderedNodes, [Set, Tuple]) ? [...arrSet(renderedNodes)] : [renderedNodes] : renderedNodes).entries()) if (vnode) NodeList.add(vnode);
+	return renderedNodes;
+}
+function customBlocksTraverse(self, node, blockN, metrics, config) {
+	let [hx_Element, NodeList, tagName, context, fall] = metrics;
+	const children = node.rawChildren;
+	const blockConfig = {
+		isVoid: false,
+		compileExp: true
+	};
+	let block = normalize_Block(self, blockN);
+	let blockCalllback;
+	if (isPObject(block)) {
+		if (hasOwn(block, "blockConfig")) {
+			if (!isPObject(block.blockConfig)) debugHandler(`"blockConfig" option of "${blockN}" custom block is not a valid type...\nExpects a plain object`, self, true);
+			else assign(blockConfig, block.blockConfig);
+			iterator(block.blockConfig).each((value, key) => {
+				if (!_makeMap_("isVoid,compileExp", key)) {
+					debugHandler(`blockConfig option of "${key}" is not a recognised config option`, self, true);
+					delete blockConfig[key];
+				}
+			});
+		} else if (hasOwn(block, "block")) blockCalllback = block.block;
+	} else blockCalllback = block;
+	let enderRenderCount = 0;
+	const data = effectRunner(_createEffectBase(() => {
+		return _$runModelBind(self, node.props.exp, hx_Element);
+	}, self)).value;
+	function factoryRenderCallback(ctx = {}) {
+		if (blockConfig.isVoid) return createRenderlessElement();
+		if (!isPObject(ctx)) debugHandler(`context data passed to factoryRender expects a plain object`, self);
+		installSuspense(children, getBoundary(hx_Element));
+		return config.suspenseFlag ? arrayInverter(children) : _HouxitCoreRenderer(children, self, true, hx_Element, smartDextCtxMerging(fall || {}, ctx), config);
+	}
+	function endFactoryRender(vNode) {
+		if (!validateCollectionArgs(arguments, {
+			count: 1,
+			validators: [Array, vNodeClass],
+			name: "factoryRender()"
+		})) enderRenderCount++;
+		vNode = arrayInverter(vNode);
+		installSuspense(vNode, getBoundary(hx_Element));
+		return _HouxitCoreRenderer(vNode, self, true, hx_Element, smartDextCtxMerging(fall || {}, ctx), config);
+	}
+	function factoryRender(vNode) {
+		return endFactoryRender(vNode);
+	}
+	const template = factoryRenderCallback();
+	return arrayInverter(blockCalllback.call(self.__public_model__, arrayInverter(template), data, factoryRender));
+}
+function createKlassBoilerPlate(callback, ...args) {
+	return function factory(self, parent, hx_Element, fall, config) {
+		const boilerPlate = callback(...args);
+		installSuspense(boilerPlate, getBoundary(hx_Element));
+		return config.suspenseFlag ? boilerPlate : _HouxitCoreRenderer(boilerPlate, self, parent, hx_Element, fall, config);
+	};
+}
+function __createTemplateClass_Parser(fn, name) {
+	if (!validateCollectionArgs(arguments, {
+		min: 1,
+		max: 2,
+		validators: [Function, String],
+		required: [true],
+		name: "createTemplateClass"
+	})) return pass;
+	return class TemplateClass extends BaseTemplateClass {
+		constructor(...args) {
+			super(fn);
+			this[TemplateClassKey] = createKlassBoilerPlate(fn, ...args);
+		}
+	};
+}
+function createTemplateClass(klass, name) {
+	return __createTemplateClass_Parser(...arguments);
+}
+var TemplateClass = class extends BaseTemplateClass {
+	constructor(...args) {
+		super(args[0]);
+		this[TemplateClassKey] = createKlassBoilerPlate(this.class.bind(this), ...args);
+	}
+};
+function _getNodeListResponse(NodeList, parent = false) {
+	NodeList = isSet(NodeList) ? arrSet(NodeList) : isTuple(NodeList) ? NodeList.list() : NodeList;
+	if (isTrue(parent) && len(NodeList)) {
+		const response = len(NodeList) > 1 ? NodeList : NodeList[0];
+		return isString(response) ? new HouxitTextElement(response, parent) : response;
+	} else if (len(NodeList)) return len(NodeList) > 1 ? new HouxitFragmentElement(NodeList, parent) : isPrimitive(NodeList[0]) ? new HouxitTextElement(isNull(NodeList[0]) ? "" : NodeList[0], parent) : NodeList[0];
+	else return null;
+}
+function normalizePreJSXFormat(strings, values) {
+	let boundJoin = [];
+	const scripting_tag = (count) => `hx:((__${count}__))`;
+	for (let [index, strs] of strings.entries()) {
+		boundJoin.push(strs);
+		if (hasOwn(values, index)) boundJoin.push(scripting_tag(index));
+	}
+	return __HouxitHTMLParser__(boundJoin.join(""), [], { JSXParser: { sources: values } });
+}
+function html(strings, ...values) {
+	return __EncodeJSXParser__(strings, values);
+}
+function __EncodeJSXParser__(strings, values) {
+	if (!isFunction(strings.reduce)) {
+		debugHandler(`html macro can only be called with backticks embeded directly to method name\n\n"html\`<templates>\`" instead of "html()"\nCheck html macro call`);
+		return;
+	}
+	if (len(values)) return normalizePreJSXFormat(strings, values);
+	const html = strings.reduce((acc, str, i) => {
+		const value = !isNull(values[i]) ? values[i] : "";
+		return acc + str + value;
+	}, "");
+	if (!isString(html)) {
+		debugHandler(`html parser macro expects strings values`);
+		return null;
+	}
+	return __HouxitHTMLParser__(html, [], { trim: true }, null);
+}
+function MKDParser(mkd) {}
+function markdown(mkd, ...values) {
+	if (!isString(mkd)) {
+		debugHandler(`markdown helper expects strings values`);
+		return null;
+	}
+}
+function createCustomElement(options) {
+	return _createCustomElement.call({}, ...arguments);
+}
+function generateCustomNativeElementConstructor() {
+	if (!inBrowserCompiler) return;
+	return class CustomNativeElement extends HTMLElement {
+		constructor() {
+			super();
+		}
+		compiler_options = {};
+		_set_compiler_options(...compiler_options) {
+			this.compiler_options = compiler_options;
+		}
+	};
+}
+function generateCustomElementConstructor(name) {
+	name = ToPascalCase(name);
+	if (!isValidIdentifier(name)) {
+		debugHandler(`unable to parse the customElements tag name\n\n
+      seems to have been an invalid identifier`);
+		return;
+	}
+	return Function("CustomNativeElement", `
+      return class ${name} extends CustomNativeElement{
         constructor(){
           super(...arguments);
         }
       }
-    `)(CustomNativeElement)}function d_(e){if(this.is_Custom_Node=!0,!H(arguments,{count:1,validators:[[Function,Object]],name:`createCustomElement`}))return;let t={};y(m_(e)).forEach(([n,r])=>{if(T(`onConnected,onDisconnected,onAdopted,onAttrChanged,plugin`,n)){if(!E(r)){A(`LifeCycle callback error\n\n"${n}" is a callback function, received an invalid type`);return}n!=`plugin`&&(t[n]=r),delete e[n]}});let n=l_();n.prototype.disConnectedCallback=t.disConnectedCallback||V,n.prototype.adoptedCallback=t.adoptedCallback||V,n.prototype.attributeChangedCallback=t.attributeChangedCallback||V,n.prototype.connectedCallback=r;function r(){let n={};if(j(b(this.attributes)))for(let[e,t]of y(this.attributes)){let{name:e,value:r}=t;n[e]=r}let[r,i,a,o,s,c]=this.compiler_options,l=this.attachShadow({mode:`open`});r=Iu(e,v(n,r.props||{}),r.children),c.unshift();let u=Ph(null,r,null,{}).$build;l.appendChild(u.$element),(t.connectedCallback||V).call(this,...arguments)}n.define=function(e,t){return i.call(this,...arguments)};function i(e,t){if(!H(arguments,{name:`customElements.define()`,min:1,max:2,validators:[String,String]}))return;if(!d(e)&&xe(e)&&at(e)){A(`Name positional argument passed to define is not a string or a valid name value
-
- or may have conflicted with native html/svg/mathml tags`);return}if(t&&!d(t)&&!Be(t)){A(`problem with the inherit value, 
-
- may not be a string value or a valid HTML tagName`),A(`CustomElement registration failed`);return}let n=u_(e);return ne&&customElements.define(e,n,t?{extends:t}:{}),n}return n}function f_(e,t){if(H(arguments,{name:`asyncWidget`,min:1,max:2,validators:[Function,Object]}))return new Rn(e,t)}function p_(e,t){return f_(...arguments)}function m_(e,t){return h_(...arguments)}function h_(e,t){if(!jt(e)){A(`widget transform Error
-
- 
-        invalid widget instance
-/... at /././. at`);return}else if(j(arguments)>2){A(`Parameter Error\n\nmax-2 argument required\n ${j(arguments)} given`);return}else if(h(e)||E(e)){nn(e);let n=g_(e),r={};if(D(e))r.build=e;else if(h(e))for(let[t,n]of y(e))w(r,t)||(r[t]=n);else Rt(e)&&(r=new e);if(t)for(let[e,n]of y(t))!w(r,e)&&!Ad(e)&&(r[e]=n);return _(r,Md)||(r[Md]=n),r}}function g_(e){return Rt(e)?`class-based`:D(e)?`function-based`:`object-based`}function __(e,t,n){if(Oo(e)&&(t=e.props,n=e.children,e=e.type),!jt(e)){A(`initBuild Error
-
-Cannot compile value as a Houxit widget
-Maybe an invalid houxit widget value`);return}else if(tr(e)){A(`The built houxit widget cannot be used in an initBuild widget App`);return}let r=k_(...x(Pu(...arguments)));return r[jd]=!0,r}function v_(e,t,n){let r=__(...arguments);if(Oo(r))return new kp(r)}function y_(e,t,n){return v_(...arguments)}function b_(e,t){return e=__(...e),e.filesFilter.useSSRCompiler=!0,e}function x_(e,t){if(!Q(e)){A(`"renderToString" macro was called on a non SSR renderer build...
-
-please check, you may have used "initBuild" app initializer instead of the "initSSRBuild"`);return}return new Promise(n=>{e.mount(null,t),n(C_(e,e.$build.$element))})}function S_(e,t){return x_(...arguments)}function C_(e,t){let n=``;t=$(t);let r=Qf(e);for(let[i,a]of t.entries())if(r?ht(a):d(a))n+=r?a.content:a;else if(Oo(a)){let t=`<`+a.type,r={};a.props&&(t+=w_(a.props,r)),t+=`>`,Ke(a.type)||(j(r)?r.innerHTML?t+=r.innerHTML:r.innerText&&(t+=r.innerText):a.children&&(t+=C_(e,a.children)),t+=`</`+a.type+`>`),n+=t}else(r?gt(a):xr(a))&&(n+=C_(e,si(r?a.fragment:a)));return n}function w_(e,t){let n=``;for(let[r,i]of y(e))if(r===`class`)n+=` class="`+i.list().join(` `)+`"`;else if(r===`style`){n+=` style="`;for(let[e,t]of y(i))n+=e+`:`+t+`;`;n+=`"`}else r===`innerHTML`||r===`innerText`?t[r]=i.trim():n+=` `+r+(i.trim()?`="`+i+`"`:``);return n}function T_(e,t,n){let r=b_(arguments,{type:`stream`,render:_a});if(Oo(r))return new kp(r)}function E_(e,t,n){return T_(e,t,n)}function D_(){}function O_(e){if(!h(e))return A(`createVNode Error:
- expects an 'object' at......
-
-parameter 1`),!1;if(j(e)>3)return A(`Options Error
-
- createVNode does not accept more than 3 options props arguments`),!1;if(!e.type&&!Y(e.type,[String,Object,Function]))return A(`Unexpected value passed to type in createVNode\n\n"${Sa(e.type)}" is an invalid type value to type option`),A(`NOTE : The "type" option is required`),!1;for(let[t,n]of y(e))if(!T(`type,props,children`,t))return A(`${t} is not a valid createVNode options value`),!1;else if(t===`props`&&n&&!h(n))return A(`Element props property expects an object value\n\nUnexpected "${Sa(n)}" value`),!1;else if(t===`children`&&Ee(n)&&!Dt(n))return A(`Element children property expects a valid houxit child node instance value\n\nUnexpected "${Sa(n)}" value`),!1;return!0}function k_(e,t,n){return new To(...arguments)}function A_(e){if(!O_(e))return;let{type:t,props:n,children:r}=e,i=k_(t,n,r);return i.is_hyperscript=!0,jt(t)&&(i.GeneticProvider=t,i.prototype_=t),i}function j_(e){return A_(e)}var M_=Zt(`RENDER_ELEMENTS`);function N_(){P_(ze.split(`,`)),P_($e.split(`,`)),P_(rt.split(`,`));for(let[e,t]of y(er))F_(e,function(e,n){return Iu(t,e,n)})}function P_(e){for(let t of e.values())F_(t,function(e,n){return Iu(t.trim(),e,n)})}function F_(e,t){e=at(e)&&e.includes(`-`)?nl(e):e.startsWith(`hx:`)?rl(e.slice(3)):e,t=Function(`element`,`
-      return function _${e.trim()}(propsOrChildren, childrenOrProps){
+    `)(CustomNativeElement);
+}
+function _createCustomElement(opts) {
+	this.is_Custom_Node = true;
+	if (!validateCollectionArgs(arguments, {
+		count: 1,
+		validators: [[Function, Object]],
+		name: "createCustomElement"
+	})) return;
+	const LifeCycleHooksList = "onConnected,onDisconnected,onAdopted,onAttrChanged,plugin";
+	let Hooks = {};
+	entries(defineWidget(opts)).forEach(([ind, value]) => {
+		if (_makeMap_(LifeCycleHooksList, ind)) {
+			if (!isFunction(value)) {
+				debugHandler(`LifeCycle callback error\n\n"${ind}" is a callback function, received an invalid type`);
+				return;
+			}
+			if (ind != "plugin") Hooks[ind] = value;
+			delete opts[ind];
+		}
+	});
+	const CustomNativeElement = generateCustomNativeElementConstructor();
+	CustomNativeElement.prototype.disConnectedCallback = Hooks.disConnectedCallback || pass;
+	CustomNativeElement.prototype.adoptedCallback = Hooks.adoptedCallback || pass;
+	CustomNativeElement.prototype.attributeChangedCallback = Hooks.attributeChangedCallback || pass;
+	CustomNativeElement.prototype.connectedCallback = connectedCallback;
+	function connectedCallback() {
+		let props = {};
+		if (len(keys(this.attributes))) for (const [key, attr] of entries(this.attributes)) {
+			const { name, value } = attr;
+			props[name] = value;
+		}
+		let [vnode, self, hx_Element, siblings, IS_RENDERLESS, customElementsArgs] = this.compiler_options;
+		const shadow = this.attachShadow({ mode: "open" });
+		vnode = h(opts, assign(props, vnode.props || {}), vnode.children);
+		customElementsArgs.unshift();
+		const createElement = () => $compilerEngine(null, vnode, null, {}).$build;
+		const template = createElement();
+		shadow.appendChild(template.$element);
+		(Hooks.connectedCallback || pass).call(this, ...arguments);
+	}
+	CustomNativeElement.define = function define(name, inherit) {
+		return __define.call(this, ...arguments);
+	};
+	function __define(name, inherit) {
+		if (!validateCollectionArgs(arguments, {
+			name: "customElements.define()",
+			min: 1,
+			max: 2,
+			validators: [String, String]
+		})) return;
+		if (!isString(name) && isEmptyStr(name) && IS_VALID_TAGNAME(name)) {
+			debugHandler("Name positional argument passed to define is not a string or a valid name value\n\n or may have conflicted with native html/svg/mathml tags");
+			return;
+		}
+		if (inherit && !isString(inherit) && !IS_HTML_TAG(inherit)) {
+			debugHandler(`problem with the inherit value, \n\n may not be a string value or a valid HTML tagName`);
+			debugHandler(`CustomElement registration failed`);
+			return;
+		}
+		const CustomElementsInstance = generateCustomElementConstructor(name);
+		if (inBrowserCompiler) customElements.define(name, CustomElementsInstance, inherit ? { extends: inherit } : {});
+		return CustomElementsInstance;
+	}
+	return CustomNativeElement;
+}
+function _asyncWidget(callback, config) {
+	if (!validateCollectionArgs(arguments, {
+		name: "asyncWidget",
+		min: 1,
+		max: 2,
+		validators: [Function, Object]
+	})) return;
+	return new AsyncWidget(callback, config);
+}
+function asyncWidget(load, config) {
+	return _asyncWidget(...arguments);
+}
+function defineWidget(opts, config) {
+	return _defineWidget(...arguments);
+}
+function _defineWidget(opts, options) {
+	if (!validHouxitWidget(opts)) {
+		debugHandler(`widget transform Error\n\n 
+        invalid widget instance\n/... at /././. at`);
+		return;
+	} else if (len(arguments) > 2) {
+		debugHandler(`Parameter Error\n\nmax-2 argument required\n ${len(arguments)} given`);
+		return;
+	} else if (isPObject(opts) || isFunction(opts)) {
+		if (isArrowFunction(opts) && null);
+		const type = hydrate_widget_type(opts);
+		let widget = /* @__PURE__ */ new Object();
+		if (isPFunction(opts)) widget.build = opts;
+		else if (isPObject(opts)) {
+			for (const [key, value] of entries(opts)) if (!hasProp(widget, key)) widget[key] = value;
+		} else if (isClass(opts)) widget = new opts();
+		if (options) {
+			for (const [key, value] of entries(options)) if (!hasProp(widget, key) && !isHouxitProp(key)) widget[key] = value;
+		}
+		if (!hasOwn(widget, widgetTypeKey)) widget[widgetTypeKey] = type;
+		return widget;
+	}
+}
+function hydrate_widget_type(opts) {
+	return isClass(opts) ? "class-based" : isPFunction(opts) ? "function-based" : "object-based";
+}
+function initialBuildTransform(options, propsOrChildren, childrenOrProps) {
+	if (isVNodeClass(options)) {
+		propsOrChildren = options.props;
+		childrenOrProps = options.children;
+		options = options.type;
+	}
+	if (!validHouxitWidget(options)) {
+		debugHandler(`initBuild Error\n\nCannot compile value as a Houxit widget\nMaybe an invalid houxit widget value`);
+		return;
+	} else if (isHouxitBuiltinSymbolWidget(options)) {
+		debugHandler(`The built houxit widget cannot be used in an initBuild widget App`);
+		return;
+	}
+	const widget = createVNodeClass(...values(propsAndChildrenGetter(...arguments)));
+	widget[initBuildInstaceKey] = true;
+	return widget;
+}
+function _initBuild(options, props, children) {
+	const widget = initialBuildTransform(...arguments);
+	if (!isVNodeClass(widget)) return;
+	return new HouxitBuild(widget);
+}
+function initBuild(options, propsOrChildren, childrenOrProps) {
+	return _initBuild(...arguments);
+}
+function createSSRStreamHack(vnodePlate, ssrConfig) {
+	vnodePlate = initialBuildTransform(...vnodePlate);
+	vnodePlate.filesFilter.useSSRCompiler = true;
+	return vnodePlate;
+}
+function _renderToStringCompiler(build, config) {
+	if (!isSSRCompiler(build)) {
+		debugHandler(`"renderToString" macro was called on a non SSR renderer build...\n\nplease check, you may have used "initBuild" app initializer instead of the "initSSRBuild"`);
+		return;
+	}
+	return new Promise((resolve) => {
+		build.mount(null, config);
+		resolve(vnodesConversionPipeline(build, build.$build.$element));
+	});
+}
+function renderToString(build, config) {
+	return _renderToStringCompiler(...arguments);
+}
+function vnodesConversionPipeline(self, vnodes) {
+	let html = "";
+	vnodes = arrayInverter(vnodes);
+	const isHy = isHydration(self);
+	for (let [index, node] of vnodes.entries()) if (isHy ? isSSRText(node) : isString(node)) html += isHy ? node.content : node;
+	else if (isVNodeClass(node)) {
+		let src = "<" + node.type;
+		const ctx = {};
+		if (node.props) src += compileSSRProps(node.props, ctx);
+		src += ">";
+		if (!IS_HTML_VOID_TAG(node.type)) {
+			if (len(ctx)) {
+				if (ctx.innerHTML) src += ctx.innerHTML;
+				else if (ctx.innerText) src += ctx.innerText;
+			} else if (node.children) src += vnodesConversionPipeline(self, node.children);
+			src += "</" + node.type + ">";
+		}
+		html += src;
+	} else if (isHy ? isSSRFragment(node) : isCollection(node)) html += vnodesConversionPipeline(self, arrSet(isHy ? node.fragment : node));
+	return html;
+}
+function compileSSRProps(props, ctx) {
+	let src = "";
+	for (let [key, value] of entries(props)) if (key === "class") src += " class=\"" + value.list().join(" ") + "\"";
+	else if (key === "style") {
+		src += " style=\"";
+		for (let [name, style] of entries(value)) src += name + ":" + style + ";";
+		src += "\"";
+	} else if (key === "innerHTML" || key === "innerText") ctx[key] = value.trim();
+	else src += " " + key + (value.trim() ? "=\"" + value + "\"" : "");
+	return src;
+}
+function _createInitSSRBuild_(options, props, children) {
+	const vNode = createSSRStreamHack(arguments, {
+		type: "stream",
+		render: None
+	});
+	if (!isVNodeClass(vNode)) return;
+	return new HouxitBuild(vNode);
+}
+function initSSRBuild(options, propsOrChildren, childrenOrProps) {
+	return _createInitSSRBuild_(options, propsOrChildren, childrenOrProps);
+}
+function boilerPlate() {}
+function defineElementOptionsValidator(options) {
+	const optionsName = "type,props,children";
+	if (!isPObject(options)) {
+		debugHandler(`createVNode Error:\n expects an 'object' at......\n\nparameter 1`);
+		return false;
+	} else if (len(options) > 3) {
+		debugHandler(`Options Error\n\n createVNode does not accept more than 3 options props arguments`);
+		return false;
+	} else if (!options.type && !validateType(options.type, [
+		String,
+		Object,
+		Function
+	])) {
+		debugHandler(`Unexpected value passed to type in createVNode\n\n"${getType(options.type)}" is an invalid type value to type option`);
+		debugHandler(`NOTE : The "type" option is required`);
+		return false;
+	}
+	for (let [name, opt] of entries(options)) if (!_makeMap_(optionsName, name)) {
+		debugHandler(`${name} is not a valid createVNode options value`);
+		return false;
+	} else if (name === "props" && opt && !isPObject(opt)) {
+		debugHandler(`Element props property expects an object value\n\nUnexpected "${getType(opt)}" value`);
+		return false;
+	} else if (name === "children" && exists(opt) && !isChildrenNode(opt)) {
+		debugHandler(`Element children property expects a valid houxit child node instance value\n\nUnexpected "${getType(opt)}" value`);
+		return false;
+	}
+	return true;
+}
+function createVNodeClass(type, props, children) {
+	return new vNodeClass(...arguments);
+}
+function _createVNode_ELEMENT(options) {
+	if (!defineElementOptionsValidator(options)) return;
+	let { type, props, children } = options;
+	const vNode = createVNodeClass(type, props, children);
+	vNode.is_hyperscript = true;
+	if (validHouxitWidget(type)) {
+		vNode.GeneticProvider = type;
+		vNode.prototype_ = type;
+	}
+	return vNode;
+}
+function createVNode(options) {
+	return _createVNode_ELEMENT(options);
+}
+var RENDER_ELEMENTS = createObj("RENDER_ELEMENTS");
+function transform_Elements_build() {
+	generate_native_elements_(HTML_TAGS.split(","));
+	generate_native_elements_(SVG_TAGS.split(","));
+	generate_native_elements_(MATHML_TAGS.split(","));
+	for (const [name, widget] of entries(BUILT_IN_WIDGETS)) map_registration(name, function(propsOrChildren, childrenOrProps) {
+		return h(widget, propsOrChildren, childrenOrProps);
+	});
+}
+function generate_native_elements_(el_arr) {
+	for (const name of el_arr.values()) map_registration(name, function(propsOrChildren, childrenOrProps) {
+		return h(name.trim(), propsOrChildren, childrenOrProps);
+	});
+}
+function map_registration(name, value) {
+	name = IS_VALID_TAGNAME(name) && name.includes("-") ? toCamelCase(name) : name.startsWith("hx:") ? ToPascalCase(name.slice(3)) : name;
+	value = Function("element", `
+      return function _${name.trim()}(propsOrChildren, childrenOrProps){
        return element(...arguments)
       }
-    `)(t),S(M_,e,{value:t,enumerable:ve})}console.info(Hh),N_(),fo(),exports.Any=ga,exports.Arguments=ba,exports.Build=Wn,exports.Class=ya,exports.Else=Qn,exports.ElseIf=Zn,exports.Exception=ii,exports.For=$n,exports.Fragment=Hn,exports.HTMLParser=wg,exports.HTMLPropsParser=Xh,exports.HouxitCompilerSetup=ho,exports.If=Xn,exports.MKDParser=o_,exports.Memo=Yn,exports.Motion=qn,exports.None=_a,exports.PRIVATE_PROPERTY_KEY=Fn,exports.Portal=Un,exports.Provider=Kn,exports.RENDER_ELEMENTS=M_,exports.Self=Gn,exports.Suspense=Jn,exports.TemplateClass=t_,exports.ToPascalCase=rl,exports.Token=Xr,exports.Tuple=M,exports.Type=fa,exports.Widget=Ru,exports._GenerateRoot=zp,exports.__WUFClass__=Do,exports._createFragment=zh,exports._getNodeListResponse=n_,exports.agent=io,exports.animate=zu,exports.asyncWidget=p_,exports.boilerPlate=D_,exports.cloneVElement=so,exports.computed=Zp,exports.createCustomElement=c_,exports.createEasing=eo,exports.createHouxitElement=Ns,exports.createNativeElement=pc,exports.createTemplateClass=e_,exports.createTextElement=xo,exports.createVNode=j_,exports.createWidgetElement=hc,exports.cubicBezier=bu,exports.debugHandler=A,exports.deepEqualityCheck=uo,exports.defineConfig=Yu,exports.defineSignals=qu,exports.defineSlots=Gu,exports.defineWidget=m_,exports.easings=$a,exports.effectHook=ua,exports.enSlot=ic,exports.escapeDecoder=yc,exports.escapeReverseDecoder=bc,exports.factoryToken=ni,exports.generateTemplateElement=lc,exports.generateUUID=bf,exports.get_version=n,exports.h=Iu,exports.html=i_,exports.initBuild=y_,exports.initSSRBuild=E_,exports.isComputed=zi,exports.isNativeElement=Ct,exports.isRaw=yr,exports.isReactiveToken=Fi,exports.isReadonly=Ii,exports.isReadonlyStream=Ji,exports.isShallow=Li,exports.isShallowReadonly=Ri,exports.isShallowReadonlyStream=Yi,exports.isShallowStream=Ki,exports.isStream=Wi,exports.isToken=W,exports.len=j,exports.log=e,exports.markRaw=_r,exports.markdown=s_,exports.memMove=br,exports.mergeProps=Nr,exports.observe=uf,exports.onCatch=ld,exports.onEffect=cd,exports.onSlotEffect=nd,exports.onSlotRender=rd,exports.onTracked=ud,exports.postBuild=id,exports.postDestroy=pd,exports.postMount=od,exports.postUpdate=dd,exports.preDestroy=fd,exports.preMount=ad,exports.preUpdate=sd,exports.pushEffect=oo,exports.raise=ai,exports.read=mr,exports.readonly=ki,exports.readonlyStream=Jf,exports.renderToString=S_,exports.resolve=Kh,exports.scaffold=Mu,exports.scopeEffectHook=qa,exports.scopeObserve=Ja,exports.shallow=ji,exports.shallowReadonlyStream=Yf,exports.shallowStream=qf,exports.stream=Kf,exports.tick=Xm,exports.toCamelCase=nl,exports.toReadonly=Vi,exports.toReadonlyStream=Qi,exports.toShallow=Bi,exports.toShallowReadonlyStream=na,exports.toShallowStream=ea,exports.toToken=Pi,exports.to_kebab_case=il,exports.token=ei,exports.tokenGENERATOR=Oh,exports.traceBack=ri,exports.trackEffectDeps=ca,exports.transite=Bu,exports.unToken=Mi,exports.useAdapter=md,exports.useAgent=gi,exports.useBind=Tc,exports.useContext=ed,exports.useModel=rf,exports.useOptions=Ar,exports.useParams=Uu,exports.useReadonlyBypasser=aa,exports.useReceiver=Qu,exports.useRef=qp,exports.useStyleSheet=_d,exports.useTransmit=Xu,exports.validateCollection=zr,exports.validateProps=Br,exports.validateType=Y,exports.version=t;
+    `)(value);
+	define(RENDER_ELEMENTS, name, {
+		value,
+		enumerable
+	});
+}
+console.info(devInfo);
+transform_Elements_build();
+_$compiler_engine_hydrator();
+//#endregion
+exports.Any = Any;
+exports.Arguments = Arguments;
+exports.Build = Build;
+exports.Class = Class;
+exports.Else = Else;
+exports.ElseIf = ElseIf;
+exports.Exception = Exception;
+exports.For = For;
+exports.Fragment = Fragment;
+exports.HTMLParser = HTMLParser;
+exports.HTMLPropsParser = HTMLPropsParser;
+exports.HouxitCompilerSetup = HouxitCompilerSetup;
+exports.If = If;
+exports.MKDParser = MKDParser;
+exports.Memo = Memo;
+exports.Motion = Motion;
+exports.None = None;
+exports.PRIVATE_PROPERTY_KEY = PRIVATE_PROPERTY_KEY;
+exports.Portal = Portal;
+exports.Provider = Provider;
+exports.RENDER_ELEMENTS = RENDER_ELEMENTS;
+exports.Self = Self;
+exports.Suspense = Suspense;
+exports.TemplateClass = TemplateClass;
+exports.ToPascalCase = ToPascalCase;
+exports.Token = Token;
+exports.Tuple = Tuple;
+exports.Type = Type;
+exports.Widget = Widget;
+exports._GenerateRoot = _GenerateRoot;
+exports.__WUFClass__ = __WUFClass__;
+exports._createFragment = _createFragment;
+exports._getNodeListResponse = _getNodeListResponse;
+exports.agent = agent;
+exports.animate = animate;
+exports.asyncWidget = asyncWidget;
+exports.boilerPlate = boilerPlate;
+exports.cloneVElement = cloneVElement;
+exports.computed = computed;
+exports.createCustomElement = createCustomElement;
+exports.createEasing = createEasing;
+exports.createHouxitElement = createHouxitElement;
+exports.createNativeElement = createNativeElement;
+exports.createTemplateClass = createTemplateClass;
+exports.createTextElement = createTextElement;
+exports.createVNode = createVNode;
+exports.createWidgetElement = createWidgetElement;
+exports.cubicBezier = cubicBezier;
+exports.debugHandler = debugHandler;
+exports.deepEqualityCheck = deepEqualityCheck;
+exports.defineConfig = defineConfig;
+exports.defineSignals = defineSignals;
+exports.defineSlots = defineSlots;
+exports.defineWidget = defineWidget;
+exports.easings = easings;
+exports.effectHook = effectHook;
+exports.enSlot = enSlot;
+exports.escapeDecoder = escapeDecoder;
+exports.escapeReverseDecoder = escapeReverseDecoder;
+exports.factoryToken = factoryToken;
+exports.generateTemplateElement = generateTemplateElement;
+exports.generateUUID = generateUUID;
+exports.get_version = get_version;
+exports.h = h;
+exports.html = html;
+exports.initBuild = initBuild;
+exports.initSSRBuild = initSSRBuild;
+exports.isComputed = isComputed;
+exports.isNativeElement = isNativeElement;
+exports.isRaw = isRaw;
+exports.isReactiveToken = isReactiveToken;
+exports.isReadonly = isReadonly;
+exports.isReadonlyStream = isReadonlyStream;
+exports.isShallow = isShallow;
+exports.isShallowReadonly = isShallowReadonly;
+exports.isShallowReadonlyStream = isShallowReadonlyStream;
+exports.isShallowStream = isShallowStream;
+exports.isStream = isStream;
+exports.isToken = isToken;
+exports.len = len;
+exports.log = log;
+exports.markRaw = markRaw;
+exports.markdown = markdown;
+exports.memMove = memMove;
+exports.mergeProps = mergeProps;
+exports.observe = observe;
+exports.onCatch = onCatch;
+exports.onEffect = onEffect;
+exports.onSlotEffect = onSlotEffect;
+exports.onSlotRender = onSlotRender;
+exports.onTracked = onTracked;
+exports.postBuild = postBuild;
+exports.postDestroy = postDestroy;
+exports.postMount = postMount;
+exports.postUpdate = postUpdate;
+exports.preDestroy = preDestroy;
+exports.preMount = preMount;
+exports.preUpdate = preUpdate;
+exports.pushEffect = pushEffect;
+exports.raise = raise;
+exports.read = read;
+exports.readonly = readonly;
+exports.readonlyStream = readonlyStream;
+exports.renderToString = renderToString;
+exports.resolve = resolve;
+exports.scaffold = scaffold;
+exports.scopeEffectHook = scopeEffectHook;
+exports.scopeObserve = scopeObserve;
+exports.shallow = shallow;
+exports.shallowReadonlyStream = shallowReadonlyStream;
+exports.shallowStream = shallowStream;
+exports.stream = stream;
+exports.tick = tick;
+exports.toCamelCase = toCamelCase;
+exports.toReadonly = toReadonly;
+exports.toReadonlyStream = toReadonlyStream;
+exports.toShallow = toShallow;
+exports.toShallowReadonlyStream = toShallowReadonlyStream;
+exports.toShallowStream = toShallowStream;
+exports.toToken = toToken;
+exports.to_kebab_case = to_kebab_case;
+exports.token = token;
+exports.tokenGENERATOR = tokenGENERATOR;
+exports.traceBack = traceBack;
+exports.trackEffectDeps = trackEffectDeps;
+exports.transite = transite;
+exports.unToken = unToken;
+exports.useAdapter = useAdapter;
+exports.useAgent = useAgent;
+exports.useBind = useBind;
+exports.useContext = useContext;
+exports.useModel = useModel;
+exports.useOptions = useOptions;
+exports.useParams = useParams;
+exports.useReadonlyBypasser = useReadonlyBypasser;
+exports.useReceiver = useReceiver;
+exports.useRef = useRef;
+exports.useStyleSheet = useStyleSheet;
+exports.useTransmit = useTransmit;
+exports.validateCollection = validateCollection;
+exports.validateProps = validateProps;
+exports.validateType = validateType;
+exports.version = version;
+
 //# sourceMappingURL=index.cjs.map

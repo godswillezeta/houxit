@@ -2,6 +2,13 @@ import { defineConfig } from "vite";
 
 export default defineConfig({
   build: {
+    minify: "terser",
+    target: "esnext",
+    terserOptions: {
+      compress: {
+        pure_funcs: ["debugHandler",'$warn','console','log'],
+      },
+    },
     lib: {
       entry: "./src/index.js",
       name: "Houxit",
@@ -9,7 +16,7 @@ export default defineConfig({
       fileName(format) {
         switch (format) {
           case "es":
-            return "index.js";
+            return "houxit.browser.esm.js";
           case "cjs":
             return "index.cjs";
           case "iife":
