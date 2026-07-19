@@ -8,7 +8,6 @@ const importRegex=/import\s+((\{([\w$\s\,]+)*\})*|([\w$\,\s]+)*)*\s+from/gm;
 const destructureImportRegex=/import\s+((([\w$]+)?\s*\,\s*)*(\{([\w$\s\,]+)*\})*)\s+from/gm;
 const undeclaredAssignmentRegex=/(([\w$]+)[ ]*=[ ]*)/g
 
-
 function NamespaceVariantAdapter(source, useUndeclaredProps= false){
   const NamespaceVariables=new Set();
   const NamespaceMap=[];

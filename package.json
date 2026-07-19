@@ -3,6 +3,7 @@
   "version": "0.1.11",
   "description": "The blueprint for modern web apps.",
   "private": true,
+  "type":"module",
   "workspaces": [
     "packages/*"
   ],
@@ -27,6 +28,11 @@
   "author": "Houxit Systems",
   "license": "MIT",
   "devDependencies": {
+    "@babel/core": "^8.0.1",
+    "@babel/generator": "^8.0.0",
+    "@babel/parser": "^8.0.4",
+    "@babel/traverse": "^8.0.4",
+    "@babel/types": "^8.0.4",
     "vite": "^8.1.5"
   }
 }

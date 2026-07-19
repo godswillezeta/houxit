@@ -1,0 +1,19 @@
+{
+  "name": "@houxit/houxit-jsx",
+  "version": "1.0.0",
+  "description": "Houxit jsx preset",
+  "repository": {
+    "type": "git",
+    "url": "www.github.com/houxitsystems/houxit-jsx"
+  },
+  "license": "MIT",
+  "author": "Chukwuemeka Ezeta",
+  "type": "module",
+  "main": "./index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@babel/plugin-syntax-jsx": "^8.0.1"
+  }
+}

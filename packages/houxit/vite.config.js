@@ -1,4 +1,5 @@
 import { defineConfig } from "vite";
+import { resolve } from "node:path";
 
 export default defineConfig({
   build: {
@@ -24,9 +25,9 @@ export default defineConfig({
         }
       }
     },
-
     outDir: "dist",
     emptyOutDir: true,
     sourcemap: true
-  }
+  },
+  
 });

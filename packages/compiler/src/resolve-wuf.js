@@ -48,7 +48,6 @@ export default function resolve(source, id){
 function compileSurface(surface, id){
   let imported=`
   import __controller__ from 'houxit/runtime/controller';\n
-  import { __WUFClass__ } from 'houxit';\n
   `;
   let instance={};
   let render=""
@@ -67,9 +66,10 @@ function compileSurface(surface, id){
       let [ src, importMap]=importExtractor(rawChildren);
       imported+=importMap;
       if(name === 'build'){
-        const { source, keys }= detector(src, {}, true);
+        const { source, keys }= detector(rawChildren, {}, true);
+        [ src, importMap]=importExtractor(source);
         instance.build=` ${hasOwn(props, 'async') ? "async " : ""}function build(){
-          ${source}
+          ${src}
         __variables__.__env__=true;
         return __controller__(__variables__, ${render});
         }`

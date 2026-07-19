@@ -221,9 +221,9 @@ class Tuple extends BaseTuple{
 }
 const $motionKey=Symbol('<Motion:key>');
 class BaseMotion{
-    constructor(motion, params={}, key, mode){
-      this[$motionKey]={
-        params:{},
+  constructor(motion, params={}, key, mode){
+    this[$motionKey]={
+      params:{},
         mode:'both'
       }
       const type=key === 'transition' ? 'trasite' : 'animate';
@@ -355,7 +355,7 @@ class BaseMotion{
   }
   const isBaseWidget=widget=> isPObject(widget) && widget instanceof Widget;
   const isProxy=value=>validateType(value, Proxy);
-  const validHouxitWidget=(w)=> w && ((isObject(w) && !isProxy(w) && !isStream(w)) || isAsyncWidget(w) || isFunction(w) || isHouxitBuiltinSymbolWidget(w));
+  const validHouxitWidget=(w)=> w && (((is_wuf_class(w) || isObject(w)) && !isProxy(w) && !isStream(w)) || isAsyncWidget(w) || isFunction(w) || isHouxitBuiltinSymbolWidget(w));
   function isAsyncFunction(fn) {
     return isPFunction(fn) && fn?.constructor?.name === 'AsyncFunction';
   }
@@ -3199,8 +3199,8 @@ class BaseMotion{
   }
   const wuf_class_prop=Symbol("wfu_class_prop");
   class __WUFClass__{
-    constructor(){
-      this[wuf_class_prop]=undefined
+    constructor(instance){
+      this[wuf_class_prop]=instance;
     }
   }
   const is_wuf_class=klass=>klass instanceof __WUFClass__;
@@ -6662,6 +6662,7 @@ class BaseMotion{
     if(!validateListenSpecialEvent(self, bindings)) {
       return
     }
+    log(bindings, element, 788)
     $$dir_ON(self, bindings, element, hx_Element, metrics);
     return true;
   }
@@ -7345,7 +7346,7 @@ class BaseMotion{
     let ref;
     if(isString(refKey)){
       if(!hasOwn(templateRefs, refKey)){
-        log(refKey, metrics.vNode)
+        // log(refKey, metrics.vNode)
         debugHandler(`[templateRefs reference] not defined (${refKey})`, self, true);
         return;
       }
@@ -7556,6 +7557,7 @@ class BaseMotion{
         if(!IS_VALID_EVENT_HANDLER(event)){
           debugHandler(`"${event}" is not a valid event name`, self, true);
         }else {
+            // log(node, event)
           const callbackListen=element=>{
             element.addEventListener(event, (...args)=>{
               (isFunction(listenerHandle) ? listenerHandle : pass)(...args);
@@ -9571,6 +9573,8 @@ class BaseMotion{
     defineGetter( self.__public_model__ , "$trackEffectDeps" , _trackEffectDeps.bind( self ) ) ;
   }
   function __useModelAdapter__( props ) {
+    
+    // log(props)
     if(!validateCollectionArgs(arguments, {
       min:0,
       max:1,
@@ -9597,6 +9601,9 @@ class BaseMotion{
       return self.__public_model__ ;
     }
     for( let [ key , value ] of entries( props ) ) {
+      if(key === '__env__'){
+        return;
+      }
       if(hasOwn(model, key)){
         debugHandler(`Error: Duplicate exposed property "${key}".\n
           Declared in:\n - model()\n - build() <useModel()>\nRename one of them. model <prop> retained...`, self, true);
@@ -14608,149 +14615,9 @@ class BaseMotion{
   _$compiler_engine_hydrator();
 
 export {
-  createVNode ,
-  Suspense ,
-  isToken ,
-  scaffold ,
-  get_version ,
-  h ,
-  shallowStream ,
-  None ,
-  useBind ,
-  Else ,
-  enSlot ,
-  If ,
-  For ,
-  escapeReverseDecoder ,
-  HouxitCompilerSetup ,
-  isReactiveToken ,
-  ElseIf ,
-  trackEffectDeps ,
-  initBuild ,
-  Memo ,
-  postUpdate ,
-  initSSRBuild ,
-  log ,//dev
-  readonlyStream ,
-  preMount ,
-  Portal ,
-  postDestroy ,
-  Build ,
-  Self ,
-  asyncWidget ,
-  preUpdate ,
-  shallowReadonlyStream ,
-  isShallow ,
-  useRef ,
-  Motion ,
-  HTMLParser ,
-  Provider ,
-  postMount ,
-  postBuild ,
-  useReceiver ,
-  unToken ,
-  onSlotRender ,
-  onSlotEffect ,
-  useTransmit ,
-  defineConfig ,
-  useStyleSheet ,
-  useContext ,
-  defineSlots ,
-  useParams ,
-  useAdapter ,
-  useModel ,
-  createHouxitElement ,
-  isReadonly ,
-  preDestroy ,
-  markdown ,
-  MKDParser ,
-  validateType ,
-  Any ,
-  Arguments ,
-  mergeProps ,
-  _getNodeListResponse ,
-  tick ,
-  generateUUID ,
-  boilerPlate ,
-  Type ,
-  defineWidget ,
-  isShallowStream ,
-  onCatch ,//dev
-  onEffect ,
-  onTracked ,
-  html ,
-  Class ,
-  readonly ,
-  escapeDecoder ,
-  resolve ,
-  observe ,
-  effectHook ,
-  generateTemplateElement ,
-  memMove ,
-  useOptions ,
-  defineSignals ,
-  Widget ,
-  len ,
-  markRaw ,
-  isRaw ,
-  validateProps ,
-  toReadonly ,
-  toShallow ,
-  shallow ,
-  validateCollection ,
-  isStream ,
-  useReadonlyBypasser ,
-  stream ,
-  token ,
-  createNativeElement ,
-  scopeEffectHook ,
-  scopeObserve ,
-  computed ,
-  read ,
-  factoryToken ,
-  isNativeElement ,
-  createWidgetElement ,
-  tokenGENERATOR ,
-  cubicBezier ,
-  RENDER_ELEMENTS ,
-  toToken ,
-  to_kebab_case ,
-  Token ,
-  ToPascalCase ,
-  toCamelCase ,
-  createTextElement ,
-  renderToString ,
-  cloneVElement ,
-  createCustomElement ,
-  _createFragment ,
-  debugHandler , //dev
-  Fragment ,
-  agent ,
-  Exception ,
-  Tuple ,
-  _GenerateRoot ,
-  traceBack ,
-  version ,
-  raise ,//dev
-  deepEqualityCheck ,
-  isShallowReadonly ,
-  isShallowReadonlyStream ,
-  toReadonlyStream ,
-  toShallowStream ,
-  toShallowReadonlyStream ,
-  pushEffect ,
-  HTMLPropsParser ,
-  animate ,
-  transite ,
-  PRIVATE_PROPERTY_KEY,
-  easings ,
-  createEasing ,
-  TemplateClass ,
-  createTemplateClass ,
-  isReadonlyStream ,
-  __WUFClass__ ,
-  isComputed ,
-  useAgent ,
-  
-}
+  createVNode , Suspense , isToken , scaffold , get_version , h , shallowStream , None , useBind , Else , enSlot , If , For , escapeReverseDecoder , HouxitCompilerSetup , isReactiveToken , ElseIf , trackEffectDeps , initBuild , Memo , postUpdate , initSSRBuild , log ,//dev
+  readonlyStream , preMount , Portal , postDestroy , Build , Self , asyncWidget , preUpdate , shallowReadonlyStream , isShallow , useRef , Motion , HTMLParser , Provider , postMount , postBuild , useReceiver , unToken , onSlotRender , onSlotEffect , useTransmit , defineConfig , useStyleSheet , useContext , defineSlots , useParams , useAdapter , useModel , createHouxitElement , isReadonly , preDestroy , markdown , MKDParser , validateType , Any , Arguments , mergeProps , _getNodeListResponse , tick , generateUUID , boilerPlate , Type , defineWidget , isShallowStream , onCatch ,//dev
+  onEffect , onTracked , html , Class , readonly , escapeDecoder , resolve , observe , effectHook , generateTemplateElement , memMove , useOptions , defineSignals , Widget , len , markRaw , isRaw , validateProps , toReadonly , toShallow , shallow , validateCollection , isStream , useReadonlyBypasser , stream , token , createNativeElement , scopeEffectHook , scopeObserve , computed , read , factoryToken , isNativeElement , createWidgetElement , tokenGENERATOR , cubicBezier , RENDER_ELEMENTS , toToken , to_kebab_case , Token , ToPascalCase , toCamelCase , createTextElement , renderToString , cloneVElement , createCustomElement , _createFragment , debugHandler , //dev
+  Fragment , agent , Exception , Tuple , _GenerateRoot , traceBack , version , raise ,//dev
+  deepEqualityCheck , isShallowReadonly , isShallowReadonlyStream , toReadonlyStream , toShallowStream , toShallowReadonlyStream , pushEffect , HTMLPropsParser , animate , transite , PRIVATE_PROPERTY_KEY, easings , createEasing , TemplateClass , createTemplateClass , isReadonlyStream , __WUFClass__ , isComputed , useAgent }
   

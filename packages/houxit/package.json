@@ -8,6 +8,7 @@
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
+      "development": "./src/index.js",
       "import": "./dist/houxit.browser.esm.js",
       "require": "./dist/index.cjs",
       "types": "./dist/index.d.ts"
@@ -23,7 +24,7 @@
   "scripts": {
     "build": "vite build",
     "prepublishOnly": "npm run build",
-     "build:dev": "vite build --config vite.config.dev.js"
+    "build:dev": "vite build --config vite.config.dev.js"
   },
   "repository": {
     "type": "git",
