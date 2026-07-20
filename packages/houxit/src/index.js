@@ -380,13 +380,22 @@ class BaseMotion{
   const isClass = val=> isFunction(val) && val.toString().startsWith('class');
   const directivesHooksMap="created,mounted,updated,init,destroyed";
   function instance_Has_Widget(self, name ){
-    return _makeMap_(BUILT_IN_WIDGETS, name) || _makeMap_(self[$$$register]?.widgets || {}, name ) ;
+    return _makeMap_(BUILT_IN_WIDGETS, name) || _makeMap_(self[$$$register]?.widgets || {}, name ) || _wufHas_instance(self, name);
   }
-  const normalize_Widget=(self, name)=>_makeMap_(BUILT_IN_WIDGETS, name) ? BUILT_IN_WIDGETS[name] : _makeMap_(self[$$$register].widgets, name) ? self[$$$register].widgets[name]: null;
+  const normalize_Widget=(self, name)=>{
+    if(_makeMap_(BUILT_IN_WIDGETS, name)){
+      return BUILT_IN_WIDGETS[name];
+    }else if(_makeMap_(self[$$$register].widgets, name)){
+      return self[$$$register].widgets[name];
+    }else if(_isWUFBuild(self) && _wufHas_instance(self, name)){
+      return normalizeWUFBuildScope(self, name);
+    }
+    return null;
+  }
   function instance_Has_Directive(self, name ){
-    return !isHouxitDirective(name) && _makeMap_(self[$$$register]?.directives || {}, name ) ;
+    return !isHouxitDirective(name) && _makeMap_(self[$$$register]?.directives || {}, name ) || _wufHas_instance(self, name) ;
   }
-  const normalize_Directives=(self, name)=> _makeMap_(self[$$$register].directives, name) ? self[$$$register].directives[name]: null;
+  const normalize_Directives=(self, name)=> _makeMap_(self[$$$register].directives, name) ? self[$$$register].directives[name]: normalizeWUFBuildScope(self, name);
   class slotInstanceMap{
     slots=new Object();
     constructor(opts={}){
@@ -4443,11 +4452,11 @@ class BaseMotion{
   }
   const hasMotionInstance=(self, name, mode)=>{
     const BUILT_IN_MOTION=mode === 'transitions' ? BUILT_IN_TRANSITIONS : BUILT_IN_ANIMATIONS;
-    return _makeMap_(BUILT_IN_MOTION, name) || _makeMap_(self[$$$register][mode], name);
+    return _makeMap_(BUILT_IN_MOTION, name) || _makeMap_(self[$$$register][mode], name) || _wufHas_instance(name);
   }
   function normalize_Motion(self, name, mode){
     const BUILT_IN_MOTION=mode === 'transitions' ? BUILT_IN_TRANSITIONS : BUILT_IN_ANIMATIONS;
-    return _makeMap_(BUILT_IN_MOTION, name) ? BUILT_IN_MOTION[name] : self[$$$register][mode][name] || pass;
+    return _makeMap_(BUILT_IN_MOTION, name) ? BUILT_IN_MOTION[name] : hasOwn(self[$$$register][mode], name) ? self[$$$register][mode][name] : _wufHas_instance(self, name) ? normalizeWUFBuildScope(self, name) : pass;
   }
   function generateMotion(self, { mode, value, key}){
     if(value && isString(value)){
@@ -5696,8 +5705,8 @@ class BaseMotion{
   function useBind(ref, config){
     return _useBind__(ref, config);
   }
-  const hasFilterInstance=(self, name)=>_makeMap_(BUILT_IN_FILTERS, name) || _makeMap_(self[$$$register].filters, name);
-  const normalize_Filter=(self, name)=>hasOwn(BUILT_IN_FILTERS, name) ? BUILT_IN_FILTERS[name] : self[$$$register].filters[name] || pass;
+  const hasFilterInstance=(self, name)=>_makeMap_(BUILT_IN_FILTERS, name) || _makeMap_(self[$$$register].filters, name) || _wufHas_instance(self, name);
+  const normalize_Filter=(self, name)=>hasOwn(BUILT_IN_FILTERS, name) ? BUILT_IN_FILTERS[name] : hasOwn(self[$$$register].filters, name) ?  self[$$$register].filters[name] : _wufHas_instance(self, name) ? normalizeWUFBuildScope(self, name) : pass;
   function customFilterDebugger(value, filter){
     if(!canRender(value)){
       debugHandler(`"${filter}" template filter expects a plain string value`);
@@ -5925,8 +5934,7 @@ class BaseMotion{
       let syntaxArray=dexTransform.syntaxArray;
       dexTransform.traverse=()=>transformDestructureContext(syntaxArray, dexTransform.sourcesArray, str, [obj, optional]);
     }
-    const getValue = new Function('obj','$$$ctx','dexTransform', `
-      with(obj){
+    let compile_Str=`with(obj){
         with($$$ctx){
           try{
             return dexTransform ? dexTransform.traverse()  : ${str.trim() || "undefined" };
@@ -5934,11 +5942,16 @@ class BaseMotion{
             throw new Error(err);
           }
         }
-      }
-    `);
+      }`
+    if(_isWUFBuild(self)){
+      compile_Str=`with(__env__){
+        ${compile_Str}
+      }`
+    }
+    const getValue = new Function('obj','$$$ctx','dexTransform','__env__', compile_Str);
     let value;
     try{
-      value = getValue.call(obj, obj, isPObject(optional) ? optional : {}, dexTransform);
+      value = getValue.call(obj, obj, isPObject(optional) ? optional : {}, dexTransform, self[$$$core].__env__ || {});
     }catch(error){
      // throw new  Error(error);
     }
@@ -6573,7 +6586,7 @@ class BaseMotion{
         bindings,
         forwardAttrs
       }, hx_Element );
-    }else if(!isRerender && (isOnListener(src) || isInlineListener(key) || key === 'dispatch')){ 
+    }else if(!isRerender && (isOnListener(key) || isInlineListener(key) || key === 'dispatch')){ 
       if(!click_handler_facading(self, [ key, attr, src ], bindings, element, hx_Element, metrics)) {
         return;
       }
@@ -6662,7 +6675,6 @@ class BaseMotion{
     if(!validateListenSpecialEvent(self, bindings)) {
       return
     }
-    log(bindings, element, 788)
     $$dir_ON(self, bindings, element, hx_Element, metrics);
     return true;
   }
@@ -9602,7 +9614,16 @@ class BaseMotion{
     }
     for( let [ key , value ] of entries( props ) ) {
       if(key === '__env__'){
-        return;
+        const __env__={};
+        for(let [name, item] of entries(value)){
+          if(isToken(item)){
+            auto_unwrapTokenRegistery(__env__, name, item);
+          }else{
+            __env__[name]=item;
+          }
+        }
+        self[$$$core].__env__=__env__;
+        return model;
       }
       if(hasOwn(model, key)){
         debugHandler(`Error: Duplicate exposed property "${key}".\n
@@ -12769,9 +12790,19 @@ class BaseMotion{
       PATCH_FLAGS:new Tuple()
     }) : new Tuple();
   }
-  const instance_Has_TemplateClass=(self, name)=> _makeMap_(self[$$$register].animation, name);
-  const normalize_TemplateClass=(self, name)=>self[$$$register].templateClasses[name] || pass;
+  const instance_Has_TemplateClass=(self, name)=> _makeMap_(self[$$$register].templateClass, name) || _wufHas_instance(self, name);
+  const normalize_TemplateClass=(self, name)=>self[$$$register].templateClasses[name] || normalizeWUFBuildScope(self, name);
   const devInfo="You're running the development version of houxit "+get_version().slice(7)+", make sure you switched to the minified  version with the (*.min.js) file extension when deploying to production";//development information
+  function _isWUFBuild(self){
+    return hasOwn(self[$$$core], '__env__');
+  }
+  function _wufHas_instance(self, key){
+    return _isWUFBuild(self) && hasOwn(self[$$$core].__env__, key);
+  }
+  function normalizeWUFBuildScope(self, key){
+    if(!_isWUFBuild(self) || !hasOwn(self[$$$core].__env__, key)) return;
+    return self[$$$core].__env__[key];
+  }
   const global_const={
     widget:{
       has:instance_Has_Widget,
@@ -14048,11 +14079,11 @@ class BaseMotion{
   }
   function instance_Has_Block(self, name ){
     name = name.startsWith("@") ? name.slice(1) : name;
-    return _makeMap_(self[$$$register]?.blocks || {}, name ) ;
+    return _makeMap_(self[$$$register]?.blocks || {}, name ) || _wufHas_instance(self, name) ;
   }
   function normalize_Block(self, name){
     name = name.startsWith("@") ? name.slice(1) : name;
-    return _makeMap_(self[$$$register].blocks, name) ? self[$$$register].blocks[name]: null;
+    return _makeMap_(self[$$$register].blocks, name) ? self[$$$register].blocks[name]: _wufHas_instance(self, name) ? normalizeWUFBuildScope(self, name) : null;
   }
   function blockElementsPreProcessors(self, vNode,  metrics, config){
     let children = vNode.children;

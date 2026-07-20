@@ -4,15 +4,21 @@ const stringsMonitorRegex=/"(.*?)"|'(.*?)'|`+(.*?\s)`+/g
 const assignmentRegex=/(function|var|let|const|class)[ ]+([\w$]+)\W/g;
 const multiAssignmentRegex=/(function|var|let|const|class)[ ]+([\w$]+[ ]*,[ ]*[\w$]+)\W/g;
 const destrutureAssignmentRegex=/(var|let|const)\s+(\{|\[)([\w$\s\,]+)*(\]|\})\s*\=/gm;
-const importRegex=/import\s+((\{([\w$\s\,]+)*\})*|([\w$\,\s]+)*)*\s+from/gm;
+const importRegex=/import\s+((\{([\w$\s\,]+)*\})|([\w$\\s]+))\s+from/gm;
 const destructureImportRegex=/import\s+((([\w$]+)?\s*\,\s*)*(\{([\w$\s\,]+)*\})*)\s+from/gm;
-const undeclaredAssignmentRegex=/(([\w$]+)[ ]*=[ ]*)/g
-
+const undeclaredAssignmentRegex=/(([\w$]+)[ ]*=[ ]*)/g;
+// const commentsRegex = /(\/\*.*?\*\/)|(\/\/.*$)/gms;
+const commentsRegex = /(\/\*[\s\S]*?\*\/)|(\/\/.*$)/gm;
+const log=console.log
+export function removeComments(source){
+  return source.replace(commentsRegex, (match, cm)=>{
+    return "";
+  });
+}
 function NamespaceVariantAdapter(source, useUndeclaredProps= false){
   const NamespaceVariables=new Set();
   const NamespaceMap=[];
   source = source.replace(stringsMonitorRegex, ()=> "");
-  
   function assignToNameSpace(declare, prop){
     NamespaceVariables.add([ declare, prop]);
     NamespaceMap.push(prop);

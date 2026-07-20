@@ -1,5 +1,5 @@
 import { log, HTMLParser, useModel } from 'houxit';
-import detector, { importExtractor } from './namespace-extractor.js';
+import detector, { importExtractor, removeComments } from './namespace-extractor.js';
 
 const hasOwn=Object.hasOwn;
 export default function resolve(source, id){
@@ -63,6 +63,7 @@ function compileSurface(surface, id){
     if(!vNode) continue;
     let { type, props, children, rawChildren } = vNode;
     if(new Set(`script,build`.split(',')).has(name)){
+      rawChildren=removeComments(rawChildren);
       let [ src, importMap]=importExtractor(rawChildren);
       imported+=importMap;
       if(name === 'build'){
@@ -80,10 +81,11 @@ function compileSurface(surface, id){
       instance[name]=rawChildren
     }
   }
-  return generateCompilerSource(instance, imported);
+  return generateCompilerSource(instance, imported, id);
 }
 const defaultRegex=/export default/;
-function generateCompilerSource(instance, importMap){
+function generateCompilerSource(instance, importMap, id){
+  const name=inferName(id);
   let source=`${importMap}\n`;
   if(instance.script && defaultRegex.test(instance.script)){
     source+=instance.script.replace(defaultRegex, (match)=>{
@@ -102,6 +104,13 @@ function generateCompilerSource(instance, importMap){
     ${instance.script ? "}" : ""}
     `
   }
+  if(name){
+    source+=`\nif(!Object.hasOwn(__module_exports__, 'name')) __module_exports__.name="${name}";
+    `
+  }
   source+="\nexport default __module_exports__;"
   return source;
+}
+function inferName(id){
+  return id.match(/([\w\-$_]+)\.houxit$/)[1];
 }
