@@ -1,0 +1,35 @@
+{
+  "Widget": {
+    "prefix": "widget",
+    "description": "Create a Houxit widget",
+    "body": [
+      "<template>",
+      "\t$0",
+      "</template>",
+      "",
+      "<script>",
+      "\t$0",
+      "</script>"
+    ]
+  },
+
+  "Render Script": {
+    "prefix": "render",
+    "description": "Render script block",
+    "body": [
+      "<script render>",
+      "\t$0",
+      "</script>"
+    ]
+  },
+
+  "Build Script": {
+    "prefix": "build",
+    "description": "Build script block",
+    "body": [
+      "<script build>",
+      "\t$0",
+      "</script>"
+    ]
+  }
+}

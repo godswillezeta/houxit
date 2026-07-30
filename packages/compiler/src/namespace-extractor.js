@@ -67,9 +67,7 @@ function NamespaceVariantAdapter(source, useUndeclaredProps= false){
 
 function namespaceGenerator(NamespaceVariables, NamespaceMap) {
   // Generate the variable collection code
-  return `const __variables__ = {
-    __env__:false
-  };
+  return `const __variables__ = {};
 ${NamespaceMap.map(varName => `
 try {
   __variables__['${varName}'] = ${varName};

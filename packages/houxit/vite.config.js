@@ -7,7 +7,7 @@ export default defineConfig({
     target: "esnext",
     terserOptions: {
       compress: {
-        pure_funcs: ["debugHandler",'$warn','console','log'],
+        pure_funcs: ["debugHandler",'$warn','console','log','warn','Error'],
       },
     },
     lib: {

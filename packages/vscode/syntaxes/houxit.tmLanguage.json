@@ -1,0 +1,43 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Houxit",
+  "scopeName": "text.houxit",
+
+  "patterns": [
+    {
+      "include": "text.html.basic"
+    },
+    {
+      "include": "#houxit-directives"
+    },
+    {
+      "include": "#interpolation"
+    }
+  ],
+
+  "repository": {
+    "houxit-directives": {
+      "patterns": [
+        {
+          "name": "entity.other.attribute-name.houxit",
+          "match": "(\\*|@|#|\\$\\$)[A-Za-z_][\\w-]*"
+        }
+      ]
+    },
+
+    "interpolation": {
+      "patterns": [
+        {
+          "name": "meta.interpolation.houxit",
+          "begin": "\\{\\{",
+          "end": "\\}\\}",
+          "patterns": [
+            {
+              "include": "source.js"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

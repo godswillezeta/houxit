@@ -146,7 +146,8 @@ const widgetOptionType={
   install:Function,
   templateClasses:Object,
   animations:Object,
-  transitions:Object
+  transitions:Object,
+  bindDrivers:[Array, Object]
 }
 const isMergableMethods=n=>_makeMap_("model,preBuild,postBuild,preMount,postMount,preUpdate,postUpdate,preDestroy,postDestroy,transmit,onTracked,onEffect,onCatch,onSlotEffect,onSlotEffect,install", n);
 const isMergableObjects=n=>_makeMap_("widgets,handlers,buildConfig,directives,observers,filters,blocks,computed,templateClasses,animations,transitions", n);
@@ -478,7 +479,6 @@ class BaseMotion{
   const $$tupleStore=Symbol();
   const $$dexTransformKey=Symbol();
   const genericKeyProp=Symbol();
-  const $$$$dir__ref$$$$=Symbol('[[[$$$$dir__ref$$$$]]]');
   const dir$$__render=Symbol("[[[$$@@dir$$__render]]]");
   const $$$context=Symbol("[[[$$@context]]]");
   const $$$operands=Symbol();//for the operands property of a widget instance
@@ -491,13 +491,9 @@ class BaseMotion{
   const lifeCiycleBinding=Symbol();
   const $$$customDirs=Symbol();
   const $$renderClass=Symbol();
-  const rawObjKey=Symbol()
-  const $$$ModelUpdateKey = Symbol();//resolving a model directive consumption on widget 
   const SSRHydrationSymbol=Symbol();
-  const $buildWidgetNormalizerKey=Symbol();
   const factoryHXSelfInstance=Symbol();
   const $factoryTokenKey=Symbol();
-  const $StarterKitKey=Symbol();
   const $asyncVnodeKey=Symbol();
   const $suspenseElement=Symbol('<suspense:element.$elemen>');
   const AsyncHxElementTrackerKey=Symbol();
@@ -509,6 +505,7 @@ class BaseMotion{
       config=assign({
         delay:200,
         timeout:Infinity,
+        suspensible:true
       }, config);
       validateAsyncWidgetConfig(config);
       this[$asyncVnodeKey]={
@@ -521,8 +518,10 @@ class BaseMotion{
   }
   function validateAsyncWidgetConfig(config){
     for(let [key, value] of entries(config)){
-      if(!_makeMap_('delay,error,fallback,timeout', key)){
+      if(!_makeMap_('delay,error,fallback,timeout,suspensible', key)){
         debugHandler(`Unrecognized key "${key}" passed to 'AsyncWidget' config object`);
+      }else if(key === "suspensible" && !isBoolean(value)){ 
+        debugHandler(`["AsyncWidget()">>config{}.suspensible type Error] expects a Boolean value`);
       }else if(_makeMap_('delay,timeout', key) && (!isNumber(value) || isNaN(Number(value)))){
         debugHandler(`"${key}" config prop of "AsyncWidget" expects a type of "number"`);
       }else if(_makeMap_('error,fallback', key) && !isPFunction(value)){
@@ -586,7 +585,7 @@ class BaseMotion{
     
   }
   const $buildHx_ElementKey=Symbol()//saving the $buildHx_ElementKey key while passing widget to houxit build.
-  const widgetSpecialAttrProps = new Set([ $$$$dir__ref$$$$ , dir$$__render, $$$context , $$$ModelUpdateKey ]);
+  const widgetSpecialAttrProps = new Set([ dir$$__render, $$$context ]);
   const isSelfRecursiveWidget=build=> isHouxitBuild(build) && build[$$$ownProperties].isSelfRecursive === (true);
   const isSpecProp = prop => widgetSpecialAttrProps.has(prop);
   const isBuiltinBlocks=block=>_makeMap_("if,else,else-if,for,const,class,new,debugger,html,await", block);
@@ -671,9 +670,9 @@ class BaseMotion{
   }
   const isCollection=item=>validateType(item, [Array, Set, Tuple, Arguments ]);
   const isInvalidInjectorOpt=opt=>_makeMap_("build,preBuild", opt);
-  const isAllowedComposersOpt=opt=>_makeMap_("postBuild,preMount,postMount,preUpdate,postUpdate,preDestroy,postDestroy,defineConfig,defineSignals,defineSlots,useTransmit,useReceiver,useContext,useParams,onEffect,onTracked,onCatch,onSlotRender,onSlotEffect", opt);
+  const isAllowedComposersOpt=opt=>_makeMap_("postBuild,preMount,postMount,preUpdate,postUpdate,preDestroy,postDestroy,defineConfig,defineSignals,defineSlots,useTransmit,useReceiver,useContext,defineParams,onEffect,onTracked,onCatch,onSlotRender,onSlotEffect", opt);
   const adaptableComposers={
-    params:useParams,
+    params:defineParams,
     postBuild,
     preMount,
     postMount,
@@ -2292,7 +2291,7 @@ class BaseMotion{
     }
     return leadEffect;
   }
-  class Effect{
+  class HouxitEffectFrame{
     effect=undefined
     self=undefined
     callbacks=new Tuple
@@ -2383,9 +2382,12 @@ class BaseMotion{
     }
   }
   const isDependency=subscriber=>subscriber instanceof Dependency;
-  const isEffect=effect=>effect instanceof Effect;
+  const isEffect=effect=>effect instanceof HouxitEffectFrame;
   function _createEffectBase(effect, self){
-    return new Effect(effect, self);
+    return new HouxitEffectFrame(effect, self);
+  }
+  function createEffectFrame(effect){
+    return _createEffectBase(effect, null);
   }
   function effectRunner(effect, ...args){
     if(!activeRunningEffects.has(effect)){
@@ -2622,7 +2624,11 @@ class BaseMotion{
     stepStart:'step-start',
     stepEnd:'step-end'
   };
-  const easings ={};
+  const easings =createObj("Easings", {
+    steps,
+    reverse,
+    mirror
+  });
   iterate(jsEasingMap).each((fn, name)=>{
     easings[name]=createEasing({
       css:cssEasingMap[name],
@@ -2644,6 +2650,8 @@ class BaseMotion{
       });
     }
     super=undefined
+    disposals=new Tuple
+    disposable=pass
     fallbackElement=undefined
     errorElement=undefined
     activeElement=undefined
@@ -2658,9 +2666,36 @@ class BaseMotion{
       resolved:false,
       postLoad:0
     }
+    drivers={
+      error:undefined,
+      fallback:undefined,
+      ancestorState:null,// 'pending' | 'failed' | 'resolved'
+      
+    }
+    syncState(){
+      if(this.super){
+        if(this.super.super) this.super.syncState();
+      }else return null;
+      const xstate=this.super.state;
+      if(xstate.pending){
+        this.drivers.ancestorState='pending';
+        if(this.super.drivers.fallback){
+          this.drivers.fallback=this.super.drivers.fallback;
+        }
+      }else if(xstate.resolved){
+        this.drivers.ancestorState='resolved';
+      }else if(xstate.failed){
+        if(this.super.drivers.error){
+          this.drivers.error=this.super.drivers.error;
+        }
+        this.drivers.ancestorState='failed';
+      }
+      return this.drivers.ancestorState;
+    }
     errorCaptured(cb, err, fb){
       this.state.failed=true;
-      this.triggerFailure(cb, err, fb);
+      const failure=()=>this.triggerFailure(cb, err, fb);
+      trackSuspenseConsistency(this, failure, 'failed');
     }
     resolvedHook(){
       this.state.resolved=true;
@@ -2919,7 +2954,8 @@ class BaseMotion{
     forwardAttrs:Boolean, 
     delimiters:Array, 
     scopedStyle:Boolean,
-    forwardEvents:Boolean
+    forwardEvents:Boolean,
+    flushType:"post"
   }
   class FrameworkCompilerOptions{
     debug=true
@@ -2927,6 +2963,7 @@ class BaseMotion{
     forwardAttrs=true
     forwardEvents=this.forwardAttrs;
     delimiters=['{{','}}']
+    flushType="post"
     scopedStyle=true
   }
   const isGlobalConfig=config=>config instanceof FrameworkCompilerOptions;
@@ -2949,6 +2986,12 @@ class BaseMotion{
         return this;
       }
       Compiler_Config_Options.forwardEvents=forwardEvents
+    }
+    flushType(flushType){
+      if(isFalse(mapSettingCheck(this, 'flushType', flushType))) {
+        return this;
+      }
+      Compiler_Config_Options.flushType=flushType
     }
     forwardSlot(forwardSlot){
       if(isFalse(mapSettingCheck(this, 'forwardSlot', forwardSlot))) {
@@ -3814,14 +3857,6 @@ class BaseMotion{
       callSetHooks(self, hookSet, element, self.__public_model__, hx_Element, hookN);
     }
   }
-  function resolveElementToken(self, ref, element, hx_Element){
-    try{
-      tick(()=>ref[ref[refInternalEffectKey].accessor]=element);
-    }catch(err){
-      debugHandler(`(ref) >>\nUresolved error when dilating the special ref prop>>>\n\n${err}`, self, true);
-      return;
-    }
-  }
   const frameDirectives="$$for,$$if,$$else-if,$$else";
   function built_in_fragment_widget(vnode, self, is_hyperscript, ctx, siblings, ssc, hx_Element, config){
     installSuspense(vnode.children, getBoundary(vnode));
@@ -3985,7 +4020,7 @@ class BaseMotion{
     }
     if(!config){
       if(conf.count > 1){
-        debugHandler(`<Memo> child widget may have supassed the number of expected <Memo> container\n\n1 at most expected >>> ${conf.count} <<< found `, self, true);
+        debugHandler(`[<Memo> Child Error] <Memo> child widget may have supassed the number of expected <Memo> container\n\n1 at most expected >>> ${conf.count} <<< found `, self, true);
         return;
       }
     }
@@ -4036,134 +4071,69 @@ class BaseMotion{
     vault.Wrapper=Element;
     return Element;
   }
+  function wrapSlotsContentDrives(self, nodeDriver, rnd, _SlotName, suspense){
+    for(let element of rnd.values()){
+      let name=element.slot_name;
+      if(name && !_SlotName.has(name)){
+        continue;
+      }else if(!name) {
+        if(isHouxitFragmentElement(element) && !isRenderlessElement(element) && !isSuspenseElement(element)){
+          wrapSlotsContentDrives(self, nodeDriver, element.NodeList.list(), _SlotName, suspense);
+          continue;
+        }
+        name='default';
+      }
+      if(name !== 'default' && len(nodeDriver[name+'X'])){
+        debugHandler(`[<Suspense> Duplicate Slot Error] "${name}" slot has been duplicated in <Suspense>`, self, true);
+        continue;
+      }
+      let vNode=isHouxitTextElement(element) ? element.$element :  element.VNodeManager.vNodeClass;
+      if(isVNodeClass(vNode)) {
+        if(vNode.props) {
+          const { hasDir, getKey }=dirExistenceCheck(vNode.props, "$$slot");
+          if(hasDir) delete vNode.props[getKey];
+        }
+        installSuspense(vNode, suspense);
+      }
+      nodeDriver[name+'X'].add(vNode);
+    }
+  }
   function normalizeEarlySlotsCompile(self, vNode, hx_Element, metrics, slotNames=[], suspense, config){
-    if(!new Set(slotNames).has('default')){
+    const _SlotName=new Set(slotNames)
+    if(_SlotName.has('default')){
       slotNames.push('default');
     }
     const isRerender=self[$$$operands].initializedRender;
-    const _$$all_= new Tuple();
-    const res={};
-    iterate(slotNames).each((name, ind)=>{
-      res[name+'X']=new Tuple();
-    });
-    const [ hx_Ele, siblings, type, ctx, ssc, op  ] = metrics;
-    if(op){
-      op._$$all_=_$$all_;
-    }
     const is_hyperscript=self[$$$core].map.is_hyperscript;
     let UnStableNodeList=[];
-    iterate(arrayInverter(vNode.children)).each((node, key)=>{
-      if(isPrimitive(node)){
-        res.defaultX.add(node);
-        _$$all_.add(node);
-        return iterate.Continue();
-      }
-      if(is_hyperscript){
+    const nodeDriver={}
+    slotNames.forEach(n=>nodeDriver[n+'X']=new Tuple);
+    if(is_hyperscript){
+      for(const node of vNode.children.values()){
         if(isSlotInstance(node)){
-          iterate(node.slots).each((value, name)=>{
-            iterate(slotNames).each((n)=>{
-              if(name === n){
-                if( n !== 'default' && len(res[n])){
-                  debugHandler('"'+n+'" slot already defined...\nduplicated slot for '+'"'+n+'" not allowed!!!', self, true);
-                  return iterate.Continue();
-                }   
-                res[n+'X'].add(value);
-                _$$all_.add(value);
-              }
-            });
-          });
+          for( let [name, value ] of entries(node.slots)){
+            if(!_SlotName.has(name)) continue;
+            if( name !== 'default' && len(nodeDriver[name+'X'])){
+              debugHandler('"'+name+'" slot already defined...\nduplicated slot for '+'"'+name+'" not allowed!!!', self, true);
+                continue;
+            }
+            nodeDriver[name+'X'].add(value);
+          };
         }else if(isChildrenNode(node)){
-          res.defaultX.add(node);
-          _$$all_.add(node);
+          installSuspense(node, suspense);
+          nodeDriver.defaultX.add(node);
         }
-      }else{
-        if(isHtmlComment(node)){
-          return iterate.Continue();
-        }
-        const props=node.props;
-        hx_Element=memMove(hx_Element);
-        hx_Element.NodeList=new Tuple();
-        const stable=isHouxitElement(node) ? node : createHouxitElement(node, self, is_hyperscript, ctx,  UnStableNodeList, ssc, hx_Element, {
-          suspenseFlag:true,
-          ...config
-        });
-        if(isHouxitElement(stable) || isVNodeClass(stable)){
-          UnStableNodeList.push(stable);
-          if(isVNodeClass(stable)){
-            node=stable;
-          }
-          if(stable.conditional_record.src === 'else'){
-            UnStableNodeList=[];
-          }
-        }
-        if(isFalse(stable)){
-          UnStableNodeList=[];
-        }else if(isRenderlessElement(stable)){
-          return;
-        }
-        const { hasDir:hasSlot, getKey:getSlot, getDir:getSlotValue } = dirExistenceCheck(props || {}, "$$slot");
-        if(!hasSlot){
-          if(isBlockTag(node.prototype_)){
-            const blockN=getBlockTagName(node.prototype_);
-            if(blockN === 'await'){
-              res.defaultX.add(node);
-              _$$all_.add(node);
-              return iterate.Continue();
-            }
-            const NodeList=new Tuple();
-            if(suspense){
-              node.filesFilter.suspense=suspense;
-            }
-            blockElementsPreProcessors(self, node, [hx_Element, NodeList, node.type, metrics[3], metrics[4]], {
-              suspenseFlag:true
-            });
-            const response=normalizeEarlySlotsCompile(self, {
-              children:NodeList.list()
-            }, hx_Element, metrics, slotNames, suspense, config);
-            iterate(response).each((value, ky)=>{
-              if(len(value)){
-                res[ky].extend(value);
-                // _$$all_.extend(value);
-              }
-            });
-          }else{
-            node=memMove(node, true)
-            res.defaultX.add(node);
-            _$$all_.add(node);
-          }
-          return;;
-        }
-        const bindings=validateIncomingPropsKeys(self, {
-          key:getSlot,
-          attr:getSlotValue
-        }, is_hyperscript, hx_Element, {
-          isRerender:self[$$$operands].initializedRender
-        });
-        iterate(slotNames).each((n)=>{
-          if(bindings.key === n){
-            if((n !== 'default' && len(res[n+'X']))){
-              debugHandler('"'+n+'" slot already defined...\nduplicated/multiple slots for '+'"'+n+'" slot not allowed!!!', self, true);
-              return;;
-            }
-            res[n+'X'].add(node);
-            _$$all_.add(node);
-          }
-        });
-        node.filesFilter.bindings=bindings;
-        node.filesFilter.shouldRestore=true;
-        delete node.props?.[getSlot];
-        node.filesFilter.creatRestore=()=>{
-          tick(()=>{
-            if( node.filesFilter.shouldRestore && !node.filesFilter.slotsRestored){
-              node.props[getSlot]=getSlotValue;
-              node.filesFilter.slotsRestored=true;
-              delete node.filesFilter.shouldRestore;
-            }
-          });
-        };
       }
-    });
-    return res;
+      return nodeDriver;
+    }
+    const preRenderState=self[$$$operands].initializedRender;
+    self[$$$operands].initializedRender=true;
+    config.suspenseFlag=true;
+    let rnd= arrayInverter(_HouxitCoreRenderer(vNode.children, self, null,  hx_Element, metrics[2], config));
+    wrapSlotsContentDrives(self, nodeDriver, rnd, _SlotName, suspense);
+    delete config.suspenseFlag;
+    self[$$$operands].initializedRender=preRenderState;
+    return nodeDriver;
   }
   function createSuspenseFallback(self, suspense, [fallbackX, errorX], vnode, ssc, hx_Element, config){
     const is_hyperscript=self[$$$core].map.is_hyperscript;
@@ -4177,15 +4147,14 @@ class BaseMotion{
             if(name === 'error'){
               arg.push(errMsg);
             }
-            nodeList.splice(key, 1, node?.(...arg));
+            const nodeT=isFunction(node) ? node?.(...arg) : node;
+            installSuspense(nodeT, suspense);
+            nodeList.splice(key, 1, nodeT);
           });
         }else{
           if(name==='error'){
             ssc=wrapNamespaceBind(self, ssc, nodeList.at(0)?.filesFilter.bindings?.value || 'error', memMove(errMsg));
           }
-        }
-        if(!is_hyperscript){
-          nodeList.forEach(n=>n.filesFilter?.creatRestore());
         }
         let tree=suspense[name+'Element'];
         tree = tree || _HouxitCoreRenderer(nodeList, self, null, hx_Element, ssc, config);
@@ -4194,29 +4163,24 @@ class BaseMotion{
         suspense[name+'Element']=tree;
         return tree;
       }
-      return [ ()=>createFallBack(fallbackX, 'fallback'), (err)=>createFallBack(errorX, 'error', err)];
+      return [ 
+        len(fallbackX) ? ()=>createFallBack(fallbackX, 'fallback') : null, 
+        len(errorX) ? (err)=>createFallBack(errorX, 'error', err) : null ];
     }
     return [];
   }
-  function installSuspense(list, suspense){
+  function installSuspense(list=[], suspense){
     if(!suspense){
       return;
     }
-    iterate(list).each((node)=>{
+    list=arrayInverter(list);
+    for(let node of list.values()){
       if(isVNodeClass(node)){
         node.filesFilter.suspense=suspense;
       }else if(isHouxitElement(node)){
         node.VNodeManager.suspense=suspense;
       }
-    });
-  }
-  function smartSuspense(suspense){
-    const superX=suspense?.super;
-    if(superX && !superX.state.resolved){
-      return superX;
-    }else{
-      return suspense;
-    }
+    };
   }
   function handleSuspenseHooks(self, suspense, vnode, isRerender){
     const hooks=vnode.filesFilter.$$$Events || {};
@@ -4232,6 +4196,14 @@ class BaseMotion{
     return obj;
   }
   function built_in_suspense_widget(vnode, self, is_hyperscript, ctx, siblings, ssc, hx_Element, config){
+    if(config.suspenseFlag){
+      const Element=createRenderlessElement();
+      Element.VNodeManager.vNodeClass=vnode;
+      runSlotDirectiveCompile(self, config, vnode.props, vnode, Element, {
+        is_hyperscript
+      }, true);
+      return Element;
+    }
     const isRerender=self[$$$operands].initializedRender;
     is_hyperscript=self[$$$core].map.is_hyperscript;
     let suspense=new SuspenseBoundary(self, vnode);
@@ -4240,8 +4212,6 @@ class BaseMotion{
       suspense.super=superX;
       superX.metrics.priorities.add(suspense);
     }
-    const suspenX=()=>smartSuspense(suspense);
-    suspense.suspenX=suspenX;
     const parent=vnode.filesFilter.parent;
     suspense.hx_Element=isHouxitBuild(parent) ? parent.$build : parent;
     let { timeout, delay } = vnode.props || {};
@@ -4279,18 +4249,17 @@ class BaseMotion{
         awaitCallback = isAsyncFunction(awaitP) ? awaitP() : awaitP;
       }
     }
-    const oldProps={};
-    const metrics=[ hx_Element, siblings, vnode.type, ctx, ssc, oldProps ];
-    const { defaultX, fallbackX, errorX, } = normalizeEarlySlotsCompile(self, vnode, hx_Element, metrics, ['default', 'fallback', 'error'], suspense);
-    installSuspense(oldProps._$$all_, suspense);
-    if(!isInfinity(suspenX().timeout)){
+    const metrics=[ siblings,  ctx, ssc ];
+    const { defaultX, fallbackX, errorX, } = normalizeEarlySlotsCompile(self, vnode, hx_Element, metrics, ['default', 'fallback', 'error'], suspense, config);
+    if(!isInfinity(suspense.timeout)){
       setTimeout(()=>{
-        if(!suspenX().state.resolved && !suspenX().state.failed){
-          suspenX().errorCaptured(pass, {
-            message:`<Suspense> render wait timed out`
+        if(!suspense.state.resolved && !suspense.state.failed){
+          suspense.errorCaptured(pass, {
+            message:`[Suspense Tmeout] <Suspense> render wait timed out.`
           }, isRerender ? fallback : null);
+          suspense.state.failed=true;
         }
-      }, suspenX().timeout);
+      }, suspense.timeout);
     }
     suspense.promise= isPromise(awaitCallback) ? awaitCallback : Promise.resolve();
     const { onPending, onResolved, onFailed } = handleSuspenseHooks(self, suspense, vnode, isRerender);
@@ -4298,31 +4267,34 @@ class BaseMotion{
       suspense.activeAwaits++;
     }
     const [ fallback, error ]=createSuspenseFallback(self, suspense, [fallbackX, errorX], vnode, ssc, hx_Element, config);
-    if(superX){
-      suspense.switchFallback=()=>{
-        if(suspense.state.pending){
-          HydrateSuspenseRender(self, suspense, fallback(), isRerender, config);
-        }
+    assign(suspense.drivers, {
+      fallback,
+      error
+    });
+    suspense.switchFallback=()=>{
+      if(suspense.state.pending){
+        const fallbackEl=safeCall(fallback)
+        if(fallbackEl) HydrateSuspenseRender(self, suspense, fallbackEl, isRerender, config);
       }
     }
     suspense.triggerFailure=function(cb=pass, err, fb){
-      const errorEl=isFunction(fb) ? fb() : error(err);
-      HydrateSuspenseRender(self, suspense, errorEl, isRerender, config);
+      const errorEl=isFunction(fb) ? fb() : error?.(err);
+      if(errorEl) HydrateSuspenseRender(self, suspense, errorEl, isRerender, config);
       if(fb){
         return;
       }
-      cb();
+      safeCall(cb);
       debugHandler(err?.message);
       onFailed(err);
     }
     suspense.triggerResolved=()=>{
-      iterate(suspense.metrics.priorities).each((sus)=>{
+      for(let sus of suspense.metrics.priorities.values()){
         const superY=sus.super;
         if(!superY){
           return iterate.Return();
         }
         sus.switchFallback();
-      });
+      };
       onResolved()
     }
     let render;
@@ -4355,38 +4327,15 @@ class BaseMotion{
       render=createRender();
     }
     if(suspense.state.postLoad){
-      suspense.promise.then(()=>{
-        (async function (){
-          await callLoadchains(suspense);
-          await callLoadchains(suspense);
-        })().then(BoundaryProcessLoader).catch((err)=>{
-          suspense.state.failed=true;
-          suspense.errorCaptured(pass, {
-            message:err.message
-          });
-        }).then(()=>{
-          if(!is_hyperscript){
-            tick(()=>{
-              iterate([errorX, fallbackX, defaultX]).each(item=> {
-                item.forEach(n=> delete n.filesFilter.slotsRestored);
-              });
-            });
-          }
-        })
-        function BoundaryProcessLoader(){
-          assign(suspense.state, {
-            pending:false,
-            resolved:true,
-          });
-          suspense.triggerResolved();
-          HydrateSuspenseRender(self, suspense, render, isRerender, config);
-          if(!is_hyperscript){
-            iterate([errorX, fallbackX, defaultX]).each(item=> {
-              item.forEach(n=>n.filesFilter.creatRestore?.());
-            });
-          }
-        }
-      })
+      processBoundaryDriver(self, suspense, {
+        isRerender,
+        config,
+        errorX,
+        defaultX,
+        fallbackX,
+        render,
+        is_hyperscript
+      });
     }else{
       assign(suspense.state, {
         pending:false,
@@ -4394,25 +4343,49 @@ class BaseMotion{
       });
     }
     let renderFallback;
-    if(!isRerender && suspense.state.pending && suspense.delay > 0){
+    if(!isRerender && suspense.state.pending && suspense.delay){
       suspense.useFallback=true;
       setTimeout(()=>{
-        if(suspense.state.pending && !suspense.state.failed && !suspense.state.resolved){
-          HydrateSuspenseRender(self, suspense, fallback(), isRerender, config);
+        if(fallback) {
+          trackSuspenseConsistency(suspense, ()=>{
+            if(suspense.state.pending && !suspense.state.failed && !suspense.state.resolved){
+              HydrateSuspenseRender(self, suspense, fallback(), isRerender, config);
+            }
+          }, 'pending');
         }
       }, suspense.delay);
     }else if(suspense.state.pending){
-      renderFallback=fallback();
+      renderFallback=fallback?.();
     }
-    if(suspense.useFallback && suspense.state.pending){
+    if( (suspense.useFallback || !fallback) && suspense.state.pending){
       renderFallback= new HouxitFragmentElement([], self);
     }else if(suspense.state.resolved){
       renderFallback=new HouxitFragmentElement(render, self);
     }
-    suspense.activeElement=renderFallback;
-    renderFallback.VNodeManager[$suspenseElement]=suspense;
-    renderFallback._vnode_key=vnode.key;
+    if(renderFallback){
+      suspense.activeElement=renderFallback;
+      renderFallback.VNodeManager[$suspenseElement]=suspense;
+      renderFallback._vnode_key=vnode.key;
+    }
     return renderFallback;
+  }
+  function trackSuspenseConsistency(suspense, action, current_state, a_p){
+    let x=suspense.syncState();
+    if(x==='pending'){
+      if(current_state==='pending' && !suspense.super.drivers.fallback){
+        action();
+      }else suspense.super.disposals.add(action);
+    }else if(x==='resolved' || !x){
+      if(!x) action();
+      else if(current_state==='failed' && !suspense.drivers.error){
+        
+        //consider switch the ancestorState to error
+      }else if(current_state === 'pending' && !suspense.drivers.fallback){
+        //consider maybe swutch ancestorState back to pending
+      }else action();
+    }else if(x === 'failed' && current_state==='failed' && !suspense.super.drivers.error){
+      action();
+    }
   }
   async function callLoadchains(suspense){
     for (const prom of suspense.loadChain.list().values()){
@@ -4424,20 +4397,59 @@ class BaseMotion{
       });
     }
   }
+  function processBoundaryDriver(self, suspense, setup){
+    suspense.state.pending=true;
+    const { errorX, fallbackX, defaultX, config, isRerender, render, is_hyperscript }=setup;
+      suspense.promise.then(()=>{
+        (async function (){
+          await callLoadchains(suspense);
+          await callLoadchains(suspense);
+        })().then(BoundaryProcessLoader).catch((err)=>{
+          suspense.state.failed=true;
+          suspense.errorCaptured(pass, {
+            message:err.message
+          });
+        });
+        function BoundaryProcessLoader(){
+          if(suspense.state.failed) return;
+          assign(suspense.state, {
+            pending:false,
+            resolved:true,
+            failed:false
+          });
+          // suspense.triggerResolved();
+          const action=()=>{
+            HydrateSuspenseRender(self, suspense, render, isRerender, config);
+            suspense.disposals.forEach(disposal=>disposal());
+          }
+          trackSuspenseConsistency(suspense, action, 'resolved');
+        }
+      })
+  }
+  function recurseParent(parent){
+    if(isObject(parent) && hasOwn(parent, 'vNodeClass')){
+      return recurseParent(parent.vNodeClass.filesFilter.parent);
+    }else if(isHouxitBuild(parent)){
+      return parent.$build
+    }else if(isHouxitElement(parent)){
+      return parent;
+    }else if(isObject(parent) && hasOwn(parent, 'vNodeClass')){
+      return recurseParent(parent.vNodeClass);
+    }
+    return parent
+  }
   function HydrateSuspenseRender(self, suspense, element, isRerender, config){
     const { activeElement, vNode }=suspense;
     const rObj=suspense.rerenderObj;
     element._vnode_key=vNode.key;
-    if(isRerender){
-      patchRenderNormalizerCall(self, rObj.activeElement, element, rObj.observer, config);
-      return;
-    }
-    let parent= vNode.filesFilter.parent;
+    let parent= recurseParent(vNode.filesFilter.parent);
     parent=isHouxitBuild(parent) ? parent.$build : parent;
     const ind=parent.NodeList.indexOf(activeElement);
-    const key=parent.VN_Tree.KEYS_INDEXES[ind];
-    parent.VN_Tree.LEAGUE_TREE[key][0]=element;
-    parent.NodeList.replace(activeElement, element);
+    if(ind >= 0){
+      const key=parent.VN_Tree.KEYS_INDEXES[ind];
+      parent.VN_Tree.LEAGUE_TREE[key][0]=element;
+      parent.NodeList.replace(activeElement, element);
+    }
     const initPosix=resolveTargetElement(activeElement);
     suspense.activeElement=element;
     initPosix.before(element.$element);
@@ -4774,9 +4786,6 @@ class BaseMotion{
     let ELEMENT;
     const { prototype_ } = vnode;
     const args=[vnode, self, is_hyperscript, ctx, siblings, ssc, hx_Element, config, null];
-    if(config.suspenseFlag && (!hasDir && !hasFor)){
-      return ;
-    }
     if(!is_hyperscript && hasDir ) {
       const createElement=()=>HX_ELEMENT_MANAGER(self, vnode, null, hx_Element, siblings, saveGarbageContent, ctx, config);
       ELEMENT = createElement();
@@ -4805,8 +4814,7 @@ class BaseMotion{
     }
   }
   function debug_unrecognized_tagname(tagname, self){
-    debugHandler(`tagname "${tagname}" is not a valid html element, or a registered widget instance\n\n
-      if this is a customElement, make sure its defined through the "customElements.define()" method `, self, true);
+    debugHandler(`[unexpected template tagname]  "${tagname}" is not a valid html element, or a registered widget instance.\n\nif this is a customElement, make sure its defined through the "customElements.define()" method `, self, true);
   }
   function isCustomElementTagname(tagname){
     return isPFunction(customElements.get(tagname));
@@ -4817,28 +4825,41 @@ class BaseMotion{
   function extendBoundary(self, parentInstance){
     
   }
-  function smart_render_toggler(self){
+  function smart_render_toggler(self, t=false){
     const initializedRender=self[$$$operands].initializedRender;
     const toggler=(cond=true)=>{
       if(initializedRender){
         self[$$$operands].initializedRender=cond;
       }
     }
-    toggler(false);
+    toggler(t);
     return toggler;
+  }
+  function asyncWidgetBoundaryWrap(boundary, action, current_state, a_p){
+    if(!boundary || !a_p.config.suspensible) return action();
+    const x=boundary.syncState();
+    if(x === 'resolved') {
+      if(!x) return action();
+      if(_makeMap_( 'resolved,pending', current_state)){
+        return action();
+      }else if(current_state === 'failed' && !boundary.drivers.error){
+        return action();
+      }
+    }else if(x==='pending'){
+      if(current_state==='resolved'){
+        boundary.disposals.add(action);
+      }
+    }
   }
   function createAsyncFallback(self, a_p, hx_Element, ssc, VN_Tree, boundary, config){
     const fallback=a_p.config.fallback;
     let useFallback=false, useDefault=false, ELEMENT
     if(fallback){
+      if(!isChildrenNode(fallback)){
+        debugHandler(`[Invalid falllback Element]  fallback content of "asyncWidget" is not a valid Houxit element`, self, true);
+        return;
+      }
       const fall_content=()=>{
-        if(boundary || (a_p.resolved || a_p.failed)) {
-          return;
-        }
-        if(!isChildrenNode(fallback)){
-          debugHandler(`fallback content of "asyncWidget" is not a valid Houxit element`, self, true);
-          return;
-        }
         const toggler=smart_render_toggler(self);
         installSuspense(fallback, boundary);
         let tree= _HouxitCoreRenderer(arrayInverter(fallback), self, null, hx_Element, ssc, config);
@@ -4854,15 +4875,21 @@ class BaseMotion{
           reinstallFallbackResponses(self, tree, a_p.fallback[AsyncHxElementTrackerKey]);
         }
         ELEMENT=tree;
-        a_p.activeElement=ELEMENT
+        a_p.activeElement=ELEMENT;
       }
-      if(!boundary && a_p.config.delay > 0) {
-        setTimeout(fall_content, a_p.config.delay);
+      const activateFallback=()=>{
+        if((a_p.resolved || a_p.failed) && !a_p.pending) {
+          return;
+        }
+        asyncWidgetBoundaryWrap(boundary, fall_content, 'pending', a_p);
+      }
+      if( a_p.config.delay) {
+        setTimeout(activateFallback, a_p.config.delay);
       }else{
-        fall_content();
+        ELEMENT=activateFallback();
       }
     }
-    if(useFallback && !boundary) {
+    if( ELEMENT && (useFallback || !boundary)) {
       return ELEMENT;
     }
     ELEMENT=new HouxitFragmentElement([], self, hx_Element);
@@ -4882,58 +4909,62 @@ class BaseMotion{
   }
   function asyncErrorElement(self, a_p, hx_Element, ssc, boundary, config){
     const toggler=smart_render_toggler(self);
-    installSuspense(a_p.config.error, suspense)
+    installSuspense(a_p.config.error, boundary);
     let FailedElement= _HouxitCoreRenderer(arrayInverter(a_p.config.error), self, null, hx_Element, ssc, config);
     FailedElement= new HouxitFragmentElement(arrayInverter(FailedElement), self, hx_Element );
     toggler();
     FailedElement[AsyncHxElementTrackerKey]={};
     if(!boundary){
-      const posix=resolveTargetElement(a_p.fallback);
-      posix.before(FailedElement.$element);
-      unMountVNode(a_p.fallback);
+      const posix=resolveTargetElement(a_p.activeElement);
+      posix?.before(FailedElement.$element);
+      unMountVNode(a_p.activeElement);
     }
-    reinstallFallbackResponses(self, FailedElement, a_p.fallback[AsyncHxElementTrackerKey]);
+    reinstallFallbackResponses(self, FailedElement, a_p.activeElement[AsyncHxElementTrackerKey]);
     a_p.failed=true
   }
   function flattenWidgetAndAsyncBuild(vnode, self, is_hyperscript=false, ctx, siblings, ssc, hx_Element, config, isWidget=false){
     const { prototype_ } = vnode;
-    const boundary=getBoundary(vnode);
     if(!isAsyncWidget(prototype_)) {
       return new HouxitWidgetElement(...arguments);
+    }else if(config.suspenseFlag){
+      const Element=createRenderlessElement();
+      Element.VNodeManager.vNodeClass=vnode;
+      runSlotDirectiveCompile(self, config, vnode.props, vnode, Element, {
+      is_hyperscript
+    }, true);
+      return Element;
     }
+    const boundary=getBoundary(vnode);
     let widget=prototype_;
     const Oa_p=widget[$asyncVnodeKey];
-    const a_p=memMove(widget[$asyncVnodeKey]);
-    const b_x=boundary?.state;
+    const a_p=memMove(Oa_p);
     a_p.resolved=false;
     a_p.pending=false;
     a_p.failed=false;
     a_p.activeElement=undefined;
     const VN_Tree=()=>hx_Element?.VN_Tree || self?.$build?.VN_Tree;
-    if(!a_p.postLoad && !Oa_p.cache){
+    if(!a_p.postLoad || !Oa_p.cache){
       let future=a_p.load();
       if(!isPromise(future)){
         debugHandler(`asyncWidget instance load callback expects a javascript Promise instance object as a return value`, self, true);
         return;
       }
       const timeout=a_p.config.timeout;
+      let timeOutId;
       if(!isInfinity(timeout)){
-        setTimeout(()=>{
+        timeOutId=setTimeout(()=>{
           if(!a_p.resolved && !a_p.failed){
-            asyncErrorElement(self, a_p, hx_Element, ssc, boundary, config);
-            debugHandler(`"asyncWidget" resolving timed out`, self, true);
+            asyncWidgetBoundaryWrap(boundary, ()=>asyncErrorElement(self, a_p, hx_Element, ssc, boundary, config), 'failed', a_p);
+            debugHandler(`["asyncWidget()" timeout Error] load time exceeds the asyncWidget.timeout config limit`, self, true);
           }
         }, timeout);
       }
       const failureHandler=er=>{
         a_p.failed=true;
+        debugHandler(er);
+        if(timeOutId) clearTimeout(timeOutId);
         if(boundary){
-          smartSuspense(boundary).errorCaptured(()=>{
-            debugHandler(er, self, true);
-          }, {
-            message:`Failed resolving state during an "async build()" process\n\nReason::"${er.message}"`
-          });
-          return;
+            //
         }
         asyncErrorElement(self, a_p, hx_Element, ssc, boundary, config);
         debugHandler(`Failed resolving state during an "async build()" process\n\nReason::"${er.message}"`, self, true);
@@ -4953,6 +4984,10 @@ class BaseMotion{
         vnode.filesFilter[$asyncVnodeKey]={
           prototype_,
         }
+        assign(a_p, {
+          resolved:true,
+          pending:false
+        });
         try{
           const toggler=smart_render_toggler(self);
           let ELEMENT=new HouxitWidgetElement(...arguments);
@@ -4960,6 +4995,8 @@ class BaseMotion{
           const awaitReady = ELEMENT.widget_instance[$$$operands].awaitReady;
           const awaitCallback=()=>{
             normalize_lazy_return(self, ELEMENT, a_p, boundary);
+            a_p.activeElement=ELEMENT;
+            if(timeOutId) clearTimeout(timeOutId);
           }
           isPromise(awaitReady) ? (awaitReady.then(()=>{
             awaitCallback();
@@ -4982,6 +5019,10 @@ class BaseMotion{
         GeneticProvider:widget,
         type:widget
       });
+      assign(a_p, {
+        resolved:true,
+        pending:false
+      })
       const ELEMENT=new HouxitWidgetElement(...arguments);
       ELEMENT[AsyncHxElementTrackerKey]={};
       a_p.activeElement=ELEMENT;
@@ -5063,12 +5104,6 @@ class BaseMotion{
       HouxitElementLifeCircleHooks(self, element, this);
     }
     this.$element=element;
-    if(!isRerender){
-      const ref_src=isHouxitWidgetElement(this) ? this.widget_instance[$$$ownProperties]  : this.compiler_options;
-      if(!isRenderlessElement(this) &&  hasProp( ref_src, 'ref_$$Prop')){
-        resolveElementToken(self, ref_src['ref_$$Prop'], isHouxitWidgetElement(this) ? this.widget_instance : this.$element, this );
-      }
-    }
     evaluateKeyOnElement(this, vnode.key, self);
   }
   class HouxitNativeElement extends HouxitElement{
@@ -5177,6 +5212,10 @@ class BaseMotion{
   class HouxitTextElement extends HouxitElement{
     constructor(text, self, hx_Element, fall, config={}){
       super();
+      if(config.suspenseFlag){
+        this.$element=text;
+        return
+      }
       const isRerender=self[$$$operands].initializedRender;
       const isHy=isHydration(self);
       this.is_hyperscript= self[$$$core].map.is_hyperscript;
@@ -5408,18 +5447,9 @@ class BaseMotion{
       is_hyperscript,
       isRerender
     }
-    const { hasDir:hasSlot, getKey:getSlot, getDir:getSlotValue } = is_hyperscript ? {} : dirExistenceCheck(props || {}, "$$slot");
-    if(hasSlot ) {
-      if(config.topLevelSlotContext){
-        const bindings=validateIncomingPropsKeys(self, {
-          key:getSlot,
-          attr:getSlotValue
-        }, is_hyperscript, hx_Element, metrics, );
-        $$dir_SLOT(self, bindings, virtualNode, hx_Element, metrics, {});
-        delete config.topLevelSlotContext;
-      }else{
-        debugHandler(`$$slot directive definitions are only allowed on a widgets top-level consumer scope instances\n\n"slot' directive on '${type}' element has failed to compile away...cross-check element render position`, self, true);
-      }
+    runSlotDirectiveCompile(self, config, props, virtualNode, hx_Element, metrics);
+    if(config.suspenseFlag){
+      return
     }
     let childNodes;
     if(children && !IS_HTML_VOID_TAG(type)) {
@@ -5684,26 +5714,38 @@ class BaseMotion{
     }
     return value 
   }
-  function _useBind__(ref, config){
+  function _useBindDriver__(ref){
     const response=validateCollectionArgs(arguments, {
-      name:'useBind',
-      required:[true, false ],
-      min:1,
-      max:2,
-      validators:[ String, Object ]
+      name:'useBindDriver',
+      required:[false],
+      min:0,
+      max:1,
+      validators:[ String ]
     });
     if(!response) {
       return null;
     }
     const self=getCurrentRunningEffect({
-      name:'useBind'
+      name:'useBindDriver'
     });
     if(!self) {
       return null;
     }
+    if(!len(arguments) || !ref) ref='modelValue';
+    const params=defineParams();
+    const signalKey='update'+(ref!=='modelValue' ? ':'+ref : "" );
+    const signals=defineSignals([signalKey]);
+    return {
+      get value(){
+        return hasOwn(params, ref) ? params[ref] : self.__public_model__.$attrs[ref];
+      },
+      update(value){
+        return signals[signalKey](value);
+      }
+    };
   }
-  function useBind(ref, config){
-    return _useBind__(ref, config);
+  function useBindDriver(ref, config){
+    return _useBindDriver__(ref, config);
   }
   const hasFilterInstance=(self, name)=>_makeMap_(BUILT_IN_FILTERS, name) || _makeMap_(self[$$$register].filters, name) || _wufHas_instance(self, name);
   const normalize_Filter=(self, name)=>hasOwn(BUILT_IN_FILTERS, name) ? BUILT_IN_FILTERS[name] : hasOwn(self[$$$register].filters, name) ?  self[$$$register].filters[name] : _wufHas_instance(self, name) ? normalizeWUFBuildScope(self, name) : pass;
@@ -6315,11 +6357,12 @@ class BaseMotion{
     styleProps = styleProps || {};
     if(isPObject(item)){
       entries(item).forEach(([key, style])=>{
-        if(!isString(unwrap(style))){ 
-          debugHandler(`"${key}" style prop: Unrecognized style property value \nat at\n "${key}" style property\n\n${element?.outerHTML || "" }`, self); 
+        if(!isPrimitive(unwrap(style))){ 
+          
+          debugHandler(`"${key}" style prop: Unrecognized style property value \nat at\n "${key}" style property\n\n${'' || "" }`, self); 
           return;
         }
-        styleProps[toCamelCase(key)]=style;
+        styleProps[toCamelCase(key)]=compileToRenderable(style);
       });
     }else if(isArray(item)) {
       item.forEach(value=>compileStyleProps(self, value, styleProps));
@@ -6893,7 +6936,7 @@ class BaseMotion{
     if(isOnListener(key) || key === 'dispatch') {
       click_handler_facading(self,[ key, value, src], bindings, element, hx_Element, metrics);
     }else if(!isRerender && key === "ref"){
-      tick(()=>Special_REF_Modifier(self, element, bindings, hx_Element, metrics));
+      Special_REF_Modifier(self, element, bindings, hx_Element, metrics);
     }else if(key === 'attach') {
       transformAttachProp(self, bindings, element, hx_Element, metrics)
     }else if((!hasOwn(element, key))) {
@@ -7358,7 +7401,6 @@ class BaseMotion{
     let ref;
     if(isString(refKey)){
       if(!hasOwn(templateRefs, refKey)){
-        // log(refKey, metrics.vNode)
         debugHandler(`[templateRefs reference] not defined (${refKey})`, self, true);
         return;
       }
@@ -7369,16 +7411,22 @@ class BaseMotion{
       debugHandler(`[templateRefs reference] not a token. templateRefs expects a token() instance.\nSee [Template Refs] reference`, self, true);
       return;
     }
-    const current=isWidget ? hx_Element.widget_instance.__public_model__ : node;
     const [ getRef, setRef ] = model.$useAgent(ref);
-    if(isNativeElement(getRef())){
-      const prev=getRef();
+    let cb=pass;
+    const current=getRef();
+    if(current && !isArray(current)){
+      const prev=current;
       setRef(shallowStream([prev]));
-    }else if(!getRef()){
-      setRef(current);
+    }else if(!current){
+      cb=element=>setRef(element);
     }
     if(isArray(getRef())){
-      getRef().push(current);
+      cb=element=>getRef().push(element);
+    }
+    if(isWidget){
+      metrics.vNode.filesFilter.templateRef=instance=>safeCall(cb, instance);
+    }else{
+      cb(node);
     }
   }
   function $$dir_HTML(self, bindings, element, hx_Element, metrics, text ){
@@ -7448,7 +7496,7 @@ class BaseMotion{
     const isHy=isHydration(self);
     const iswt=!(isSSR ? isString(vnode.type) : isNativeElement(vnode)) && validHouxitWidget(vnode?.prototype_);
     hx_Element.slot_name=key;
-    const parent=hx_Element.VNodeManager.vNodeClass.filesFilter.parent.widget_instance;
+    const parent=hx_Element?.VNodeManager?.vNodeClass.filesFilter.parent.widget_instance;
     const slotBindings=parent?.[$$$compiler].scopeSlotsBindings;
     let dataBind=slotBindings ? slotBindings[key]?.bindings : undefined;
     hx_Element.LabContext=wrapNamespaceBind(self, hx_Element.LabContext, value, dataBind);
@@ -7477,7 +7525,7 @@ class BaseMotion{
     transform = unwrap(transform);
     metrics.effect=effect;
     if(!key && !isPObject(transform)) {
-      debugHandler(`"$$bind" directive attributes binding expects a plain props object value when not chained to any key argument`, self, true);
+      debugHandler(`[non object spread bind] "$$bind" directive attributes binding expects a plain props object value when not chained to any key argument`, self, true);
       return ;
     }else if(!key && isPObject(transform)) {
       for(const [ ky, attr ] of entries(transform)){
@@ -7569,7 +7617,6 @@ class BaseMotion{
         if(!IS_VALID_EVENT_HANDLER(event)){
           debugHandler(`"${event}" is not a valid event name`, self, true);
         }else {
-            // log(node, event)
           const callbackListen=element=>{
             element.addEventListener(event, (...args)=>{
               (isFunction(listenerHandle) ? listenerHandle : pass)(...args);
@@ -7696,10 +7743,14 @@ class BaseMotion{
       effect=_createEffectBase(function(){
         return get_Object_Value(self.__public_model__, item, true);
       }, self);
-      initVal=compileToRenderable(effectRunner(effect).value);
+      bindings.effect=effect
+      initVal=unwrap(effectRunner(effect).value);
     }catch(err){
       debugHandler(`undefined reference for directive "$$model"\n\n "${item}" is not defined on widget model instance\n\n${err}`, self, true);
       return
+    }
+    if(isHouxitWidgetElement(hx_Element)){
+      return defineInstanceModelDriver(...arguments);
     }
     if((isSSR && isString(element.type)) || IS_ELEMENT_NODE(element)){
       if(!(isSSR ? _makeMap_(HTML_FORM_ELEMENTS, element.type) : Is_Form_Element(element) )){
@@ -7707,13 +7758,27 @@ class BaseMotion{
         $warn("widget root element is not a form element", self);
         return;
       }
+      const nameProp=getFormElementProp(element);
       function flushCallback(element){
-        element.value=unwrap(initVal);//compileToRenderable(unwrap(initVal));
+        if(element.localName==='select'){
+          if(element.multiple){
+            if(!isCollection(source)){
+              debugHandler(`[$$model collection error] <select multiple> element expects $$model source to be an array or valid colloction type`, self, true);
+              return;
+            }
+            const options=element.options;
+            for(let v of source.values()){
+              
+            }
+          }
+        }else{
+          element.value=compileToRenderable(unwrap(initVal));
+        }
         element.addEventListener(get_Model_Event(element), function($ev){
           const value=$ev.target.value;
           try{
             if(initVal !== value){
-              Promise.try(()=>set_Object_Value(self.__public_model__, item, value)).catch((err)=>{
+              tick(()=> updateElementModelValue(self, element, value, item)).catch((err)=>{
                 throw new Error(err);
               });
               initVal=value;
@@ -7728,12 +7793,63 @@ class BaseMotion{
       }else if(!isSSR) {
         flushCallback(element);
       }
-    }else{
-      
+      effect.attachCallback(()=>{
+        element.value=compileToRenderable(unwrap(effect.runEffect().value));
+      });
     }
-    effect.attachCallback(()=>{
-      element.value=compileToRenderable(effect.runEffect().value);
+  }
+  function updateElementModelValue(self, element, value, path){
+    const name=element.localName;
+    const type=element.type;
+    const source=unwrap(get_Object_Value(self.__public_model__, path));
+    if((name === 'input' && _makeMap_('checkbox,radio')) || name === 'select'){
+      if(name === 'select' && element.multiple){
+        if(!isCollection(source)){
+          debugHandler(`[$$model collection error] <select multiple> element expects $$model source to be an array or valid colloction type`, self, true);
+          return;
+        }
+        
+        // log(element, element.selectedIndex)
+        return;
+      }
+      if(!isCollection(source)){
+      }
+    }
+        set_Object_Value(self.__public_model__, path, value)
+    // log(element.value, source)
+    if(name);
+  }
+  function getFormElementProp(el){
+    const name=el.localName;
+    const type=el.type;
+    if(_makeMap_('input,button')){
+      if(type ==='checkbox') return 'checked';
+      return 'value';
+    }else if(name==='select'){
+      return ''
+    }
+  }
+  function defineInstanceModelDriver(self, bindings, props, hx_Element, metrics){
+    const { vNode } = metrics;
+    let { key, effect, value } = bindings;
+    props[key ?? 'modelValue']=effect.value;
+    const ev="update"+ (key ? ":"+key : "");
+    const EVENTS=vNode.filesFilter.$$$Events;
+    if(!hasOwn(EVENTS, ev)) EVENTS[ev]={
+      callbacks:new Tuple,
+      event:ev,
+      effect:undefined
+    }
+    EVENTS[ev].callbacks.add((newValue)=>set_Object_Value(self.__public_model__, value, newValue));
+    let oldValue=effect.value;
+    const flush=createPriorityFlush(effect, function(observers){
+      oldValue=__widget_props_effect(hx_Element.widget_instance, {
+        effect,
+        key: key ?? 'modelValue',
+        value:oldValue
+      }, observers);
     });
+    hx_Element.VN_Tree.FLUSHS.add(flush);
   }
   const DirectiveMacros={
     bind:$$dir_BIND,
@@ -8647,19 +8763,20 @@ class BaseMotion{
   const garbageKey=Symbol();
   function _transformTheParamsInjectorHook(params){
     const self=getCurrentRunningEffect({
-      name:'useParams'
+      name:'defineParams'
     });
     if(!self && !(validateCollectionArgs(arguments, {
-      name:"useParams",
+      name:"defineParams",
       validators:[[Array, Object]],
       count:1
     } ))) {
       return generateBuildParams(self);
     }
+    if(!params) return generateBuildParams(self);
     paramsManager(self, params, self.__public_model__.$attrs, true);
     return generateBuildParams(self);
   }
-  function useParams(params){
+  function defineParams(params){
     return _transformTheParamsInjectorHook(...arguments)
   }
   function _composersSlotsMappingHook(slots){
@@ -9258,7 +9375,7 @@ class BaseMotion{
       traverseMixins_Inheritance(self, options);
     }
   }
-  function _hydrateHashToSelector(selector, $Data_Hash){
+  function _hydrateHashToSelector(selector, $Data_Hash, setup){
     const trimmed = selector.trim();
     let modified=trimmed;
     const _Manage_Hash_Class=function(sel, sep){
@@ -9272,7 +9389,7 @@ class BaseMotion{
       const split=trimmed.split(sep);
       for (let [key, sel] of entries(split)){
         sel=sel.trim();
-        sel=_hydrateHashToSelector(sel, $Data_Hash)
+        sel=_hydrateHashToSelector(sel, $Data_Hash, setup)
         split[key]=sel;
       }
       return split.join(` ${sep} `)
@@ -9294,8 +9411,12 @@ class BaseMotion{
     if(trimmed.includes('>')) {
       return _Manage_Hash_Class(trimmed, '>');
     }
+    if(trimmed.startsWith('@')){
+      setup.ignore=true;
+      return trimmed;
+    }
     if(!trimmed.startsWith('@') && !trimmed.startsWith('body') && !trimmed.includes(':')  ) {
-      return trimmed ? `${trimmed}${$Data_Hash}` : trimmed;
+      return trimmed && !setup.ignore ? `${trimmed}${$Data_Hash}` : trimmed;
     }else if(trimmed.includes('::')) {
       return _Manage_Hash_Class(trimmed, '::');
     }else if(trimmed.includes(':') && !trimmed.startsWith('@') && !trimmed.startsWith(':')) {
@@ -9305,8 +9426,9 @@ class BaseMotion{
   };
   const selectorPattern = /([^\r\n{]+)\s*{/g;
   function _stylesheet_hydration(self, styles){
+    let setup={}
     return styles.replace(selectorPattern, (match, text)=>{
-      return _hydrateHashToSelector(text, `[data-hx_build=${self[$$$ownProperties].hx_build}]`)+'{';
+      return _hydrateHashToSelector(text, `[data-hx_build=${self[$$$ownProperties].hx_build}]`, setup)+'{';
     });
   }
   function _preCompile_StyleSheet(opts, self, vnode){
@@ -9582,11 +9704,8 @@ class BaseMotion{
     defineGetter( self.__public_model__ , "$write", WRITE.bind( self ) ) ;
     defineGetter( self.__public_model__ , "$effectHook" , EffectAdapterHook.bind( self ) ) ;
     defineGetter( self.__public_model__ , "$pushEffect" , pushEffect.bind( self ) ) ;
-    defineGetter( self.__public_model__ , "$trackEffectDeps" , _trackEffectDeps.bind( self ) ) ;
   }
   function __useModelAdapter__( props ) {
-    
-    // log(props)
     if(!validateCollectionArgs(arguments, {
       min:0,
       max:1,
@@ -9670,7 +9789,7 @@ class BaseMotion{
         return read(value);
       }else if(isString(value)){
         if(!isHouxitBuild(self)){
-          debugHandler(`[[Deps Tracker $warn]] Effect global tracking faiked`);
+          debugHandler(`[[Deps Tracker $warn]] Effect global tracking failed`);
           return value;
         }
         return get_Object_Value(self.__public_model__, deps);
@@ -9840,6 +9959,7 @@ class BaseMotion{
     injectCustomDirective(self, options, vnode);
     injectCustomAnimations_Transitions(self, options, vnode);
     __Generate_Widget_Hash(self);
+    RuntimeTokenDir(self, vnode);
     return options;
   }
   const alpha ='A,a,B,b,C,c,D,d,E,e,F,f,G,g,H,h,I,i,J,j,K,k,L,l,M,m,N,n,O,o,P,p,Q,q,R,r,S,s,T,t,U,u,V,v,W,w,X,x,Y,y,Z,z'
@@ -10125,9 +10245,17 @@ class BaseMotion{
       deleteProperty(target, prop, value, receiver){
         return streamMutationTransform(arguments, reactive, ReactiveEffect, 'deleteProperty', config, dependency );
       },
-      // apply(target, thisArg, args ){
-      //   return Reflect.apply(...arguments);
-      // }
+      has(target, key){
+        
+        return Reflect.has(target, key);
+      },
+      ownKeys(target){
+        return Reflect.ownKeys(target);
+      },
+      getOwnPropertyDescriptor(target, key){
+        
+        return Reflect.getOwnPropertyDescriptor(target, key);
+      }
     });
     dependency.set(reactive, new Map());
     return reactive;
@@ -10545,13 +10673,9 @@ class BaseMotion{
       $warn(`${err}`);
     }
   }
-  function RuntimeTokenDir(self, options, vnode){
-    const hasToken=vnode.props && hasProp(vnode.props, $$$$dir__ref$$$$);
-    if(!hasToken) {
-      return;
-    }
-    self[$$$ownProperties]['ref_$$Prop']=vnode.props[$$$$dir__ref$$$$];
-    delete vnode.props[$$$$dir__ref$$$$];
+  function RuntimeTokenDir(self, vnode){
+    const templateRef=vnode.filesFilter.templateRef;
+    safeCall(templateRef, self.__public_model__);
   }
   function normalizeHyperscriptSlotting(self, children, hx_Element, patchFlags, isRerender, config){
     const renderSlotList=[];
@@ -10897,13 +11021,36 @@ class BaseMotion{
     }
     self[$$$ownProperties].hx_Element=options['hx_Element'];
   }
+  function hydrateModelBinding(self, opts){
+    if(!hasOwn(opts, 'bindDrivers') || !len(opts.bindDrivers)) return;
+    const drivers=opts.bindDrivers;
+    if(!hasOwn(opts, 'params')) opts.params={};
+    else if(isArray(opts.params) && isPObject(drivers)){
+      const params=opts.params;
+      opts.params={};
+      for(let p of params.values()){ 
+        opts.params[p]=Any;
+      }
+    }
+    if(!hasOwn(opts, 'signals')) opts.signals=[];
+    for(let [ key, item ] of getIterator(drivers) ){
+      if(isArray(drivers)){
+        key=item;
+        item=Any;
+      }
+      const signalKey='update'+(key!=='modelValue' ? ':'+key : "" );
+      if(!hasOwn(opts.params, key)) opts.params[key]=item;
+      if(!opts.signals.includes(signalKey)) opts.signals.push(signalKey);
+    }
+  }
   function HouxitBuild( options ) {
     const [ opts, vnode ] = createCordinationProperties( this , options ) ; //create properties;
     this[$$$compiler].initialization=()=>{
       sanitizedOptions( this , opts, vnode ) ;//sanitize received options
-        validateRegistryProvider( this ) ;
+      validateRegistryProvider( this ) ;
       $ensureLifeCircleHooks( this , opts, vnode ) ;
-      setConfig(this, opts, vnode ); 
+      setConfig(this, opts, vnode );
+      hydrateModelBinding(this, opts);
       $construct_With_Signals(this, opts, false, vnode);
       map_Events_Fall(this , vnode);
       __Ensure_Renderer(this, opts, vnode);
@@ -10916,7 +11063,6 @@ class BaseMotion{
       }
       build =  _hydrate_props_fallthrough(opts, self, build);
       build=_preCompile_StyleSheet(opts, self, build);
-      RuntimeTokenDir(self, opts, vnode);
       defineLateGlobalProps(self, build);
       return build;
     }
@@ -11374,7 +11520,7 @@ class BaseMotion{
         finisherLazyRender(this, nodeSelector, domRoot, true );
         toggler();
       }).catch((e)=>{
-        smartSuspense(boundary)?.errorCaptured(pass, {
+        boundary?.errorCaptured(pass, {
           message:"<async build>() process has failed to resolve..."
         });
       });
@@ -11765,6 +11911,9 @@ class BaseMotion{
   function configForwardEvents(forwardEvents){
     return createConfig_Constraint.call(this, "forwardEvents", ...arguments);
   }
+  function configFlushType(flushType){
+    return createConfig_Constraint.call(this, "flushType", ...arguments);
+  }
   function configForwardSlot(forwardSlot){
     return createConfig_Constraint.call(this, "forwardSlot", ...arguments);
   }
@@ -11803,7 +11952,7 @@ class BaseMotion{
     const self=this;
     gR.setupOptions[hookName]=function(){
       callback?.(self.__public_model__, _OPTIONS[hookName], function applyMixin(mixin){
-        _applyAdapterMixin.call(self, mixin, self[$$$core].opts)
+        _applyAdapterMixin.call(self, mixin, self[$$$core].opts);
       });
     }
   }
@@ -11998,25 +12147,25 @@ class BaseMotion{
     initBuild = self[$$$compiler].templateProcessor( self , initBuild, buildFacade, slotter) ;
     return initBuild ;
   }
-  function _tick( fn ) {
+  function _tick( fn, wait ) {
     const response = validateCollectionArgs(arguments, {
-      count:1,
-      validators:[Function],
-      name:"tick"
+      min:0,
+      max:2,
+      validators:[Function, Number],
+      name:"tick()"
     });
     if(!response) {
       return freeze();
     }
-    const self= this && isHouxitBuild( this ) ? this : null
-    if( len( arguments ) && !isPFunction( fn ) ) {
-      debugHandler( `positional argument 1 on "tick" is not a function\n\n callback argument 1 requires a function type` , self , !isNull( self ) ) ;
-      fn = pass ;
-    }
+    const self= this && isHouxitBuild( this ) ? this : null;
     return new Promise( ( resolve , reject ) => {
-      resolve( deferEventCircleThread( self , isFunction(fn) ? fn : pass , isHouxitBuild( self ) ) ) ;
+      if(wait){
+        setTimeout(pass, wait);
+      }
+      if(fn) resolve( deferEventCircleThread( self , fn , isHouxitBuild( self ) ) ) ;
     } ) ;
   }
-  function tick( fn ){
+  function tick( fn, wait ){
     return _tick( ...arguments );
   }
   async function _Reactive_Adapter_Plugin(data, callback, self, deep=false){
@@ -12396,9 +12545,9 @@ class BaseMotion{
       stabilizeMemo(config);
       return NewNode;
     }
-    else {
-      effectiveElement_REUSE_PATCH(self, hx_Element, vNode, observer, parent );//effectiveElement_REUSE_PATCH will be facing a depreciation witb the emergence of fine-grained reactivity in the compiler
-    }
+    // else {
+    //   effectiveElement_REUSE_PATCH(self, hx_Element, vNode, observer, parent );//effectiveElement_REUSE_PATCH will be facing a depreciation witb the emergence of fine-grained reactivity in the compiler
+    // }
   }
   function installMemoInstance(self, hx_Element, EffectVNode, config){
     if(!(isMemoElement(hx_Element) || config.memoVault)) {
@@ -12694,14 +12843,14 @@ class BaseMotion{
     vNode.prototype_=validHouxitWidget(widget) ? widget : tagname;
     return true;
   }
-  function $compilerEngine ( self , virtualNode , hx_Element, slotsCompilerArgs, config ) {
-    let { rawChildren, GeneticProvider:widget, props } =virtualNode
-    const is_hyperscript= self ? self[$$$core]?.map.is_hyperscript : virtualNode.is_hyperscript;
-    const isRerender=self ? self[$$$operands].initializedRender : null;
-    const propsElements={};
+  function get_$name(self){
+    return self[$$$ownProperties].name;
+  }
+  function runSlotDirectiveCompile(self, config, props, virtualNode, hx_Element, metrics, isWidget){
+    const { is_hyperscript } = metrics;
     const { hasDir:hasSlot, getKey:getSlot, getDir:getSlotValue } = is_hyperscript ? {} : dirExistenceCheck(props || {}, "$$slot");
     if(hasSlot) {
-      if(config.topLevelSlotContext){
+      if(config.topLevelSlotContext || config.suspenseFlag){
         const bindings=validateIncomingPropsKeys(self, {
           key:getSlot,
           attr:getSlotValue
@@ -12709,14 +12858,26 @@ class BaseMotion{
           isRerender
         });
         $$dir_SLOT(self, bindings, virtualNode, hx_Element, {
-          is_hyperscript,
-          isRerender,
-          config
+          config,
+          ...metrics
         });
         delete config.topLevelSlotContext;
       }else{
-        debugHandler(`$$slot directive definitions are only allowed on a widgets top-level consumer scope instances\n\n"slot' directive on ... widget has failed to compile away...cross-check element render positioning`, self, true);
+        debugHandler(`$$slot directive definitions are only allowed on a widgets top-level consumer scope instances\n\n"slot' directive on ... <${isWidget ? get_$name(self) : virtualNode.type}> has failed to compile away...cross-check element render positioning`, self, true);
       }
+    }
+  }
+  function $compilerEngine ( self , virtualNode , hx_Element, slotsCompilerArgs, config ) {
+    let { rawChildren, GeneticProvider:widget, props } =virtualNode
+    const is_hyperscript= self ? self[$$$core]?.map.is_hyperscript : virtualNode.is_hyperscript;
+    const isRerender=self ? self[$$$operands].initializedRender : null;
+    const propsElements={};
+    runSlotDirectiveCompile(self, config, props, virtualNode, hx_Element, {
+      isRerender,
+      is_hyperscript
+    }, true);
+    if(config.suspenseFlag){
+      return
     }
     if(len(props) && self) {
       Props_dilation_compile(virtualNode, self, hx_Element, {
@@ -13363,7 +13524,7 @@ class BaseMotion{
         return createHouxitElement(node, self, false, assign({}, hx_Element?.LabContext), NodeList, assign({}, fall),  hx_Element, config );
       }
       Vnode=createElement();
-      if(!isPFunction(Vnode.compiler_options.createElement)){ 
+      if(!isPFunction(Vnode?.compiler_options?.createElement)){
         Vnode.compiler_options.createElement=createElement;
       }
     }else{
@@ -13499,7 +13660,7 @@ class BaseMotion{
       const boundary=getBoundary(self);
       if(boundary){
         iterate(arrayInverter(templateRender)).each((node)=>{
-          node.filesFilter.suspense=boundary;
+          if(isVNodeClass(node)) node.filesFilter.suspense=boundary;
         });
       }
     }
@@ -13588,7 +13749,7 @@ class BaseMotion{
       }
     }).catch(err=>{
       if(boundary){
-        smartSuspense(boundary).errorCaptured(()=>{
+        boundary.errorCaptured(()=>{
           debugHandler(err, self, true);
         }, {
           message:`{{@await}} block fails to resolve...`
@@ -14646,8 +14807,9 @@ class BaseMotion{
   _$compiler_engine_hydrator();
 
 export {
-  createVNode , Suspense , isToken , scaffold , get_version , h , shallowStream , None , useBind , Else , enSlot , If , For , escapeReverseDecoder , HouxitCompilerSetup , isReactiveToken , ElseIf , trackEffectDeps , initBuild , Memo , postUpdate , initSSRBuild , log ,//dev
-  readonlyStream , preMount , Portal , postDestroy , Build , Self , asyncWidget , preUpdate , shallowReadonlyStream , isShallow , useRef , Motion , HTMLParser , Provider , postMount , postBuild , useReceiver , unToken , onSlotRender , onSlotEffect , useTransmit , defineConfig , useStyleSheet , useContext , defineSlots , useParams , useAdapter , useModel , createHouxitElement , isReadonly , preDestroy , markdown , MKDParser , validateType , Any , Arguments , mergeProps , _getNodeListResponse , tick , generateUUID , boilerPlate , Type , defineWidget , isShallowStream , onCatch ,//dev
+  createVNode , Suspense , isToken , scaffold , get_version , h , shallowStream , None , useBindDriver , Else , enSlot , If , For , escapeReverseDecoder , HouxitCompilerSetup , isReactiveToken , ElseIf , trackEffectDeps , initBuild , Memo , postUpdate , initSSRBuild , log ,//dev
+  readonlyStream , preMount , Portal , postDestroy , Build , Self , asyncWidget , preUpdate , shallowReadonlyStream , isShallow , useRef , Motion , HTMLParser , Provider , postMount , postBuild , useReceiver , unToken , onSlotRender , onSlotEffect , useTransmit , defineConfig , useStyleSheet , useContext , defineSlots , defineParams , useAdapter , useModel , createHouxitElement , isReadonly , preDestroy , markdown , MKDParser , validateType , Any , Arguments , mergeProps , _getNodeListResponse , tick , generateUUID , boilerPlate , Type , defineWidget , isShallowStream , onCatch ,//dev
+  createEffectFrame,
   onEffect , onTracked , html , Class , readonly , escapeDecoder , resolve , observe , effectHook , generateTemplateElement , memMove , useOptions , defineSignals , Widget , len , markRaw , isRaw , validateProps , toReadonly , toShallow , shallow , validateCollection , isStream , useReadonlyBypasser , stream , token , createNativeElement , scopeEffectHook , scopeObserve , computed , read , factoryToken , isNativeElement , createWidgetElement , tokenGENERATOR , cubicBezier , RENDER_ELEMENTS , toToken , to_kebab_case , Token , ToPascalCase , toCamelCase , createTextElement , renderToString , cloneVElement , createCustomElement , _createFragment , debugHandler , //dev
   Fragment , agent , Exception , Tuple , _GenerateRoot , traceBack , version , raise ,//dev
   deepEqualityCheck , isShallowReadonly , isShallowReadonlyStream , toReadonlyStream , toShallowStream , toShallowReadonlyStream , pushEffect , HTMLPropsParser , animate , transite , PRIVATE_PROPERTY_KEY, easings , createEasing , TemplateClass , createTemplateClass , isReadonlyStream , __WUFClass__ , isComputed , useAgent }

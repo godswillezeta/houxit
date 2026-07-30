@@ -46,9 +46,9 @@ export default function resolve(source, id){
   return compileSurface(surface, id);
 }
 function compileSurface(surface, id){
-  let imported=`
+  let imported=surface.build ? `
   import __controller__ from 'houxit/runtime/controller';\n
-  `;
+  ` : "";
   let instance={};
   let render=""
   if(surface.render){
@@ -71,8 +71,8 @@ function compileSurface(surface, id){
         [ src, importMap]=importExtractor(source);
         instance.build=` ${hasOwn(props, 'async') ? "async " : ""}function build(){
           ${src}
-        __variables__.__env__=true;
-        return __controller__(__variables__, ${render});
+        __env__=true;
+        return __controller__(__variables__, ${render || 'undefined'});
         }`
       }else{
         instance.script=src;
@@ -93,14 +93,16 @@ function generateCompilerSource(instance, importMap, id){
     });
     delete instance.script;
   }else{
+    if(instance.build) source+="let __env__=false;"
     source+="const __module_exports__={};"
   }
+  
   for(let [key, option] of Object.entries(instance)){
     if(new Set(['styles','template','markdown']).has(key)){
       option=`\`${option}\``;
     }
     source+=`\n${instance.script ? "if(!Object.hasOwn(__module_exports__, '${key}')){" : ""}
-    __module_exports__['${key}']=${option}
+  __module_exports__['${key}']=${option}
     ${instance.script ? "}" : ""}
     `
   }
@@ -108,7 +110,12 @@ function generateCompilerSource(instance, importMap, id){
     source+=`\nif(!Object.hasOwn(__module_exports__, 'name')) __module_exports__.name="${name}";
     `
   }
-  source+="\nexport default __module_exports__;"
+  source+="\nexport default __module_exports__;";
+  if(instance.build){
+source+=`\nif(!__env__){
+//console.error('[illegal return in "<script build>"] <script build> blocks does not allow custom return statements. Use a separate <script render> instead and return your vnodes directly');
+}`
+  }
   return source;
 }
 function inferName(id){

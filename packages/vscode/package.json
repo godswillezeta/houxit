@@ -1,0 +1,71 @@
+{
+  "name": "houxit-official",
+  "displayName": "Houxit - Official",
+  "description": "Official language support for the Houxit framework.",
+  "version": "0.0.1",
+  "publisher": "godswillezeta",
+  "engines": {
+    "vscode": "^1.100.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "keywords": [
+    "houxit",
+    "javascript",
+    "framework",
+    "html"
+  ],
+  "activationEvents": [
+    "onLanguage:houxit"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "houxit",
+        "aliases": [
+          "Houxit",
+          "houxit"
+        ],
+        "extensions": [
+          ".houxit"
+        ],
+        "icon":{
+          "light":"./icons/houxit-light.png",
+          "dark":"./icons/houxit-dark.png"
+        },
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "houxit",
+        "scopeName": "text.houxit",
+        "path": "./syntaxes/houxit.tmLanguage.json"
+      },
+      {
+        "scopeName": "houxit.injection",
+        "path": "./syntaxes/houxit.injection.json",
+        "injectTo": [
+          "text.html.basic"
+        ]
+      }
+    ],
+    "snippets": [
+      {
+        "language": "houxit",
+        "path": "./snippets/houxit.json"
+      }
+    ]
+  },
+  "scripts": {
+    "compile": "tsc -p .",
+    "watch": "tsc -w"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@types/vscode": "^1.100.0",
+    "typescript": "^5.9.0"
+  }
+}

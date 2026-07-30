@@ -126,7 +126,8 @@ var widgetOptionType = {
 	install: Function,
 	templateClasses: Object,
 	animations: Object,
-	transitions: Object
+	transitions: Object,
+	bindDrivers: [Array, Object]
 };
 var isMergableMethods = (n) => _makeMap_("model,preBuild,postBuild,preMount,postMount,preUpdate,postUpdate,preDestroy,postDestroy,transmit,onTracked,onEffect,onCatch,onSlotEffect,onSlotEffect,install", n);
 var isMergableObjects = (n) => _makeMap_("widgets,handlers,buildConfig,directives,observers,filters,blocks,computed,templateClasses,animations,transitions", n);
@@ -300,9 +301,12 @@ function isChildrenNode(val) {
 function isChildrenObj(val) {
 	return isChildrenNode(val) && !(isPrimitive(val) || isArray(val));
 }
+function isRerender(self) {
+	return isHouxitBuild(self) && isTrue(self[$$$operands].initializedRender);
+}
 var isBaseWidget = (widget) => isPObject(widget) && widget instanceof Widget;
 var isProxy = (value) => validateType(value, Proxy);
-var validHouxitWidget = (w) => w && (isObject(w) && !isProxy(w) && !isStream(w) || isAsyncWidget(w) || isFunction(w) || isHouxitBuiltinSymbolWidget(w));
+var validHouxitWidget = (w) => w && ((is_wuf_class(w) || isObject(w)) && !isProxy(w) && !isStream(w) || isAsyncWidget(w) || isFunction(w) || isHouxitBuiltinSymbolWidget(w));
 function isAsyncFunction(fn) {
 	return isPFunction(fn) && fn?.constructor?.name === "AsyncFunction";
 }
@@ -327,13 +331,18 @@ var IS_VALID_EVENT_HANDLER = (eventName) => _makeMap_(GLOBAL_EVENTS, eventName);
 var isClass = (val) => isFunction(val) && val.toString().startsWith("class");
 var directivesHooksMap = "created,mounted,updated,init,destroyed";
 function instance_Has_Widget(self, name) {
-	return _makeMap_(BUILT_IN_WIDGETS, name) || _makeMap_(self[$$$register]?.widgets || {}, name);
+	return _makeMap_(BUILT_IN_WIDGETS, name) || _makeMap_(self[$$$register]?.widgets || {}, name) || _wufHas_instance(self, name);
 }
-var normalize_Widget = (self, name) => _makeMap_(BUILT_IN_WIDGETS, name) ? BUILT_IN_WIDGETS[name] : _makeMap_(self[$$$register].widgets, name) ? self[$$$register].widgets[name] : null;
+var normalize_Widget = (self, name) => {
+	if (_makeMap_(BUILT_IN_WIDGETS, name)) return BUILT_IN_WIDGETS[name];
+	else if (_makeMap_(self[$$$register].widgets, name)) return self[$$$register].widgets[name];
+	else if (_isWUFBuild(self) && _wufHas_instance(self, name)) return normalizeWUFBuildScope(self, name);
+	return null;
+};
 function instance_Has_Directive(self, name) {
-	return !isHouxitDirective(name) && _makeMap_(self[$$$register]?.directives || {}, name);
+	return !isHouxitDirective(name) && _makeMap_(self[$$$register]?.directives || {}, name) || _wufHas_instance(self, name);
 }
-var normalize_Directives = (self, name) => _makeMap_(self[$$$register].directives, name) ? self[$$$register].directives[name] : null;
+var normalize_Directives = (self, name) => _makeMap_(self[$$$register].directives, name) ? self[$$$register].directives[name] : normalizeWUFBuildScope(self, name);
 var slotInstanceMap = class {
 	slots = /* @__PURE__ */ new Object();
 	constructor(opts = {}) {
@@ -395,7 +404,6 @@ var isClassBasedBuild = (build) => isHouxitBuild(build) && build[$$$ownPropertie
 var isFunctionBasedBuild = (build) => isHouxitBuild(build) && build[$$$ownProperties].widgetType === "function-based";
 var $$tupleStore = Symbol();
 var $$dexTransformKey = Symbol();
-var $$$$dir__ref$$$$ = Symbol("[[[$$$$dir__ref$$$$]]]");
 var dir$$__render = Symbol("[[[$$@@dir$$__render]]]");
 var $$$context = Symbol("[[[$$@context]]]");
 var $$$operands = Symbol();
@@ -419,7 +427,8 @@ var AsyncWidget = class {
 	constructor(load, config = {}) {
 		config = assign({
 			delay: 200,
-			timeout: Infinity
+			timeout: Infinity,
+			suspensible: true
 		}, config);
 		validateAsyncWidgetConfig(config);
 		this[$asyncVnodeKey] = {
@@ -431,7 +440,8 @@ var AsyncWidget = class {
 	}
 };
 function validateAsyncWidgetConfig(config) {
-	for (let [key, value] of entries(config)) if (!_makeMap_("delay,error,fallback,timeout", key)) debugHandler(`Unrecognized key "${key}" passed to 'AsyncWidget' config object`);
+	for (let [key, value] of entries(config)) if (!_makeMap_("delay,error,fallback,timeout,suspensible", key)) debugHandler(`Unrecognized key "${key}" passed to 'AsyncWidget' config object`);
+	else if (key === "suspensible" && !isBoolean(value)) debugHandler(`["AsyncWidget()">>config{}.suspensible type Error] expects a Boolean value`);
 	else if (_makeMap_("delay,timeout", key) && (!isNumber(value) || isNaN(Number(value)))) debugHandler(`"${key}" config prop of "AsyncWidget" expects a type of "number"`);
 	else if (_makeMap_("error,fallback", key) && !isPFunction(value)) {} else continue;
 }
@@ -519,7 +529,7 @@ var isCollection = (item) => validateType(item, [
 ]);
 var isInvalidInjectorOpt = (opt) => _makeMap_("build,preBuild", opt);
 var adaptableComposers = {
-	params: useParams,
+	params: defineParams,
 	postBuild,
 	preMount,
 	postMount,
@@ -1809,7 +1819,7 @@ var Dependency = class {
 		this.effects.forEach((effect) => effect.notify());
 	}
 };
-var Effect = class {
+var HouxitEffectFrame = class {
 	effect = void 0;
 	self = void 0;
 	callbacks = new Tuple();
@@ -1887,9 +1897,12 @@ var Effect = class {
 	}
 };
 var isDependency = (subscriber) => subscriber instanceof Dependency;
-var isEffect = (effect) => effect instanceof Effect;
+var isEffect = (effect) => effect instanceof HouxitEffectFrame;
 function _createEffectBase(effect, self) {
-	return new Effect(effect, self);
+	return new HouxitEffectFrame(effect, self);
+}
+function createEffectFrame(effect) {
+	return _createEffectBase(effect, null);
 }
 function effectRunner(effect, ...args) {
 	if (!activeRunningEffects.has(effect)) activeRunningEffects.add(effect);
@@ -1940,6 +1953,23 @@ var HouxitEasing = class {
 		easingConstructor.call(this, value);
 	}
 };
+var steps = (count = 1, direction = "end") => createEasing({
+	css: `steps(${count}, ${direction})`,
+	fn: (t) => {
+		if (direction === "start") return Math.ceil(t * count) / count;
+		return Math.floor(t * count) / count;
+	}
+});
+var reverse = (easing) => createEasing({
+	css: easing.css,
+	fn: (t) => easing.fn(1 - t)
+});
+var mirror = (easing) => createEasing({
+	css: easing.css,
+	fn: (t) => {
+		return t < .5 ? easing.fn(t * 2) : easing.fn(2 - t * 2);
+	}
+});
 var jsEasingMap = {
 	linear: (t) => t,
 	easeIn: (t) => t * t,
@@ -2078,7 +2108,11 @@ var cssEasingMap = {
 	stepStart: "step-start",
 	stepEnd: "step-end"
 };
-var easings = {};
+var easings = createObj("Easings", {
+	steps,
+	reverse,
+	mirror
+});
 iterate(jsEasingMap).each((fn, name) => {
 	easings[name] = createEasing({
 		css: cssEasingMap[name],
@@ -2100,6 +2134,8 @@ var SuspenseBoundary = class {
 		});
 	}
 	super = void 0;
+	disposals = new Tuple();
+	disposable = pass;
 	fallbackElement = void 0;
 	errorElement = void 0;
 	activeElement = void 0;
@@ -2114,9 +2150,30 @@ var SuspenseBoundary = class {
 		resolved: false,
 		postLoad: 0
 	};
+	drivers = {
+		error: void 0,
+		fallback: void 0,
+		ancestorState: null
+	};
+	syncState() {
+		if (this.super) {
+			if (this.super.super) this.super.syncState();
+		} else return null;
+		const xstate = this.super.state;
+		if (xstate.pending) {
+			this.drivers.ancestorState = "pending";
+			if (this.super.drivers.fallback) this.drivers.fallback = this.super.drivers.fallback;
+		} else if (xstate.resolved) this.drivers.ancestorState = "resolved";
+		else if (xstate.failed) {
+			if (this.super.drivers.error) this.drivers.error = this.super.drivers.error;
+			this.drivers.ancestorState = "failed";
+		}
+		return this.drivers.ancestorState;
+	}
 	errorCaptured(cb, err, fb) {
 		this.state.failed = true;
-		this.triggerFailure(cb, err, fb);
+		const failure = () => this.triggerFailure(cb, err, fb);
+		trackSuspenseConsistency(this, failure, "failed");
 	}
 	resolvedHook() {
 		this.state.resolved = true;
@@ -2281,7 +2338,8 @@ var ConfigValidator = {
 	forwardAttrs: Boolean,
 	delimiters: Array,
 	scopedStyle: Boolean,
-	forwardEvents: Boolean
+	forwardEvents: Boolean,
+	flushType: "post"
 };
 var FrameworkCompilerOptions = class {
 	debug = true;
@@ -2289,6 +2347,7 @@ var FrameworkCompilerOptions = class {
 	forwardAttrs = true;
 	forwardEvents = this.forwardAttrs;
 	delimiters = ["{{", "}}"];
+	flushType = "post";
 	scopedStyle = true;
 };
 var Compiler_Config_Options = new FrameworkCompilerOptions();
@@ -2304,6 +2363,10 @@ var HouxitCompilerSetup = class {
 	forwardEvents(forwardEvents) {
 		if (isFalse(mapSettingCheck(this, "forwardEvents", forwardEvents))) return this;
 		Compiler_Config_Options.forwardEvents = forwardEvents;
+	}
+	flushType(flushType) {
+		if (isFalse(mapSettingCheck(this, "flushType", flushType))) return this;
+		Compiler_Config_Options.flushType = flushType;
 	}
 	forwardSlot(forwardSlot) {
 		if (isFalse(mapSettingCheck(this, "forwardSlot", forwardSlot))) return this;
@@ -2530,10 +2593,11 @@ var vNodeClass = class extends BasevNodeClass {
 };
 var wuf_class_prop = Symbol("wfu_class_prop");
 var __WUFClass__ = class {
-	constructor() {
-		this[wuf_class_prop] = void 0;
+	constructor(instance) {
+		this[wuf_class_prop] = instance;
 	}
 };
+var is_wuf_class = (klass) => klass instanceof __WUFClass__;
 var isVNodeClass = (vnode) => vnode instanceof vNodeClass;
 var HouxitElement = class {
 	constructor() {
@@ -3056,14 +3120,6 @@ function $assignToHookFN(self, hookSet, element, model, hx_Element, hookN) {
 		callSetHooks(self, hookSet, element, self.__public_model__, hx_Element, hookN);
 	};
 }
-function resolveElementToken(self, ref, element, hx_Element) {
-	try {
-		tick(() => ref[ref[refInternalEffectKey].accessor] = element);
-	} catch (err) {
-		debugHandler(`(ref) >>\nUresolved error when dilating the special ref prop>>>\n\n${err}`, self, true);
-		return;
-	}
-}
 function built_in_fragment_widget(vnode, self, is_hyperscript, ctx, siblings, ssc, hx_Element, config) {
 	installSuspense(vnode.children, getBoundary(vnode));
 	const fragment = new HouxitFragmentElement(vnode.children ? _HouxitCoreRenderer(vnode.children, self, null, hx_Element, ctx, config) : [], self, hx_Element, vnode.props?.key);
@@ -3185,7 +3241,7 @@ function checkMemoContentValidity(self, render, effect_stabilizer, config) {
 	}
 	if (!config) {
 		if (conf.count > 1) {
-			debugHandler(`<Memo> child widget may have supassed the number of expected <Memo> container\n\n1 at most expected >>> ${conf.count} <<< found `, self, true);
+			debugHandler(`[<Memo> Child Error] <Memo> child widget may have supassed the number of expected <Memo> container\n\n1 at most expected >>> ${conf.count} <<< found `, self, true);
 			return;
 		}
 	}
@@ -3230,113 +3286,61 @@ function built_in_memo_widget(vnode, self, is_hyperscript, ctx, siblings, ssc, h
 	vault.Wrapper = Element;
 	return Element;
 }
+function wrapSlotsContentDrives(self, nodeDriver, rnd, _SlotName, suspense) {
+	for (let element of rnd.values()) {
+		let name = element.slot_name;
+		if (name && !_SlotName.has(name)) continue;
+		else if (!name) {
+			if (isHouxitFragmentElement(element) && !isRenderlessElement(element) && !isSuspenseElement(element)) {
+				wrapSlotsContentDrives(self, nodeDriver, element.NodeList.list(), _SlotName, suspense);
+				continue;
+			}
+			name = "default";
+		}
+		if (name !== "default" && len(nodeDriver[name + "X"])) {
+			debugHandler(`[<Suspense> Duplicate Slot Error] "${name}" slot has been duplicated in <Suspense>`, self, true);
+			continue;
+		}
+		let vNode = isHouxitTextElement(element) ? element.$element : element.VNodeManager.vNodeClass;
+		if (isVNodeClass(vNode)) {
+			if (vNode.props) {
+				const { hasDir, getKey } = dirExistenceCheck(vNode.props, "$$slot");
+				if (hasDir) delete vNode.props[getKey];
+			}
+			installSuspense(vNode, suspense);
+		}
+		nodeDriver[name + "X"].add(vNode);
+	}
+}
 function normalizeEarlySlotsCompile(self, vNode, hx_Element, metrics, slotNames = [], suspense, config) {
-	if (!new Set(slotNames).has("default")) slotNames.push("default");
+	const _SlotName = new Set(slotNames);
+	if (_SlotName.has("default")) slotNames.push("default");
 	self[$$$operands].initializedRender;
-	const _$$all_ = new Tuple();
-	const res = {};
-	iterate(slotNames).each((name, ind) => {
-		res[name + "X"] = new Tuple();
-	});
-	const [hx_Ele, siblings, type, ctx, ssc, op] = metrics;
-	if (op) op._$$all_ = _$$all_;
 	const is_hyperscript = self[$$$core].map.is_hyperscript;
-	let UnStableNodeList = [];
-	iterate(arrayInverter(vNode.children)).each((node, key) => {
-		if (isPrimitive(node)) {
-			res.defaultX.add(node);
-			_$$all_.add(node);
-			return iterate.Continue();
+	const nodeDriver = {};
+	slotNames.forEach((n) => nodeDriver[n + "X"] = new Tuple());
+	if (is_hyperscript) {
+		for (const node of vNode.children.values()) if (isSlotInstance(node)) for (let [name, value] of entries(node.slots)) {
+			if (!_SlotName.has(name)) continue;
+			if (name !== "default" && len(nodeDriver[name + "X"])) {
+				debugHandler("\"" + name + "\" slot already defined...\nduplicated slot for \"" + name + "\" not allowed!!!", self, true);
+				continue;
+			}
+			nodeDriver[name + "X"].add(value);
 		}
-		if (is_hyperscript) {
-			if (isSlotInstance(node)) iterate(node.slots).each((value, name) => {
-				iterate(slotNames).each((n) => {
-					if (name === n) {
-						if (n !== "default" && len(res[n])) {
-							debugHandler("\"" + n + "\" slot already defined...\nduplicated slot for \"" + n + "\" not allowed!!!", self, true);
-							return iterate.Continue();
-						}
-						res[n + "X"].add(value);
-						_$$all_.add(value);
-					}
-				});
-			});
-			else if (isChildrenNode(node)) {
-				res.defaultX.add(node);
-				_$$all_.add(node);
-			}
-		} else {
-			if (isHtmlComment(node)) return iterate.Continue();
-			const props = node.props;
-			hx_Element = memMove(hx_Element);
-			hx_Element.NodeList = new Tuple();
-			const stable = isHouxitElement(node) ? node : createHouxitElement(node, self, is_hyperscript, ctx, UnStableNodeList, ssc, hx_Element, {
-				suspenseFlag: true,
-				...config
-			});
-			if (isHouxitElement(stable) || isVNodeClass(stable)) {
-				UnStableNodeList.push(stable);
-				if (isVNodeClass(stable)) node = stable;
-				if (stable.conditional_record.src === "else") UnStableNodeList = [];
-			}
-			if (isFalse(stable)) UnStableNodeList = [];
-			else if (isRenderlessElement(stable)) return;
-			const { hasDir: hasSlot, getKey: getSlot, getDir: getSlotValue } = dirExistenceCheck(props || {}, "$$slot");
-			if (!hasSlot) {
-				if (isBlockTag(node.prototype_)) {
-					if (getBlockTagName(node.prototype_) === "await") {
-						res.defaultX.add(node);
-						_$$all_.add(node);
-						return iterate.Continue();
-					}
-					const NodeList = new Tuple();
-					if (suspense) node.filesFilter.suspense = suspense;
-					blockElementsPreProcessors(self, node, [
-						hx_Element,
-						NodeList,
-						node.type,
-						metrics[3],
-						metrics[4]
-					], { suspenseFlag: true });
-					iterate(normalizeEarlySlotsCompile(self, { children: NodeList.list() }, hx_Element, metrics, slotNames, suspense, config)).each((value, ky) => {
-						if (len(value)) res[ky].extend(value);
-					});
-				} else {
-					node = memMove(node, true);
-					res.defaultX.add(node);
-					_$$all_.add(node);
-				}
-				return;
-			}
-			const bindings = validateIncomingPropsKeys(self, {
-				key: getSlot,
-				attr: getSlotValue
-			}, is_hyperscript, hx_Element, { isRerender: self[$$$operands].initializedRender });
-			iterate(slotNames).each((n) => {
-				if (bindings.key === n) {
-					if (n !== "default" && len(res[n + "X"])) {
-						debugHandler("\"" + n + "\" slot already defined...\nduplicated/multiple slots for \"" + n + "\" slot not allowed!!!", self, true);
-						return;
-					}
-					res[n + "X"].add(node);
-					_$$all_.add(node);
-				}
-			});
-			node.filesFilter.bindings = bindings;
-			node.filesFilter.shouldRestore = true;
-			delete node.props?.[getSlot];
-			node.filesFilter.creatRestore = () => {
-				tick(() => {
-					if (node.filesFilter.shouldRestore && !node.filesFilter.slotsRestored) {
-						node.props[getSlot] = getSlotValue;
-						node.filesFilter.slotsRestored = true;
-						delete node.filesFilter.shouldRestore;
-					}
-				});
-			};
+		else if (isChildrenNode(node)) {
+			installSuspense(node, suspense);
+			nodeDriver.defaultX.add(node);
 		}
-	});
-	return res;
+		return nodeDriver;
+	}
+	const preRenderState = self[$$$operands].initializedRender;
+	self[$$$operands].initializedRender = true;
+	config.suspenseFlag = true;
+	wrapSlotsContentDrives(self, nodeDriver, arrayInverter(_HouxitCoreRenderer(vNode.children, self, null, hx_Element, metrics[2], config)), _SlotName, suspense);
+	delete config.suspenseFlag;
+	self[$$$operands].initializedRender = preRenderState;
+	return nodeDriver;
 }
 function createSuspenseFallback(self, suspense, [fallbackX, errorX], vnode, ssc, hx_Element, config) {
 	const is_hyperscript = self[$$$core].map.is_hyperscript;
@@ -3347,10 +3351,11 @@ function createSuspenseFallback(self, suspense, [fallbackX, errorX], vnode, ssc,
 			if (is_hyperscript) iterate(nodeList).each((node, key) => {
 				const arg = [];
 				if (name === "error") arg.push(errMsg);
-				nodeList.splice(key, 1, node?.(...arg));
+				const nodeT = isFunction(node) ? node?.(...arg) : node;
+				installSuspense(nodeT, suspense);
+				nodeList.splice(key, 1, nodeT);
 			});
 			else if (name === "error") ssc = wrapNamespaceBind(self, ssc, nodeList.at(0)?.filesFilter.bindings?.value || "error", memMove(errMsg));
-			if (!is_hyperscript) nodeList.forEach((n) => n.filesFilter?.creatRestore());
 			let tree = suspense[name + "Element"];
 			tree = tree || _HouxitCoreRenderer(nodeList, self, null, hx_Element, ssc, config);
 			tree = isHouxitFragmentElement(tree) ? tree : new HouxitFragmentElement(arrayInverter(tree), self, hx_Element);
@@ -3358,21 +3363,15 @@ function createSuspenseFallback(self, suspense, [fallbackX, errorX], vnode, ssc,
 			suspense[name + "Element"] = tree;
 			return tree;
 		};
-		return [() => createFallBack(fallbackX, "fallback"), (err) => createFallBack(errorX, "error", err)];
+		return [len(fallbackX) ? () => createFallBack(fallbackX, "fallback") : null, len(errorX) ? (err) => createFallBack(errorX, "error", err) : null];
 	}
 	return [];
 }
-function installSuspense(list, suspense) {
+function installSuspense(list = [], suspense) {
 	if (!suspense) return;
-	iterate(list).each((node) => {
-		if (isVNodeClass(node)) node.filesFilter.suspense = suspense;
-		else if (isHouxitElement(node)) node.VNodeManager.suspense = suspense;
-	});
-}
-function smartSuspense(suspense) {
-	const superX = suspense?.super;
-	if (superX && !superX.state.resolved) return superX;
-	else return suspense;
+	list = arrayInverter(list);
+	for (let node of list.values()) if (isVNodeClass(node)) node.filesFilter.suspense = suspense;
+	else if (isHouxitElement(node)) node.VNodeManager.suspense = suspense;
 }
 function handleSuspenseHooks(self, suspense, vnode, isRerender) {
 	const hooks = vnode.filesFilter.$$$Events || {};
@@ -3390,6 +3389,12 @@ function handleSuspenseHooks(self, suspense, vnode, isRerender) {
 	return obj;
 }
 function built_in_suspense_widget(vnode, self, is_hyperscript, ctx, siblings, ssc, hx_Element, config) {
+	if (config.suspenseFlag) {
+		const Element = createRenderlessElement();
+		Element.VNodeManager.vNodeClass = vnode;
+		runSlotDirectiveCompile(self, config, vnode.props, vnode, Element, { is_hyperscript }, true);
+		return Element;
+	}
 	const isRerender = self[$$$operands].initializedRender;
 	is_hyperscript = self[$$$core].map.is_hyperscript;
 	let suspense = new SuspenseBoundary(self, vnode);
@@ -3398,8 +3403,6 @@ function built_in_suspense_widget(vnode, self, is_hyperscript, ctx, siblings, ss
 		suspense.super = superX;
 		superX.metrics.priorities.add(suspense);
 	}
-	const suspenX = () => smartSuspense(suspense);
-	suspense.suspenX = suspenX;
 	const parent = vnode.filesFilter.parent;
 	suspense.hx_Element = isHouxitBuild(parent) ? parent.$build : parent;
 	let { timeout, delay } = vnode.props || {};
@@ -3427,43 +3430,48 @@ function built_in_suspense_widget(vnode, self, is_hyperscript, ctx, siblings, ss
 		}
 		if (throwE) debugHandler(`"await" <Suspense> prop expects an "async Function" , a "Promise object" or a callback that returns a "Promise object" object`, self, true);
 	} else awaitCallback = isAsyncFunction(awaitP) ? awaitP() : awaitP;
-	const oldProps = {};
 	const { defaultX, fallbackX, errorX } = normalizeEarlySlotsCompile(self, vnode, hx_Element, [
-		hx_Element,
 		siblings,
-		vnode.type,
 		ctx,
-		ssc,
-		oldProps
+		ssc
 	], [
 		"default",
 		"fallback",
 		"error"
-	], suspense);
-	installSuspense(oldProps._$$all_, suspense);
-	if (!isInfinity(suspenX().timeout)) setTimeout(() => {
-		if (!suspenX().state.resolved && !suspenX().state.failed) suspenX().errorCaptured(pass, { message: `<Suspense> render wait timed out` }, isRerender ? fallback : null);
-	}, suspenX().timeout);
+	], suspense, config);
+	if (!isInfinity(suspense.timeout)) setTimeout(() => {
+		if (!suspense.state.resolved && !suspense.state.failed) {
+			suspense.errorCaptured(pass, { message: `[Suspense Tmeout] <Suspense> render wait timed out.` }, isRerender ? fallback : null);
+			suspense.state.failed = true;
+		}
+	}, suspense.timeout);
 	suspense.promise = isPromise(awaitCallback) ? awaitCallback : Promise.resolve();
 	const { onPending, onResolved, onFailed } = handleSuspenseHooks(self, suspense, vnode, isRerender);
 	if (isPromise(awaitCallback)) suspense.activeAwaits++;
 	const [fallback, error] = createSuspenseFallback(self, suspense, [fallbackX, errorX], vnode, ssc, hx_Element, config);
-	if (superX) suspense.switchFallback = () => {
-		if (suspense.state.pending) HydrateSuspenseRender(self, suspense, fallback(), isRerender, config);
+	assign(suspense.drivers, {
+		fallback,
+		error
+	});
+	suspense.switchFallback = () => {
+		if (suspense.state.pending) {
+			const fallbackEl = safeCall(fallback);
+			if (fallbackEl) HydrateSuspenseRender(self, suspense, fallbackEl, isRerender, config);
+		}
 	};
 	suspense.triggerFailure = function(cb = pass, err, fb) {
-		const errorEl = isFunction(fb) ? fb() : error(err);
-		HydrateSuspenseRender(self, suspense, errorEl, isRerender, config);
+		const errorEl = isFunction(fb) ? fb() : error?.(err);
+		if (errorEl) HydrateSuspenseRender(self, suspense, errorEl, isRerender, config);
 		if (fb) return;
-		cb();
+		safeCall(cb);
 		debugHandler(err?.message);
 		onFailed(err);
 	};
 	suspense.triggerResolved = () => {
-		iterate(suspense.metrics.priorities).each((sus) => {
+		for (let sus of suspense.metrics.priorities.values()) {
 			if (!sus.super) return iterate.Return();
 			sus.switchFallback();
-		});
+		}
 		onResolved();
 	};
 	let render;
@@ -3491,57 +3499,44 @@ function built_in_suspense_widget(vnode, self, is_hyperscript, ctx, siblings, ss
 			suspense.errorCaptured(pass, { message: err.message });
 		});
 	} else render = createRender();
-	if (suspense.state.postLoad) suspense.promise.then(() => {
-		(async function() {
-			await callLoadchains(suspense);
-			await callLoadchains(suspense);
-		})().then(BoundaryProcessLoader).catch((err) => {
-			suspense.state.failed = true;
-			suspense.errorCaptured(pass, { message: err.message });
-		}).then(() => {
-			if (!is_hyperscript) tick(() => {
-				iterate([
-					errorX,
-					fallbackX,
-					defaultX
-				]).each((item) => {
-					item.forEach((n) => delete n.filesFilter.slotsRestored);
-				});
-			});
-		});
-		function BoundaryProcessLoader() {
-			assign(suspense.state, {
-				pending: false,
-				resolved: true
-			});
-			suspense.triggerResolved();
-			HydrateSuspenseRender(self, suspense, render, isRerender, config);
-			if (!is_hyperscript) iterate([
-				errorX,
-				fallbackX,
-				defaultX
-			]).each((item) => {
-				item.forEach((n) => n.filesFilter.creatRestore?.());
-			});
-		}
+	if (suspense.state.postLoad) processBoundaryDriver(self, suspense, {
+		isRerender,
+		config,
+		errorX,
+		defaultX,
+		fallbackX,
+		render,
+		is_hyperscript
 	});
 	else assign(suspense.state, {
 		pending: false,
 		resolved: true
 	});
 	let renderFallback;
-	if (!isRerender && suspense.state.pending && suspense.delay > 0) {
+	if (!isRerender && suspense.state.pending && suspense.delay) {
 		suspense.useFallback = true;
 		setTimeout(() => {
-			if (suspense.state.pending && !suspense.state.failed && !suspense.state.resolved) HydrateSuspenseRender(self, suspense, fallback(), isRerender, config);
+			if (fallback) trackSuspenseConsistency(suspense, () => {
+				if (suspense.state.pending && !suspense.state.failed && !suspense.state.resolved) HydrateSuspenseRender(self, suspense, fallback(), isRerender, config);
+			}, "pending");
 		}, suspense.delay);
-	} else if (suspense.state.pending) renderFallback = fallback();
-	if (suspense.useFallback && suspense.state.pending) renderFallback = new HouxitFragmentElement([], self);
+	} else if (suspense.state.pending) renderFallback = fallback?.();
+	if ((suspense.useFallback || !fallback) && suspense.state.pending) renderFallback = new HouxitFragmentElement([], self);
 	else if (suspense.state.resolved) renderFallback = new HouxitFragmentElement(render, self);
-	suspense.activeElement = renderFallback;
-	renderFallback.VNodeManager[$suspenseElement] = suspense;
-	renderFallback._vnode_key = vnode.key;
+	if (renderFallback) {
+		suspense.activeElement = renderFallback;
+		renderFallback.VNodeManager[$suspenseElement] = suspense;
+		renderFallback._vnode_key = vnode.key;
+	}
 	return renderFallback;
+}
+function trackSuspenseConsistency(suspense, action, current_state, a_p) {
+	let x = suspense.syncState();
+	if (x === "pending") if (current_state === "pending" && !suspense.super.drivers.fallback) action();
+	else suspense.super.disposals.add(action);
+	else if (x === "resolved" || !x) if (!x) action();
+	else if (current_state === "failed" && !suspense.drivers.error) {} else if (current_state === "pending" && !suspense.drivers.fallback) {} else action();
+	else if (x === "failed" && current_state === "failed" && !suspense.super.drivers.error) action();
 }
 async function callLoadchains(suspense) {
 	for (const prom of suspense.loadChain.list().values()) await prom.then(() => {
@@ -3551,20 +3546,51 @@ async function callLoadchains(suspense) {
 		throw new Error(err);
 	});
 }
+function processBoundaryDriver(self, suspense, setup) {
+	suspense.state.pending = true;
+	const { errorX, fallbackX, defaultX, config, isRerender, render, is_hyperscript } = setup;
+	suspense.promise.then(() => {
+		(async function() {
+			await callLoadchains(suspense);
+			await callLoadchains(suspense);
+		})().then(BoundaryProcessLoader).catch((err) => {
+			suspense.state.failed = true;
+			suspense.errorCaptured(pass, { message: err.message });
+		});
+		function BoundaryProcessLoader() {
+			if (suspense.state.failed) return;
+			assign(suspense.state, {
+				pending: false,
+				resolved: true,
+				failed: false
+			});
+			const action = () => {
+				HydrateSuspenseRender(self, suspense, render, isRerender, config);
+				suspense.disposals.forEach((disposal) => disposal());
+			};
+			trackSuspenseConsistency(suspense, action, "resolved");
+		}
+	});
+}
+function recurseParent(parent) {
+	if (isObject(parent) && hasOwn(parent, "vNodeClass")) return recurseParent(parent.vNodeClass.filesFilter.parent);
+	else if (isHouxitBuild(parent)) return parent.$build;
+	else if (isHouxitElement(parent)) return parent;
+	else if (isObject(parent) && hasOwn(parent, "vNodeClass")) return recurseParent(parent.vNodeClass);
+	return parent;
+}
 function HydrateSuspenseRender(self, suspense, element, isRerender, config) {
 	const { activeElement, vNode } = suspense;
-	const rObj = suspense.rerenderObj;
+	suspense.rerenderObj;
 	element._vnode_key = vNode.key;
-	if (isRerender) {
-		patchRenderNormalizerCall(self, rObj.activeElement, element, rObj.observer, config);
-		return;
-	}
-	let parent = vNode.filesFilter.parent;
+	let parent = recurseParent(vNode.filesFilter.parent);
 	parent = isHouxitBuild(parent) ? parent.$build : parent;
 	const ind = parent.NodeList.indexOf(activeElement);
-	const key = parent.VN_Tree.KEYS_INDEXES[ind];
-	parent.VN_Tree.LEAGUE_TREE[key][0] = element;
-	parent.NodeList.replace(activeElement, element);
+	if (ind >= 0) {
+		const key = parent.VN_Tree.KEYS_INDEXES[ind];
+		parent.VN_Tree.LEAGUE_TREE[key][0] = element;
+		parent.NodeList.replace(activeElement, element);
+	}
 	const initPosix = resolveTargetElement(activeElement);
 	suspense.activeElement = element;
 	initPosix.before(element.$element);
@@ -3574,11 +3600,11 @@ function HydrateSuspenseRender(self, suspense, element, isRerender, config) {
 var BUILT_IN_TRANSITIONS = {};
 var BUILT_IN_ANIMATIONS = {};
 var hasMotionInstance = (self, name, mode) => {
-	return _makeMap_(mode === "transitions" ? BUILT_IN_TRANSITIONS : BUILT_IN_ANIMATIONS, name) || _makeMap_(self[$$$register][mode], name);
+	return _makeMap_(mode === "transitions" ? BUILT_IN_TRANSITIONS : BUILT_IN_ANIMATIONS, name) || _makeMap_(self[$$$register][mode], name) || _wufHas_instance(name);
 };
 function normalize_Motion(self, name, mode) {
 	const BUILT_IN_MOTION = mode === "transitions" ? BUILT_IN_TRANSITIONS : BUILT_IN_ANIMATIONS;
-	return _makeMap_(BUILT_IN_MOTION, name) ? BUILT_IN_MOTION[name] : self[$$$register][mode][name] || pass;
+	return _makeMap_(BUILT_IN_MOTION, name) ? BUILT_IN_MOTION[name] : hasOwn(self[$$$register][mode], name) ? self[$$$register][mode][name] : _wufHas_instance(self, name) ? normalizeWUFBuildScope(self, name) : pass;
 }
 function generateMotion(self, { mode, value, key }) {
 	if (value && isString(value)) {
@@ -3853,7 +3879,6 @@ function createHouxitElement(vnode, self, is_hyperscript, ctx, siblings, ssc, hx
 		config,
 		null
 	];
-	if (config.suspenseFlag && !hasDir && !hasFor) return;
 	if (!is_hyperscript && hasDir) {
 		const createElement = () => HX_ELEMENT_MANAGER(self, vnode, null, hx_Element, siblings, saveGarbageContent, ctx, config);
 		ELEMENT = createElement();
@@ -3870,8 +3895,7 @@ function createElement_Smart(ELEMENT, fn) {
 	if (!ELEMENT.compiler_options.createElement) ELEMENT.compiler_options.createElement = fn;
 }
 function debug_unrecognized_tagname(tagname, self) {
-	debugHandler(`tagname "${tagname}" is not a valid html element, or a registered widget instance\n\n
-      if this is a customElement, make sure its defined through the "customElements.define()" method `, self, true);
+	debugHandler(`[unexpected template tagname]  "${tagname}" is not a valid html element, or a registered widget instance.\n\nif this is a customElement, make sure its defined through the "customElements.define()" method `, self, true);
 }
 function isCustomElementTagname(tagname) {
 	return isPFunction(customElements.get(tagname));
@@ -3879,24 +3903,34 @@ function isCustomElementTagname(tagname) {
 function getBoundary(instance) {
 	return isHouxitBuild(instance) ? instance[$$$core].virtualNode.filesFilter.suspense : instance?.[isVNodeClass(instance) ? "filesFilter" : "VNodeManager"]?.suspense;
 }
-function smart_render_toggler(self) {
+function smart_render_toggler(self, t = false) {
 	const initializedRender = self[$$$operands].initializedRender;
 	const toggler = (cond = true) => {
 		if (initializedRender) self[$$$operands].initializedRender = cond;
 	};
-	toggler(false);
+	toggler(t);
 	return toggler;
+}
+function asyncWidgetBoundaryWrap(boundary, action, current_state, a_p) {
+	if (!boundary || !a_p.config.suspensible) return action();
+	const x = boundary.syncState();
+	if (x === "resolved") {
+		if (!x) return action();
+		if (_makeMap_("resolved,pending", current_state)) return action();
+		else if (current_state === "failed" && !boundary.drivers.error) return action();
+	} else if (x === "pending") {
+		if (current_state === "resolved") boundary.disposals.add(action);
+	}
 }
 function createAsyncFallback(self, a_p, hx_Element, ssc, VN_Tree, boundary, config) {
 	const fallback = a_p.config.fallback;
 	let useFallback = false, ELEMENT;
 	if (fallback) {
+		if (!isChildrenNode(fallback)) {
+			debugHandler(`[Invalid falllback Element]  fallback content of "asyncWidget" is not a valid Houxit element`, self, true);
+			return;
+		}
 		const fall_content = () => {
-			if (boundary || a_p.resolved || a_p.failed) return;
-			if (!isChildrenNode(fallback)) {
-				debugHandler(`fallback content of "asyncWidget" is not a valid Houxit element`, self, true);
-				return;
-			}
 			const toggler = smart_render_toggler(self);
 			installSuspense(fallback, boundary);
 			let tree = _HouxitCoreRenderer(arrayInverter(fallback), self, null, hx_Element, ssc, config);
@@ -3913,10 +3947,14 @@ function createAsyncFallback(self, a_p, hx_Element, ssc, VN_Tree, boundary, conf
 			ELEMENT = tree;
 			a_p.activeElement = ELEMENT;
 		};
-		if (!boundary && a_p.config.delay > 0) setTimeout(fall_content, a_p.config.delay);
-		else fall_content();
+		const activateFallback = () => {
+			if ((a_p.resolved || a_p.failed) && !a_p.pending) return;
+			asyncWidgetBoundaryWrap(boundary, fall_content, "pending", a_p);
+		};
+		if (a_p.config.delay) setTimeout(activateFallback, a_p.config.delay);
+		else ELEMENT = activateFallback();
 	}
-	if (useFallback && !boundary) return ELEMENT;
+	if (ELEMENT && (useFallback || !boundary)) return ELEMENT;
 	ELEMENT = new HouxitFragmentElement([], self, hx_Element);
 	ELEMENT[AsyncHxElementTrackerKey] = {};
 	a_p.activeElement = ELEMENT;
@@ -3932,52 +3970,55 @@ function normalize_lazy_return(self, ELEMENT, a_p, boundary) {
 }
 function asyncErrorElement(self, a_p, hx_Element, ssc, boundary, config) {
 	const toggler = smart_render_toggler(self);
-	installSuspense(a_p.config.error, suspense);
+	installSuspense(a_p.config.error, boundary);
 	let FailedElement = _HouxitCoreRenderer(arrayInverter(a_p.config.error), self, null, hx_Element, ssc, config);
 	FailedElement = new HouxitFragmentElement(arrayInverter(FailedElement), self, hx_Element);
 	toggler();
 	FailedElement[AsyncHxElementTrackerKey] = {};
 	if (!boundary) {
-		resolveTargetElement(a_p.fallback).before(FailedElement.$element);
-		unMountVNode(a_p.fallback);
+		resolveTargetElement(a_p.activeElement)?.before(FailedElement.$element);
+		unMountVNode(a_p.activeElement);
 	}
-	reinstallFallbackResponses(self, FailedElement, a_p.fallback[AsyncHxElementTrackerKey]);
+	reinstallFallbackResponses(self, FailedElement, a_p.activeElement[AsyncHxElementTrackerKey]);
 	a_p.failed = true;
 }
 function flattenWidgetAndAsyncBuild(vnode, self, is_hyperscript = false, ctx, siblings, ssc, hx_Element, config, isWidget = false) {
 	const { prototype_ } = vnode;
-	const boundary = getBoundary(vnode);
 	if (!isAsyncWidget(prototype_)) return new HouxitWidgetElement(...arguments);
+	else if (config.suspenseFlag) {
+		const Element = createRenderlessElement();
+		Element.VNodeManager.vNodeClass = vnode;
+		runSlotDirectiveCompile(self, config, vnode.props, vnode, Element, { is_hyperscript }, true);
+		return Element;
+	}
+	const boundary = getBoundary(vnode);
 	let widget = prototype_;
 	const Oa_p = widget[$asyncVnodeKey];
-	const a_p = memMove(widget[$asyncVnodeKey]);
-	boundary?.state;
+	const a_p = memMove(Oa_p);
 	a_p.resolved = false;
 	a_p.pending = false;
 	a_p.failed = false;
 	a_p.activeElement = void 0;
 	const VN_Tree = () => hx_Element?.VN_Tree || self?.$build?.VN_Tree;
-	if (!a_p.postLoad && !Oa_p.cache) {
+	if (!a_p.postLoad || !Oa_p.cache) {
 		let future = a_p.load();
 		if (!isPromise(future)) {
 			debugHandler(`asyncWidget instance load callback expects a javascript Promise instance object as a return value`, self, true);
 			return;
 		}
 		const timeout = a_p.config.timeout;
-		if (!isInfinity(timeout)) setTimeout(() => {
+		let timeOutId;
+		if (!isInfinity(timeout)) timeOutId = setTimeout(() => {
 			if (!a_p.resolved && !a_p.failed) {
-				asyncErrorElement(self, a_p, hx_Element, ssc, boundary, config);
-				debugHandler(`"asyncWidget" resolving timed out`, self, true);
+				asyncWidgetBoundaryWrap(boundary, () => asyncErrorElement(self, a_p, hx_Element, ssc, boundary, config), "failed", a_p);
+				debugHandler(`["asyncWidget()" timeout Error] load time exceeds the asyncWidget.timeout config limit`, self, true);
 			}
 		}, timeout);
 		const failureHandler = (er) => {
 			a_p.failed = true;
-			if (boundary) {
-				smartSuspense(boundary).errorCaptured(() => {
-					debugHandler(er, self, true);
-				}, { message: `Failed resolving state during an "async build()" process\n\nReason::"${er.message}"` });
-				return;
-			}
+			debugHandler(er);
+			if (timeOutId) clearTimeout(timeOutId);
+			if (boundary) {}
 			asyncErrorElement(self, a_p, hx_Element, ssc, boundary, config);
 			debugHandler(`Failed resolving state during an "async build()" process\n\nReason::"${er.message}"`, self, true);
 		};
@@ -3992,6 +4033,10 @@ function flattenWidgetAndAsyncBuild(vnode, self, is_hyperscript = false, ctx, si
 				type: res
 			});
 			vnode.filesFilter[$asyncVnodeKey] = { prototype_ };
+			assign(a_p, {
+				resolved: true,
+				pending: false
+			});
 			try {
 				const toggler = smart_render_toggler(self);
 				let ELEMENT = new HouxitWidgetElement(...arguments);
@@ -3999,6 +4044,8 @@ function flattenWidgetAndAsyncBuild(vnode, self, is_hyperscript = false, ctx, si
 				const awaitReady = ELEMENT.widget_instance[$$$operands].awaitReady;
 				const awaitCallback = () => {
 					normalize_lazy_return(self, ELEMENT, a_p, boundary);
+					a_p.activeElement = ELEMENT;
+					if (timeOutId) clearTimeout(timeOutId);
 				};
 				isPromise(awaitReady) ? awaitReady.then(() => {
 					awaitCallback();
@@ -4020,6 +4067,10 @@ function flattenWidgetAndAsyncBuild(vnode, self, is_hyperscript = false, ctx, si
 			prototype_: widget,
 			GeneticProvider: widget,
 			type: widget
+		});
+		assign(a_p, {
+			resolved: true,
+			pending: false
 		});
 		const ELEMENT = new HouxitWidgetElement(...arguments);
 		ELEMENT[AsyncHxElementTrackerKey] = {};
@@ -4081,10 +4132,6 @@ function HouxitTemplateGenerators(vnode, self, is_hyperscript = false, ctx, sibl
 	const element = _generateTemplateElement(vnode, self, this, siblings, vnode.IS_RENDERLESS, customElementsArgs, config);
 	if (!isRerender && isHouxitNativeElement(this)) HouxitElementLifeCircleHooks(self, element, this);
 	this.$element = element;
-	if (!isRerender) {
-		const ref_src = isHouxitWidgetElement(this) ? this.widget_instance[$$$ownProperties] : this.compiler_options;
-		if (!isRenderlessElement(this) && hasProp(ref_src, "ref_$$Prop")) resolveElementToken(self, ref_src["ref_$$Prop"], isHouxitWidgetElement(this) ? this.widget_instance : this.$element, this);
-	}
 	evaluateKeyOnElement(this, vnode.key, self);
 }
 var HouxitNativeElement = class extends HouxitElement {
@@ -4171,6 +4218,10 @@ var HouxitRenderlessElement = class extends HouxitFragmentElement {
 var HouxitTextElement = class extends HouxitElement {
 	constructor(text, self, hx_Element, fall, config = {}) {
 		super();
+		if (config.suspenseFlag) {
+			this.$element = text;
+			return;
+		}
 		const isRerender = self[$$$operands].initializedRender;
 		const isHy = isHydration(self);
 		this.is_hyperscript = self[$$$core].map.is_hyperscript;
@@ -4341,14 +4392,8 @@ function _createNativeElement(virtualNode, self, hx_Element, siblings, IS_RENDER
 		is_hyperscript,
 		isRerender
 	};
-	const { hasDir: hasSlot, getKey: getSlot, getDir: getSlotValue } = is_hyperscript ? {} : dirExistenceCheck(props || {}, "$$slot");
-	if (hasSlot) if (config.topLevelSlotContext) {
-		$$dir_SLOT(self, validateIncomingPropsKeys(self, {
-			key: getSlot,
-			attr: getSlotValue
-		}, is_hyperscript, hx_Element, metrics), virtualNode, hx_Element, metrics, {});
-		delete config.topLevelSlotContext;
-	} else debugHandler(`$$slot directive definitions are only allowed on a widgets top-level consumer scope instances\n\n"slot' directive on '${type}' element has failed to compile away...cross-check element render position`, self, true);
+	runSlotDirectiveCompile(self, config, props, virtualNode, hx_Element, metrics);
+	if (config.suspenseFlag) return;
 	let childNodes;
 	if (children && !IS_HTML_VOID_TAG(type)) if (!isRerender && hasOwn(virtualNode.filesFilter, "dir--raw")) {
 		if (_$runModelBind(self, virtualNode.filesFilter["dir--raw"], hx_Element, true)) {
@@ -4498,21 +4543,34 @@ function _$runModelBind(self, ref, hx_Element, returnToken = false) {
 	}
 	return value;
 }
-function _useBind__(ref, config) {
+function _useBindDriver__(ref) {
 	if (!validateCollectionArgs(arguments, {
-		name: "useBind",
-		required: [true, false],
-		min: 1,
-		max: 2,
-		validators: [String, Object]
+		name: "useBindDriver",
+		required: [false],
+		min: 0,
+		max: 1,
+		validators: [String]
 	})) return null;
-	if (!getCurrentRunningEffect({ name: "useBind" })) return null;
+	const self = getCurrentRunningEffect({ name: "useBindDriver" });
+	if (!self) return null;
+	if (!len(arguments) || !ref) ref = "modelValue";
+	const params = defineParams();
+	const signalKey = "update" + (ref !== "modelValue" ? ":" + ref : "");
+	const signals = defineSignals([signalKey]);
+	return {
+		get value() {
+			return hasOwn(params, ref) ? params[ref] : self.__public_model__.$attrs[ref];
+		},
+		update(value) {
+			return signals[signalKey](value);
+		}
+	};
 }
-function useBind(ref, config) {
-	return _useBind__(ref, config);
+function useBindDriver(ref, config) {
+	return _useBindDriver__(ref, config);
 }
-var hasFilterInstance = (self, name) => _makeMap_(BUILT_IN_FILTERS, name) || _makeMap_(self[$$$register].filters, name);
-var normalize_Filter = (self, name) => hasOwn(BUILT_IN_FILTERS, name) ? BUILT_IN_FILTERS[name] : self[$$$register].filters[name] || pass;
+var hasFilterInstance = (self, name) => _makeMap_(BUILT_IN_FILTERS, name) || _makeMap_(self[$$$register].filters, name) || _wufHas_instance(self, name);
+var normalize_Filter = (self, name) => hasOwn(BUILT_IN_FILTERS, name) ? BUILT_IN_FILTERS[name] : hasOwn(self[$$$register].filters, name) ? self[$$$register].filters[name] : _wufHas_instance(self, name) ? normalizeWUFBuildScope(self, name) : pass;
 function customFilterDebugger(value, filter) {
 	if (!canRender(value)) {
 		debugHandler(`"${filter}" template filter expects a plain string value`);
@@ -4686,8 +4744,7 @@ function _Evaluate_THIS(obj, str, self, optional) {
 		let syntaxArray = dexTransform.syntaxArray;
 		dexTransform.traverse = () => transformDestructureContext(syntaxArray, dexTransform.sourcesArray, str, [obj, optional]);
 	}
-	const getValue = new Function("obj", "$$$ctx", "dexTransform", `
-      with(obj){
+	let compile_Str = `with(obj){
         with($$$ctx){
           try{
             return dexTransform ? dexTransform.traverse()  : ${str.trim() || "undefined"};
@@ -4695,11 +4752,14 @@ function _Evaluate_THIS(obj, str, self, optional) {
             throw new Error(err);
           }
         }
-      }
-    `);
+      }`;
+	if (_isWUFBuild(self)) compile_Str = `with(__env__){
+        ${compile_Str}
+      }`;
+	const getValue = new Function("obj", "$$$ctx", "dexTransform", "__env__", compile_Str);
 	let value;
 	try {
-		value = getValue.call(obj, obj, isPObject(optional) ? optional : {}, dexTransform);
+		value = getValue.call(obj, obj, isPObject(optional) ? optional : {}, dexTransform, self[$$$core].__env__ || {});
 	} catch (error) {}
 	return value;
 }
@@ -4974,11 +5034,11 @@ function toggleClassNames(element, classes, remove = false) {
 function compileStyleProps(self, item, styleProps) {
 	styleProps = styleProps || {};
 	if (isPObject(item)) entries(item).forEach(([key, style]) => {
-		if (!isString(unwrap(style))) {
-			debugHandler(`"${key}" style prop: Unrecognized style property value \nat at\n "${key}" style property\n\n${element?.outerHTML || ""}`, self);
+		if (!isPrimitive(unwrap(style))) {
+			debugHandler(`"${key}" style prop: Unrecognized style property value \nat at\n "${key}" style property\n\n`, self);
 			return;
 		}
-		styleProps[toCamelCase(key)] = style;
+		styleProps[toCamelCase(key)] = compileToRenderable(style);
 	});
 	else if (isArray(item)) item.forEach((value) => compileStyleProps(self, value, styleProps));
 	else if (isString(item)) {
@@ -5187,7 +5247,7 @@ function HTMLAttrsMagnifier(element, bindings, hx_Element, self, metrics) {
 		bindings,
 		forwardAttrs
 	}, hx_Element);
-	else if (!isRerender && (isOnListener(src) || isInlineListener(key) || key === "dispatch")) {
+	else if (!isRerender && (isOnListener(key) || isInlineListener(key) || key === "dispatch")) {
 		if (!click_handler_facading(self, [
 			key,
 			attr,
@@ -5264,12 +5324,6 @@ function click_handler_facading(self, [key, attr, src], bindings, element, hx_El
 	if (!validateListenSpecialEvent(self, bindings)) return;
 	$$dir_ON(self, bindings, element, hx_Element, metrics);
 	return true;
-}
-function getPropMode(prop) {
-	if (isHTMLBooleanAttributes(prop)) return "bool";
-	else if (isHTMLIDLAttributes(prop)) return prop === "style" ? "style" : "idl";
-	else if (prop === "ref") return ref;
-	else if (prop === "class") return "class";
 }
 function _createElementPropsEffectBlock_(self, metrics, observer, vnode) {
 	const { element, mode, effect, value, key, deepKeys = [] } = metrics;
@@ -5440,7 +5494,7 @@ function widget_props_plugin(element, bindings, hx_Element, self, metrics) {
 		value,
 		src
 	], bindings, element, hx_Element, metrics);
-	else if (!isRerender && key === "ref") tick(() => Special_REF_Modifier(self, element, bindings, hx_Element, metrics));
+	else if (!isRerender && key === "ref") Special_REF_Modifier(self, element, bindings, hx_Element, metrics);
 	else if (key === "attach") transformAttachProp(self, bindings, element, hx_Element, metrics);
 	else if (!hasOwn(element, key)) {
 		element[key] = value;
@@ -5773,7 +5827,6 @@ function Special_REF_Modifier(self, node, binding, hx_Element, metrics) {
 	let ref;
 	if (isString(refKey)) {
 		if (!hasOwn(templateRefs, refKey)) {
-			log(refKey, metrics.vNode);
 			debugHandler(`[templateRefs reference] not defined (${refKey})`, self, true);
 			return;
 		}
@@ -5783,11 +5836,14 @@ function Special_REF_Modifier(self, node, binding, hx_Element, metrics) {
 		debugHandler(`[templateRefs reference] not a token. templateRefs expects a token() instance.\nSee [Template Refs] reference`, self, true);
 		return;
 	}
-	const current = isWidget ? hx_Element.widget_instance.__public_model__ : node;
 	const [getRef, setRef] = model.$useAgent(ref);
-	if (isNativeElement(getRef())) setRef(shallowStream([getRef()]));
-	else if (!getRef()) setRef(current);
-	if (isArray(getRef())) getRef().push(current);
+	let cb = pass;
+	const current = getRef();
+	if (current && !isArray(current)) setRef(shallowStream([current]));
+	else if (!current) cb = (element) => setRef(element);
+	if (isArray(getRef())) cb = (element) => getRef().push(element);
+	if (isWidget) metrics.vNode.filesFilter.templateRef = (instance) => safeCall(cb, instance);
+	else cb(node);
 }
 function $$dir_HTML(self, bindings, element, hx_Element, metrics, text) {
 	let { value, modifiers } = bindings;
@@ -5845,7 +5901,7 @@ function $$dir_SLOT(self, bindings, vnode, hx_Element, metrics) {
 	isHydration(self);
 	!(isSSR ? isString(vnode.type) : isNativeElement(vnode)) && validHouxitWidget(vnode?.prototype_);
 	hx_Element.slot_name = key;
-	const slotBindings = hx_Element.VNodeManager.vNodeClass.filesFilter.parent.widget_instance?.[$$$compiler].scopeSlotsBindings;
+	const slotBindings = (hx_Element?.VNodeManager?.vNodeClass.filesFilter.parent.widget_instance)?.[$$$compiler].scopeSlotsBindings;
 	let dataBind = slotBindings ? slotBindings[key]?.bindings : void 0;
 	hx_Element.LabContext = wrapNamespaceBind(self, hx_Element.LabContext, value, dataBind);
 }
@@ -5871,7 +5927,7 @@ function $$dir_BIND(self, binding, el, hx_Element, metrics) {
 	transform = unwrap(transform);
 	metrics.effect = effect;
 	if (!key && !isPObject(transform)) {
-		debugHandler(`"$$bind" directive attributes binding expects a plain props object value when not chained to any key argument`, self, true);
+		debugHandler(`[non object spread bind] "$$bind" directive attributes binding expects a plain props object value when not chained to any key argument`, self, true);
 		return;
 	} else if (!key && isPObject(transform)) for (const [ky, attr] of entries(transform)) attributes_hydration({
 		key: ky,
@@ -6052,24 +6108,36 @@ function $$dir_MODEL(self, bindings, element, hx_Element, metrics) {
 		effect = _createEffectBase(function() {
 			return get_Object_Value(self.__public_model__, item, true);
 		}, self);
-		initVal = compileToRenderable(effectRunner(effect).value);
+		bindings.effect = effect;
+		initVal = unwrap(effectRunner(effect).value);
 	} catch (err) {
 		debugHandler(`undefined reference for directive "$$model"\n\n "${item}" is not defined on widget model instance\n\n${err}`, self, true);
 		return;
 	}
+	if (isHouxitWidgetElement(hx_Element)) return defineInstanceModelDriver(...arguments);
 	if (isSSR && isString(element.type) || IS_ELEMENT_NODE(element)) {
 		if (!(isSSR ? _makeMap_(HTML_FORM_ELEMENTS, element.type) : Is_Form_Element(element))) {
 			debugHandler(`Compilation Error::\n\n cannot bind a data model to  a none form element\n\n`, self, true);
 			$warn("widget root element is not a form element", self);
 			return;
 		}
+		getFormElementProp(element);
 		function flushCallback(element) {
-			element.value = unwrap(initVal);
+			if (element.localName === "select") {
+				if (element.multiple) {
+					if (!isCollection(source)) {
+						debugHandler(`[$$model collection error] <select multiple> element expects $$model source to be an array or valid colloction type`, self, true);
+						return;
+					}
+					element.options;
+					for (let v of source.values());
+				}
+			} else element.value = compileToRenderable(unwrap(initVal));
 			element.addEventListener(get_Model_Event(element), function($ev) {
 				const value = $ev.target.value;
 				try {
 					if (initVal !== value) {
-						Promise.try(() => set_Object_Value(self.__public_model__, item, value)).catch((err) => {
+						tick(() => updateElementModelValue(self, element, value, item)).catch((err) => {
 							throw new Error(err);
 						});
 						initVal = value;
@@ -6081,10 +6149,57 @@ function $$dir_MODEL(self, bindings, element, hx_Element, metrics) {
 		}
 		if (isHydration(self)) element.filesFilter.$ssr_kit.hydrationFlushs.add(flushCallback);
 		else if (!isSSR) flushCallback(element);
+		effect.attachCallback(() => {
+			element.value = compileToRenderable(unwrap(effect.runEffect().value));
+		});
 	}
-	effect.attachCallback(() => {
-		element.value = compileToRenderable(effect.runEffect().value);
+}
+function updateElementModelValue(self, element, value, path) {
+	const name = element.localName;
+	element.type;
+	const source = unwrap(get_Object_Value(self.__public_model__, path));
+	if (name === "input" && _makeMap_("checkbox,radio") || name === "select") {
+		if (name === "select" && element.multiple) {
+			if (!isCollection(source)) {
+				debugHandler(`[$$model collection error] <select multiple> element expects $$model source to be an array or valid colloction type`, self, true);
+				return;
+			}
+			return;
+		}
+		if (!isCollection(source)) {}
+	}
+	set_Object_Value(self.__public_model__, path, value);
+	if (name);
+}
+function getFormElementProp(el) {
+	const name = el.localName;
+	const type = el.type;
+	if (_makeMap_("input,button")) {
+		if (type === "checkbox") return "checked";
+		return "value";
+	} else if (name === "select") return "";
+}
+function defineInstanceModelDriver(self, bindings, props, hx_Element, metrics) {
+	const { vNode } = metrics;
+	let { key, effect, value } = bindings;
+	props[key ?? "modelValue"] = effect.value;
+	const ev = "update" + (key ? ":" + key : "");
+	const EVENTS = vNode.filesFilter.$$$Events;
+	if (!hasOwn(EVENTS, ev)) EVENTS[ev] = {
+		callbacks: new Tuple(),
+		event: ev,
+		effect: void 0
+	};
+	EVENTS[ev].callbacks.add((newValue) => set_Object_Value(self.__public_model__, value, newValue));
+	let oldValue = effect.value;
+	const flush = createPriorityFlush(effect, function(observers) {
+		oldValue = __widget_props_effect(hx_Element.widget_instance, {
+			effect,
+			key: key ?? "modelValue",
+			value: oldValue
+		}, observers);
 	});
+	hx_Element.VN_Tree.FLUSHS.add(flush);
 }
 var DirectiveMacros = {
 	bind: $$dir_BIND,
@@ -6827,16 +6942,17 @@ function transite(animation, params, mode) {
 }
 var garbageKey = Symbol();
 function _transformTheParamsInjectorHook(params) {
-	const self = getCurrentRunningEffect({ name: "useParams" });
+	const self = getCurrentRunningEffect({ name: "defineParams" });
 	if (!self && !validateCollectionArgs(arguments, {
-		name: "useParams",
+		name: "defineParams",
 		validators: [[Array, Object]],
 		count: 1
 	})) return generateBuildParams(self);
+	if (!params) return generateBuildParams(self);
 	paramsManager(self, params, self.__public_model__.$attrs, true);
 	return generateBuildParams(self);
 }
-function useParams(params) {
+function defineParams(params) {
 	return _transformTheParamsInjectorHook(...arguments);
 }
 function _composersSlotsMappingHook(slots) {
@@ -7258,7 +7374,7 @@ function sanitizedOptions(self, options, vnode) {
 	if (vnode && vnode.filesFilter.isHydration) self[$$$compiler].SSRHydrationFlag = true;
 	if (vnode) traverseMixins_Inheritance(self, options);
 }
-function _hydrateHashToSelector(selector, $Data_Hash) {
+function _hydrateHashToSelector(selector, $Data_Hash, setup) {
 	const trimmed = selector.trim();
 	let modified = trimmed;
 	const _Manage_Hash_Class = function(sel, sep) {
@@ -7272,7 +7388,7 @@ function _hydrateHashToSelector(selector, $Data_Hash) {
 		const split = trimmed.split(sep);
 		for (let [key, sel] of entries(split)) {
 			sel = sel.trim();
-			sel = _hydrateHashToSelector(sel, $Data_Hash);
+			sel = _hydrateHashToSelector(sel, $Data_Hash, setup);
 			split[key] = sel;
 		}
 		return split.join(` ${sep} `);
@@ -7283,15 +7399,20 @@ function _hydrateHashToSelector(selector, $Data_Hash) {
 	if (trimmed.includes("+")) return _Manage_Hash_Class(trimmed, "+");
 	if (trimmed.includes("~")) return _Manage_Hash_Class(trimmed, "~");
 	if (trimmed.includes(">")) return _Manage_Hash_Class(trimmed, ">");
-	if (!trimmed.startsWith("@") && !trimmed.startsWith("body") && !trimmed.includes(":")) return trimmed ? `${trimmed}${$Data_Hash}` : trimmed;
+	if (trimmed.startsWith("@")) {
+		setup.ignore = true;
+		return trimmed;
+	}
+	if (!trimmed.startsWith("@") && !trimmed.startsWith("body") && !trimmed.includes(":")) return trimmed && !setup.ignore ? `${trimmed}${$Data_Hash}` : trimmed;
 	else if (trimmed.includes("::")) return _Manage_Hash_Class(trimmed, "::");
 	else if (trimmed.includes(":") && !trimmed.startsWith("@") && !trimmed.startsWith(":")) return _Manage_Hash_Class(trimmed, ":");
 	return modified;
 }
 var selectorPattern = /([^\r\n{]+)\s*{/g;
 function _stylesheet_hydration(self, styles) {
+	let setup = {};
 	return styles.replace(selectorPattern, (match, text) => {
-		return _hydrateHashToSelector(text, `[data-hx_build=${self[$$$ownProperties].hx_build}]`) + "{";
+		return _hydrateHashToSelector(text, `[data-hx_build=${self[$$$ownProperties].hx_build}]`, setup) + "{";
 	});
 }
 function _preCompile_StyleSheet(opts, self, vnode) {
@@ -7492,7 +7613,6 @@ function RuntimeUtilitiesProvide(self, opts, vnode) {
 	defineGetter(self.__public_model__, "$write", WRITE.bind(self));
 	defineGetter(self.__public_model__, "$effectHook", EffectAdapterHook.bind(self));
 	defineGetter(self.__public_model__, "$pushEffect", pushEffect.bind(self));
-	defineGetter(self.__public_model__, "$trackEffectDeps", _trackEffectDeps.bind(self));
 }
 function __useModelAdapter__(props) {
 	if (!validateCollectionArgs(arguments, {
@@ -7513,6 +7633,13 @@ function __useModelAdapter__(props) {
 	} else model = self.__public_model__;
 	if (!props || !len(props)) return self.__public_model__;
 	for (let [key, value] of entries(props)) {
+		if (key === "__env__") {
+			const __env__ = {};
+			for (let [name, item] of entries(value)) if (isToken(item)) auto_unwrapTokenRegistery(__env__, name, item);
+			else __env__[name] = item;
+			self[$$$core].__env__ = __env__;
+			return model;
+		}
 		if (hasOwn(model, key)) {
 			debugHandler(`Error: Duplicate exposed property "${key}".\n
           Declared in:\n - model()\n - build() <useModel()>\nRename one of them. model <prop> retained...`, self, true);
@@ -7560,7 +7687,7 @@ function getObsCurrentValue(self, deps, effect) {
 		if (isFunction(value) || isToken(value)) return read(value);
 		else if (isString(value)) {
 			if (!isHouxitBuild(self)) {
-				debugHandler(`[[Deps Tracker $warn]] Effect global tracking faiked`);
+				debugHandler(`[[Deps Tracker $warn]] Effect global tracking failed`);
 				return value;
 			}
 			return get_Object_Value(self.__public_model__, deps);
@@ -7712,6 +7839,7 @@ function __Ensure_Renderer(self, options, vnode) {
 	injectCustomDirective(self, options, vnode);
 	injectCustomAnimations_Transitions(self, options, vnode);
 	__Generate_Widget_Hash(self);
+	RuntimeTokenDir(self, vnode);
 	return options;
 }
 var alpha = "A,a,B,b,C,c,D,d,E,e,F,f,G,g,H,h,I,i,J,j,K,k,L,l,M,m,N,n,O,o,P,p,Q,q,R,r,S,s,T,t,U,u,V,v,W,w,X,x,Y,y,Z,z";
@@ -7959,6 +8087,15 @@ function transformProxyStream(obj, ReactiveEffect, config) {
 		},
 		deleteProperty(target, prop, value, receiver) {
 			return streamMutationTransform(arguments, reactive, ReactiveEffect, "deleteProperty", config, dependency);
+		},
+		has(target, key) {
+			return Reflect.has(target, key);
+		},
+		ownKeys(target) {
+			return Reflect.ownKeys(target);
+		},
+		getOwnPropertyDescriptor(target, key) {
+			return Reflect.getOwnPropertyDescriptor(target, key);
 		}
 	});
 	dependency.set(reactive, /* @__PURE__ */ new Map());
@@ -8282,10 +8419,9 @@ function callbackHookWithCatch(self, hook, name, special = false) {
 		$warn(`${err}`);
 	}
 }
-function RuntimeTokenDir(self, options, vnode) {
-	if (!(vnode.props && hasProp(vnode.props, $$$$dir__ref$$$$))) return;
-	self[$$$ownProperties]["ref_$$Prop"] = vnode.props[$$$$dir__ref$$$$];
-	delete vnode.props[$$$$dir__ref$$$$];
+function RuntimeTokenDir(self, vnode) {
+	const templateRef = vnode.filesFilter.templateRef;
+	safeCall(templateRef, self.__public_model__);
 }
 function normalizeHyperscriptSlotting(self, children, hx_Element, patchFlags, isRerender, config) {
 	const renderSlotList = [];
@@ -8554,6 +8690,26 @@ function getHouxitBuildInstance(self, options, vnode) {
 	if (!hasOwn(options, "hx_Element") || !isHouxitElement(options["hx_Element"])) return;
 	self[$$$ownProperties].hx_Element = options["hx_Element"];
 }
+function hydrateModelBinding(self, opts) {
+	if (!hasOwn(opts, "bindDrivers") || !len(opts.bindDrivers)) return;
+	const drivers = opts.bindDrivers;
+	if (!hasOwn(opts, "params")) opts.params = {};
+	else if (isArray(opts.params) && isPObject(drivers)) {
+		const params = opts.params;
+		opts.params = {};
+		for (let p of params.values()) opts.params[p] = Any;
+	}
+	if (!hasOwn(opts, "signals")) opts.signals = [];
+	for (let [key, item] of getIterator(drivers)) {
+		if (isArray(drivers)) {
+			key = item;
+			item = Any;
+		}
+		const signalKey = "update" + (key !== "modelValue" ? ":" + key : "");
+		if (!hasOwn(opts.params, key)) opts.params[key] = item;
+		if (!opts.signals.includes(signalKey)) opts.signals.push(signalKey);
+	}
+}
 function HouxitBuild(options) {
 	const [opts, vnode] = createCordinationProperties(this, options);
 	this[$$$compiler].initialization = () => {
@@ -8561,6 +8717,7 @@ function HouxitBuild(options) {
 		validateRegistryProvider(this);
 		$ensureLifeCircleHooks(this, opts, vnode);
 		setConfig(this, opts, vnode);
+		hydrateModelBinding(this, opts);
 		$construct_With_Signals(this, opts, false, vnode);
 		map_Events_Fall(this, vnode);
 		__Ensure_Renderer(this, opts, vnode);
@@ -8571,7 +8728,6 @@ function HouxitBuild(options) {
 		}
 		build = _hydrate_props_fallthrough(opts, self, build);
 		build = _preCompile_StyleSheet(opts, self, build);
-		RuntimeTokenDir(self, opts, vnode);
 		defineLateGlobalProps(self, build);
 		return build;
 	};
@@ -8944,7 +9100,7 @@ function mount(nodeSelector, config, HydrationFlag) {
 			finisherLazyRender(this, nodeSelector, domRoot, true);
 			toggler();
 		}).catch((e) => {
-			smartSuspense(boundary)?.errorCaptured(pass, { message: "<async build>() process has failed to resolve..." });
+			boundary?.errorCaptured(pass, { message: "<async build>() process has failed to resolve..." });
 		});
 		if (boundary) {
 			boundary.activeAwaits++;
@@ -9433,22 +9589,20 @@ function Render_Template(self, initBuild, buildFacade, slotter) {
 	initBuild = self[$$$compiler].templateProcessor(self, initBuild, buildFacade, slotter);
 	return initBuild;
 }
-function _tick(fn) {
+function _tick(fn, wait) {
 	if (!validateCollectionArgs(arguments, {
-		count: 1,
-		validators: [Function],
-		name: "tick"
+		min: 0,
+		max: 2,
+		validators: [Function, Number],
+		name: "tick()"
 	})) return freeze();
 	const self = this && isHouxitBuild(this) ? this : null;
-	if (len(arguments) && !isPFunction(fn)) {
-		debugHandler(`positional argument 1 on "tick" is not a function\n\n callback argument 1 requires a function type`, self, !isNull(self));
-		fn = pass;
-	}
 	return new Promise((resolve, reject) => {
-		resolve(deferEventCircleThread(self, isFunction(fn) ? fn : pass, isHouxitBuild(self)));
+		if (wait) setTimeout(pass, wait);
+		if (fn) resolve(deferEventCircleThread(self, fn, isHouxitBuild(self)));
 	});
 }
-function tick(fn) {
+function tick(fn, wait) {
 	return _tick(...arguments);
 }
 async function _Reactive_Adapter_Plugin(data, callback, self, deep = false) {
@@ -9692,34 +9846,6 @@ function smartMoveElement(self, parent, mover, target) {
 		}
 	}
 }
-function effectiveElement_REUSE_PATCH(self, hx_Element, vNode, observer, parent, ignore) {
-	if (isHouxitTextElement(hx_Element)) {
-		RerenderTextElements(self, hx_Element, vNode, observer, parent);
-		return;
-	} else if (isHouxitWidgetElement(hx_Element) || isRenderlessElement(hx_Element)) return;
-	if (isHouxitFragmentElement(hx_Element) || isHouxitNativeElement(hx_Element) && !IS_HTML_VOID_TAG(hx_Element.prototype_)) resolvePatchAlgorithm(self, hx_Element, vNode, observer);
-	if (isHouxitNativeElement(hx_Element)) {
-		const attrs = hx_Element.$element.attributes;
-		const shapeProps = vNode.VNodeManager.patchFlags.shapeProps;
-		const s_a = {};
-		for (let { name, value } of values(attrs)) {
-			if (name === "data-hx_build") continue;
-			if (!hasOwn(shapeProps, name)) _createElementPropsEffectBlock_(self, {
-				value,
-				element: hx_Element.$element,
-				mode: getPropMode(name.trim()),
-				key: name
-			});
-			else s_a[name] = value;
-		}
-		for (let [name, value] of entries(shapeProps)) _createElementPropsEffectBlock_(self, {
-			value: s_a[name],
-			element: hx_Element.$element,
-			mode: getPropMode(name.trim()),
-			key: name
-		});
-	}
-}
 function __createRerenderBlock(self, vnode, ...args) {
 	if (isRenderlessElement(vnode)) return vnode;
 	const toggler = smart_render_toggler(self);
@@ -9772,7 +9898,7 @@ function renderVnodeDiffSequence(self, hx_Element, vNode, observer, parent, metr
 		config?.list?.add(NewNode);
 		stabilizeMemo(config);
 		return NewNode;
-	} else effectiveElement_REUSE_PATCH(self, hx_Element, vNode, observer, parent);
+	}
 }
 function installMemoInstance(self, hx_Element, EffectVNode, config) {
 	if (!(isMemoElement(hx_Element) || config.memoVault)) return;
@@ -9864,17 +9990,6 @@ function HouxitElementDiffingCheck(node, vNode) {
 	if (isHouxitTextElement(node) && isHouxitTextElement(vNode) || keying_check(node, vNode) && isSameHouxitElementType(node, vNode) && deepEqualityCheck(node.prototype_, vNode.prototype_) && primate_check(node, vNode)) return true;
 	return false;
 }
-function RerenderTextElements(self, node, vNode, observer, parent) {
-	node.compiler_options.value;
-	if (node?.prototype_ !== vNode?.prototype_) {
-		const update = () => {
-			node.$element.textContent = vNode?.prototype_;
-			node.prototype_ = vNode.prototype_;
-		};
-		vNode.VNodeManager.awaitTextReady?.then(update) || update();
-		if (parent) linkUpdateHook(self, parent, observer);
-	}
-}
 function WidgetElementUnwrap(vnode) {
 	if (isHouxitWidgetElement(vnode)) {
 		vnode = vnode?.widget_instance?.$build;
@@ -9883,9 +9998,6 @@ function WidgetElementUnwrap(vnode) {
 	return vnode;
 }
 var isTextOrNativeElement = (vnode) => isHouxitTextElement(vnode) || isHouxitNativeElement(vnode);
-function linkUpdateHook(self, vnode, observer) {
-	if (!isPass(vnode.updated_hook)) observer.updated_hooks.add(vnode.updated_hook);
-}
 function _Resolve_Directives_Hydration(self, bindings, virtualNode, hx_Element, metrics) {
 	const { isRerender, is_hyperscript, vNode, config } = metrics;
 	let { directive, value, key } = bindings;
@@ -9975,23 +10087,33 @@ function resolveInstanceWidgetNormalizer(self, vNode) {
 	vNode.prototype_ = validHouxitWidget(widget) ? widget : tagname;
 	return true;
 }
+function get_$name(self) {
+	return self[$$$ownProperties].name;
+}
+function runSlotDirectiveCompile(self, config, props, virtualNode, hx_Element, metrics, isWidget) {
+	const { is_hyperscript } = metrics;
+	const { hasDir: hasSlot, getKey: getSlot, getDir: getSlotValue } = is_hyperscript ? {} : dirExistenceCheck(props || {}, "$$slot");
+	if (hasSlot) if (config.topLevelSlotContext || config.suspenseFlag) {
+		$$dir_SLOT(self, validateIncomingPropsKeys(self, {
+			key: getSlot,
+			attr: getSlotValue
+		}, is_hyperscript, hx_Element, { isRerender }), virtualNode, hx_Element, {
+			config,
+			...metrics
+		});
+		delete config.topLevelSlotContext;
+	} else debugHandler(`$$slot directive definitions are only allowed on a widgets top-level consumer scope instances\n\n"slot' directive on ... <${isWidget ? get_$name(self) : virtualNode.type}> has failed to compile away...cross-check element render positioning`, self, true);
+}
 function $compilerEngine(self, virtualNode, hx_Element, slotsCompilerArgs, config) {
 	let { rawChildren, GeneticProvider: widget, props } = virtualNode;
 	const is_hyperscript = self ? self[$$$core]?.map.is_hyperscript : virtualNode.is_hyperscript;
 	const isRerender = self ? self[$$$operands].initializedRender : null;
 	const propsElements = {};
-	const { hasDir: hasSlot, getKey: getSlot, getDir: getSlotValue } = is_hyperscript ? {} : dirExistenceCheck(props || {}, "$$slot");
-	if (hasSlot) if (config.topLevelSlotContext) {
-		$$dir_SLOT(self, validateIncomingPropsKeys(self, {
-			key: getSlot,
-			attr: getSlotValue
-		}, is_hyperscript, hx_Element, { isRerender }), virtualNode, hx_Element, {
-			is_hyperscript,
-			isRerender,
-			config
-		});
-		delete config.topLevelSlotContext;
-	} else debugHandler(`$$slot directive definitions are only allowed on a widgets top-level consumer scope instances\n\n"slot' directive on ... widget has failed to compile away...cross-check element render positioning`, self, true);
+	runSlotDirectiveCompile(self, config, props, virtualNode, hx_Element, {
+		isRerender,
+		is_hyperscript
+	}, true);
+	if (config.suspenseFlag) return;
 	if (len(props) && self) {
 		Props_dilation_compile(virtualNode, self, hx_Element, { is_hyperscript }, propsElements, config);
 		virtualNode.props = propsElements;
@@ -10045,9 +10167,19 @@ function _createFragment() {
 		PATCH_FLAGS: new Tuple()
 	}) : new Tuple();
 }
-var instance_Has_TemplateClass = (self, name) => _makeMap_(self[$$$register].animation, name);
-var normalize_TemplateClass = (self, name) => self[$$$register].templateClasses[name] || pass;
+var instance_Has_TemplateClass = (self, name) => _makeMap_(self[$$$register].templateClass, name) || _wufHas_instance(self, name);
+var normalize_TemplateClass = (self, name) => self[$$$register].templateClasses[name] || normalizeWUFBuildScope(self, name);
 var devInfo = "You're running the development version of houxit " + get_version().slice(7) + ", make sure you switched to the minified  version with the (*.min.js) file extension when deploying to production";
+function _isWUFBuild(self) {
+	return hasOwn(self[$$$core], "__env__");
+}
+function _wufHas_instance(self, key) {
+	return _isWUFBuild(self) && hasOwn(self[$$$core].__env__, key);
+}
+function normalizeWUFBuildScope(self, key) {
+	if (!_isWUFBuild(self) || !hasOwn(self[$$$core].__env__, key)) return;
+	return self[$$$core].__env__[key];
+}
 var global_const = {
 	widget: {
 		has: instance_Has_Widget,
@@ -10484,7 +10616,7 @@ function specializedTemplateProductionProcessor(self, attributes, node, metrics,
 			return createHouxitElement(node, self, false, assign({}, hx_Element?.LabContext), NodeList, assign({}, fall), hx_Element, config);
 		};
 		Vnode = createElement();
-		if (!isPFunction(Vnode.compiler_options.createElement)) Vnode.compiler_options.createElement = createElement;
+		if (!isPFunction(Vnode?.compiler_options?.createElement)) Vnode.compiler_options.createElement = createElement;
 	} else {
 		let children = null;
 		if (node.children) children = isPlainTextChildrenTagElements(tagName) ? node.children : _HouxitCoreRenderer(node.rawChildren, null, true, null, null);
@@ -10611,7 +10743,7 @@ function _HouxitCoreRenderer(html, self, parent, hx_Element, fall, config = {}) 
 	if (config.official && !isRerender) {
 		const boundary = getBoundary(self);
 		if (boundary) iterate(arrayInverter(templateRender)).each((node) => {
-			node.filesFilter.suspense = boundary;
+			if (isVNodeClass(node)) node.filesFilter.suspense = boundary;
 		});
 	}
 	const NodeList = new Tuple();
@@ -10676,7 +10808,7 @@ function createAwaitBlockNode(self, node, blockN, metrics, [children, exp], conf
 		});
 		else callback(effect.value);
 	}).catch((err) => {
-		if (boundary) smartSuspense(boundary).errorCaptured(() => {
+		if (boundary) boundary.errorCaptured(() => {
 			debugHandler(err, self, true);
 		}, { message: `{{@await}} block fails to resolve...` });
 	});
@@ -11095,11 +11227,11 @@ function blockElseIfPreprocessor(self, node, config, blockN, isWidget) {
 }
 function instance_Has_Block(self, name) {
 	name = name.startsWith("@") ? name.slice(1) : name;
-	return _makeMap_(self[$$$register]?.blocks || {}, name);
+	return _makeMap_(self[$$$register]?.blocks || {}, name) || _wufHas_instance(self, name);
 }
 function normalize_Block(self, name) {
 	name = name.startsWith("@") ? name.slice(1) : name;
-	return _makeMap_(self[$$$register].blocks, name) ? self[$$$register].blocks[name] : null;
+	return _makeMap_(self[$$$register].blocks, name) ? self[$$$register].blocks[name] : _wufHas_instance(self, name) ? normalizeWUFBuildScope(self, name) : null;
 }
 function blockElementsPreProcessors(self, vNode, metrics, config) {
 	vNode.children;
@@ -11535,6 +11667,6 @@ console.info(devInfo);
 transform_Elements_build();
 _$compiler_engine_hydrator();
 //#endregion
-export { Any, Arguments, Build, Class, Else, ElseIf, Exception, For, Fragment, HTMLParser, HTMLPropsParser, HouxitCompilerSetup, If, MKDParser, Memo, Motion, None, PRIVATE_PROPERTY_KEY, Portal, Provider, RENDER_ELEMENTS, Self, Suspense, TemplateClass, ToPascalCase, Token, Tuple, Type, Widget, _GenerateRoot, __WUFClass__, _createFragment, _getNodeListResponse, agent, animate, asyncWidget, boilerPlate, cloneVElement, computed, createCustomElement, createEasing, createHouxitElement, createNativeElement, createTemplateClass, createTextElement, createVNode, createWidgetElement, cubicBezier, debugHandler, deepEqualityCheck, defineConfig, defineSignals, defineSlots, defineWidget, easings, effectHook, enSlot, escapeDecoder, escapeReverseDecoder, factoryToken, generateTemplateElement, generateUUID, get_version, h, html, initBuild, initSSRBuild, isComputed, isNativeElement, isRaw, isReactiveToken, isReadonly, isReadonlyStream, isShallow, isShallowReadonly, isShallowReadonlyStream, isShallowStream, isStream, isToken, len, log, markRaw, markdown, memMove, mergeProps, observe, onCatch, onEffect, onSlotEffect, onSlotRender, onTracked, postBuild, postDestroy, postMount, postUpdate, preDestroy, preMount, preUpdate, pushEffect, raise, read, readonly, readonlyStream, renderToString, resolve, scaffold, scopeEffectHook, scopeObserve, shallow, shallowReadonlyStream, shallowStream, stream, tick, toCamelCase, toReadonly, toReadonlyStream, toShallow, toShallowReadonlyStream, toShallowStream, toToken, to_kebab_case, token, tokenGENERATOR, traceBack, trackEffectDeps, transite, unToken, useAdapter, useAgent, useBind, useContext, useModel, useOptions, useParams, useReadonlyBypasser, useReceiver, useRef, useStyleSheet, useTransmit, validateCollection, validateProps, validateType, version };
+export { Any, Arguments, Build, Class, Else, ElseIf, Exception, For, Fragment, HTMLParser, HTMLPropsParser, HouxitCompilerSetup, If, MKDParser, Memo, Motion, None, PRIVATE_PROPERTY_KEY, Portal, Provider, RENDER_ELEMENTS, Self, Suspense, TemplateClass, ToPascalCase, Token, Tuple, Type, Widget, _GenerateRoot, __WUFClass__, _createFragment, _getNodeListResponse, agent, animate, asyncWidget, boilerPlate, cloneVElement, computed, createCustomElement, createEasing, createEffectFrame, createHouxitElement, createNativeElement, createTemplateClass, createTextElement, createVNode, createWidgetElement, cubicBezier, debugHandler, deepEqualityCheck, defineConfig, defineParams, defineSignals, defineSlots, defineWidget, easings, effectHook, enSlot, escapeDecoder, escapeReverseDecoder, factoryToken, generateTemplateElement, generateUUID, get_version, h, html, initBuild, initSSRBuild, isComputed, isNativeElement, isRaw, isReactiveToken, isReadonly, isReadonlyStream, isShallow, isShallowReadonly, isShallowReadonlyStream, isShallowStream, isStream, isToken, len, log, markRaw, markdown, memMove, mergeProps, observe, onCatch, onEffect, onSlotEffect, onSlotRender, onTracked, postBuild, postDestroy, postMount, postUpdate, preDestroy, preMount, preUpdate, pushEffect, raise, read, readonly, readonlyStream, renderToString, resolve, scaffold, scopeEffectHook, scopeObserve, shallow, shallowReadonlyStream, shallowStream, stream, tick, toCamelCase, toReadonly, toReadonlyStream, toShallow, toShallowReadonlyStream, toShallowStream, toToken, to_kebab_case, token, tokenGENERATOR, traceBack, trackEffectDeps, transite, unToken, useAdapter, useAgent, useBindDriver, useContext, useModel, useOptions, useReadonlyBypasser, useReceiver, useRef, useStyleSheet, useTransmit, validateCollection, validateProps, validateType, version };
 
 //# sourceMappingURL=houxit.browser.esm.js.map
