@@ -62,7 +62,7 @@ var Houxit = (function(exports) {
 		if (isHouxitBuild(self)) DEBUG_ENV = self[$$$core].settings.debug;
 		if (DEBUG_ENV) {
 			if (dictateW) console.warn(`${$warner}\n\nEncountered a problem ${txt} \n\n at  at  \n <${self && isHouxitBuild(self) ? self[$$$ownProperties].name : "UnknownWidget"}> widget`);
-			console.error(`${$warner}\n\n${msg}\n\n"${msg?.stack || ""}"`);
+			throw new Error(`${$warner}\n\n${msg}\n\n""`);
 		}
 	}
 	function $warn(msg, self) {
@@ -159,7 +159,6 @@ var Houxit = (function(exports) {
 	var IS_HTML_TAG = (txt) => _makeMap_(HTML_TAGS, txt);
 	var WEB_COMPONENTS = "template,slot";
 	var HTML_FORM_ELEMENTS = "select,textarea,input,form,progress,meter,option";
-	var Is_Form_Element = (element) => IS_ELEMENT_NODE(element) && _makeMap_(HTML_FORM_ELEMENTS, element.localName);
 	var IS_WEB_COMPONENT = (txt) => _makeMap_(WEB_COMPONENTS, txt);
 	var HTML_VOID_TAGS = "base,link,meta,hr,br,wbr,area,img,track,embed,source,input";
 	var IS_HTML_VOID_TAG = (txt) => _makeMap_(HTML_VOID_TAGS, txt);
@@ -177,7 +176,7 @@ var Houxit = (function(exports) {
 	var IS_MATHML_TAG = (tag) => _makeMap_(MATHML_TAGS, tag);
 	var IS_VALID_TAGNAME = (txt) => {
 		if (IS_HTML_TAG(txt) || IS_WEB_COMPONENT(txt) || IS_HTML_VOID_TAG(txt) || IS_SVG_TAG(txt) || IS_MATHML_TAG(txt)) return true;
-		if (IS_HTML_DEPRECATED_TAG(txt) || IS_SVG_DEPRRCATED_TAG(txt)) debugHandler(`"${txt}" is an html/svg deprecated tag, and should not be used in new projects\n\nhouxit does not allow the compilation of obselete elements`);
+		if (IS_HTML_DEPRECATED_TAG(txt) || IS_SVG_DEPRRCATED_TAG(txt)) debugHandler(`[ ] "${txt}" is an html/svg deprecated tag, and should not be used in new projects\n\nhouxit does not allow the compilation of obselete elements`);
 		return false;
 	};
 	var Tuple = class extends BaseTuple {
@@ -194,13 +193,13 @@ var Houxit = (function(exports) {
 			};
 			const type = key === "transition" ? "trasite" : "animate";
 			if (!isPFunction(motion)) {
-				debugHandler(`"${type}()" "${key}" function expects a plain function...\nvalidation failed`);
+				debugHandler(`[ ] "${type}()" "${key}" function expects a plain function...\nvalidation failed`);
 				return;
 			} else if (params && !isPObject(params)) {
-				debugHandler(`"params" @ argument 2 of "${type}" "${key}" function expects a plain object object of parameter properties`);
+				debugHandler(`[ ] "params" @ argument 2 of "${type}" "${key}" function expects a plain object object of parameter properties`);
 				return;
 			} else if (mode && !isString(mode) && !_makeMap_("both,in,out", mode)) {
-				debugHandler(`Failed to validate the "mode" argument/..`);
+				debugHandler(`[ ] Failed to validate the "mode" argument/..`);
 				return;
 			}
 			assign(this[$motionKey], {
@@ -316,18 +315,6 @@ var Houxit = (function(exports) {
 	function parseScript(script, args) {
 		return new Function(`"use strict"; return (${script})`)(args);
 	}
-	function passableBlock(block, warn = false) {
-		try {
-			parseScript(block);
-			return true;
-		} catch (err) {
-			if (isTrue(warn)) {
-				debugHandler(`Statement not passage in mustache/binding context\n\nContext expects a single expression\n\n"${block}"`);
-				debugHandler(err);
-			}
-			return false;
-		}
-	}
 	var isInDomNode = (element) => inBrowserCompiler && element?.getRootNode() === document;
 	var GLOBAL_EVENTS = "abort,animationcancel,animationend,animationiteration,animationstart,auxclick,blur,error,focus,canplay,canplaythrough,cancel,change,click,close,contextmenu,dblclick,drag,dragend,dragenter,dragleave,dragover,dragstart,drop,durationchange,emptied,ended,formdata,gotpointercapture,input,invalid,keydown,keypress,load,keyup,loadeddata,loadedmetadata,loadend,loadstart,lostpointercapture,mousedown,mouseenter,mouseleave,mousemove,mouseout,mouseover,mouseup,mousewheel,wheel,pause,play,playing,pointerdown,pointermove,pointerup,pointercancel,pointerover,pointerout,pointerleave,pointerenter,pointerlockchange,pointerlockerror,progress,ratechange,reset,resize,scroll,securitypolicyviolation,seeked,seeking,select,selectstart,selectionchange,slotchange,stalled,submit,suspend,timeupdate,touchcancel,touchend,touchstart,touchmove,transitioncancel,transitionrun,transitioned,transitionstart,waiting,volumechange,autocompleteerror,autocomplete,hover";
 	var IS_VALID_EVENT_HANDLER = (eventName) => _makeMap_(GLOBAL_EVENTS, eventName);
@@ -372,10 +359,9 @@ var Houxit = (function(exports) {
 		return objXtruct;
 	}
 	var canRender = (value) => isPrimitive(value) && !isNull(value);
-	function compileToRenderable(value) {
+	function compileToRenderable(value, preserve = true) {
 		value = unwrap(value);
-		if (canRender(value)) return String(value);
-		else if (isPFunction(value)) return value();
+		if (canRender(value)) return preserve ? value : String(value);
 		else if (validateType(value, [
 			Array,
 			Date,
@@ -443,9 +429,9 @@ var Houxit = (function(exports) {
 		}
 	};
 	function validateAsyncWidgetConfig(config) {
-		for (let [key, value] of entries(config)) if (!_makeMap_("delay,error,fallback,timeout,suspensible", key)) debugHandler(`Unrecognized key "${key}" passed to 'AsyncWidget' config object`);
+		for (let [key, value] of entries(config)) if (!_makeMap_("delay,error,fallback,timeout,suspensible", key)) debugHandler(`[ ] Unrecognized key "${key}" passed to 'AsyncWidget' config object`);
 		else if (key === "suspensible" && !isBoolean(value)) debugHandler(`["AsyncWidget()">>config{}.suspensible type Error] expects a Boolean value`);
-		else if (_makeMap_("delay,timeout", key) && (!isNumber(value) || isNaN(Number(value)))) debugHandler(`"${key}" config prop of "AsyncWidget" expects a type of "number"`);
+		else if (_makeMap_("delay,timeout", key) && (!isNumber(value) || isNaN(Number(value)))) debugHandler(`[ ] "${key}" config prop of "AsyncWidget" expects a type of "number"`);
 		else if (_makeMap_("error,fallback", key) && !isPFunction(value)) {} else continue;
 	}
 	var isAsyncWidget = (vnode) => vnode instanceof AsyncWidget && hasOwn(vnode, $asyncVnodeKey);
@@ -504,7 +490,7 @@ var Houxit = (function(exports) {
 	var rawObjectStoreMap = /* @__PURE__ */ new WeakSet();
 	function _markRaw(obj) {
 		if (isPrimitive(obj)) {
-			debugHandler(`Non mutatable values been marked as raw:: "${typeof obj}" cannot be set to raw data to hide from reactive effect assembling`);
+			debugHandler(`[ ] Non mutatable values been marked as raw:: "${typeof obj}" cannot be set to raw data to hide from reactive effect assembling`);
 			return obj;
 		}
 		if (isPrimitive(obj) || isRaw(obj)) return obj;
@@ -571,7 +557,7 @@ var Houxit = (function(exports) {
 	}
 	function irresponsibleInstallWarn(self, callback, ns) {
 		if (isInitialBuild(self)) {
-			debugHandler(`Irresponsible use of "${ns}" in an initBuild widget instance`, self, true);
+			debugHandler(`[ ] Irresponsible use of "${ns}" in an initBuild widget instance`, self, true);
 			return false;
 		}
 		return true;
@@ -591,7 +577,7 @@ var Houxit = (function(exports) {
 		})) return {};
 		for (const [key, value] of entries(instance)) if (!isValidWidgetOption(key)) self[$$$operands]._OPTIONS[key] = value;
 		else if (isAllowedAdapterOpts(key)) adaptableComposers[key](value);
-		else if (isInvalidInjectorOpt(key)) debugHandler(`[useOptions options Error] invalid option "${key}" passed to options Adapter: not a valid  adapter.\n\nuse the options API macros instead`, self);
+		else if (isInvalidInjectorOpt(key)) debugHandler(`[ ] [useOptions options Error] invalid option "${key}" passed to options Adapter: not a valid  adapter.\n\nuse the options API macros instead`, self);
 		else self[$$$core].opts[key] = value;
 		return self;
 	}
@@ -655,24 +641,24 @@ var Houxit = (function(exports) {
 			return false;
 		}
 		if (min && len(args) < min) {
-			debugHandler(`"${name}" function expects atleast "${min}" minimum of arguments\n\n${len(args)} received`, self);
+			debugHandler(`[ ] "${name}" function expects atleast "${min}" minimum of arguments\n\n${len(args)} received`, self);
 			return false;
 		}
 		if (!isUndefined(count) && !len(args) === count) {
-			debugHandler(`"${name}" method expects only ${count} number of arguments\n${len(args)} passed`, self);
+			debugHandler(`[ ] "${name}" method expects only ${count} number of arguments\n${len(args)} passed`, self);
 			return false;
 		}
 		if (!validator(...args)) return false;
 		if (len(required)) {
 			for (let [index, check] of required.entries()) if (!len(args) >= Number(index) && isUndefined(args[index])) {
-				debugHandler(`Argument at index ${index} of ${name} expects a required positional parameter\n\nparameter not provided or is undefined :: use "null" instead if you tend to skip or not context an argument value `, self);
+				debugHandler(`[ ] Argument at index ${index} of ${name} expects a required positional parameter\n\nparameter not provided or is undefined :: use "null" instead if you tend to skip or not context an argument value `, self);
 				return false;
 			}
 		}
 		if (isArray(validators) && len(validators) && len(args)) for (let [key, item] of args.entries()) {
 			if (!key > len(validators)) break;
 			if (isFalse(validateType(item, validators[key] || Any))) {
-				debugHandler(`unexpected argument value type received at ${key} index of the "${name}" adapter\n\nInvalid input type`, self);
+				debugHandler(`[ ] unexpected argument value type received at ${key} index of the "${name}" adapter\n\nInvalid input type`, self);
 				return false;
 			}
 		}
@@ -695,16 +681,16 @@ var Houxit = (function(exports) {
 		};
 		let { name, props, self } = config;
 		if (!isObject(config)) {
-			debugHandler(`configuration parameter at argument 2 of validatorProps expects a plain javascript object`);
+			debugHandler(`[ ] configuration parameter at argument 2 of validatorProps expects a plain javascript object`);
 			return;
 		} else if (!isPObject(value) || hasOwn(value, "props") && !isPObject(value.props)) {
-			debugHandler(`unexpected value received at "${name}, validation for ${isPObject(value) ? "{}.prop" : "{}"}" adapter\n\nInvalid input type :: expects a plain Object`, self);
+			debugHandler(`[ ] unexpected value received at "${name}, validation for ${isPObject(value) ? "{}.prop" : "{}"}" adapter\n\nInvalid input type :: expects a plain Object`, self);
 			return false;
 		}
 		const propsSet = {};
 		for (let [param, ind] of entries(config.props)) {
 			if (!isPObject(param)) {
-				debugHandler(`Properties validator expects a plain object\n
+				debugHandler(`[ ] Properties validator expects a plain object\n
         For the "${ind}" prop validation`);
 				return false;
 			}
@@ -745,20 +731,6 @@ var Houxit = (function(exports) {
 	function validateProps(value, config) {
 		return validatePropsInput(...arguments);
 	}
-	function deepTranformMacro(watchers) {
-		function _transform(value, config) {
-			if (!validateCollectionArgs(arguments, {
-				min: 1,
-				max: 2,
-				validators: [Any, Object],
-				name: "deepTranform"
-			})) return value;
-			return _createReactiveProxyCollectons(value, watchers, config?.shallow || false, config || {});
-		}
-		return function deepTranform(value, config) {
-			return _transform(...arguments);
-		};
-	}
 	function fineTuneFactoryTokenCompile(effective, watchers, config) {
 		const callback = config[$factoryTokenKey];
 		delete config[$factoryTokenKey];
@@ -768,7 +740,7 @@ var Houxit = (function(exports) {
 		function effect() {
 			return watchers.effectTrigger();
 		}
-		config = callback(track, effect, deepTranformMacro(watchers));
+		config = callback(track, effect);
 		const factoryObject = watchers.factoryObject;
 		watchers.config = config;
 		if (config.accessor) {
@@ -779,7 +751,7 @@ var Houxit = (function(exports) {
 		}
 		for (let desc of ["get", "set"].values()) if (hasOwn(config, desc)) {
 			if (!isFunction(config[desc])) {
-				debugHandler(`"${desc}" property descriptor at "factoryToken" is of an invalid data type\ntype of 'Function' expected`);
+				debugHandler(`[ ] "${desc}" property descriptor at "factoryToken" is of an invalid data type\ntype of 'Function' expected`);
 				return freeze();
 			}
 			factoryObject[desc] = config[desc];
@@ -846,7 +818,7 @@ var Houxit = (function(exports) {
 			};
 			descriptor.set = function(value, prop) {
 				if (readonly && !isReadonlyBypasser(value)) {
-					debugHandler(`Cannot reassign/mutate a "readonly" token value\n\n___MUTATION FAILED___\n........".${prop}" property assignment \n\nFailed writing to a readonly \n.........>>>bypassKey verification failure occured...`);
+					debugHandler(`[ ] Cannot reassign/mutate a "readonly" token value\n\n___MUTATION FAILED___\n........".${prop}" property assignment \n\nFailed writing to a readonly \n.........>>>bypassKey verification failure occured...`);
 					return false;
 				}
 				value = unwrap(readonly ? value[bypassSymbol] : value);
@@ -1023,10 +995,10 @@ var Houxit = (function(exports) {
 			name: "useAgent"
 		})) return [dataRead, pass];
 		if (isHouxitBuild(this) && !isChar(data)) {
-			debugHandler(`data path at positional argument 1 expects a string/symbol value of an existing model path\n\n.>...$useAgent`);
+			debugHandler(`[ ] data path at positional argument 1 expects a string/symbol value of an existing model path\n\n.>...$useAgent`);
 			return [dataRead, pass];
 		} else if (isModelInstance(ModelInstance) && !isChar(data)) {
-			debugHandler(`data property at positional argument 1 of "useAgent" expects a string/symbol value\n\nMust be a model valid path`);
+			debugHandler(`[ ] data property at positional argument 1 of "useAgent" expects a string/symbol value\n\nMust be a model valid path`);
 			return [dataRead, pass];
 		}
 		const self = isHouxitBuild(this) ? this : isModelInstance(ModelInstance) ? { __public_model__: ModelInstance } : null;
@@ -1034,7 +1006,7 @@ var Houxit = (function(exports) {
 		if (self && !isHouxitBuild(self)) delete self.__public_model__;
 		let prop = isModelInstance(ModelInstance) ? data : isToken(data) ? data[refInternalEffectKey].accessor : "";
 		if (isModelInstance(ModelInstance) && !object_Has_Path(ModelInstance, prop)) {
-			debugHandler(`"${prop}" property is not a valid model property`);
+			debugHandler(`[ ] "${prop}" property is not a valid model property`);
 			return [dataRead, pass];
 		}
 		data = isModelInstance(ModelInstance) && exists(prop) ? _$runModelBind(ModelInstance, prop || "") : data;
@@ -1051,7 +1023,7 @@ var Houxit = (function(exports) {
 			if (isPFunction(mutation)) try {
 				mutation(mutateArgs);
 			} catch (err) {
-				debugHandler(`Encountered an error during the call of the writer callback\n\n${err}`);
+				debugHandler(`[ ] Encountered an error during the call of the writer callback\n\n${err}`);
 				return false;
 			}
 			else if (!isPFunction(mutation)) {
@@ -1078,7 +1050,7 @@ var Houxit = (function(exports) {
 		})) return false;
 		for (const [prop, value] of entries(props)) {
 			if (!object_Has_Path(this.__public_model__, prop)) {
-				debugHandler(`"${prop}" not found in model instance\n\n..............at......"$write"`, this, true);
+				debugHandler(`[ ] "${prop}" not found in model instance\n\n..............at......"$write"`, this, true);
 				return false;
 			}
 			this.__public_model__.$useAgent(prop)[1](({ write }) => write(value));
@@ -1160,7 +1132,7 @@ var Houxit = (function(exports) {
 		})) return false;
 		if (!type || !_makeMap_("of,in", type)) type = "of";
 		else if (!isIterable(value) && !isNumber(value)) {
-			debugHandler(`No iterable .value prop received at parameter 1 object of the "iterate" helper macro`);
+			debugHandler(`[ ] No iterable .value prop received at parameter 1 object of the "iterate" helper macro`);
 			return false;
 		}
 		const useOF = type && type.trim() === "of";
@@ -1308,7 +1280,7 @@ var Houxit = (function(exports) {
 	}
 	function genericStreamTransform(stream, config, types) {
 		if (isPrimitive(stream)) {
-			debugHandler(`Value Exception\nFailed to convert a primitive Value to a streamable object\n\nExpects a plain object or a collection`);
+			debugHandler(`[ ] Value Exception\nFailed to convert a primitive Value to a streamable object\n\nExpects a plain object or a collection`);
 			return;
 		} else {
 			types = new Tuple(...types);
@@ -1363,7 +1335,7 @@ var Houxit = (function(exports) {
 			validators: [Function, Object],
 			name: "trackEffectDeps"
 		})) return [];
-		const effect = _createEffectBase(fn);
+		const effect = _createHouxitEffectFrame(fn);
 		effectRunner(effect);
 		function reRunEffect() {
 			return effect.runEffect();
@@ -1390,7 +1362,7 @@ var Houxit = (function(exports) {
 		})) return pass;
 		const self = getCurrentRunningEffect({ name: "effectHook" });
 		if (!self) {
-			debugHandler(`effectHook called out of scope`);
+			debugHandler(`[ ] effectHook called out of scope`);
 			return pass;
 		}
 		return EffectAdapterHook.call(self, ...arguments);
@@ -1407,7 +1379,7 @@ var Houxit = (function(exports) {
 			required: [true]
 		})) return;
 		config.initial = false;
-		const effect = _createEffectBase(function() {
+		const effect = _createHouxitEffectFrame(function() {
 			return fn();
 		}, this);
 		const { value, dependencies } = effectRunner(effect);
@@ -1421,7 +1393,13 @@ var Houxit = (function(exports) {
 			this.type = type;
 			this.validator = validator;
 		}
+		isValid(value) {
+			return __validateCustomType__.call(this, value);
+		}
 	};
+	function __validateCustomType__(value) {
+		return validateType(this.type, value) && (this.validator ? this.validator(value) : true);
+	}
 	var AnyType = class extends Type {
 		constructor() {
 			super([], (value) => true);
@@ -1516,7 +1494,7 @@ var Houxit = (function(exports) {
 	BaseDict.prototype.set = function set(key, value) {};
 	function isFrozenWarn(isFrozen, action, type) {
 		if (isFrozen) {
-			debugHandler(`cannot perfom ${action} on ${type}\n\ninstance may have been frozen or sealed from future possible mutations`);
+			debugHandler(`[ ] cannot perfom ${action} on ${type}\n\ninstance may have been frozen or sealed from future possible mutations`);
 			return false;
 		}
 		return true;
@@ -1544,7 +1522,7 @@ var Houxit = (function(exports) {
 			},
 			set(NS) {
 				if (!isTSO(NS)) {
-					debugHandler(`Mutation Exception\nCannot mutate the size property of a Tuple Object\n`);
+					debugHandler(`[ ] Mutation Exception\nCannot mutate the size property of a Tuple Object\n`);
 					return false;
 				}
 				size = NS.value;
@@ -1665,7 +1643,7 @@ var Houxit = (function(exports) {
 			name: "Tuple.splice()"
 		})) return false;
 		if (len(arguments) > 1 && start + deleteCount - 1 > this.size) {
-			debugHandler(`deleteCount argument 2 count at "Tuple.splice()" exceeds the tuple size`);
+			debugHandler(`[ ] deleteCount argument 2 count at "Tuple.splice()" exceeds the tuple size`);
 			return false;
 		}
 		if (len(arguments) === 1) {
@@ -1697,7 +1675,7 @@ var Houxit = (function(exports) {
 	};
 	BaseTuple.prototype.exchange = function exchange(value1, value2) {
 		if (!(this.has(value1) && this.has(value2))) {
-			debugHandler(`argument ${!this.has(value1) ? "1" : "2"} not a member of this tuple`);
+			debugHandler(`[ ] argument ${!this.has(value1) ? "1" : "2"} not a member of this tuple`);
 			return false;
 		}
 		const index1 = this.indexOf(value1);
@@ -1716,7 +1694,7 @@ var Houxit = (function(exports) {
 		})) return false;
 		else if (!len(sort) && !this.size) return;
 		else if (start > (this.size || 1) - 1) {
-			debugHandler(`Tuple.arrange()'s "start" argument @parameter 2 exceeds the tuple size\n"${start}"`);
+			debugHandler(`[ ] Tuple.arrange()'s "start" argument @parameter 2 exceeds the tuple size\n"${start}"`);
 			return false;
 		}
 		const flowTuple = new Tuple();
@@ -1755,10 +1733,10 @@ var Houxit = (function(exports) {
 		})) return;
 		index = Number(index);
 		if (isNaN(index)) {
-			debugHandler(`index passed to Tuple.at() is not a number`);
+			debugHandler(`[ ] index passed to Tuple.at() is not a number`);
 			return;
 		} else if (index < 0 && index > this.size) {
-			debugHandler(`index exceded Tuple limit.........\n"at()"`);
+			debugHandler(`[ ] index exceded Tuple limit.........\n"at()"`);
 			return null;
 		}
 		return this.list()[index];
@@ -1800,7 +1778,7 @@ var Houxit = (function(exports) {
 		const self = currentRunningEffectBuild;
 		const { name, silently } = binding;
 		if (!isHouxitBuild(self)) {
-			if (!silently) debugHandler(`"${name}()" Adapter method cannot be called outside of a build widget or function widget body.\n\n"${name}()" may have been called from an asynchronous thread from the origin or outside of the build option method/function based widget\n\nCheck if the widget instance build method is an arrow function`);
+			if (!silently) debugHandler(`[ ] "${name}()" Adapter method cannot be called outside of a build widget or function widget body.\n\n"${name}()" may have been called from an asynchronous thread from the origin or outside of the build option method/function based widget\n\nCheck if the widget instance build method is an arrow function`);
 			return false;
 		}
 		return self;
@@ -1819,9 +1797,13 @@ var Houxit = (function(exports) {
 			});
 		}
 		notifyEffects() {
+			if (!len(this.effects)) return;
 			this.effects.forEach((effect) => effect.notify());
 		}
 	};
+	function getFlushType(self) {
+		return self[$$$core].settings.flushType;
+	}
 	var HouxitEffectFrame = class {
 		effect = void 0;
 		self = void 0;
@@ -1830,7 +1812,10 @@ var Houxit = (function(exports) {
 		active = true;
 		followers = new Tuple();
 		notified = false;
+		flushType = "post";
+		cached = void 0;
 		constructor(effect, self) {
+			if (isHouxitBuild(self)) this.flushType = getFlushType(self);
 			assign(this, {
 				effect,
 				self
@@ -1848,13 +1833,18 @@ var Houxit = (function(exports) {
 		}
 		schedule() {
 			if (isHouxitBuild(this.self)) {
-				for (let [callback, type, flush] of this.callbacks.values()) if (type === "effect") this.self[$$$operands]._OBSERVERS.add([callback, flush]);
+				let flushType = getFlushType(this.self);
+				flushType = this.flushType !== flushType ? this.flushType : flushType;
+				for (let [callback, type] of this.callbacks.values()) if (type === "effect") this.self[$$$operands]._OBSERVERS.add([callback, flushType]);
 				else if (type === "priority") this.self[$$$compiler].VN_Tree.priority.add(callback);
-				this.self.__public_model__.$pushEffect().then(() => {
+				this.self.__public_model__.$pushEffect(pass, flushType);
+				const recover = () => {
 					this.propagate();
 					this.notified = false;
-				});
-			} else if (this.flushType && this.flushType === "sync") {
+				};
+				if (flushType === "sync") recover();
+				else tick(recover);
+			} else if (this.flushType === "sync") {
 				this.callbacks.forEach(([fn]) => fn?.());
 				this.propagate();
 				this.notified = false;
@@ -1864,14 +1854,10 @@ var Houxit = (function(exports) {
 				this.notified = false;
 			});
 		}
-		attachCallback(callback, type = "effect", flush = "sync") {
+		attachCallback(callback, type = "effect") {
 			const { self } = this;
 			if (!this.reducer && !len(this.dependencies)) return;
-			this.callbacks.add([
-				callback,
-				type,
-				flush
-			]);
+			this.callbacks.add([callback, type]);
 		}
 		flushDeps() {
 			this.dependencies.forEach((dep) => {
@@ -1901,14 +1887,15 @@ var Houxit = (function(exports) {
 	};
 	var isDependency = (subscriber) => subscriber instanceof Dependency;
 	var isEffect = (effect) => effect instanceof HouxitEffectFrame;
-	function _createEffectBase(effect, self) {
+	function _createHouxitEffectFrame(effect, self) {
 		return new HouxitEffectFrame(effect, self);
 	}
 	function createEffectFrame(effect) {
-		return _createEffectBase(effect, null);
+		return _createHouxitEffectFrame(effect, null);
 	}
 	function effectRunner(effect, ...args) {
 		if (!activeRunningEffects.has(effect)) activeRunningEffects.add(effect);
+		effect.cached = effect.value;
 		effect.value = effect.effect(...args);
 		activeRunningEffects.delete(effect);
 		return effect;
@@ -1926,17 +1913,17 @@ var Houxit = (function(exports) {
 			String,
 			Object
 		])) {
-			debugHandler(`easing Function argument 1 receives an invalid argument`);
+			debugHandler(`[ ] easing Function argument 1 receives an invalid argument`);
 			return;
 		}
 		if (isPObject(value)) {
 			({css, fn, name} = value);
 			if (css && !isString(css)) {
-				debugHandler(`easing Function "css" property receives an invalid argument...\nexpects a css valid easing value`);
+				debugHandler(`[ ] easing Function "css" property receives an invalid argument...\nexpects a css valid easing value`);
 				css = void 0;
 			}
 			if (fn && !isPFunction(fn)) {
-				debugHandler(`easing Function "fn" property receives an invalid argument...\nexpects a Function return a valid easing value`);
+				debugHandler(`[ ] easing Function "fn" property receives an invalid argument...\nexpects a Function return a valid easing value`);
 				fn = void 0;
 			}
 		} else if (isString(value)) css = value;
@@ -2230,19 +2217,19 @@ var Houxit = (function(exports) {
 	function agent(value, config) {
 		return _createAgent(...arguments);
 	}
-	function _pushEffect_(callback) {
+	function _pushEffect_(callback, flushType = "post") {
 		let self = this;
 		if (!isHouxitBuild(this)) {
 			self = getCurrentRunningEffect({ name: "pushEffect" });
 			if (!isHouxitBuild(self)) return;
 		}
 		if (!validateCollectionArgs(arguments, {
-			max: 1,
+			max: 2,
 			validators: [Function],
 			name: "pushEffect",
 			self: this
 		})) return;
-		self[$$$operands].dependency.trigger();
+		self[$$$operands].dependency.trigger(flushType);
 		return isFunction(callback) ? tick(callback) : Promise.resolve();
 	}
 	function pushEffect(callback) {
@@ -2250,7 +2237,7 @@ var Houxit = (function(exports) {
 	}
 	function cloneVElement(vnode) {
 		if (!isHouxitElement(vnode)) {
-			debugHandler(`cloneVElement() macro expects a houxit virtual node as it's first argument`);
+			debugHandler(`[ ] cloneVElement() macro expects a houxit virtual node as it's first argument`);
 			return;
 		}
 		return vnode.compiler_options.createElement();
@@ -2334,7 +2321,7 @@ var Houxit = (function(exports) {
 		global[PRIVATE_PROPERTY_KEY] = {};
 		if (inBrowserCompiler) {}
 	}
-	createObj("Exceptions", { SE: (self) => debugHandler(``, self, isHouxitBuild(self)) });
+	createObj("Exceptions", { SE: (self) => debugHandler(`[ ] `, self, isHouxitBuild(self)) });
 	var ConfigValidator = {
 		debug: Boolean,
 		forwardSlot: Boolean,
@@ -2469,7 +2456,7 @@ var Houxit = (function(exports) {
 			let res = false;
 			for (let typeF of type.values()) {
 				if (!isFunction(typeF) && !isBaseType(typeF) && !isNull(typeF) && !isEmptyStr(typeF)) {
-					debugHandler(`type check value is not a function or class constructor type\n\n found "${typeF}"`);
+					debugHandler(`[ ] type check value is not a function or class constructor type\n\n found "${typeF}"`);
 					return false;
 				}
 				res = validateType(val, typeF);
@@ -2499,7 +2486,7 @@ var Houxit = (function(exports) {
 	}
 	function _createTextElement(self, text, hx_Element, isRerender, config) {
 		if (!isPrimitive(text)) {
-			debugHandler(`cannot create a TEXT_NODE element from a none primitive value.......\n\n"${text}" value`, self);
+			debugHandler(`[ ] cannot create a TEXT_NODE element from a none primitive value.......\n\n"${text}" value`, self);
 			text = "";
 		}
 		const isSSR = isSSRCompiler(self), is_hyperscript = hx_Element.is_hyperscript;
@@ -2512,7 +2499,7 @@ var Houxit = (function(exports) {
 			};
 		}
 		if (!is_hyperscript && hasSpecialCharacters(text) || is_hyperscript && isFunction(text)) {
-			const effect = _createEffectBase(function() {
+			const effect = _createHouxitEffectFrame(function() {
 				return is_hyperscript ? safeCall(text) : resolveAccessor(self, text, hx_Element);
 			}, self);
 			let { dependencies, value: textContent } = effectRunner(effect);
@@ -2713,7 +2700,7 @@ var Houxit = (function(exports) {
 	function tagMachErr(self, metrics) {
 		let [op, cl, p1] = metrics;
 		if (!isTagMatch(op, cl)) {
-			debugHandler(`Unmaching tags for "for" directive loop data keys mapping\n opening tag does not match a closing tag\n\n found ${p1} Unmaching`, self, true);
+			debugHandler(`[ ] Unmaching tags for "for" directive loop data keys mapping\n opening tag does not match a closing tag\n\n found ${p1} Unmaching`, self, true);
 			return false;
 		}
 		return true;
@@ -2723,7 +2710,7 @@ var Houxit = (function(exports) {
 		const Loop_Data = {};
 		const match = str.match(WrappedDestructuredRegex);
 		if (!match || !match[14]) {
-			debugHandler(`Usupported Loop format in 'for' ${isBlock ? "block" : "directive"}\n\n"${str}" loop syntax is invalid or is not recognised`, self, true);
+			debugHandler(`[ ] Usupported Loop format in 'for' ${isBlock ? "block" : "directive"}\n\n"${str}" loop syntax is invalid or is not recognised`, self, true);
 			return;
 		}
 		const [matc, ig1, each, opening, value, isDestructure, ig2, ig3, ig4, isValueName, afterValue, key_index, closing, loopType, resource] = match;
@@ -2733,7 +2720,7 @@ var Houxit = (function(exports) {
 			""
 		])) return;
 		if (!resource) {
-			debugHandler(`unable to alocate loop resource in loof 'for'`, self, true);
+			debugHandler(`[ ] unable to alocate loop resource in loof 'for'`, self, true);
 			return;
 		}
 		assign(Loop_Data, {
@@ -2753,20 +2740,20 @@ var Houxit = (function(exports) {
 		if (!data) return;
 		let effect, dataObject;
 		try {
-			effect = isRerender ? config.effect : _createEffectBase(() => {
+			effect = isRerender ? config.effect : _createHouxitEffectFrame(() => {
 				return unwrap(_$runModelBind(self, data.obj, hx_Element));
 			}, self);
 			dataObject = (isRerender ? effect.runEffect() : effectRunner(effect)).value;
 		} catch (error) {
-			debugHandler(`Trouble accessing '${data.obj}' object for for loop\n\nnot found on instance or is undefined\n\n${error}`, self, true);
+			debugHandler(`[ ] Trouble accessing '${data.obj}' object for for loop\n\nnot found on instance or is undefined\n\n${error}`, self, true);
 			return;
 		}
 		if (!isIterable(dataObject) && !isNumber(dataObject)) {
-			debugHandler(`Undefined scope for for, \n\n${data.obj} not iterable`, self, true);
+			debugHandler(`[ ] Undefined scope for for, \n\n${data.obj} not iterable`, self, true);
 			return;
 		}
 		if (data.type && !_makeMap_("of,in", data.type)) {
-			debugHandler(`((Iteration issue))\n\n"${data.type}" is not an iterator\n "of" or "in" only supported by Houxit`, self, true);
+			debugHandler(`[(Iteration issue)]\n\n"${data.type}" is not an iterator\n "of" or "in" only supported by Houxit`, self, true);
 			return;
 		}
 		return {
@@ -2827,7 +2814,7 @@ var Houxit = (function(exports) {
 	function _$Conditional_Dir_Resolver(self, vnode, hx_Element, siblings, ctx, recordPatch, config) {
 		const [hasIf, hasElseIf, hasElse] = recordPatch[3];
 		if (hasMultiConditionals(hasIf, hasElse, hasElseIf) > 1) {
-			debugHandler(`((directive))>.....Overloaded Conditional directive found on element instance\n\n
+			debugHandler(`[(directive)].....Overloaded Conditional directive found on element instance\n\n
         "${hasIf ? "$$if" : hasElseIf ? "$$else-if" : "$$else"}"\nfailed to determine>>>>`, self, true);
 			return;
 		}
@@ -2877,7 +2864,7 @@ var Houxit = (function(exports) {
 			const { config, self, propValue, hx_Element, vnode, siblings, srcKey, ctx, isRerender } = this, isElse = typeF === "else";
 			let passed = !previous ? false : previous.conditional_record.passed, node;
 			const previousTypeF = previous?.conditional_record.src || typeF;
-			const effect = this.effect ?? _createEffectBase(() => {
+			const effect = this.effect ?? _createHouxitEffectFrame(() => {
 				return isElse ? true : _$runModelBind(self, propValue, ctx);
 			}, self);
 			this.effect ? effect.runEffect() : effectRunner(effect);
@@ -2934,7 +2921,7 @@ var Houxit = (function(exports) {
 			if (previous) previous.conditional_record.passed;
 			delete vnode.props[srcKey];
 			if (!isRerender && !previous || !isConditionalVnode(previous, "if", config) && !isConditionalVnode(previous, "else-if", config)) {
-				debugHandler(`The "$$${block}" conditional rendering directive block expects a preceding "$$if" or "$$else-if" directive element\n\nMay return unexpected result during production\nDid you mean "$$if" directive instead?\n at>>>>>`, self, true);
+				debugHandler(`[ ] The "$$${block}" conditional rendering directive block expects a preceding "$$if" or "$$else-if" directive element\n\nMay return unexpected result during production\nDid you mean "$$if" directive instead?\n at>>>>>`, self, true);
 				node = $IfElseDirRenderLess(false, block, previous);
 				node.compiler_options.createElement = this.createElement;
 				return node;
@@ -2962,10 +2949,10 @@ var Houxit = (function(exports) {
 	}
 	function destructWarn(ref, object, self) {
 		if (ref && objectDestructureRegex.test(ref) && !isObject(object)) {
-			debugHandler(`Invalid object destructuring from a none object value\n\nillegal destructuring found at "${object}" on "$$<...>" directive definition\nTarget value is not an object`, self, true);
+			debugHandler(`[ ] Invalid object destructuring from a none object value\n\nillegal destructuring found at "${object}" on "$$<...>" directive definition\nTarget value is not an object`, self, true);
 			return false;
 		} else if (ref && arrayDestructureRegex.test(ref) && !isArray(object)) {
-			debugHandler(`Invalid array destructuring from a none array value\n\nillegal destructuring found at "${object}" on $$*** directive definition\nTarget value is not an array iterable`, self, true);
+			debugHandler(`[ ] Invalid array destructuring from a none array value\n\nillegal destructuring found at "${object}" on $$*** directive definition\nTarget value is not an array iterable`, self, true);
 			return false;
 		}
 		return true;
@@ -3068,7 +3055,7 @@ var Houxit = (function(exports) {
 			]
 		];
 		if (hasElse && hasFor && elseIndex > forIndex) {
-			debugHandler(`A "$$for" directive loop cannot take precedence in the presence of an "$$else" condition directive statements\n\ndirective scoping error`, self, true);
+			debugHandler(`[ ] A "$$for" directive loop cannot take precedence in the presence of an "$$else" condition directive statements\n\ndirective scoping error`, self, true);
 			return;
 		}
 		vnode = memMove(vnode, true);
@@ -3132,11 +3119,11 @@ var Houxit = (function(exports) {
 	function debug_self_prop_warn(props, self, args) {
 		const [WidgetName, propName, type] = args;
 		if (!props || !hasOwn(props, propName)) {
-			debugHandler(`"${WidgetName}" built-in widget expects a "${propName}" params\nMissing...`, self, true);
+			debugHandler(`[ ] "${WidgetName}" built-in widget expects a "${propName}" params\nMissing...`, self, true);
 			return false;
 		}
 		if (type && !validateType(props[propName], type)) {
-			debugHandler(`"${WidgetName}" validation for the "${propName}" param is invalid`, self, true);
+			debugHandler(`[ ] "${WidgetName}" validation for the "${propName}" param is invalid`, self, true);
 			return false;
 		}
 		return true;
@@ -3156,7 +3143,7 @@ var Houxit = (function(exports) {
 			return;
 		}
 		else if (validHouxitWidget(value)) return value;
-		debugHandler(`<Bulld/>.self property value failed to compile\nunrecognized data type`, self, true);
+		debugHandler(`[ ] <Bulld/>.self property value failed to compile\nunrecognized data type`, self, true);
 	}
 	function built_in_build_widget(vnode, self, is_hyperscript, ctx, siblings, ssc, hx_Element, config) {
 		if (!debug_self_prop_warn(vnode.props, self, ["hx:build", "self"])) return createRenderlessElement();
@@ -3188,7 +3175,7 @@ var Houxit = (function(exports) {
 		const target = unToken(props.target);
 		const portalElement = target ? _GenerateRoot(target) : void 0;
 		if (!portalElement || !IS_ELEMENT_NODE(portalElement)) {
-			debugHandler(`Unable to generate portal element\n\n
+			debugHandler(`[ ] Unable to generate portal element\n\n
         Target not existing in the current document model layer\n\n
         Mount target for Portal widget is not a valid element node`, self, true);
 			return;
@@ -3233,8 +3220,8 @@ var Houxit = (function(exports) {
 		} else {
 			if (isHouxitFragmentElement(render[0])) return checkMemoContentValidity(self, render[0], effect_stabilizer, conf);
 			else if (isRenderlessElement(render[0])) return renderless;
-			debugHandler(`"<Memo>" expects atleast a single child widget instance\n\n<Memo> validation failed...\nNot a widget Instance`, self, true);
-			debugHandler(`<Memo> expects a widget element instance...not a regular HTML element or unidentified DOM/Custom Wrapper`);
+			debugHandler(`[ ] "<Memo>" expects atleast a single child widget instance\n\n<Memo> validation failed...\nNot a widget Instance`, self, true);
+			debugHandler(`[ ] <Memo> expects a widget element instance...not a regular HTML element or unidentified DOM/Custom Wrapper`);
 			return;
 		}
 		else if (!len(render)) return renderless;
@@ -3244,7 +3231,7 @@ var Houxit = (function(exports) {
 		}
 		if (!config) {
 			if (conf.count > 1) {
-				debugHandler(`[<Memo> Child Error] <Memo> child widget may have supassed the number of expected <Memo> container\n\n1 at most expected >>> ${conf.count} <<< found `, self, true);
+				debugHandler(`[ ] [<Memo> Child Error] <Memo> child widget may have supassed the number of expected <Memo> container\n\n1 at most expected >>> ${conf.count} <<< found `, self, true);
 				return;
 			}
 		}
@@ -3257,10 +3244,10 @@ var Houxit = (function(exports) {
 		let { max, test } = vnode.props;
 		max = Number(max);
 		if (max && (max < 1 || isNaN(max))) {
-			debugHandler(`Failed validation of <Memo>.max param\n"${max}" ${isNaN(max) ? "is not a number" : "is less than 1"}`, self, true);
+			debugHandler(`[ ] Failed validation of <Memo>.max param\n"${max}" ${isNaN(max) ? "is not a number" : "is less than 1"}`, self, true);
 			max = Infinity;
 		} else if (!max) max = Infinity;
-		if (test && !isPFunction(test)) debugHandler(`<Memo>.test prop expects a plain function returning Boolean\nINVALID <TEST> PROPERTY VALUE`, self);
+		if (test && !isPFunction(test)) debugHandler(`[ ] <Memo>.test prop expects a plain function returning Boolean\nINVALID <TEST> PROPERTY VALUE`, self);
 		const vault = {
 			storage: /* @__PURE__ */ new Map(),
 			keys: new Tuple(),
@@ -3301,7 +3288,7 @@ var Houxit = (function(exports) {
 				name = "default";
 			}
 			if (name !== "default" && len(nodeDriver[name + "X"])) {
-				debugHandler(`[<Suspense> Duplicate Slot Error] "${name}" slot has been duplicated in <Suspense>`, self, true);
+				debugHandler(`[ ] [<Suspense> Duplicate Slot Error] "${name}" slot has been duplicated in <Suspense>`, self, true);
 				continue;
 			}
 			let vNode = isHouxitTextElement(element) ? element.$element : element.VNodeManager.vNodeClass;
@@ -3416,10 +3403,10 @@ var Houxit = (function(exports) {
 		}).each((value, key) => {
 			if (!hasOwn(vnode.props || {}, key)) return iterate.Continue();
 			if (isNaN(Number(value))) {
-				debugHandler(`<Suspense> validation for "${key}" prop failed\n expects a Number value type`, self, true);
+				debugHandler(`[ ] <Suspense> validation for "${key}" prop failed\n expects a Number value type`, self, true);
 				return iterate.Continue();
 			} else if (value < 0) {
-				debugHandler(`<Suspense>.[${key}] prop receives a negative value...`, self, true);
+				debugHandler(`[ ] <Suspense>.[${key}] prop receives a negative value...`, self, true);
 				return iterate.Continue();
 			}
 			suspense[key] = value;
@@ -3431,7 +3418,7 @@ var Houxit = (function(exports) {
 				awaitCallback = awaitP();
 				if (isPromise(awaitCallback)) throwE = false;
 			}
-			if (throwE) debugHandler(`"await" <Suspense> prop expects an "async Function" , a "Promise object" or a callback that returns a "Promise object" object`, self, true);
+			if (throwE) debugHandler(`[ ] "await" <Suspense> prop expects an "async Function" , a "Promise object" or a callback that returns a "Promise object" object`, self, true);
 		} else awaitCallback = isAsyncFunction(awaitP) ? awaitP() : awaitP;
 		const { defaultX, fallbackX, errorX } = normalizeEarlySlotsCompile(self, vnode, hx_Element, [
 			siblings,
@@ -3613,12 +3600,12 @@ var Houxit = (function(exports) {
 		if (value && isString(value)) {
 			const mode = key === "transite" ? "transitions" : "animations";
 			if (!hasMotionInstance(self, value, mode)) {
-				debugHandler(`Unrecognized ${mode} name "${value}"\n\n if this is a custom ${mode}, make sure it's registered through the local ${mode} option or global prototype '.${mode}()' method`, self, true);
+				debugHandler(`[ ] Unrecognized ${mode} name "${value}"\n\n if this is a custom ${mode}, make sure it's registered through the local ${mode} option or global prototype '.${mode}()' method`, self, true);
 				return;
 			}
 			return normalize_Motion(self, value, mode);
 		} else if (value && !isPFunction(value)) {
-			debugHandler(`<Motion> "${key}" prop expects ${key === "animate" ? "an animation" : "a transition"} function>>>>\nValidation failed...`, self, true);
+			debugHandler(`[ ] <Motion> "${key}" prop expects ${key === "animate" ? "an animation" : "a transition"} function>>>>\nValidation failed...`, self, true);
 			return;
 		} else if (value) return value;
 	}
@@ -3646,7 +3633,7 @@ var Houxit = (function(exports) {
 			});
 			else if (key === "mode") {
 				if (mode && !isString(value)) {
-					debugHandler(`<Motion> "params" prop requires a string value>>>\nvalidation failed...`, self, true);
+					debugHandler(`[ ] <Motion> "params" prop requires a string value>>>\nvalidation failed...`, self, true);
 					return;
 				} else if (mode && !_makeMap_("in,out,both", value)) {
 					debugHandler("<Motion>.mode params property receives an Invalid mode argument...\nreceives \"" + value + "\"", self, true);
@@ -3654,7 +3641,7 @@ var Houxit = (function(exports) {
 				}
 			} else if (key === "params") {
 				if (value && !isPObject(value)) {
-					debugHandler(`<Motion> "params" prop requires a plain object>>>\nvalidation failed...`, self, true);
+					debugHandler(`[ ] <Motion> "params" prop requires a plain object>>>\nvalidation failed...`, self, true);
 					return;
 				} else if (params) config.params = assign(config.params, params);
 				return;
@@ -3777,7 +3764,7 @@ var Houxit = (function(exports) {
 		const isRerender = self[$$$operands].initializedRender;
 		is_hyperscript = self[$$$core].map.is_hyperscript;
 		const context = smartDextCtxMerging(ssc || {}, ctx || {});
-		const effect = _createEffectBase(() => {
+		const effect = _createHouxitEffectFrame(() => {
 			return unwrap(is_hyperscript || !isString(test) ? safeCall(test) : _$runModelBind(self, test, smartDextCtxMerging(context, ssc || {})));
 		});
 		let value = effectRunner(effect).value;
@@ -3898,7 +3885,7 @@ var Houxit = (function(exports) {
 		if (!ELEMENT.compiler_options.createElement) ELEMENT.compiler_options.createElement = fn;
 	}
 	function debug_unrecognized_tagname(tagname, self) {
-		debugHandler(`[unexpected template tagname]  "${tagname}" is not a valid html element, or a registered widget instance.\n\nif this is a customElement, make sure its defined through the "customElements.define()" method `, self, true);
+		debugHandler(`[ ] [unexpected template tagname]  "${tagname}" is not a valid html element, or a registered widget instance.\n\nif this is a customElement, make sure its defined through the "customElements.define()" method `, self, true);
 	}
 	function isCustomElementTagname(tagname) {
 		return isPFunction(customElements.get(tagname));
@@ -3914,8 +3901,11 @@ var Houxit = (function(exports) {
 		toggler(t);
 		return toggler;
 	}
+	function isSuspensible(a_p) {
+		return a_p.config.suspensible;
+	}
 	function asyncWidgetBoundaryWrap(boundary, action, current_state, a_p) {
-		if (!boundary || !a_p.config.suspensible) return action();
+		if (!boundary || !isSuspensible(a_p)) return action();
 		const x = boundary.syncState();
 		if (x === "resolved") {
 			if (!x) return action();
@@ -3930,12 +3920,11 @@ var Houxit = (function(exports) {
 		let useFallback = false, ELEMENT;
 		if (fallback) {
 			if (!isChildrenNode(fallback)) {
-				debugHandler(`[Invalid falllback Element]  fallback content of "asyncWidget" is not a valid Houxit element`, self, true);
+				debugHandler(`[ ] [Invalid falllback Element]  fallback content of "asyncWidget" is not a valid Houxit element`, self, true);
 				return;
 			}
 			const fall_content = () => {
 				const toggler = smart_render_toggler(self);
-				installSuspense(fallback, boundary);
 				let tree = _HouxitCoreRenderer(arrayInverter(fallback), self, null, hx_Element, ssc, config);
 				tree = new HouxitFragmentElement(arrayInverter(tree), self, hx_Element);
 				tree[AsyncHxElementTrackerKey] = {};
@@ -3973,7 +3962,6 @@ var Houxit = (function(exports) {
 	}
 	function asyncErrorElement(self, a_p, hx_Element, ssc, boundary, config) {
 		const toggler = smart_render_toggler(self);
-		installSuspense(a_p.config.error, boundary);
 		let FailedElement = _HouxitCoreRenderer(arrayInverter(a_p.config.error), self, null, hx_Element, ssc, config);
 		FailedElement = new HouxitFragmentElement(arrayInverter(FailedElement), self, hx_Element);
 		toggler();
@@ -3994,7 +3982,7 @@ var Houxit = (function(exports) {
 			runSlotDirectiveCompile(self, config, vnode.props, vnode, Element, { is_hyperscript }, true);
 			return Element;
 		}
-		const boundary = getBoundary(vnode);
+		let boundary = getBoundary(vnode);
 		let widget = prototype_;
 		const Oa_p = widget[$asyncVnodeKey];
 		const a_p = memMove(Oa_p);
@@ -4006,7 +3994,7 @@ var Houxit = (function(exports) {
 		if (!a_p.postLoad || !Oa_p.cache) {
 			let future = a_p.load();
 			if (!isPromise(future)) {
-				debugHandler(`asyncWidget instance load callback expects a javascript Promise instance object as a return value`, self, true);
+				debugHandler(`[ ] asyncWidget instance load callback expects a javascript Promise instance object as a return value`, self, true);
 				return;
 			}
 			const timeout = a_p.config.timeout;
@@ -4014,7 +4002,7 @@ var Houxit = (function(exports) {
 			if (!isInfinity(timeout)) timeOutId = setTimeout(() => {
 				if (!a_p.resolved && !a_p.failed) {
 					asyncWidgetBoundaryWrap(boundary, () => asyncErrorElement(self, a_p, hx_Element, ssc, boundary, config), "failed", a_p);
-					debugHandler(`["asyncWidget()" timeout Error] load time exceeds the asyncWidget.timeout config limit`, self, true);
+					debugHandler(`[ ] ["asyncWidget()" timeout Error] load time exceeds the asyncWidget.timeout config limit`, self, true);
 				}
 			}, timeout);
 			const failureHandler = (er) => {
@@ -4023,7 +4011,7 @@ var Houxit = (function(exports) {
 				if (timeOutId) clearTimeout(timeOutId);
 				if (boundary) {}
 				asyncErrorElement(self, a_p, hx_Element, ssc, boundary, config);
-				debugHandler(`Failed resolving state during an "async build()" process\n\nReason::"${er.message}"`, self, true);
+				debugHandler(`[ ] Failed resolving state during an "async build()" process\n\nReason::"${er.message}"`, self, true);
 			};
 			future = future.then((res) => {
 				if (isObject(res) && isUndefined(res.prototype) && hasOwn(res, "default")) res = res.default;
@@ -4057,7 +4045,7 @@ var Houxit = (function(exports) {
 					failureHandler(err);
 				}
 			}).catch(failureHandler);
-			if (boundary) {
+			if (boundary && isSuspensible(a_p)) {
 				boundary.activeAwaits++;
 				boundary.loadChain.add(future);
 			}
@@ -4111,7 +4099,7 @@ var Houxit = (function(exports) {
 	function evaluateKeyOnElement(hx_Element, key, self) {
 		if (!isHouxitElement(hx_Element)) return;
 		else if (!isNull(key) && !isPrimitive(key)) {
-			debugHandler(`key prop value expects primitive values`, self, true);
+			debugHandler(`[ ] key prop value expects primitive values`, self, true);
 			return;
 		} else if (!isNull(key)) hx_Element._vnode_key = key;
 	}
@@ -4266,10 +4254,10 @@ var Houxit = (function(exports) {
 		if (!props || !props[dir$$__render] || !len(props[dir$$__render])) return;
 		for (let dir of props[dir$$__render].values()) if (isChar(dir.name) && !isHouxitDirective(dir.name)) {
 			if (!hasProp(self[$$$register].directives, dir.name) || !self[$$$register].directives[dir.name]) {
-				debugHandler(`"${dir.name}" is not a registered directive\n`, self, true);
+				debugHandler(`[ ] "${dir.name}" is not a registered directive\n`, self, true);
 				return;
 			} else if (!validateType(self[$$$register].directives[dir.name], [Function, Object])) {
-				debugHandler(`directive resolved at "${dir.name}" is not a valid directive data value`, self, true);
+				debugHandler(`[ ] directive resolved at "${dir.name}" is not a valid directive data value`, self, true);
 				return;
 			}
 			dirMap(self, dir, self[$$$register].directives[dir.name], hx_Element);
@@ -4283,7 +4271,7 @@ var Houxit = (function(exports) {
 		if (isPObject(dir)) {
 			for (let [name, hook] of entries(dir)) if (_makeMap_(directivesHooksMap, name)) {
 				if (!isPFunction(hook)) {
-					debugHandler(`"${name} directive hook received at $$ is not a function`, self, true);
+					debugHandler(`[ ] "${name} directive hook received at $$ is not a function`, self, true);
 					return;
 				}
 				hook.value = resolver.value;
@@ -4304,7 +4292,7 @@ var Houxit = (function(exports) {
 			name: "enSlot()"
 		})) return;
 		if (isClass(options)) {
-			debugHandler(`Uresolved function type ---- received at "enSlot"\n\nSeems to be a "class" instance value type`);
+			debugHandler(`[ ] Uresolved function type ---- received at "enSlot"\n\nSeems to be a "class" instance value type`);
 			return;
 		} else if (isPFunction(options)) options = { default: options };
 		return new slotInstanceMap(options || {});
@@ -4334,7 +4322,7 @@ var Houxit = (function(exports) {
 		key = !key ? null : isNaN(Number(key)) ? key : Number(key);
 		const KEYS_INDEXES = hx_Element.VN_Tree.KEYS_INDEXES;
 		if (!isNull(key) && KEYS_INDEXES.has(key)) {
-			debugHandler(`keyed element seemes to have been dublicated within this render siblings >>"${key}"<<<\n\nCheck for possible duplicates in special key props\n`, self, true);
+			debugHandler(`[ ] keyed element seemes to have been dublicated within this render siblings >>"${key}"<<<\n\nCheck for possible duplicates in special key props\n`, self, true);
 			return;
 		}
 		if (resource && isNull(key)) if (KEYS_INDEXES.has(key)) key = index;
@@ -4455,7 +4443,7 @@ var Houxit = (function(exports) {
 			...config
 		};
 		if (validHouxitWidget(prototype_)) buildInstance = $compilerEngine(self, virtualNode, hx_Element, slotsCompilerArgs, config);
-		else debugHandler(`widget initializer failed to compile...`, true, self);
+		else debugHandler(`[ ] widget initializer failed to compile...`, true, self);
 		if (buildInstance) {
 			if (!is_hyperscript) hx_Element.hx_build = buildInstance[$$$ownProperties].hx_build;
 			if (buildInstance[$$$ownProperties]?.slot_name) hx_Element.slot_name = buildInstance[$$$ownProperties].slot_name;
@@ -4490,16 +4478,16 @@ var Houxit = (function(exports) {
 	}
 	function validateDelimiterConstruct(self, delimiters) {
 		if (!isArray(delimiters)) {
-			debugHandler(`expects an arrah of character strings encoding\n\n.....delimiters config setup`, self, isHouxitBuild(self));
+			debugHandler(`[ ] expects an arrah of character strings encoding\n\n.....delimiters config setup`, self, isHouxitBuild(self));
 			return false;
 		}
 		let [open, close] = delimiters;
 		if (open && close) {
 			if (!hasSpecialCharacters(open) || !hasSpecialCharacters(close)) {
-				debugHandler(`mustache customization error::\n\n delimeters must match value of special characters\n\ne.g !, @, #, $, %, ^, &, *, (, ),  [, ], {, }, ;, :, ?`, self, isHouxitBuild(self));
+				debugHandler(`[ ] mustache customization error::\n\n delimeters must match value of special characters\n\ne.g !, @, #, $, %, ^, &, *, (, ),  [, ], {, }, ;, :, ?`, self, isHouxitBuild(self));
 				return false;
 			} else if (includesUnsupported([open, close])) {
-				debugHandler(`Invalid  delimiter value :: \n\n"${open} or ${close} is an unsupported delimiter constructs"\n cannot be used as a string mustache delimeter since this are javascript multiline string interpolation technic\n\n Delimeter Configuration failed`, self, isHouxitBuild(self));
+				debugHandler(`[ ] Invalid  delimiter value :: \n\n"${open} or ${close} is an unsupported delimiter constructs"\n cannot be used as a string mustache delimeter since this are javascript multiline string interpolation technic\n\n Delimeter Configuration failed`, self, isHouxitBuild(self));
 				return false;
 			}
 		}
@@ -4540,7 +4528,7 @@ var Houxit = (function(exports) {
 		} catch (err) {
 			console.error(err);
 			if (ref && !returnToken) {
-				debugHandler(`Accessor Error::\n\n"${ref}" property value was accessed during render, but not initialized on model or is undefined\n\nat at\n ..."${ref}" property \n\n${err}`, self, true);
+				debugHandler(`[ ] Accessor Error::\n\n"${ref}" property value was accessed during render, but not initialized on model or is undefined\n\nat at\n ..."${ref}" property \n\n${err}`, self, true);
 				return;
 			} else return ref;
 		}
@@ -4566,7 +4554,8 @@ var Houxit = (function(exports) {
 			},
 			update(value) {
 				return signals[signalKey](value);
-			}
+			},
+			name: ref
 		};
 	}
 	function useBindDriver(ref, config) {
@@ -4576,7 +4565,7 @@ var Houxit = (function(exports) {
 	var normalize_Filter = (self, name) => hasOwn(BUILT_IN_FILTERS, name) ? BUILT_IN_FILTERS[name] : hasOwn(self[$$$register].filters, name) ? self[$$$register].filters[name] : _wufHas_instance(self, name) ? normalizeWUFBuildScope(self, name) : pass;
 	function customFilterDebugger(value, filter) {
 		if (!canRender(value)) {
-			debugHandler(`"${filter}" template filter expects a plain string value`);
+			debugHandler(`[ ] "${filter}" template filter expects a plain string value`);
 			return false;
 		}
 		return true;
@@ -4597,10 +4586,10 @@ var Houxit = (function(exports) {
 	function SHORTENER_FILTER_SERVICE(value, verboseText = "") {
 		value = Number(value);
 		if (!isNumber(value) || isNaN(value)) {
-			debugHandler(`shortener filter Adapter at argument <1> expects a number`);
+			debugHandler(`[ ] shortener filter Adapter at argument <1> expects a number`);
 			return value;
 		} else if (!isString(verboseText)) {
-			debugHandler(`shortener filter Adapter at argument <2> expects a string`);
+			debugHandler(`[ ] shortener filter Adapter at argument <2> expects a string`);
 			return value;
 		}
 		var result = value;
@@ -4629,10 +4618,10 @@ var Houxit = (function(exports) {
 	}
 	function CURRENCY_FILTER_SERVICE(value, currency = "$") {
 		if (!isNumber(value) || isNaN(value)) {
-			debugHandler(`currency filter Adapter at argument <1> expects a number`);
+			debugHandler(`[ ] currency filter Adapter at argument <1> expects a number`);
 			return value;
 		} else if (!isString(currency)) {
-			debugHandler(`currency filter Adapter at argument <2> expects a string`);
+			debugHandler(`[ ] currency filter Adapter at argument <2> expects a string`);
 			return value;
 		}
 		const stringifyNum = String(value);
@@ -4686,7 +4675,7 @@ var Houxit = (function(exports) {
 			try {
 				value = filterCallback.filter(value, ...parameters);
 			} catch (error) {
-				debugHandler(`Encountered an error when running the filter callback at >>>>>> ${name}`, self, true);
+				debugHandler(`[ ] Encountered an error when running the filter callback at >>>>>> ${name}`, self, true);
 				debugHandler(error, self);
 				break;
 			}
@@ -4702,19 +4691,19 @@ var Houxit = (function(exports) {
 			parameters = _$runModelBind(self, `((...args)=> args)(${content})`, hx_Element);
 		}
 		if (!hasFilterInstance(self, name)) {
-			debugHandler(`Unrecognized  filter name "${name}"\n\n if this is a custom filter, make sure it's registered through the local filter option or global prototype 'filter' method`, self, true);
+			debugHandler(`[ ] Unrecognized  filter name "${name}"\n\n if this is a custom filter, make sure it's registered through the local filter option or global prototype 'filter' method`, self, true);
 			return;
 		}
 		const filterInstance = normalize_Filter(self, name);
 		if (!validateType(filterInstance, [Function, Object])) {
-			debugHandler(`${name} filter receives an Invalid type definition\n\nExpects a filter function or a plain object type exposing a filter method which acts as the filter callable itself`, self, true);
+			debugHandler(`[ ] ${name} filter receives an Invalid type definition\n\nExpects a filter function or a plain object type exposing a filter method which acts as the filter callable itself`, self, true);
 			return;
 		} else if (isPObject(filterInstance)) {
 			if (!hasProp(filterInstance, "filter")) {
-				debugHandler(`"${name}" filter instance object does not expose a "filter" method which acts as the filter function`, self, true);
+				debugHandler(`[ ] "${name}" filter instance object does not expose a "filter" method which acts as the filter function`, self, true);
 				return;
 			} else if (!isPFunction(filterInstance.filter)) {
-				debugHandler(`"${name}".<filter> instance filter property value is not a method/callable  \n\n Expects a function type which acts as the filter function`, self, true);
+				debugHandler(`[ ] "${name}".<filter> instance filter property value is not a method/callable  \n\n Expects a function type which acts as the filter function`, self, true);
 				return;
 			}
 		}
@@ -4726,9 +4715,8 @@ var Houxit = (function(exports) {
 	var HouxitDirectives = "if,else,else-if,html,text,for,raw,slot,model,bind,on,scoped,provide,transite,animate,clone";
 	var isHouxitDirective = (dir) => _makeMap_(HouxitDirectives, dir);
 	function _Evaluate_THIS(obj, str, self, optional) {
-		if (/^(?:const|var|let|while|for|of|if|else|import|export|switch|case|try|catch|throw|continue|break|with|debugger|label|do|from|as|finally|delete|void|enum|implements|interface|package|protected;).*$/.test(str.replace(stringsMonitorRegex, () => "")) && !passableBlock(str)) throw new Error(`Invalid expression: \n\n"${str}" Your binding seems to contain an unallowed expression as a statement\n Only single expressions are allowed.`, self, true);
 		const commentRegex = /\/\/.*$|\/\*[^]*?\*\//g;
-		let expressionWithoutComments = str.replace(commentRegex, "");
+		let expressionWithoutComments = str.replace(commentRegex, "").replace(stringsMonitorRegex, () => "");
 		const unsupportedRegex = /(?:\.\.|\bthrow\b|\bdelete\b|\bvoid\b|\bconst\b|\blet\b|\bvar\b|\bwhile\b|\bfor\b|\bof\b|\bif\b|\belse\b|\bimport\b|\bexport\b|\bswitch\b|\bcase\b|\btry\b|\bcatch\b|\bcontinue\b|\bbreak\b|\bwith\b|\bdebugger\b|\blabel\b|\bdo\b|\bfrom\b|\bas\b|\bfinally\b|\benum\b|\bimplements\b|\binterface\b|\bpackage\b|\bprotected\b)/;
 		let checkRegex = false;
 		try {
@@ -4738,7 +4726,7 @@ var Houxit = (function(exports) {
 		}
 		if (checkRegex && unsupportedRegex.test(expressionWithoutComments.replace(stringsMonitorRegex, () => ""))) throw new Error(`Invalid expression: \n\nUnsupported constructs are not allowed.\n\n"${str}"`, self, true);
 		else if (commentRegex.test(str)) {
-			debugHandler(`Template SyntaxError...\n\nComments not allowed in template expression\n\n"${str}"`, self, true);
+			debugHandler(`[ ] Template SyntaxError...\n\nComments not allowed in template expression\n\n"${str}"`, self, true);
 			return;
 		}
 		let dexTransform;
@@ -4870,7 +4858,7 @@ var Houxit = (function(exports) {
 		const isRerender = self[$$$operands]?.initializedRender;
 		if (dynamicAttrRegex.test(attr)) {
 			const matches = attr.match(dynamicAttrRegex);
-			attr = effectRunner(_createEffectBase(function() {
+			attr = effectRunner(_createHouxitEffectFrame(function() {
 				return matches[0].replace(dynamicAttrRegex, (match, text) => {
 					return unwrap(_$runModelBind(self.__public_model__, text, hx_Element, true));
 				});
@@ -4878,7 +4866,7 @@ var Houxit = (function(exports) {
 			if (len(subscribers) && !isRerender) {} else if (isRerender) {}
 		}
 		if (!isString(attr)) {
-			debugHandler(`Unexpected value at "${iniAttr}" as dynamically evaluated prop name binding is not a valId prop string`);
+			debugHandler(`[ ] Unexpected value at "${iniAttr}" as dynamically evaluated prop name binding is not a valId prop string`);
 			return iniAttr;
 		}
 		iniAttr.replace(dynamicAttrRegex, function(match, space) {
@@ -4929,7 +4917,7 @@ var Houxit = (function(exports) {
 						Array,
 						Function
 					]) && isArray(value) && isNaN(Number(keys)) && Number(keys) + 1 > len(value)) return false;
-					value = value[keys];
+					value = value?.[keys];
 				}
 			} else if (!hasOwn(value || {}, key)) return false;
 			else {
@@ -5038,7 +5026,7 @@ var Houxit = (function(exports) {
 		styleProps = styleProps || {};
 		if (isPObject(item)) entries(item).forEach(([key, style]) => {
 			if (!isPrimitive(unwrap(style))) {
-				debugHandler(`"${key}" style prop: Unrecognized style property value \nat at\n "${key}" style property\n\n`, self);
+				debugHandler(`[ ] "${key}" style prop: Unrecognized style property value \nat at\n "${key}" style property\n\n`, self);
 				return;
 			}
 			styleProps[toCamelCase(key)] = compileToRenderable(style);
@@ -5129,7 +5117,7 @@ var Houxit = (function(exports) {
 		} else if (!key.includes(":") && !key.includes("|") && !has$$_bind(key)) binding.key = key;
 		else {
 			let [dir, keys, unecessary] = directive_sep(key);
-			if (exists(unecessary)) debugHandler(`Error in directive saperator chain.\n\nExcessive directive chain, unable to determine\n >>>> "${unecessary}"`, self, true);
+			if (exists(unecessary)) debugHandler(`[ ] Error in directive saperator chain.\n\nExcessive directive chain, unable to determine\n >>>> "${unecessary}"`, self, true);
 			binding[key.startsWith("$$") ? "directive" : "key"] = dir;
 			if (!binding.key) binding.key = keys;
 			else keys = binding.key;
@@ -5167,7 +5155,7 @@ var Houxit = (function(exports) {
 	}
 	function validateIncomingPropsKeys(self, { key, attr }, is_hyperscript, hx_Element, metrics) {
 		if (is_hyperscript && isillegalKeyBinding(key, is_hyperscript)) {
-			debugHandler(`Illegal binding not allowed in build Adapter mode\n\n"${key}" property has a disallowed binding directive property`, true, self);
+			debugHandler(`[ ] Illegal binding not allowed in build Adapter mode\n\n"${key}" property has a disallowed binding directive property`, true, self);
 			return {};
 		}
 		let { isRerender, patch } = metrics, modifiers = [], deepKeys = [], directive, bindings = {}, effect;
@@ -5271,7 +5259,7 @@ var Houxit = (function(exports) {
 				} else element.setAttribute(key, attr);
 			} catch (err) {
 				debugHandler(err);
-				debugHandler(`Attribute Error::\n\n...unable to set node attribute "${key}\n\n ${err}`, self, true, `When setting the attribute "${key}" on "${isSSR ? element.type : element.outerHTML}"`, self, !is_hyperscript);
+				debugHandler(`[ ] Attribute Error::\n\n...unable to set node attribute "${key}\n\n ${err}`, self, true, `When setting the attribute "${key}" on "${isSSR ? element.type : element.outerHTML}"`, self, !is_hyperscript);
 				return;
 			}
 			if (isRerender && !len(bindings.subscribers) || isSSR) return;
@@ -5290,7 +5278,7 @@ var Houxit = (function(exports) {
 	function motionPropFacade(self, bindings, element, hx_Element, metrics) {
 		let { value, key } = bindings;
 		if (!isBaseMotion(value)) {
-			debugHandler(`<Element>.motion property receives an Invalid value...\nNot a <Houxit.Motion> Property`, self, true);
+			debugHandler(`[ ] <Element>.motion property receives an Invalid value...\nNot a <Houxit.Motion> Property`, self, true);
 			return;
 		}
 		value.type;
@@ -5314,10 +5302,10 @@ var Houxit = (function(exports) {
 	function click_handler_facading(self, [key, attr, src], bindings, element, hx_Element, metrics) {
 		attr = unwrap(attr);
 		if (key === "dispatch" && !isArray(attr)) {
-			debugHandler(`<dispatch> dispatcher expects an array value of events and method\n\nFound "${attr}" of "${getType(attr)}" type`, self, !isNull(self));
+			debugHandler(`[ ] <dispatch> dispatcher expects an array value of events and method\n\nFound "${attr}" of "${getType(attr)}" type`, self, !isNull(self));
 			return;
 		} else if (isOnListener(src) && !validateType(attr, [Array, Function])) {
-			debugHandler(`<${key}> listener expects a function value or an array of valid methods functions\n\nFound "${attr}" of "${getType(attr)}" type`, self, !isNull(self));
+			debugHandler(`[ ] <${key}> listener expects a function value or an array of valid methods functions\n\nFound "${attr}" of "${getType(attr)}" type`, self, !isNull(self));
 			return;
 		}
 		if (isInlineListener(key)) bindings.key = isInlineListener(key);
@@ -5437,7 +5425,7 @@ var Houxit = (function(exports) {
 	function transformAttachProp(self, bindings, element, hx_Element, metrics) {
 		const { key, value } = bindings;
 		if (!isPFunction(value)) {
-			debugHandler(`"attach" special property expects a plain Function type`, self, true);
+			debugHandler(`[ ] "attach" special property expects a plain Function type`, self, true);
 			return;
 		}
 		const hooks = hx_Element.VNodeManager.LifeCycleHooks;
@@ -5535,7 +5523,7 @@ var Houxit = (function(exports) {
 			Build
 		], vNode.prototype_))) {
 			const fn = bindings.value;
-			const effect = _createEffectBase(() => {
+			const effect = _createHouxitEffectFrame(() => {
 				return unwrap(safeCall(fn));
 			}, self);
 			effectRunner(effect);
@@ -5558,12 +5546,12 @@ var Houxit = (function(exports) {
 			return;
 		}
 		if (!isString(value)) {
-			debugHandler(`slot "name" atrribute value expects a "string" value data type\n\nuntraceable data type found`, self, true);
+			debugHandler(`[ ] slot "name" atrribute value expects a "string" value data type\n\nuntraceable data type found`, self, true);
 			return;
 		}
 		const SSBs = self[$$$compiler].scopeSlotsBindings;
 		if (hasOwn(SSBs, value)) {
-			debugHandler(`slot with name "${value}" has been duplicated\n\nMore than one slot with same name mapping cannot be implemented to avoid dublicated renderimg of slots contents`, self, true);
+			debugHandler(`[ ] slot with name "${value}" has been duplicated\n\nMore than one slot with same name mapping cannot be implemented to avoid dublicated renderimg of slots contents`, self, true);
 			$warn(`NOTE: Un-named slots elements shares the same naming scope with implicitly defined "name='default'" slots elements`, self);
 			return;
 		}
@@ -5582,19 +5570,19 @@ var Houxit = (function(exports) {
 		const isSSR = isSSRCompiler(self);
 		const SSRVnode = hx_Element.VNodeManager.SSRVnode;
 		if (!isRerender && (isSSR ? SSRVnode.type : element.localName) !== "slot") {
-			debugHandler(`"context" special property is only scoped to html "<slot>" element in Houxit\n<slot> element scope context property found on a none "<slot>" element\n\nFailed to resolve binding`);
+			debugHandler(`[ ] "context" special property is only scoped to html "<slot>" element in Houxit\n<slot> element scope context property found on a none "<slot>" element\n\nFailed to resolve binding`);
 			return;
 		}
 		const slotName = isRerender && !isSSR ? hx_Element.VNodeManager.element_slot_ref : isSSR ? SSRVnode.props.name : element.name;
 		const SSBs = self[$$$compiler].scopeSlotsBindings;
 		if (!isRerender && !slotName && !hasOwn(SSBs, slotName)) {
-			debugHandler(`To specifically bind context scope to slots, they are obliged to be contextually named\n\nIt's either this slot element was not named properly…\nOr that the "context" property precedes the special slot "name" attribute`, self, true);
+			debugHandler(`[ ] To specifically bind context scope to slots, they are obliged to be contextually named\n\nIt's either this slot element was not named properly…\nOr that the "context" property precedes the special slot "name" attribute`, self, true);
 			$warn(`To resolve this, make sure the "name" attribute comes before the "context" key on this slot element`, self);
 			return;
 		}
 		let data_bind = bindings.value;
 		if (!isPObject(data_bind)) {
-			debugHandler(`"context" special scope property expects a plain object\nInvalid data type received\n\n@@ "${slotName}" <slot> element>>>>>`, self, true);
+			debugHandler(`[ ] "context" special scope property expects a plain object\nInvalid data type received\n\n@@ "${slotName}" <slot> element>>>>>`, self, true);
 			return;
 		}
 		data_bind = token(data_bind);
@@ -5713,10 +5701,10 @@ var Houxit = (function(exports) {
 		if (isPFunction(directive)) CustomDir.mounted = directive;
 		else if (isPObject(directive)) {
 			if (!has_Intersect_Prop(directivesHooksMap.split(","), keys(directive))) {
-				debugHandler(`((Directive Error))\n\ndirective ${typeof directive} does not define any of widget Directive hook.\n  "created/mounted/updated/init/destroyed" method`, self, true);
+				debugHandler(`[(Directive Error)]\n\ndirective ${typeof directive} does not define any of widget Directive hook.\n  "created/mounted/updated/init/destroyed" method`, self, true);
 				return element;
 			} else for (const [name, hook] of entries(directive)) if (new Set(directivesHooksMap.split(",")).has(name)) if (!isPFunction(directive[name])) {
-				debugHandler(`((Custom directive))\n\ncustom Directive "${Name}" ${name}  hook is not a function`, self, true);
+				debugHandler(`[(Custom directive)]\n\ncustom Directive "${Name}" ${name}  hook is not a function`, self, true);
 				return element;
 			} else {
 				hook[lifeCiycleBinding] = {
@@ -5856,7 +5844,7 @@ var Houxit = (function(exports) {
 		const is_hyperscript = hx_Element.is_hyperscript;
 		let effect, attr = value;
 		if (!is_hyperscript) {
-			effect = _createEffectBase(function() {
+			effect = _createHouxitEffectFrame(function() {
 				return _$runModelBind(self, attr, hx_Element, !modifiers.has("bind"));
 			}, self);
 			value = effectRunner(effect).value;
@@ -5896,7 +5884,7 @@ var Houxit = (function(exports) {
 		let { value, modifiers, key } = bindings;
 		const { is_hyperscript, isRerender, config } = metrics;
 		if (!key) {
-			debugHandler(`slot key error: "$$slot" directive has no key mapping name defined to the "slot" element\n\n--failed-- to normalize slot --directive--`);
+			debugHandler(`[(slot key error)] "$$slot" directive has no key mapping name defined to the "slot" element\n\n--failed-- to normalize slot --directive--`);
 			return;
 		}
 		modifiers = new Set(modifiers);
@@ -5921,7 +5909,7 @@ var Houxit = (function(exports) {
 			item,
 			src
 		}, hx_Element, is_hyperscript);
-		const effect = _createEffectBase(function() {
+		const effect = _createHouxitEffectFrame(function() {
 			return isString(item) ? _$runModelBind(self, item, hx_Element || ctx) : safeCall(item);
 		}, self);
 		let { value: transform } = effectRunner(effect);
@@ -5969,7 +5957,7 @@ var Houxit = (function(exports) {
 				src
 			}, hx_Element, metrics.is_hyperscript);
 			const funcToken = attr;
-			effect = _createEffectBase(() => {
+			effect = _createHouxitEffectFrame(() => {
 				attr = _$runModelBind(self, attr, hx_Element);
 				attr = object_Has_Path(self.__public_model__, funcToken) && isPFunction(attr) ? attr.bind(self.__public_model__) : attr;
 				return attr;
@@ -5977,12 +5965,12 @@ var Houxit = (function(exports) {
 			try {
 				attr = effectRunner(effect).value;
 			} catch (err) {
-				debugHandler(`${err}`, self, true);
+				debugHandler(`[ ] ${err}`, self, true);
 				return node;
 			}
 			attr = unwrap(attr);
 			if (!isPFunction(attr)) {
-				debugHandler(`"${name}" event must be wrapped as or in a function \n\non.....on...\n  "${isWidget ? "" : node?.localName}" \n`, self, true);
+				debugHandler(`[ ] "${name}" event must be wrapped as or in a function \n\non.....on...\n  "${isWidget ? "" : node?.localName}" \n`, self, true);
 				return node;
 			}
 		}
@@ -6002,7 +5990,7 @@ var Houxit = (function(exports) {
 				attr.options = options;
 				card.callbacks.add(attr);
 			}
-		} else if (!isRerender && isHydration(self) && isVNodeClass(node) || !isSSR && IS_ELEMENT_NODE(node)) for (let event of deepKeys.values()) if (!IS_VALID_EVENT_HANDLER(event)) debugHandler(`"${event}" is not a valid event name`, self, true);
+		} else if (!isRerender && isHydration(self) && isVNodeClass(node) || !isSSR && IS_ELEMENT_NODE(node)) for (let event of deepKeys.values()) if (!IS_VALID_EVENT_HANDLER(event)) debugHandler(`[ ] "${event}" is not a valid event name`, self, true);
 		else {
 			const callbackListen = (element) => {
 				element.addEventListener(event, (...args) => {
@@ -6023,26 +6011,26 @@ var Houxit = (function(exports) {
 		let { key, value: item, modifiers, deepKeys, directive: name } = bindings;
 		modifiers = new Set(modifiers);
 		if (!object_Has_Path(self.__public_model__, item)) {
-			debugHandler(`value "${item}" property value was referenced during render, but not initialized on model or is undefined\n\nat at\n ..."${name} directive on ${isWidget ? "$$clone" : vnode.localName} `, self, true);
+			debugHandler(`[ ] value "${item}" property value was referenced during render, but not initialized on model or is undefined\n\nat at\n ..."${name} directive on ${isWidget ? "$$clone" : vnode.localName} `, self, true);
 			return;
 		}
 		let ref, effect;
 		try {
 			if (!is_hyperscript) {
-				effect = _createEffectBase(function() {
+				effect = _createHouxitEffectFrame(function() {
 					return get_Object_Value(self.__public_model__, item, modifiers.has("bind"));
 				}, self);
 				ref = effectRunner(effect).value;
 			}
 			if (ref && !isNull(ref)) ref = get_Object_Value(self.__public_model__, item, modifiers.has("bind"));
 		} catch (err) {
-			debugHandler(`There is a problem with accessing the path "${item}" property which was referenced during render, but seems not initialized on model or is undefined\n\nat at\n ..."${name} directive on ${isWidget ? "$$ref" : vnode.localName} `, self, true);
+			debugHandler(`[ ] There is a problem with accessing the path "${item}" property which was referenced during render, but seems not initialized on model or is undefined\n\nat at\n ..."${name} directive on ${isWidget ? "ref" : vnode.localName} `, self, true);
 			debugHandler(err);
 			return;
 		}
 		if (isToken(ref)) {
 			if (isReadonly(ref)) {
-				debugHandler(`Path provided to the $$clone directive path "${item}" resolves to a readonly ref value\n\nFailed to mutate a readonly ref......at ......."${name}"`, self, true);
+				debugHandler(`[ ] Path provided to the $$clone directive path "${item}" resolves to a readonly ref value\n\nFailed to mutate a readonly ref......at ......."${name}"`, self, true);
 				return;
 			}
 			item + ref[refInternalEffectKey].accessor;
@@ -6052,7 +6040,7 @@ var Houxit = (function(exports) {
 		let { value, modifiers, key, directive, deepKeys } = bindings;
 		modifiers = new Set(modifiers);
 		hx_Element.is_hyperscript;
-		value = effectRunner(_createEffectBase(function() {
+		value = effectRunner(_createHouxitEffectFrame(function() {
 			return _$runModelBind(self, value, hx_Element, !modifiers.has("bind"));
 		}, self)).value;
 		value = unwrap(value);
@@ -6084,12 +6072,12 @@ var Houxit = (function(exports) {
 		let { value: item, modifiers, directive: name } = bindings;
 		modifiers = new Set(modifiers);
 		if (!(isNativeElement(node) && node.localName === "style")) {
-			debugHandler(`"$$scoped" directive is only restricted to document <style> elements only`, self, true);
+			debugHandler(`[ ] "$$scoped" directive is only restricted to document <style> elements only`, self, true);
 			return node;
 		}
 		let effect;
 		if (!is_hyperscript) {
-			effect = _createEffectBase(function() {
+			effect = _createHouxitEffectFrame(function() {
 				return _$runModelBind(self, item, hx_Element, !modifiers.has("bind"));
 			}, self);
 			value = effectRunner(effect).value;
@@ -6102,90 +6090,206 @@ var Houxit = (function(exports) {
 		let { directive, value, key } = Binding;
 		hx_Element.VNodeManager[$$$context] = { prop: value };
 	}
+	function genericCollection(value) {
+		if (!validateType(value, [
+			WeakSet,
+			Set,
+			Tuple,
+			Array
+		])) {
+			debugHandler("[genericCollection() Error] receives a non collection value");
+			return {};
+		}
+		const add = validateType(value, [
+			Set,
+			Tuple,
+			WeakSet
+		]) ? "add" : "push";
+		const has = validateType(value, [
+			Set,
+			Tuple,
+			WeakSet
+		]) ? "has" : "includes";
+		const deleteV = validateType(value, [Set, WeakSet]) ? "remove" : isTuple(value) ? "delete" : "splice";
+		return {
+			add: (...args) => value[add](...args),
+			has: (...args) => value[has](...args),
+			delete(v, c = 1, ...inserts) {
+				let args = [v];
+				if (isArray(value)) args = [
+					value.indexOf(v),
+					c,
+					...inserts
+				];
+				return value[deleteV](...args);
+			}
+		};
+	}
 	function $$dir_MODEL(self, bindings, element, hx_Element, metrics) {
 		let { value: item, modifiers, key } = bindings;
 		let initVal = "", effect;
 		const { config } = metrics;
 		const isSSR = isSSRCompiler(self);
 		try {
-			effect = _createEffectBase(function() {
+			effect = _createHouxitEffectFrame(function() {
 				return get_Object_Value(self.__public_model__, item, true);
 			}, self);
 			bindings.effect = effect;
 			initVal = unwrap(effectRunner(effect).value);
 		} catch (err) {
-			debugHandler(`undefined reference for directive "$$model"\n\n "${item}" is not defined on widget model instance\n\n${err}`, self, true);
+			debugHandler(`[ ] undefined reference for directive "$$model"\n\n "${item}" is not defined on widget model instance\n\n${err}`, self, true);
 			return;
 		}
 		if (isHouxitWidgetElement(hx_Element)) return defineInstanceModelDriver(...arguments);
-		if (isSSR && isString(element.type) || IS_ELEMENT_NODE(element)) {
-			if (!(isSSR ? _makeMap_(HTML_FORM_ELEMENTS, element.type) : Is_Form_Element(element))) {
-				debugHandler(`Compilation Error::\n\n cannot bind a data model to  a none form element\n\n`, self, true);
+		const localName = isSSR ? element.type : element.localName;
+		if (isSSR && isString(localName) || IS_ELEMENT_NODE(element)) {
+			if (!_makeMap_(HTML_FORM_ELEMENTS, localName)) {
+				debugHandler(`[(Compilation Error)]::\n\n cannot bind a data model to  a none form element\n\n`, self, true);
 				$warn("widget root element is not a form element", self);
 				return;
 			}
-			getFormElementProp(element);
+			hx_Element.VNodeManager.has_model = true;
 			function flushCallback(element) {
-				if (element.localName === "select") {
-					if (element.multiple) {
-						if (!isCollection(source)) {
-							debugHandler(`[$$model collection error] <select multiple> element expects $$model source to be an array or valid colloction type`, self, true);
-							return;
-						}
-						element.options;
-						for (let v of source.values());
-					}
-				} else element.value = compileToRenderable(unwrap(initVal));
+				if (localName === "form") return normalize_form_model(self, element, initVal, modifiers, effect);
+				const target_value = get_I_V(element);
+				applyModelInitialState(self, element, initVal, localName);
+				updateElementModelValue(self, element, target_value, item, initVal, modifiers, null, true);
 				element.addEventListener(get_Model_Event(element), function($ev) {
-					const value = $ev.target.value;
 					try {
-						if (initVal !== value) {
-							tick(() => updateElementModelValue(self, element, value, item)).catch((err) => {
-								throw new Error(err);
-							});
-							initVal = value;
-						}
+						initVal = updateElementModelValue(self, element, get_I_V($ev.target), item, initVal, modifiers);
 					} catch (err) {
-						debugHandler(`${err}`, self, true);
+						debugHandler(err);
+						debugHandler(`[ ] ${err}`, self, true);
 					}
 				});
 			}
 			if (isHydration(self)) element.filesFilter.$ssr_kit.hydrationFlushs.add(flushCallback);
-			else if (!isSSR) flushCallback(element);
-			effect.attachCallback(() => {
-				element.value = compileToRenderable(unwrap(effect.runEffect().value));
+			else if (!isSSR) whenMounted(self, element, () => flushCallback(element));
+			createPriorityFlush(effect, () => {
+				if (localName === "form") return;
+				applyModelInitialState(self, element, unwrap(effect.runEffect().value), localName);
 			});
 		}
 	}
-	function updateElementModelValue(self, element, value, path) {
-		const name = element.localName;
-		element.type;
-		const source = unwrap(get_Object_Value(self.__public_model__, path));
-		if (name === "input" && _makeMap_("checkbox,radio") || name === "select") {
-			if (name === "select" && element.multiple) {
-				if (!isCollection(source)) {
+	function get_I_V(el, force = false) {
+		let value = el.value;
+		if (force || _makeMap_("number,range", el.type)) {
+			const van = el.valueAsNumber;
+			return isNaN(van) ? value : van;
+		}
+		return value;
+	}
+	function alreadyDefined$$Model(el) {
+		return el._hx_Element.hx_Element.VNodeManager.has_model;
+	}
+	function normalize_form_model(self, element, value, modifiers, effect) {
+		if (value && !isPObject(value)) {
+			debugHandler("[Houxit $$model Warning]: " + escapeDecoder("<form $$model=\"user\">") + " expects an Object. Received " + typeof value + " instead.", self, true);
+			return;
+		} else if (!value) value = {};
+		const controls = element.querySelectorAll("input:not([type=\"submit\"]):not([type=\"reset\"]):not([type=\"button\"]):not([type=\"image\"]), textarea, select");
+		const register = new Tuple();
+		for (let control of controls) {
+			if (!control.hasAttribute("name") || alreadyDefined$$Model(control)) continue;
+			const name = control.getAttribute("name");
+			let tag = control.localName;
+			const type = control.type;
+			if (register.has(name)) {
+				if (!(tag === "input" && _makeMap_("radio,checkbox", type))) $warn(`[Houxit $$model Warning]: Multiple form controls elements share the name "${name}" in the same form. Did you intend to use radio buttons or checkboxes instead?`, self, true);
+			} else register.add(name);
+			if (!object_Has_Path(value, name)) set_Object_Value(value, name, c_d_m(control, tag, type));
+			let initVal = get_Object_Value(value, name);
+			const target_value = get_I_V(control);
+			applyModelInitialState(self, control, initVal, tag);
+			updateElementModelValue(self, control, target_value, name, initVal, modifiers, value, true);
+			control.addEventListener(get_Model_Event(control), function($ev) {
+				try {
+					initVal = updateElementModelValue(self, control, get_I_V($ev.target), name, initVal, modifiers, value);
+				} catch (err) {
+					debugHandler(err);
+					debugHandler(`[ ] ${err}`, self, true);
+				}
+			});
+			createPriorityFlush(effect, () => {
+				if (localName === "form") return;
+				applyModelInitialState(self, control, unwrap(effect.runEffect().value), tag);
+			});
+		}
+		register.clear();
+	}
+	function c_d_m(control, name, type) {
+		if (name === "select" && control.multiple || name === "input" && type === "checkbox") return [];
+	}
+	function applyModelInitialState(self, element, initVal, localName, inForm) {
+		if (localName === "select") {
+			if (element.multiple) {
+				if (!isCollection(initVal)) {
 					debugHandler(`[$$model collection error] <select multiple> element expects $$model source to be an array or valid colloction type`, self, true);
 					return;
 				}
-				return;
 			}
-			if (!isCollection(source)) {}
+			for (let [index, opt] of entries(element.options)) {
+				const value = opt.value;
+				if (element.multiple ? genericCollection(initVal).has(value) : initVal === value) opt.selected = true;
+				else opt.selected = false;
+			}
+		} else {
+			const type = element.type;
+			const value = element.value;
+			if (_makeMap_("checkbox,radio", type)) {
+				if (isNull(initVal) && type === "checkbox") initVal = set_Object_Value(self.__public_model__, item, []);
+				if ((isCollection(initVal) || type === "radio") && !element.hasAttribute("value")) {
+					debugHandler("Houxit Warning: " + escapeDecoder("<input type=\"" + type + "\" $$model>") + " is bound to " + (type === "radio" ? "" : "an Array") + " model but has no value attribute. " + (type === "radio" ? "" : "Array") + type + " require a unique value attribute.");
+					return;
+				}
+				if (isCollection(initVal) ? genericCollection(initVal).has(value) : !element.hasAttribute("value") ? initVal : value === initVal) element.checked = true;
+				else element.checked = false;
+			} else if (type === "file") {
+				debugHandler(`[Houxit $$model Warning]:$$model is not supported on ${escapeDecoder("<input type=\"file\">")}. Use @change to access event.target.files instead.`);
+				return;
+			} else if (!isNull(initVal)) element.value = compileToRenderable(initVal);
 		}
-		set_Object_Value(self.__public_model__, path, value);
-		if (name);
 	}
-	function getFormElementProp(el) {
-		const name = el.localName;
-		const type = el.type;
-		if (_makeMap_("input,button")) {
-			if (type === "checkbox") return "checked";
-			return "value";
-		} else if (name === "select") return "";
+	function updateElementModelValue(self, element, target_value, path, value, modifiers, rfct, cs = false) {
+		const name = element.localName;
+		const type = element.type;
+		let current = applyModelValueModifiers(target_value, modifiers);
+		const setV = (val) => {
+			set_Object_Value(isObject(rfct) ? rfct : self.__public_model__, path, val);
+			return val;
+		};
+		if (name === "select") {
+			let coll = isCollection(value) && element.multiple ? genericCollection(value) : value;
+			for (let [index, opt] of entries(element.options)) {
+				const v = applyModelValueModifiers(opt.value, modifiers);
+				if (opt.selected && !(element.multiple ? coll.has(v) : v === value)) value = isCollection(value) && element.multiple ? coll.add(v) : setV(v);
+				else if (!opt.selected && (element.multiple ? coll.has(v) : v === value)) value = isCollection(value) && element.multiple ? coll.delete(v) : setV(null);
+			}
+		} else {
+			if (!element.hasAttribute("value")) current = element.checked ? true : false;
+			if (_makeMap_("radio,checkbox", type)) {
+				if (type === "checkbox" && isCollection(value)) {
+					let coll = genericCollection(value);
+					if (element.checked && !coll.has(current)) coll.add(current);
+					else if (!element.checked && coll.has(current)) coll.delete(current);
+				} else if (!cs || cs && isNull(value)) value = setV(current);
+			} else if (!cs || cs && isNull(value)) value = setV(current);
+		}
+		return value;
+	}
+	function applyModelValueModifiers(value, modifiers) {
+		for (let modifier of modifiers.values()) switch (modifier) {
+			case "number":
+				const val = Number(value);
+				if (!isNaN(val)) value = val;
+			case "trim": if (isString(value)) value = value.trim();
+		}
+		return value;
 	}
 	function defineInstanceModelDriver(self, bindings, props, hx_Element, metrics) {
 		const { vNode } = metrics;
-		let { key, effect, value } = bindings;
-		props[key ?? "modelValue"] = effect.value;
+		let { key, effect, value, modifiers } = bindings;
+		props[key ?? "modelValue"] = applyModelValueModifiers(effect.value, modifiers);
 		const ev = "update" + (key ? ":" + key : "");
 		const EVENTS = vNode.filesFilter.$$$Events;
 		if (!hasOwn(EVENTS, ev)) EVENTS[ev] = {
@@ -6193,7 +6297,10 @@ var Houxit = (function(exports) {
 			event: ev,
 			effect: void 0
 		};
-		EVENTS[ev].callbacks.add((newValue) => set_Object_Value(self.__public_model__, value, newValue));
+		EVENTS[ev].callbacks.add((newValue) => {
+			newValue = applyModelValueModifiers(newValue, modifiers);
+			return set_Object_Value(self.__public_model__, value, newValue);
+		});
 		let oldValue = effect.value;
 		const flush = createPriorityFlush(effect, function(observers) {
 			oldValue = __widget_props_effect(hx_Element.widget_instance, {
@@ -6471,18 +6578,18 @@ var Houxit = (function(exports) {
 			return t;
 		}).join(",");
 		if (!isPObject(config)) {
-			debugHandler(`${type} function expects a plain object as a return value`, self, true);
+			debugHandler(`[ ] ${type} function expects a plain object as a return value`, self, true);
 			return false;
 		}
 		config = memMove(config, true);
 		for (let [key, value] of entries(config)) {
 			if (!_makeMap_(motionPtops, key)) {
-				debugHandler(`"${key}" prop of custom ${type} Function is not recognised`, self, true);
+				debugHandler(`[ ] "${key}" prop of custom ${type} Function is not recognised`, self, true);
 				delete config[key];
 				continue;
 			}
 			if (!validateType(value, propsTypes[key])) {
-				debugHandler(`"${key}"" return prop of ${type} custom function is of an invalid type`, self, true);
+				debugHandler(`[ ] "${key}"" return prop of ${type} custom function is of an invalid type`, self, true);
 				return false;
 			}
 			if (key === "keyframes") {
@@ -6497,11 +6604,11 @@ var Houxit = (function(exports) {
 				};
 				config.keyframes.keyframes = value;
 			} else if (key === "easing" && !isEasingObject(value)) config.easing = createEasing(value);
-			else if (key === "direction" && !_makeMap_("alternate,reverse,normal")) {
-				debugHandler(`${type} "direction" option receives am invalid value "${value}" argument\n\ncan only be "alternate,reverse,normal"`, self, true);
+			else if (key === "direction" && !_makeMap_("alternate,reverse,normal", value)) {
+				debugHandler(`[ ] ${type} "direction" option receives am invalid value "${value}" argument\n\ncan only be "alternate | reverse | normal"`, self, true);
 				continue;
-			} else if (key === "fill" && !_makeMap_(`both,forwards,backwards`)) {
-				debugHandler(`${type} "fill" option receives am invalid value "${value}" argument\n\ncan only be "both,forwards,backwards"`, self, true);
+			} else if (key === "fill" && !_makeMap_(`both,forwards,backwards`, value)) {
+				debugHandler(`[ ] ${type} "fill" option receives am invalid value "${value}" argument\n\ncan only be "both | forward | backwards"`, self, true);
 				continue;
 			}
 		}
@@ -6579,7 +6686,7 @@ var Houxit = (function(exports) {
 		const match = isArray(bezier) ? bezier : bezierRegexMatch(bezier);
 		if (isString(bezier) && !match) {
 			if (_makeMap_("linear,ease,ease-in,ease-out,ease-in-out,step-start,step-end", bezier.trim())) return easings[toCamelCase(bezier)].fn;
-			debugHandler(`Invalid cubic-bezier: ${bezier}`, self, true);
+			debugHandler(`[ ] Invalid cubic-bezier: ${bezier}`, self, true);
 			return;
 		}
 		const stack = [];
@@ -6825,17 +6932,21 @@ var Houxit = (function(exports) {
 		};
 		return response;
 	}
-	function get_Model_Event(element) {
-		const tag = element.localName;
-		const type = element.type;
-		if (IS_ELEMENT_NODE(element) && Is_Form_Element(element)) {
-			if (tag === "input") return _makeMap_(["file"], type) ? "change" : _makeMap_([
-				"button",
-				"submit",
-				"reset"
-			], type) ? "click" : _makeMap_(["image", "hidden"], type) ? "change" : "input";
-			return tag === "form" ? "submit" : tag === "select" ? "change" : tag === "textarea" ? "input" : "input";
+	function get_Model_Event(el) {
+		if (el.tagName === "SELECT") return "change";
+		if (el.tagName === "TEXTAREA") return "input";
+		if (el.tagName === "INPUT") switch (el.type) {
+			case "checkbox":
+			case "radio":
+			case "date":
+			case "time":
+			case "datetime-local":
+			case "month":
+			case "week":
+			case "file": return "change";
+			default: return "input";
 		}
+		return "input";
 	}
 	function _compileToStaticTemplateScaffold(self, render, recursive = false) {
 		const NodeList = isString(render) ? __HouxitHTMLParser__(render, []) : render;
@@ -6844,7 +6955,7 @@ var Houxit = (function(exports) {
 	function scaffold(render, ctx) {
 		render = isPFunction(render) ? render() : render;
 		if (!isChildrenNode(render)) {
-			debugHandler(`Illegal value type passed to scaffold `);
+			debugHandler(`[ ] Illegal value type passed to scaffold `);
 			return;
 		} else if (isPrimitive(render) && !isNull(render)) render = String(render);
 		return _compileToStaticTemplateScaffold(this, render);
@@ -6908,7 +7019,7 @@ var Houxit = (function(exports) {
 					},
 					set(modelX) {
 						if (!isPObject(modelX)) {
-							debugHandler(`Unexpected assignment to the model instance object\n\nassignment expects a plain object`);
+							debugHandler(`[ ] Unexpected assignment to the model instance object\n\nassignment expects a plain object`);
 							return false;
 						}
 						model = modelX;
@@ -6969,7 +7080,7 @@ var Houxit = (function(exports) {
 			return self[$$$core].slots;
 		}
 		for (const [index, sl] of slots.entries()) if (!isString(sl)) {
-			debugHandler(`defineSlots() adapter macro array value expects a String value\n\nat array index ..........${index}`, self, true);
+			debugHandler(`[ ] defineSlots() adapter macro array value expects a String value\n\nat array index ..........${index}`, self, true);
 			continue;
 		}
 		defineFallbackSlotsToken(self, { slots }, [], self[$$$core].slots);
@@ -7122,7 +7233,7 @@ var Houxit = (function(exports) {
 		if (hasOwn(opts, "model") && isPFunction(opts.model)) try {
 			opts.model.call(modelData, generateBuildParams(self), self.__public_model__.$attrs);
 		} catch (err) {
-			debugHandler(`There is an error when running the model method option\n\n${err}`, self, true);
+			debugHandler(`[ ] There is an error when running the model method option\n\n${err}`, self, true);
 		}
 		self.__public_model__ = assign(self.__public_model__, modelData);
 	}
@@ -7132,7 +7243,7 @@ var Houxit = (function(exports) {
 			const FirstCharRegex = /^[a-zA-Z_]+/;
 			entries(opts.widgets).forEach(([key, widget]) => {
 				if (!FirstCharRegex.test(key.at(0)) && !validNameRegex.test(key)) {
-					debugHandler(`Widget registration failed,\nImproper widget namecasing found at "${key}"\n\nwidget names must atleast start with an uppercase letter or a multi-word string seperated by a hyphen or an underscore and not start with hyphen or a number`, self, true);
+					debugHandler(`[ ] Widget registration failed,\nImproper widget namecasing found at "${key}"\n\nwidget names must atleast start with an uppercase letter or a multi-word string seperated by a hyphen or an underscore and not start with hyphen or a number`, self, true);
 					return;
 				}
 				define(self[$$$register].widgets, key, {
@@ -7147,7 +7258,7 @@ var Houxit = (function(exports) {
 		if (!opts.handlers) return;
 		entries(opts.handlers).forEach(([ind, method]) => {
 			if (!isPFunction(method)) {
-				debugHandler(`widget method option's values must be a method or a function\n\n type of "${getType(method)}" found`, self, true);
+				debugHandler(`[ ] widget method option's values must be a method or a function\n\n type of "${getType(method)}" found`, self, true);
 				return;
 			}
 			method[$$isHandler] = true;
@@ -7162,10 +7273,10 @@ var Houxit = (function(exports) {
 		const [props, param, ind] = objMetrics;
 		let response = true;
 		if (isTrue(param.required) && hasProp(param, "default")) {
-			debugHandler(`validation error  .......\n\nthe required validator should not be truthy alongside a default value\nat at\n\n"${ind}" ${PN}`, self, true);
+			debugHandler(`[ ] validation error  .......\n\nthe required validator should not be truthy alongside a default value\nat at\n\n"${ind}" ${PN}`, self, true);
 			response = false;
 		} else if (hasProp(param, "required") && !isBoolean(param.required)) {
-			debugHandler(`The "required" validation options receives an unresolvable value \nat at \n"${ind}" ${PN}\n requires a boolean value`, self, true);
+			debugHandler(`[ ] The "required" validation options receives an unresolvable value \nat at \n"${ind}" ${PN}\n requires a boolean value`, self, true);
 			response = false;
 		} else if (!hasProp(param, "type")) {
 			debugHandler(`[Houxit Params validation Error] The type validator property is  required\n  Mising @ "${ind}" param`, self, true);
@@ -7175,13 +7286,13 @@ var Houxit = (function(exports) {
 			Array,
 			Type
 		])) {
-			debugHandler(`unexpected value passed as the type validator option\n expects a function or an Array of type function`, self, true);
+			debugHandler(`[ ] unexpected value passed as the type validator option\n expects a function or an Array of type function`, self, true);
 			response = false;
 		} else if (hasProp(param, "validator") && !isPFunction(param.validator)) {
-			debugHandler(`The "validator option must be a  function\n\nat ${ind} ${PN}`, self, true);
+			debugHandler(`[ ] The "validator option must be a  function\n\nat ${ind} ${PN}`, self, true);
 			response = false;
 		} else if (isTrue(param.required) && !_makeMap_(props || {}, ind)) {
-			debugHandler(`Params validation error........\n\nThe ${PN + " of the \"" + self[$$$ownProperties].name + "\" widget"} params is required and seems not to  be provided "\nrequired ${PN} is missing\n\nat at\n  ....."${ind}"  param`, self, true);
+			debugHandler(`[ ] Params validation error........\n\nThe ${PN + " of the \"" + self[$$$ownProperties].name + "\" widget"} params is required and seems not to  be provided "\nrequired ${PN} is missing\n\nat at\n  ....."${ind}"  param`, self, true);
 			paramsSet[ind] = void 0;
 			response = false;
 		}
@@ -7206,18 +7317,18 @@ var Houxit = (function(exports) {
 			if (hasOwn(param, "validator")) {
 				let valRes = param.validator(value);
 				if (!isBoolean(valRes)) {
-					debugHandler(`${pn} validator option method must return a Boolean value of true/false`, self, true);
+					debugHandler(`[ ] ${pn} validator option method must return a Boolean value of true/false`, self, true);
 					return false;
 				}
 				if (isFalse(valRes)) {
-					debugHandler(`Validation for ${pn} ${ind} returned false`, self, true);
+					debugHandler(`[ ] Validation for ${pn} ${ind} returned false`, self, true);
 					return false;
 				}
 			}
 			paramsSet[ind] = value;
 		} else if (hasOwn(props, ind) && !validateType(value, param.type)) {
 			paramsSet[ind] = void 0;
-			debugHandler(`${pn} validation error .....\n\nproperty validation for ${self ? "widget" : "object"} ${pn} value failed, property "${ind}" is of an invalid type\n\n${isArray(param.type) ? "Matches no type in the required validation list" : "typeof " + param.type.name + " expected"}`, self, true);
+			debugHandler(`[ ] ${pn} validation error .....\n\nproperty validation for ${self ? "widget" : "object"} ${pn} value failed, property "${ind}" is of an invalid type\n\n${isArray(param.type) ? "Matches no type in the required validation list" : "typeof " + param.type.name + " expected"}`, self, true);
 			return false;
 		}
 		return true;
@@ -7235,7 +7346,7 @@ var Houxit = (function(exports) {
 			paramsSet = self[$$$ownProperties].$params;
 			entries(params).forEach(([ind, param]) => {
 				if (has$$_bind(ind)) {
-					debugHandler(`Params validation error "${ind}" passed to widget as a houxit directive binding
+					debugHandler(`[ ] Params validation error "${ind}" passed to widget as a houxit directive binding
             \n\n
             The "$$" may not be appended or used on a params identifier key name`, self, true);
 					return;
@@ -7283,7 +7394,7 @@ var Houxit = (function(exports) {
 		props = assign({}, props);
 		if (!in_build) defineGetter(self[$$$ownProperties], "$params", new Params());
 		if (params && !validateType(params, [Object, Array])) {
-			debugHandler(`param option type validation failed, \n\n
+			debugHandler(`[ ] param option type validation failed, \n\n
         unexpected data type of "${getType(params)}"`, self, true);
 			return;
 		}
@@ -7326,7 +7437,7 @@ var Houxit = (function(exports) {
 					forwardAttrs
 				});
 			} catch (err) {
-				debugHandler(`Encountered a road block during attributes fallthrough forwarding on element "<${vnode.$element[isSSR ? "type" : "localName"]} ... >"\n\n
+				debugHandler(`[ ] Encountered a road block during attributes fallthrough forwarding on element "<${vnode.$element[isSSR ? "type" : "localName"]} ... >"\n\n
             Check warning details info on attribute "${key}"`, self, true);
 				return Break();
 			}
@@ -7341,7 +7452,7 @@ var Houxit = (function(exports) {
 		if (!hasOwn(options, "templateClasses")) return;
 		for (let [key, klass] of entries(options.templateClasses)) {
 			if (!(isPFunction(klass) || isTemplateClass(klass))) {
-				debugHandler(`"${key}" templateClass property value expects a plain function`, self, true);
+				debugHandler(`[ ] "${key}" templateClass property value expects a plain function`, self, true);
 				return;
 			}
 			define(self.__public_model__, key, {
@@ -7353,10 +7464,10 @@ var Houxit = (function(exports) {
 	function recite_options_validation(self, opt, key) {
 		if (isHouxitProp(key)) {} else if (isValidWidgetOption(key) && !isNodeJSOnlyOption(key) && !validateType(opt, widgetOptionType[key])) {
 			if (isClassBasedBuild(self) && key === "model" && !isPObject(opt) || !isClassBasedBuild(self)) {
-				debugHandler(`${key} option is of an invalid type, \n\n "${key}" option cannot be of a "${getType(opt)}" type`, self, true);
+				debugHandler(`[ ] ${key} option is of an invalid type, \n\n "${key}" option cannot be of a "${getType(opt)}" type`, self, true);
 				return false;
 			}
-		} else if (isNodeJSOnlyOption(key) && inBrowserCompiler) debugHandler(`"${key}" option is a nodejs only option, and cannot be used in houxit inbrowser compiler`, self, true);
+		} else if (isNodeJSOnlyOption(key) && inBrowserCompiler) debugHandler(`[ ] "${key}" option is a nodejs only option, and cannot be used in houxit inbrowser compiler`, self, true);
 		else if (!isValidWidgetOption(key)) self[$$$operands]._OPTIONS[key] = opt;
 		return true;
 	}
@@ -7498,7 +7609,7 @@ var Houxit = (function(exports) {
 	function injectCustomDirective(self, options, vnode) {
 		if (hasProp(options, "directives")) for (let [key, value] of entries(options.directives)) {
 			if (!validateType(value, [Object, Function])) {
-				debugHandler(`a directive requires an object of directive hooks or a function to act as a "mounted" hook `, self, true);
+				debugHandler(`[ ] a directive requires an object of directive hooks or a function to act as a "mounted" hook `, self, true);
 				return;
 			}
 			define(self[$$$register].directives, has$$_bind(key) ? key.slice(2) : key, {
@@ -7513,7 +7624,7 @@ var Houxit = (function(exports) {
 		iterate(["transitions", "animations"]).each((optName) => {
 			if (hasProp(options, optName)) for (let [key, value] of entries(options[optName])) {
 				if (!isPFunction(value)) {
-					debugHandler(`An "${optName}" expects a plain function...`, self, true);
+					debugHandler(`[ ] An "${optName}" expects a plain function...`, self, true);
 					return;
 				}
 				define(self[$$$register][optName], key, {
@@ -7529,10 +7640,16 @@ var Houxit = (function(exports) {
 	function mapSettingCheck(self, key, setting) {
 		self = !isHouxitBuild(self) ? null : self;
 		if (!_makeMap_(configOptionsSettings, key)) {
-			debugHandler(`unrecognised settings option found in buildConfig defineConfig  at   at\n"${key} name property`, self, isHouxitBuild(self));
+			debugHandler(`[ ] unrecognised settings option found in buildConfig defineConfig  at   at\n"${key} name property`, self, isHouxitBuild(self));
 			return false;
+		} else if (key === "flushType") {
+			const flushType = ConfigValidator[key];
+			if (!_makeMap_("post,sync", flushType)) {
+				debugHandler("[unrecognised flushType] \"" + flushType + "\" is not a valid flushType. do you mean - post | sync ", self, true);
+				return;
+			}
 		} else if (!validateType(setting, ConfigValidator[key])) {
-			debugHandler(`${key} config option of buildConfig receives an invalid type\n\nExpects a/an "${ConfigValidator[key].name.toLowerCase()}" type`, self, isHouxitBuild(self));
+			debugHandler(`[ ] ${key} config option of buildConfig receives an invalid type\n\nExpects a/an "${ConfigValidator[key].name.toLowerCase()}" type`, self, isHouxitBuild(self));
 			return false;
 		}
 		if (key === "delimiters") {
@@ -7543,7 +7660,7 @@ var Houxit = (function(exports) {
 	function setConfig(self, opts) {
 		if (!opts.buildConfig || !len(opts.buildConfig)) return false;
 		entries(opts.buildConfig).forEach(([key, setting]) => {
-			if (isFalse(mapSettingCheck(self, key, setting))) return false;
+			if (!mapSettingCheck(self, key, setting)) return false;
 			self[$$$core].settings[key] = setting;
 		});
 		return true;
@@ -7552,6 +7669,7 @@ var Houxit = (function(exports) {
 		flushType = "post";
 		oldValue = void 0;
 		constructor(self, deps, callback, options, EffectHook) {
+			if (isHouxitBuild(self)) this.flushType = getFlushType(self);
 			const isEffectHook = isEffect(EffectHook);
 			this.deps = deps;
 			this.callback = callback;
@@ -7559,10 +7677,10 @@ var Houxit = (function(exports) {
 			this.options = options;
 			if (hasOwn(options, "flushType")) {
 				const flushType = options.flushType;
-				if (!isString(flushType) && !_makeMap_("post,sync", flushType)) debugHandler(`unrecognised flushType options received\n\nvalue "${flushType}" is not a vailid flushType`, self, true);
+				if (!isString(flushType) || !_makeMap_("post,sync,pre", flushType)) debugHandler("[unrecognised flushType] \"" + flushType + "\" is not a valid flushType. do you mean - post | sync | pre", self, true);
 				else this.flushType = flushType;
 			}
-			this.effect = isEffectHook ? EffectHook : _createEffectBase(() => {
+			this.effect = isEffectHook ? EffectHook : _createHouxitEffectFrame(() => {
 				return getObsCurrentValue(self, deps, this.effect);
 			}, self);
 			const { value, dependencies } = isEffectHook ? EffectHook : effectRunner(this.effect);
@@ -7573,7 +7691,7 @@ var Houxit = (function(exports) {
 			} : () => {
 				returnValue = this.callback.call(self?.__public_model__, ...this.wrapValueArgs());
 				this.oldValue = this.effect.value;
-			}, "effect", this.flushType);
+			}, "effect");
 			if (!self) this.effect.flushType = this.flushType;
 			if (options.initial && !isEffectHook) this.effect.schedule();
 		}
@@ -7602,11 +7720,12 @@ var Houxit = (function(exports) {
 	function _EffectDependencyNotifier(self) {
 		const postEffList = [];
 		const observers = self[$$$operands]._OBSERVERS;
-		for (const [obs, flush] of observers.values()) if (flush === "sync") callbackHookWithCatch(self, obs, "Encountered an error during an effect flush call", true);
+		getFlushType(self);
+		for (const [obs, flush] of observers.values()) if (flush === "pre" || flush === "sync") callbackHookWithCatch(self, obs, "Encountered an error during an effect flush call", true);
 		else if (flush === "post") postEffList.push(obs);
 		observers.clear();
 		return function() {
-			for (let hk of postEffList.values()) callbackHookWithCatch(self, hk, "Encountered an error during an effect flush call", true);
+			for (let hk of postEffList.values()) tick(() => callbackHookWithCatch(self, hk, "Encountered an error during an effect flush call", true));
 		};
 	}
 	function RuntimeUtilitiesProvide(self, opts, vnode) {
@@ -7644,7 +7763,7 @@ var Houxit = (function(exports) {
 				return model;
 			}
 			if (hasOwn(model, key)) {
-				debugHandler(`Error: Duplicate exposed property "${key}".\n
+				debugHandler(`[ ] Error: Duplicate exposed property "${key}".\n
           Declared in:\n - model()\n - build() <useModel()>\nRename one of them. model <prop> retained...`, self, true);
 				continue;
 			}
@@ -7671,13 +7790,13 @@ var Houxit = (function(exports) {
 			Set,
 			Dependency
 		]) && !isStream(deps)) {
-			debugHandler(`error setting Effect observer for tracked dependency value "${deps}"\n\n invalid type\nexpects a getter or collections of getter functions`, ...errArgs);
+			debugHandler(`[ ] error setting Effect observer for tracked dependency value "${deps}"\n\n invalid type\nexpects a getter or collections of getter functions`, ...errArgs);
 			return false;
 		} else if (!isPFunction(callback)) {
-			debugHandler(`effect observer callback expects a plain function method`);
+			debugHandler(`[ ] effect observer callback expects a plain function method`);
 			return false;
 		} else if (isString(deps) && !object_Has_Path(self.__public_model__, deps)) {
-			debugHandler(`undefined property "${deps}" accessed in effect  macro "EffectObserver"`, ...errArgs);
+			debugHandler(`[ ] undefined property "${deps}" accessed in effect  macro "EffectObserver"`, ...errArgs);
 			return false;
 		}
 		if (isArray(deps)) {
@@ -7721,7 +7840,7 @@ var Houxit = (function(exports) {
 			required: [true, true]
 		})) {
 			if (!self) {
-				debugHandler(`You can't use the "$observe()" adapter within a widget public model instance`);
+				debugHandler(`[ ] You can't use the "$observe()" adapter within a widget public model instance`);
 				return;
 			}
 		}
@@ -7761,7 +7880,7 @@ var Houxit = (function(exports) {
 	}
 	function EffectObserver(deps, callback, options = {}, EffectHook) {
 		if (len(arguments) === 3 && !isPObject(options)) {
-			debugHandler(`Invalid Argument Type: parameter 3 arguments of effect observer expects a plain object`, this, true);
+			debugHandler(`[ Invalid Argument Type]: parameter 3 arguments of effect observer expects a plain object`, this, true);
 			return;
 		}
 		if (!checkObserversValidations(this, deps, callback)) return;
@@ -7773,7 +7892,7 @@ var Houxit = (function(exports) {
 				if (isHouxitBuild(self)) callback.call(self.__public_model__, observer.effect.value);
 				return true;
 			} else if (len(arguments) && !isPFunction(callback)) {
-				debugHandler(`unexpected args Type:: callback argument at effect stopper expects a plain function`, self, true);
+				debugHandler(`[ unexpected args Type] callback argument at effect stopper expects a plain function`, self, true);
 				return false;
 			}
 		}
@@ -7798,7 +7917,7 @@ var Houxit = (function(exports) {
 			try {
 				event.callbacks.forEach((callback) => callback.call(this, ...arguments));
 			} catch (err) {
-				debugHandler(`Signal traceBack error:: prevíous call on Signal events failed with an error`, self, true);
+				debugHandler(`[ Signal traceBack error ]:: prevíous call on Signal events failed with an error`, self, true);
 				debugHandler(`${err}`, self);
 				return;
 			}
@@ -7821,14 +7940,14 @@ var Houxit = (function(exports) {
 		const sName = optName.slice(0, -1);
 		for (const [name, filter] of entries(options[optName])) {
 			if (optName === "blocks" ? isBuiltinBlocks(name) : _makeMap_(BUILT_IN_FILTERS, name)) {
-				debugHandler(`registration failure\nFailed to register the custom ${sName} with the name "${name}\n\n Which collides with a BUILT_IN_${sName.toUpperCase()} name\nregistration FAILED___`, self, true);
+				debugHandler(`[ ] registration failure\nFailed to register the custom ${sName} with the name "${name}\n\n Which collides with a BUILT_IN_${sName.toUpperCase()} name\nregistration FAILED___`, self, true);
 				continue;
 			} else if (!validateType(filter, [Function, Object])) {
-				debugHandler(`${sName.at(0).toUpperCase() + sName.slice(1)} must be a function or an object exposing a "${sName}" method option \n\nat        at\n "${name}" ${sName} registration`, self, true);
+				debugHandler(`[ ] ${sName.at(0).toUpperCase() + sName.slice(1)} must be a function or an object exposing a "${sName}" method option \n\nat        at\n "${name}" ${sName} registration`, self, true);
 				continue;
 			}
 			if (isObject(filter) && (!hasOwn(filter, sName) || !isPFunction(filter[sName]))) {
-				debugHandler(`"${name}" ${sName} object must expose a ${sName} method\n\nregistration FAILED___`, self, true);
+				debugHandler(`[ ] "${name}" ${sName} object must expose a ${sName} method\n\nregistration FAILED___`, self, true);
 				continue;
 			}
 			self[$$$register][optName][name] = filter;
@@ -7897,9 +8016,18 @@ var Houxit = (function(exports) {
 			this.self = self;
 			this.triggered = false;
 		}
-		trigger() {
+		trigger(flush) {
 			if (this.triggered) return;
-			deferEventCircleThread(this.self, this.callback());
+			let flushType = getFlushType(this.self);
+			flushType = flush && flush !== flushType ? flush : flushType;
+			this.triggered = true;
+			if (flushType === "post" || flushType === "pre") deferEventCircleThread(this.self, this.callback()).then(() => {
+				this.triggered = false;
+			});
+			else if (flushType === "sync") {
+				this.callback();
+				this.triggered = false;
+			}
 		}
 	};
 	function defineProxyScopeProps(obj, config) {
@@ -7934,17 +8062,21 @@ var Houxit = (function(exports) {
 		for (let [key, value] of getIterator(obj)) if (isToken(value)) auto_unwrapTokenRegistery(obj, key, value);
 		else if (isProxySkipped(key) || _isProxyStream(value) || isRaw(value) || isPFunction(value) && value[$$isHandler]) {} else if (!isPrimitive(value)) obj[key] = _createStream(value, config);
 	}
-	function streamMutationTransform(args, object, effObj, name, config, dependency) {
+	function streamMutationTransform(args, object, effObj, name, config, dependency, initKeys) {
 		const { readonly = false, shallow = false } = config;
 		args = [...args];
 		let [target, prop, valueX, receiver] = args;
 		let value = name === "defineProperty" ? valueX.value : valueX;
+		if (!initKeys.has(prop)) {
+			Reflect[name](...args);
+			return true;
+		}
 		if (prop === $$$StreamProxyKey || !Reflect.has(target, prop)) {
 			Reflect[name](...args);
 			return true;
 		}
 		if (readonly && (name === "deleteProperty" || !isReadonlyBypasser(value))) {
-			debugHandler(`Cannot reassign/mutate a "readonly" stream prop\n\n___MUTATION FAILED___\n........"{}.${prop}" property assignment/mutation using {##}.${name} method \n\n{##} object props are readonly \n.........>>>bypassKey verification failure`);
+			debugHandler(`[ ] Cannot reassign/mutate a "readonly" stream prop\n\n___MUTATION FAILED___\n........"{}.${prop}" property assignment/mutation using {##}.${name} method \n\n{##} object props are readonly \n.........>>>bypassKey verification failure`);
 			return false;
 		} else if (readonly && name === "defineProperty" && isReadonlyBypasser(value)) {
 			value = value[bypassSymbol];
@@ -7975,7 +8107,7 @@ var Houxit = (function(exports) {
 	}
 	function _createStream(obj, config) {
 		if (!isStreamable(obj) || isStream(obj) || isToken(obj) || isDomSpecialConstructor(obj)) {
-			if (isToken(obj)) debugHandler(`[stream parsing warning] token instance cannot be passed to stream`);
+			if (isToken(obj)) debugHandler(`[ ] [stream parsing warning] token instance cannot be passed to stream`);
 			return obj;
 		}
 		if (!validateCollectionArgs(arguments, {
@@ -8069,6 +8201,7 @@ var Houxit = (function(exports) {
 	}
 	function transformProxyStream(obj, ReactiveEffect, config) {
 		const dependency = ReactiveEffect.dependency;
+		const initKeys = new Tuple(...keys(obj));
 		const reactive = new Proxy(obj, {
 			get(target, prop) {
 				const getter = () => Reflect.get(...arguments);
@@ -8083,13 +8216,13 @@ var Houxit = (function(exports) {
 				return value;
 			},
 			set(target, prop, value, receiver) {
-				return streamMutationTransform(arguments, reactive, ReactiveEffect, "set", config, dependency);
+				return streamMutationTransform(arguments, reactive, ReactiveEffect, "set", config, dependency, initKeys);
 			},
 			defineProperty(target, prop, value, receiver) {
-				return streamMutationTransform(arguments, reactive, ReactiveEffect, "defineProperty", config, dependency);
+				return streamMutationTransform(arguments, reactive, ReactiveEffect, "defineProperty", config, dependency, initKeys);
 			},
 			deleteProperty(target, prop, value, receiver) {
-				return streamMutationTransform(arguments, reactive, ReactiveEffect, "deleteProperty", config, dependency);
+				return streamMutationTransform(arguments, reactive, ReactiveEffect, "deleteProperty", config, dependency, initKeys);
 			},
 			has(target, key) {
 				return Reflect.has(target, key);
@@ -8217,7 +8350,7 @@ var Houxit = (function(exports) {
 		} };
 		if (writable || debug) descriptor.set = function(valueX) {
 			if (writable) value = valueX;
-			else if (debug) debugHandler(`"{}<${prop}>" not writable!!!`);
+			else if (debug) debugHandler(`[ ] "{}<${prop}>" not writable!!!`);
 		};
 		if (isTrue(enumerable)) descriptor.enumerable = enumerable;
 		return define(obj, prop, descriptor);
@@ -8318,7 +8451,7 @@ var Houxit = (function(exports) {
 	}
 	function slotDebuger(self) {
 		return (slotName, slotContent) => {
-			debugHandler(`Problem when mapping slot element>>>\n\nMore than one vnode slot name seems to be pointing to the  same slot\nat at "${slotName}" slot Directive  of "${slotContent.$element.outerHTML}" \n\nmaybe you should wrap them within a single template wrapper`, self, true, "During the induction of slots contents");
+			debugHandler(`[ ] Problem when mapping slot element>>>\n\nMore than one vnode slot name seems to be pointing to the  same slot\nat at "${slotName}" slot Directive  of "${slotContent.$element.outerHTML}" \n\nmaybe you should wrap them within a single template wrapper`, self, true, "During the induction of slots contents");
 			$warn(`Note: unnamed contents will be automatically weapped as "default" slot\nWon't conflict with other default contents`, self);
 		};
 	}
@@ -8359,7 +8492,7 @@ var Houxit = (function(exports) {
 		function factory(name) {
 			return function slotRender(def) {
 				if (len(arguments) && def && !isChildrenNode(def) || isArrowFunction(def) && !isChildrenNode(def())) {
-					debugHandler(`Render functions default slot content must be a render function also`, self, true);
+					debugHandler(`[ ] Render functions default slot content must be a render function also`, self, true);
 					return null;
 				} else if (def && isChildrenNode(def)) {
 					def = isPFunction(def) ? def(self) : def;
@@ -8439,13 +8572,13 @@ var Houxit = (function(exports) {
 			if (isSlotInstance(value)) for (let [slotN, slotRender] of entries(value.slots)) {
 				slotRender = slotRender.call($$$context()?.value, slotBindings[slotN]?.bindings);
 				if (!isChildrenNode(slotRender)) {
-					debugHandler(`Element Recognition Error: unrecognised element/value passed to render`, self, true);
+					debugHandler(`[ ] Element Recognition Error: unrecognised element/value passed to render`, self, true);
 					return;
 				}
 				installSuspense(slotRender, getBoundary(hx_Element));
 				slotRender = arrayInverter(_HouxitCoreRenderer(arrayInverter(slotRender), patchFlags, null, hx_Element, null, config));
 				if (slotN !== "default" && except.has(slotN)) {
-					debugHandler(`Duplicate Slot Error: slot content with the name mapping "${slotN}" has already be defined\n\nUntraced slotting mapping\n"${slotN}" slot Duplicate found`, self, true);
+					debugHandler(`[ ] Duplicate Slot Error: slot content with the name mapping "${slotN}" has already be defined\n\nUntraced slotting mapping\n"${slotN}" slot Duplicate found`, self, true);
 					return;
 				} else {
 					except.add(slotN);
@@ -8511,18 +8644,18 @@ var Houxit = (function(exports) {
 	}
 	function createContext_Parameters(self, options, vnode) {
 		if (!options.context) return;
-		const effect = _createEffectBase(function() {
+		const effect = _createHouxitEffectFrame(function() {
 			return options.context.call(self.__public_model__);
 		}, self);
 		try {
 			effectRunner(effect);
 		} catch (err) {
-			debugHandler(`Provider Method Error: Encountered an error while trying to run the context >> provider option method`, self, true);
+			debugHandler(`[ ] Provider Method Error: Encountered an error while trying to run the context >> provider option method`, self, true);
 			debugHandler(`${err}`, self);
 			return;
 		}
 		if (!isPObject(effect.value)) {
-			debugHandler(`Context Return Error: The context option return value expects a plain object\nReturning a non plain object is invalid `, self, true);
+			debugHandler(`[ ] Context Return Error: The context option return value expects a plain object\nReturning a non plain object is invalid `, self, true);
 			return;
 		}
 		const value = token(effect.value);
@@ -8558,11 +8691,11 @@ var Houxit = (function(exports) {
 	}
 	function mapPublicationsTraverse(self, opts, adapter) {
 		if (!hasOwn(opts, "transmit")) return;
-		const effect = _createEffectBase(() => {
+		const effect = _createHouxitEffectFrame(() => {
 			return opts.transmit.call(self.__public_model__);
 		}, self);
 		if (!isPObject(effect.value)) {
-			debugHandler(`${adapter ? "useTransmit method argument" : "transmit method option"} expects a plain object as a return value`, self, true);
+			debugHandler(`[ ] ${adapter ? "useTransmit method argument" : "transmit method option"} expects a plain object as a return value`, self, true);
 			return;
 		}
 		const globalBoard = isInitialBuild(self) ? self[$$$core].$globals.transmited : self[$$$core].$root[$$$core].$globals.transmited;
@@ -8575,7 +8708,7 @@ var Houxit = (function(exports) {
 		for (let [key, valueX] of getIterator(opts.receive)) {
 			let keyName = isArray(opts.receive) ? valueX : key;
 			if (!validateType(keyName, [String, Symbol])) {
-				debugHandler(`Arrays value of receive option expects a string / Symbol values of transmited property names\n\n
+				debugHandler(`[ ] Arrays value of receiver expects a string / Symbol values of transmited property names\n\n
           ........"${keyName}"`, self, true);
 				return;
 			}
@@ -8583,14 +8716,14 @@ var Houxit = (function(exports) {
 			if (!hasOwn(globalBoard, keyName)) if (isPObject(valueX) && hasProp(valueX, "default")) if (!isPFunction(valueX.default)) defaultValue = valueX.default;
 			else defaultValue = !isArrowFunction(valueX.default) ? valueX.default.call(self.__public_model__) : valueX.default();
 			else {
-				debugHandler(`No transmited props with the provided receive key "${keyName}"\n\n
-            Unrecognized receive property`, self, true);
+				debugHandler(`[ ] No transmited props with the provided receive key "${keyName}"\n\n
+            Untransmited receive property`, self, true);
 				return;
 			}
 			let received = get_Object_Value(globalBoard, keyName);
 			if (isPObject(valueX) && hasOwn(valueX, "receive")) {
 				if (!isPFunction(valueX.receive)) {
-					debugHandler(`receive option of "${key}" receive property expects a function`, self, true);
+					debugHandler(`[ ] receive option of "${key}" receive property expects a function`, self, true);
 					return;
 				}
 				received = !isArrowFunction(valueX.receive) ? valueX.receive.call(self.__public_model__, received) : valueX.receive(received);
@@ -8599,20 +8732,20 @@ var Houxit = (function(exports) {
 			let aliasKey = keyName;
 			if (isPObject(valueX)) {
 				if (!hasOwn(valueX, "alias")) {
-					debugHandler(`receive prop "${keyName}" object expects an "alias" property`, self, true);
+					debugHandler(`[ ] receive prop "${keyName}" object expects an "alias" property`, self, true);
 					return;
 				} else if (!validateType(valueX.alias, [String, Symbol])) {
-					debugHandler(`"${keyName}" receive alias property expects a String or a Symbol`, self, true);
+					debugHandler(`[ ] "${keyName}" receive alias property expects a String or a Symbol`, self, true);
 					return;
 				} else if (!exists(valueX.alias)) {
-					debugHandler(`alias property of "${keyName}" receive property is an empty string or undefined prop naming`, self, true);
+					debugHandler(`[ ] alias property of "${keyName}" receive property is an empty string or undefined prop naming`, self, true);
 					return;
 				} else if (validateType(valueX, [String, Symbol])) valueX = { alias: valueX };
 				aliasKey = valueX.alias;
 			}
 			if (object_Has_Path(self.__public_model__, aliasKey)) {
-				debugHandler(`"${aliasKey}" property of receive conflicts with an existing model property\n\n
-          Try configuring an alias property instead\n\n............at "${keyName}"`, self, true);
+				debugHandler(`[ ] "${aliasKey}" property of receiver conflicts with an existing model property\n\n
+          Try configuring an= unique alias property name instead\n\n............at "${keyName}"`, self, true);
 				return;
 			}
 			if (!in_build) define(self.__public_model__, aliasKey, {
@@ -8633,7 +8766,7 @@ var Houxit = (function(exports) {
 		const store = {};
 		for (const mx of mixins.toReversed().values()) {
 			if (!validateType(mx, [Function, Object])) {
-				debugHandler(`[Houxit Mixin Merge Warn] Mixins expects a plain fuction/object instance/valid Houxit widget instance`, self, true);
+				debugHandler(`[ ] [Houxit Mixin Merge Warn] Mixins expects a plain fuction/object instance/valid Houxit widget instance`, self, true);
 				return;
 			} else if (applied_mixins.has(mx)) continue;
 			applied_mixins.prepend(mx);
@@ -8737,10 +8870,9 @@ var Houxit = (function(exports) {
 		resolveBuildLab(this, opts, vnode);
 	}
 	function resolveBuildLab(self, options) {
-		self[$$$core].build = options.build || options.template || options.markdown;
+		self[$$$core].build = options.build || options.render || options.template || options.markdown;
 		self[$$$core].opts = options;
 	}
-	function $$houxitPower() {}
 	function getComposersContext(self) {
 		const adapters = {
 			signals: self.__public_model__.$signals,
@@ -8826,7 +8958,7 @@ var Houxit = (function(exports) {
 				self[$$$core].build = () => [];
 				return (async function() {
 					installCurrentRunningEffect(self);
-					const builder = await widgetBuild.call(void 0, generateBuildParams(self), getComposersContext(self), $$houxitPower);
+					const builder = await widgetBuild.call(void 0, generateBuildParams(self), getComposersContext(self));
 					reinstatePreviousRunningEffect();
 					self[$$$core].build = function() {
 						return builder;
@@ -8840,14 +8972,14 @@ var Houxit = (function(exports) {
 			const useState = !isArrowFunction(widgetBuild);
 			try {
 				if (useState) installCurrentRunningEffect(self);
-				renderer = widgetBuild.call(void 0, generateBuildParams(self), getComposersContext(self), $$houxitPower);
+				renderer = widgetBuild.call(void 0, generateBuildParams(self), getComposersContext(self));
 				if (useState) reinstatePreviousRunningEffect();
 				responseRender = renderer;
 				if (isArrowFunction(widgetBuild) && !isPFunction(renderer)) responseRender = () => renderer;
 			} catch (err) {
-				debugHandler(`Error during the call of the build function`, self, true, DebugFlags.build);
+				debugHandler(`[ ] Error during the call of the build function`, self, true, DebugFlags.build);
 				debugHandler(err);
-				if (isXtruct(widgetBuild)) debugHandler(`build options method seems to be a constructor function`, self);
+				if (isXtruct(widgetBuild)) debugHandler(`[ ] build options method seems to be a constructor function`, self);
 				else debugHandler(`${err}`, self);
 				return;
 			}
@@ -8861,10 +8993,10 @@ var Houxit = (function(exports) {
 				}
 			}
 			if (!isPFunction(responseRender) && !isArrowFunction(widgetBuild)) {
-				debugHandler(`Error during the call of ${!isFunctionBasedBuild(self) ? "the build function" : "functional widget"} context\n\nfailed to return a render function when returning the build method::\nCross-Check your returned build Data as This may lead to unexpected results during Houxit element nodes Compilation`, self, true, DebugFlags.build);
+				debugHandler(`[ ] Error during the call of ${!isFunctionBasedBuild(self) ? "the build function" : "functional widget"} context\n\nfailed to return a render function when returning the build method::\nCross-Check your returned build Data as This may lead to unexpected results during Houxit element nodes Compilation`, self, true, DebugFlags.build);
 				return;
 			} else if (!isChildrenNode(responseRender())) {
-				debugHandler(`value not a valid Houxit Element instance`, self, true);
+				debugHandler(`[ ] value not a valid Houxit Element instance`, self, true);
 				return;
 			}
 			self[$$$core].map.is_hyperscript = true;
@@ -8891,14 +9023,14 @@ var Houxit = (function(exports) {
 	}
 	function _GenerateRoot(nodeSelector, self) {
 		if (isNull(nodeSelector)) {
-			debugHandler(`No node model or selector value passed for deployment`, self, true);
+			debugHandler(`[ ] No node model or selector value passed for deployment`, self, true);
 			return;
 		}
 		let domRoot;
 		if (isString(nodeSelector)) {
 			domRoot = document.querySelector(nodeSelector);
 			if (!isNativeElement(domRoot)) {
-				debugHandler(`Error generating element, target not a valid native element instance`, self, true);
+				debugHandler(`[ ] Error generating element, target not a valid native element instance`, self, true);
 				return;
 			}
 		} else if (isNativeElement(nodeSelector) || nodeSelector.isHouxit_Fragment || nodeSelector === document) domRoot = nodeSelector;
@@ -8919,13 +9051,13 @@ var Houxit = (function(exports) {
 		const _opts = self[$$$operands]._OPTIONS;
 		for (let [key, opt] of entries(_opts)) {
 			if (!_makeMap_(registeredOpts, key)) {
-				debugHandler(`Unrecognised option found\n\n
+				debugHandler(`[ ] Unrecognised option found\n\n
           "${key}" option is not a valid widget option or not registered,
           \n\n
           You can register this option by passing an "optionRegistry" object prop to "build.controller({})" method as an object argument method`, self, true);
 				return;
 			} else if (!validateType(opt, registeredOpts[key])) {
-				debugHandler(`The provided "${key}" option validation failed on the required type\n\n
+				debugHandler(`[ ] The provided "${key}" option validation failed on the required type\n\n
           Type of "${getType(opt)}"" found`, self, true);
 				return;
 			}
@@ -8983,7 +9115,7 @@ var Houxit = (function(exports) {
 			name: "computed",
 			validators: [[Function, Object], Object]
 		}) && !isPFunction(callback) && !isGettersObject(callback)) {
-			debugHandler(`computed macro at Parameter 1 expects a getter function or a descriptor object of a required "get" and an optional "set" property methods`, self, true);
+			debugHandler(`[ ] computed macro at Parameter 1 expects a getter function or a descriptor object of a required "get" and an optional "set" property methods`, self, true);
 			return;
 		}
 		return hydrateComputedTokenTransform(void 0, callback, true, config || {});
@@ -8992,7 +9124,7 @@ var Houxit = (function(exports) {
 		return _computed_.call(this, ...arguments);
 	}
 	function composedTokenHydration(self, computed, config) {
-		return factoryToken(function(track, effect) {
+		return factoryToken(function(track, trigger) {
 			function getter() {
 				track();
 				const internals = config.internals;
@@ -9011,7 +9143,7 @@ var Houxit = (function(exports) {
 				const returnValue = effectRunner(internals.effect).value;
 				internals.effect.attachCallback(() => {
 					internals.updateFlags++;
-					effect();
+					trigger();
 				});
 				internals.cache = returnValue;
 				return returnValue;
@@ -9025,7 +9157,7 @@ var Houxit = (function(exports) {
 			};
 			if (isGettersObject(computed) && hasOwn(computed, "set") && isPFunction(computed.set)) {
 				descriptor.set = function() {
-					effect();
+					trigger();
 					return computed?.set?.call(self?.__public_model__, ...arguments);
 				};
 				if (hasOwn(descriptor, "readonly")) delete descriptor.readonly;
@@ -9037,7 +9169,7 @@ var Houxit = (function(exports) {
 		config = assign({}, config);
 		const computed__Token = composedTokenHydration(self, computed, config);
 		const internals = computed__Token[refInternalEffectKey];
-		const effect = _createEffectBase();
+		const effect = _createHouxitEffectFrame();
 		effect.flushType = "sync";
 		internals.cache = effect.values;
 		internals.effect = effect;
@@ -9049,7 +9181,7 @@ var Houxit = (function(exports) {
 		const model = self.__public_model__;
 		for (let [key, computed] of entries(opts.computed)) {
 			if (!isPFunction(computed) && !isGettersObject(computed)) {
-				debugHandler(`computed option  at "${key}" property expects a getter function method option or a descriptor object of a "get" and an optional "set" property methods`, self, true);
+				debugHandler(`[ ] computed option  at "${key}" property expects a getter function method option or a descriptor object of a "get" and an optional "set" property methods`, self, true);
 				return;
 			}
 			const computedToken = hydrateComputedTokenTransform(self, computed);
@@ -9072,7 +9204,7 @@ var Houxit = (function(exports) {
 			return;
 		}
 		if (!isSSR && isInitialBuild(self) && isTrue(domRoot.IS_HOUXIT_MOUNTROOT)) {
-			debugHandler(`A Houxit widget has already been mounted on self element, cannot mount more than one Widget on a single root element`, self, true, `When trying to mount this initialBuild instance to the target DOM`);
+			debugHandler(`[ ] A Houxit widget has already been mounted on self element, cannot mount more than one Widget on a single root element`, self, true, `When trying to mount this initialBuild instance to the target DOM`);
 			return;
 		}
 		adapterDOMMountingProduction(self, domRoot);
@@ -9082,7 +9214,7 @@ var Houxit = (function(exports) {
 		const isSSR = isSSRCompiler(this);
 		if (isSSR && HydrationFlag === SSRHydrationSymbol) this[$$$compiler].SSRHydrationFlag = true;
 		if (!isSSR && !inBrowserCompiler) {
-			debugHandler(`Houxit failed to load Dom specific API(s) as it seems you are running Houxit from a server environment.....\nuse "initSSRBuild" App builder instead.`, self, true);
+			debugHandler(`[ ] Houxit failed to load Dom specific API(s) as it seems you are running Houxit from a server environment.....\nuse "initSSRBuild" App builder instead.`, self, true);
 			return this;
 		}
 		let domRoot = (isHydration(this) || !isSSR) && inBrowserCompiler ? _GenerateRoot(nodeSelector, this) : null;
@@ -9119,7 +9251,7 @@ var Houxit = (function(exports) {
 		return false;
 	}
 	function misMatchError(self, msg) {
-		if (!ignoreHydrationMismatchError(self)) debugHandler(`(((Hydration Mis-Match Error)))....\n\n${msg}`, self, true);
+		if (!ignoreHydrationMismatchError(self)) debugHandler(`[(Hydration Mis-Match Error)]....\n\n${msg}`, self, true);
 	}
 	function hydration_match(self, el, vNode) {
 		if (IS_ELEMENT_NODE(el) && isSSRText(vNode) || isVNodeClass(vNode) && IS_TEXT_NODE(el)) misMatchError(self, `adjacent elements mismatches during "HydrationTypeMatch" ....of (${IS_ELEMENT_NODE(el) ? "<" + el.localName + ">" : "\"" + el.textContent + "\""} ... ${isVNodeClass(vNode) ? "<" + vNode.type + ">" : "\"" + vNode.content + "\""})`);
@@ -9270,10 +9402,10 @@ var Houxit = (function(exports) {
 	}
 	function install(plugin, options) {
 		if (!validateType(plugin, [Object, Function])) {
-			debugHandler(`plugin installation Error::\n\n install argument must be an object value with  an exposed plugin installation method or a function which acts as the plugin method itself`, this, true);
+			debugHandler(`[ ] plugin installation Error::\n\n install argument must be an object value with  an exposed plugin installation method or a function which acts as the plugin method itself`, this, true);
 			return this;
 		} else if (isPObject(plugin) && !isPFunction(plugin.plugin)) {
-			debugHandler(`plugin installation Error::\n\n plugin object did not expose a plugin installation method`, this, true);
+			debugHandler(`[ ] plugin installation Error::\n\n plugin object did not expose a plugin installation method`, this, true);
 			return this;
 		}
 		(isPObject(plugin) ? plugin.plugin : plugin)?.(this, options);
@@ -9301,10 +9433,10 @@ var Houxit = (function(exports) {
 	}
 	function mixin(mx) {
 		if (!validateType(mx, [Object, Function])) {
-			debugHandler(`unrecognised global mixin registration for\n ${compileToRenderable(mx)}`, this, true);
+			debugHandler(`[ ] unrecognised global mixin registration for\n ${compileToRenderable(mx)}`, this, true);
 			return this;
 		} else if (len(arguments) !== 1) {
-			debugHandler(`.mixin() expects not more than one formal argument`, this);
+			debugHandler(`[ ] .mixin() expects not more than one formal argument`, this);
 			return this;
 		}
 		this[$$$core].$globals.register.mixins.add(mx);
@@ -9371,15 +9503,15 @@ var Houxit = (function(exports) {
 		return this;
 	}
 	function _Build_destroy() {
-		if (len(arguments)) debugHandler(`.destroy() method of initBuild accepts no formal parameters`, this);
+		if (len(arguments)) debugHandler(`[ ] .destroy() method of initBuild accepts no formal parameters`, this);
 		else if (!this[$$$operands].hasMountProto) {
-			debugHandler(`instance of widget not yet mounted\n\nwidget unmounting failure`);
+			debugHandler(`[ ] instance of widget not yet mounted\n\nwidget unmounting failure`);
 			return false;
 		}
 		try {
 			unMountVNode(this.$build);
 		} catch (err) {
-			debugHandler(`widget instance destroy failed`, this, true);
+			debugHandler(`[ ] widget instance destroy failed`, this, true);
 			debugHandler(err);
 			return false;
 		}
@@ -9414,13 +9546,13 @@ var Houxit = (function(exports) {
 			name: "app.controller.optionsHook()"
 		})) return;
 		else if (!hasOwn(getGlobalRegistery(this).legalOptions, hookName)) {
-			debugHandler(`optionsHook plugin method called on an undefined/unregistered option...\n\n"${hookName}"`, this, true);
+			debugHandler(`[ ] optionsHook plugin method called on an undefined/unregistered option...\n\n"${hookName}"`, this, true);
 			return;
 		}
 	}
 	function _applyAdapterMixin(mixin, options) {
 		if (!isPObject(mixin)) {
-			debugHandler(`[Custom Option-Hook mixin] "applyMixin" callback expects a plain object`, this, true);
+			debugHandler(`[ ] [Custom Option-Hook mixin] "applyMixin" callback expects a plain object`, this, true);
 			return;
 		}
 		applyMixinMergeStrategy(this, options, [mixin]);
@@ -9439,7 +9571,7 @@ var Houxit = (function(exports) {
 	}
 	function _controller_Adapter(options) {
 		if (!isPObject(options)) {
-			debugHandler(`argument at position 1 expects a plain object\n\nType unaccepted`, this, true);
+			debugHandler(`[ ] argument at position 1 expects a plain object\n\nType unaccepted`, this, true);
 			return;
 		}
 		const controllers = this[$$$core].$globals.controller;
@@ -9448,7 +9580,7 @@ var Houxit = (function(exports) {
 		optionsRegistery(this, options);
 		let { setup, setupAdapter } = options;
 		if (hasOwn(options, "setupAdapter") && !isPFunction(setupAdapter)) {
-			debugHandler(`setupAdapter option of .controller({}) method expects a function/method type`, this, true);
+			debugHandler(`[ ] setupAdapter option of .controller({}) method expects a function/method type`, this, true);
 			return this;
 		}
 		if (!exists(setupAdapter) && !isPFunction(setupAdapter)) setupAdapter = pass;
@@ -9469,14 +9601,14 @@ var Houxit = (function(exports) {
 	function optionsRegistery(self, options) {
 		if (!hasProp(options, "optionsRegistery")) return;
 		else if (!isPObject(options.optionsRegistery)) {
-			debugHandler(`The "optionsRegistery" property argument of controller expects a plain object\n\nType Unexpected`, self, true);
+			debugHandler(`[ ] The "optionsRegistery" property argument of controller expects a plain object\n\nType Unexpected`, self, true);
 			return;
 		}
 		options.optionsRegistery;
 		const globals = getGlobalRegistery(self);
 		entries(options.optionsRegistery).forEach(([key, validator]) => {
 			if (_makeMap_(globals.legalOptions, key)) {
-				debugHandler(`${key} custom optionsRegistery already exists in the registery record`, self, true);
+				debugHandler(`[ ] ${key} custom optionsRegistery already exists in the registery record`, self, true);
 				return;
 			}
 			define(globals.legalOptions, key, {
@@ -9488,7 +9620,7 @@ var Houxit = (function(exports) {
 	function mountedWarning(self, name) {
 		if (isTrue(self[$$$operands].hasMountProto)) {
 			if (!self[$$$core].map.mountWarn) {
-				debugHandler(`This "mount" method has been called\n\ncalling of methods after the widget is mounted is prohibited\n\n call to ('.${name}') method is considered an invalid houxit syntax`, self, true);
+				debugHandler(`[ ] This "mount" method has been called\n\ncalling of methods after the widget is mounted is prohibited\n\n call to ('.${name}') method is considered an invalid houxit syntax`, self, true);
 				self[$$$core].map.mountWarn = true;
 			}
 			return false;
@@ -9497,7 +9629,7 @@ var Houxit = (function(exports) {
 	}
 	function transmit(prop, value) {
 		if (!validateType(prop, [String, Symbol])) {
-			debugHandler(`Parameter 1 on .transmit() expects a string or a Symbol `, this, true);
+			debugHandler(`[ ] Parameter 1 on .transmit() expects a string or a Symbol `, this, true);
 			return this;
 		}
 		define(isInitialBuild(this) ? this[$$$core].$globals.transmited : this[$$$core].$root[$$$core].$globals.transmited, prop, {
@@ -9576,7 +9708,7 @@ var Houxit = (function(exports) {
 			});
 		}).then(() => callback()).catch((err) => {
 			debugHandler(err);
-			debugHandler(`${err}`, self, true);
+			debugHandler(`[ ] ${err}`, self, true);
 		});
 	}
 	function Render_Template(self, initBuild, buildFacade, slotter) {
@@ -9592,17 +9724,17 @@ var Houxit = (function(exports) {
 		initBuild = self[$$$compiler].templateProcessor(self, initBuild, buildFacade, slotter);
 		return initBuild;
 	}
-	function _tick(fn, wait) {
+	function _tick(fn) {
 		if (!validateCollectionArgs(arguments, {
 			min: 0,
-			max: 2,
-			validators: [Function, Number],
+			max: 1,
+			validators: [[Function, Number]],
 			name: "tick()"
 		})) return freeze();
 		const self = this && isHouxitBuild(this) ? this : null;
 		return new Promise((resolve, reject) => {
-			if (wait) setTimeout(pass, wait);
-			if (fn) resolve(deferEventCircleThread(self, fn, isHouxitBuild(self)));
+			if (isNumber(fn)) setTimeout(resolve, fn);
+			else if (isPFunction(fn)) resolve(deferEventCircleThread(self, fn, isHouxitBuild(self)));
 		});
 	}
 	function tick(fn, wait) {
@@ -9613,7 +9745,7 @@ var Houxit = (function(exports) {
 			try {
 				callback();
 			} catch (err) {
-				debugHandler(`Encountered a Problem during DOM effect trigger phase\n\n>>>>>`, self, true);
+				debugHandler(`[ ] Encountered a Problem during DOM effect trigger phase\n\n>>>>>`, self, true);
 				$warn(`${err}`, self);
 				return;
 			}
@@ -9641,7 +9773,7 @@ var Houxit = (function(exports) {
 		});
 	}
 	function RenderEffect_$Warn(self, err) {
-		debugHandler(`----unable to complete the rerender effect circle patch\n\nthis is likely a probable bug/error in the houxit's compiler level;\nplease report any problem —— and open an issue on our github repo issue page`, self, true);
+		debugHandler(`[ ] ----unable to complete the rerender effect circle patch\n\nthis is likely a probable bug/error in the houxit's compiler level;\nplease report any problem —— and open an issue on our github repo issue page`, self, true);
 		debugHandler(`${err}`, self);
 		console.error(err);
 	}
@@ -9844,7 +9976,7 @@ var Houxit = (function(exports) {
 		} catch (err) {
 			if (err.name === "HierarchyRequestError") parent.insertBefore(mover, target);
 			else {
-				debugHandler(`${err}`, self, true);
+				debugHandler(`[ ] ${err}`, self, true);
 				console.error(err);
 			}
 		}
@@ -10008,7 +10140,7 @@ var Houxit = (function(exports) {
 		if (!isSSR && !isHouxitDirective(directive)) return _With_Custom_Directives(self, bindings, vNode, hx_Element, metrics);
 		if (directive === "provide") {
 			if (!validHouxitWidget(vNode?.GeneticProvider)) {
-				debugHandler(`Illegal Provide Use: "$$provide" directive is only scoped to widget instances vnode only\n\n found on "${(isSSR ? isString(virtualNode.type) : isNativeElement(virtualNode)) ? virtualNode.outerHTML + " element" : ""}"`, self, true);
+				debugHandler(`[ ] Illegal Provide Use: "$$provide" directive is only scoped to widget instances vnode only\n\n found on "${(isSSR ? isString(virtualNode.type) : isNativeElement(virtualNode)) ? virtualNode.outerHTML + " element" : ""}"`, self, true);
 				return;
 			}
 			if (_makeMap_([Suspense, For], vNode.prototype_)) vNode.filesFilter.$$dir_PROVIDE_bindings = bindings;
@@ -10071,19 +10203,19 @@ var Houxit = (function(exports) {
 		const tagname = isBlockTag(vNode.type) ? getBlockTagName(vNode.type) : vNode.type;
 		let widget;
 		if (!isBlockTag(vNode.type) && !isDynamicPropTag(vNode.type) && !instance_Has_Widget(self, tagname) && !(inBrowserCompiler ? customElements.get(tagname) : false)) {
-			debugHandler(`Template Compilation Error::\n\nUnresolved tagname "<${tagname}>"\n\n   ...if this is a Houxit widget, make sure its registered through the "widgets" option or defined through the CustomElementsInstance.define() method if it's a customElement `, self, true);
+			debugHandler(`[ ] Template Compilation Error::\n\nUnresolved tagname "<${tagname}>"\n\n   ...if this is a Houxit widget, make sure its registered through the "widgets" option or defined through the CustomElementsInstance.define() method if it's a customElement `, self, true);
 			return false;
 		} else if (isBlockTag(vNode.type)) {
 			if (isBuiltinBlocks(tagname)) return true;
 			if (!instance_Has_Block(self, tagname)) {
-				debugHandler(`((Block Resolver Error))\n\n"${tagname}" block is not a registered block element`, self, true);
+				debugHandler(`[ ] ((Block Resolver Error))\n\n"${tagname}" block is not a registered block element`, self, true);
 				return false;
 			} else vNode.GeneticProvider = normalize_Block(self, tagname);
 			return true;
 		} else if (_makeMap_(BUILT_IN_WIDGETS, tagname)) widget = BUILT_IN_WIDGETS[tagname];
 		widget = normalize_Widget(self, tagname);
 		if (!isDynamicPropTag(tagname) && !validHouxitWidget(widget) && !customElements.get(tagname)) {
-			debugHandler(`>>>> "${tagname}\n\nCannot compile value as a Houxit widget\nMaybe an invalid houxit widget value type`, self, true);
+			debugHandler(`[ ] >>>> "${tagname}\n\nCannot compile value as a Houxit widget\nMaybe an invalid houxit widget value type`, self, true);
 			return false;
 		}
 		if (validHouxitWidget(widget)) vNode.GeneticProvider = widget;
@@ -10105,7 +10237,7 @@ var Houxit = (function(exports) {
 				...metrics
 			});
 			delete config.topLevelSlotContext;
-		} else debugHandler(`$$slot directive definitions are only allowed on a widgets top-level consumer scope instances\n\n"slot' directive on ... <${isWidget ? get_$name(self) : virtualNode.type}> has failed to compile away...cross-check element render positioning`, self, true);
+		} else debugHandler(`[ ] $$slot directive definitions are only allowed on a widgets top-level consumer scope instances\n\n"slot' directive on ... <${isWidget ? get_$name(self) : virtualNode.type}> has failed to compile away...cross-check element render positioning`, self, true);
 	}
 	function $compilerEngine(self, virtualNode, hx_Element, slotsCompilerArgs, config) {
 		let { rawChildren, GeneticProvider: widget, props } = virtualNode;
@@ -10224,7 +10356,7 @@ var Houxit = (function(exports) {
 		if (!isHouxitBuild(self)) return;
 		if (global_const[type].has(self, name)) instance = global_const[type](self, name);
 		else {
-			debugHandler(`"resolve.${type}()" macro was unable to find a widget with the provided name "${name}"\n\n are you sure this is a builtIn/globaly/localy registered ${type}`, self, true);
+			debugHandler(`[ ] "resolve.${type}()" macro was unable to find a widget with the provided name "${name}"\n\n are you sure this is a builtIn/globaly/localy registered ${type}`, self, true);
 			return;
 		}
 		return instance;
@@ -10415,7 +10547,7 @@ var Houxit = (function(exports) {
 		else if (JSXParserRegex.test(value)) {
 			const instance = normalizeJSXPropValue(config, key);
 			if (!isString(instance)) {
-				debugHandler(`property key value passed to the "html" macro is not a valid prop name\n\ntype of "${typeof instance}" found >>>> Expects a "string" value`);
+				debugHandler(`[ ] property key value passed to the "html" macro is not a valid prop name\n\ntype of "${typeof instance}" found >>>> Expects a "string" value`);
 				return;
 			}
 			vnode.props[instance] = vnode.props[key];
@@ -10498,7 +10630,7 @@ var Houxit = (function(exports) {
 		if (!isString(source) && !source.trim()) return !isArray(NodeList) ? [] : NodeList;
 		config = assign({
 			deep: true,
-			trim: true
+			trim: false
 		}, config);
 		source = parserSourceInitializer(source, self);
 		let tag_matches = source.match(openingTagsRegex);
@@ -10510,9 +10642,9 @@ var Houxit = (function(exports) {
 		NodeList = NodeList || [];
 		for (let [index, tagMatch] of (tag_matches || []).entries()) {
 			if (config.trim && !(len(loaderList) && isPlainTextChildrenTagElements(loaderList[0][0]))) {
-				tagMatch = tagMatch.trim();
+				tagMatch = tagMatch;
 				if (tagMatch == "") continue;
-			} else if (!config.trim && !(len(loaderList) && isPlainTextChildrenTagElements(loaderList[0][0]))) tagMatch = tagMatch.trim();
+			} else if (!config.trim && !(len(loaderList) && isPlainTextChildrenTagElements(loaderList[0][0]))) tagMatch = tagMatch;
 			tagMatch = isOpenEmptyTag(tagMatch) ? "<hx:fragment>" : isCloseEmptyTag(tagMatch) ? "</hx:fragment>" : tagMatch;
 			if (isOpeningCommentTag(tagMatch) || isOpeningTag(tagMatch)) {
 				if (isOpeningCommentTag(tagMatch) && len(loaderList)) {
@@ -10647,7 +10779,7 @@ var Houxit = (function(exports) {
 			context,
 			fall
 		];
-		if (!is_hyperscript && isString(tagName) && isBlockTag(tagName)) if (!isHouxitBuild(self)) debugHandler(`block tags Cannot be used in build/static templates mode`, self, true);
+		if (!is_hyperscript && isString(tagName) && isBlockTag(tagName)) if (!isHouxitBuild(self)) debugHandler(`[ ] block tags Cannot be used in build/static templates mode`, self, true);
 		else return blockElementsPreProcessors(self, vNode, args(), config);
 		else return specializedTemplateProductionProcessor(self, attributes, vNode, args(), config);
 	}
@@ -10713,12 +10845,12 @@ var Houxit = (function(exports) {
 			else if (isPrimitive(node) ? String(node).trim() : node || isFunction(node)) {
 				if (is_hyperscript && isFunction(node)) {
 					const fn = node;
-					const effect = _createEffectBase(() => {
+					const effect = _createHouxitEffectFrame(() => {
 						return unwrap(fn());
 					}, self);
 					let value = effectRunner(effect).value;
 					if (!isPrimitive(value)) {
-						debugHandler(`lazy callback effect expects only a primitive node\n\n${typeof value} render not supported\nat ...."${fn.toString()}"`, self, true);
+						debugHandler(`[ ] lazy callback effect expects only a primitive node\n\n${typeof value} render not supported\nat ...."${fn.toString()}"`, self, true);
 						return;
 					}
 					config.lazy_effect = effect;
@@ -10797,7 +10929,7 @@ var Houxit = (function(exports) {
 		const isRerender = self[$$$operands].initializedRender;
 		hx_Element.LabContext = smartDextCtxMerging(hx_Element.LabContext || {}, fall || {});
 		async function getResp() {
-			return await effectRunner(_createEffectBase(() => {
+			return await effectRunner(_createHouxitEffectFrame(() => {
 				return _$runModelBind(self, exp, isHouxitElement(hx_Element) ? hx_Element : fall);
 			}, self));
 		}
@@ -10846,7 +10978,7 @@ var Houxit = (function(exports) {
 	}
 	function blockHtmlEmbedder(self, node, blockN, metrics, [children, exp], config) {
 		const [hx_Element, NodeList, tagName, context, fall] = metrics;
-		_createEffectBase(() => {
+		_createHouxitEffectFrame(() => {
 			return _$runModelBind(self, exists(exp.trim()) ? exp : "undefined", hx_Element);
 		}, self);
 		return [];
@@ -10854,7 +10986,7 @@ var Houxit = (function(exports) {
 	function blockClassTransformer(self, node, blockN, metrics, [children, exp], config) {
 		const [hx_Element, NodeList, tagName, context, fall] = metrics;
 		if (!variableDeclarationRegex.test(exp)) {
-			debugHandler(`template "@class" block declaration failure \n\ndoes not meet required name and args syntax rules`, self, true);
+			debugHandler(`[ ] template "@class" block declaration failure \n\ndoes not meet required name and args syntax rules`, self, true);
 			return;
 		}
 		let [match, var_name, var_params] = exp.match(variableDeclarationRegex);
@@ -10865,29 +10997,29 @@ var Houxit = (function(exports) {
 			validator = validator[1];
 			validator = _$runModelBind(self, validator, hx_Element);
 			if (!isPFunction(validator)) {
-				debugHandler(`@class: template "@class" block validator prop expects a plain function callback reference`, self, true);
+				debugHandler(`[ ] @class: template "@class" block validator prop expects a plain function callback reference`, self, true);
 				return;
 			}
 		}
 		if (var_params) {
 			var_params = var_params.trim();
 			if (!(var_params.startsWith("(") && var_params.endsWith(")"))) {
-				debugHandler(`${var_name}: arguments of template class "${var_name}" does not meet required syntax\nmissing parenthesis in arguments enclosure  "(" and ")"`, self, true);
+				debugHandler(`[ ] ${var_name}: arguments of template class "${var_name}" does not meet required syntax\nmissing parenthesis in arguments enclosure  "(" and ")"`, self, true);
 				return;
 			}
 		}
 		var_name = var_name || match;
 		if (!isValidIdentifier(var_name)) {
-			debugHandler(`template "@class" block name "${var_name}" is not a JavaScript valid identifier`, self, true);
+			debugHandler(`[ ] template "@class" block name "${var_name}" is not a JavaScript valid identifier`, self, true);
 			return;
 		}
 		function templateKlassGenerator(...props) {
 			const isValid = validator ? validator([...props]) : true;
 			if (!isBoolean(isValid)) {
-				debugHandler(`TemplateClass validator expects a Boolean return value\nvalidation proceses failed`, self, true);
+				debugHandler(`[ ] TemplateClass validator expects a Boolean return value\nvalidation proceses failed`, self, true);
 				return false;
 			} else if (!isValid) {
-				debugHandler(`validation method for template class "${var_name}" failed\nreturns falsy in its props validation check`, self, true);
+				debugHandler(`[ ] validation method for template class "${var_name}" failed\nreturns falsy in its props validation check`, self, true);
 				return false;
 			}
 			return true;
@@ -10980,7 +11112,7 @@ var Houxit = (function(exports) {
 		let args = len(name) < len(exp.trim()) ? ArgsExtractor(exp, name).content : void 0;
 		args = args ? _$runModelBind(self, "[" + args + "]", hx_Element || fall) : [];
 		const templateKlass = _$runModelBind(self, name, hx_Element);
-		const deb = () => debugHandler(`"${name}" reference is not a valid TemplateClass instance`, self, true);
+		const deb = () => debugHandler(`[ ] "${name}" reference is not a valid TemplateClass instance`, self, true);
 		if (!isClass(templateKlass)) {
 			deb();
 			return [];
@@ -10996,13 +11128,13 @@ var Houxit = (function(exports) {
 	function blockConstPreprocessor(self, node, blockN, metrics, [children, exp], config) {
 		const [hx_Element, NodeList, tagName, context, fall] = metrics;
 		if (exp.trim() && !variableDeclarationRegex.test(exp)) {
-			debugHandler(`"${exp}" statement is not recognised or not a valid statement or expression`, self, true);
+			debugHandler(`[ ] "${exp}" statement is not recognised or not a valid statement or expression`, self, true);
 			return [];
 		} else if (!exp.trim()) return [];
 		let [match, variable, expression] = exp.match(variableDeclarationRegex);
 		variable = variable.trim();
 		if (!isDestructureSyntax(variable) && !isValidIdentifier(variable)) {
-			debugHandler(`"${variable}" is an invalid identifier`, self, true);
+			debugHandler(`[ ] "${variable}" is an invalid identifier`, self, true);
 			return [];
 		}
 		const data = _$runModelBind(self, expression?.trim(), hx_Element || context);
@@ -11013,7 +11145,7 @@ var Houxit = (function(exports) {
 				syntaxArray: [variable]
 			} }, true);
 		} else if (!hasOwn(context, variable)) fall[variable] = data;
-		else if (hasOwn(context, variable)) debugHandler(`"${variable}" const block namespace already declared\nor instance cannot be re-declared/re-assigned`, self, true);
+		else if (hasOwn(context, variable)) debugHandler(`[ ] "${variable}" const block namespace already declared\nor instance cannot be re-declared/re-assigned`, self, true);
 	}
 	function blockForProcessor(self, node, blockN, metrics, [children, exp], isWidget = false, conf) {
 		const [hx_Element, NodeList, tagName, context, fall, value, provide] = metrics;
@@ -11028,7 +11160,7 @@ var Houxit = (function(exports) {
 		if (!isRerender) conf.effect = effect;
 		else Loop_Data.obj = effect.runEffect().value;
 		if (!isIterable(Loop_Data.obj) && !isNumber(Loop_Data.obj)) {
-			debugHandler(`${getType(Loop_Data.obj)} value passed to the "For" built-in ${isWidget ? "widget" : "block"} is not an iterable object`, self, true);
+			debugHandler(`[ ] ${getType(Loop_Data.obj)} value passed to the "For" built-in ${isWidget ? "widget" : "block"} is not an iterable object`, self, true);
 			return template;
 		}
 		function factoryRender(option, config, children) {
@@ -11094,7 +11226,7 @@ var Houxit = (function(exports) {
 			effect = node.compiler[If].test;
 			data = is_hyperscript ? value : effect.value;
 		} else if (!isRerender) {
-			effect = _createEffectBase(() => {
+			effect = _createHouxitEffectFrame(() => {
 				return _$runModelBind(self, exists(exp.trim()) ? exp : "undefined", hx_Element);
 			}, self);
 			data = effectRunner(effect).value;
@@ -11173,7 +11305,7 @@ var Houxit = (function(exports) {
 			const devOpts = vNode.compiler[ElseIf].test;
 			if (isWidget && !isRerender) data = devOpts.value;
 			else if (!isWidget && !isRerender) {
-				effect = isEffect(devOpts) ? devOpts : _createEffectBase(() => {
+				effect = isEffect(devOpts) ? devOpts : _createHouxitEffectFrame(() => {
 					return _$runModelBind(self, exists(exp?.trim()) ? exp : "undefined", hx_Element);
 				}, self);
 				data = effect.runEffect().value;
@@ -11218,7 +11350,7 @@ var Houxit = (function(exports) {
 		const elif = isWidget ? "hx:else-if" : "else-if";
 		const els = isWidget ? "hx:else" : "else";
 		if (prev === els && (tag === els || tag === elif)) {
-			debugHandler(`An "${els}" ${isWidget ? "widget" : "block"} already existing\n\nUnresolved Error:: cannot precced with the "@${tag}" block`, self, true);
+			debugHandler(`[ ] An "${els}" ${isWidget ? "widget" : "block"} already existing\n\nUnresolved Error:: cannot precced with the "@${tag}" block`, self, true);
 			return falseP;
 		}
 		config.keywordLists.push(tag);
@@ -11226,7 +11358,7 @@ var Houxit = (function(exports) {
 	}
 	function blockElseIfPreprocessor(self, node, config, blockN, isWidget) {
 		const b = isWidget ? "widget" : "block";
-		debugHandler(`The "${blockN}" ${b} cannot be used outside of the "${isWidget ? "hx:if" : "@if"}" template ${b} scope`, self, true);
+		debugHandler(`[ ] The "${blockN}" ${b} cannot be used outside of the "${isWidget ? "hx:if" : "@if"}" template ${b} scope`, self, true);
 	}
 	function instance_Has_Block(self, name) {
 		name = name.startsWith("@") ? name.slice(1) : name;
@@ -11245,7 +11377,7 @@ var Houxit = (function(exports) {
 		if (isBuiltinBlocks(blockN)) renderedNodes = controlBuiltInBlocks(self, vNode, blockN, metrics, config);
 		else if (instance_Has_Block(self, blockN)) renderedNodes = customBlocksTraverse(self, vNode, blockN, metrics, config);
 		else {
-			debugHandler(`((Block Resolver Error))\n\n"@${blockN}" block is not a registered block element`, self, true);
+			debugHandler(`[ ] ((Block Resolver Error))\n\n"@${blockN}" block is not a registered block element`, self, true);
 			return;
 		}
 		for (const [index, vnode] of (!isArray(renderedNodes) ? validateType(renderedNodes, [Set, Tuple]) ? [...arrSet(renderedNodes)] : [renderedNodes] : renderedNodes).entries()) if (vnode) NodeList.add(vnode);
@@ -11262,23 +11394,23 @@ var Houxit = (function(exports) {
 		let blockCalllback;
 		if (isPObject(block)) {
 			if (hasOwn(block, "blockConfig")) {
-				if (!isPObject(block.blockConfig)) debugHandler(`"blockConfig" option of "${blockN}" custom block is not a valid type...\nExpects a plain object`, self, true);
+				if (!isPObject(block.blockConfig)) debugHandler(`[ ] "blockConfig" option of "${blockN}" custom block is not a valid type...\nExpects a plain object`, self, true);
 				else assign(blockConfig, block.blockConfig);
 				iterator(block.blockConfig).each((value, key) => {
 					if (!_makeMap_("isVoid,compileExp", key)) {
-						debugHandler(`blockConfig option of "${key}" is not a recognised config option`, self, true);
+						debugHandler(`[ ] blockConfig option of "${key}" is not a recognised config option`, self, true);
 						delete blockConfig[key];
 					}
 				});
 			} else if (hasOwn(block, "block")) blockCalllback = block.block;
 		} else blockCalllback = block;
 		let enderRenderCount = 0;
-		const data = effectRunner(_createEffectBase(() => {
+		const data = effectRunner(_createHouxitEffectFrame(() => {
 			return _$runModelBind(self, node.props.exp, hx_Element);
 		}, self)).value;
 		function factoryRenderCallback(ctx = {}) {
 			if (blockConfig.isVoid) return createRenderlessElement();
-			if (!isPObject(ctx)) debugHandler(`context data passed to factoryRender expects a plain object`, self);
+			if (!isPObject(ctx)) debugHandler(`[ ] context data passed to factoryRender expects a plain object`, self);
 			installSuspense(children, getBoundary(hx_Element));
 			return config.suspenseFlag ? arrayInverter(children) : _HouxitCoreRenderer(children, self, true, hx_Element, smartDextCtxMerging(fall || {}, ctx), config);
 		}
@@ -11351,7 +11483,7 @@ var Houxit = (function(exports) {
 	}
 	function __EncodeJSXParser__(strings, values) {
 		if (!isFunction(strings.reduce)) {
-			debugHandler(`html macro can only be called with backticks embeded directly to method name\n\n"html\`<templates>\`" instead of "html()"\nCheck html macro call`);
+			debugHandler(`[ ] html macro can only be called with backticks embeded directly to method name\n\n"html\`<templates>\`" instead of "html()"\nCheck html macro call`);
 			return;
 		}
 		if (len(values)) return normalizePreJSXFormat(strings, values);
@@ -11360,7 +11492,7 @@ var Houxit = (function(exports) {
 			return acc + str + value;
 		}, "");
 		if (!isString(html)) {
-			debugHandler(`html parser macro expects strings values`);
+			debugHandler(`[ ] html parser macro expects strings values`);
 			return null;
 		}
 		return __HouxitHTMLParser__(html, [], { trim: true }, null);
@@ -11368,7 +11500,7 @@ var Houxit = (function(exports) {
 	function MKDParser(mkd) {}
 	function markdown(mkd, ...values) {
 		if (!isString(mkd)) {
-			debugHandler(`markdown helper expects strings values`);
+			debugHandler(`[ ] markdown helper expects strings values`);
 			return null;
 		}
 	}
@@ -11390,7 +11522,7 @@ var Houxit = (function(exports) {
 	function generateCustomElementConstructor(name) {
 		name = ToPascalCase(name);
 		if (!isValidIdentifier(name)) {
-			debugHandler(`unable to parse the customElements tag name\n\n
+			debugHandler(`[ ] unable to parse the customElements tag name\n\n
       seems to have been an invalid identifier`);
 			return;
 		}
@@ -11414,7 +11546,7 @@ var Houxit = (function(exports) {
 		entries(defineWidget(opts)).forEach(([ind, value]) => {
 			if (_makeMap_(LifeCycleHooksList, ind)) {
 				if (!isFunction(value)) {
-					debugHandler(`LifeCycle callback error\n\n"${ind}" is a callback function, received an invalid type`);
+					debugHandler(`[ ] LifeCycle callback error\n\n"${ind}" is a callback function, received an invalid type`);
 					return;
 				}
 				if (ind != "plugin") Hooks[ind] = value;
@@ -11456,8 +11588,8 @@ var Houxit = (function(exports) {
 				return;
 			}
 			if (inherit && !isString(inherit) && !IS_HTML_TAG(inherit)) {
-				debugHandler(`problem with the inherit value, \n\n may not be a string value or a valid HTML tagName`);
-				debugHandler(`CustomElement registration failed`);
+				debugHandler(`[ ] problem with the inherit value, \n\n may not be a string value or a valid HTML tagName`);
+				debugHandler(`[ ] CustomElement registration failed`);
 				return;
 			}
 			const CustomElementsInstance = generateCustomElementConstructor(name);
@@ -11483,11 +11615,11 @@ var Houxit = (function(exports) {
 	}
 	function _defineWidget(opts, options) {
 		if (!validHouxitWidget(opts)) {
-			debugHandler(`widget transform Error\n\n 
+			debugHandler(`[ ] widget transform Error\n\n 
         invalid widget instance\n/... at /././. at`);
 			return;
 		} else if (len(arguments) > 2) {
-			debugHandler(`Parameter Error\n\nmax-2 argument required\n ${len(arguments)} given`);
+			debugHandler(`[ ] Parameter Error\n\nmax-2 argument required\n ${len(arguments)} given`);
 			return;
 		} else if (isPObject(opts) || isFunction(opts)) {
 			if (isArrowFunction(opts) && null);
@@ -11514,10 +11646,10 @@ var Houxit = (function(exports) {
 			options = options.type;
 		}
 		if (!validHouxitWidget(options)) {
-			debugHandler(`initBuild Error\n\nCannot compile value as a Houxit widget\nMaybe an invalid houxit widget value`);
+			debugHandler(`[ ] initBuild Error\n\nCannot compile value as a Houxit widget\nMaybe an invalid houxit widget value`);
 			return;
 		} else if (isHouxitBuiltinSymbolWidget(options)) {
-			debugHandler(`The built houxit widget cannot be used in an initBuild widget App`);
+			debugHandler(`[ ] The built houxit widget cannot be used in an initBuild widget App`);
 			return;
 		}
 		const widget = createVNodeClass(...values(propsAndChildrenGetter(...arguments)));
@@ -11539,7 +11671,7 @@ var Houxit = (function(exports) {
 	}
 	function _renderToStringCompiler(build, config) {
 		if (!isSSRCompiler(build)) {
-			debugHandler(`"renderToString" macro was called on a non SSR renderer build...\n\nplease check, you may have used "initBuild" app initializer instead of the "initSSRBuild"`);
+			debugHandler(`[ ] "renderToString" macro was called on a non SSR renderer build...\n\nplease check, you may have used "initBuild" app initializer instead of the "initSSRBuild"`);
 			return;
 		}
 		return new Promise((resolve) => {
@@ -11597,28 +11729,28 @@ var Houxit = (function(exports) {
 	function defineElementOptionsValidator(options) {
 		const optionsName = "type,props,children";
 		if (!isPObject(options)) {
-			debugHandler(`createVNode Error:\n expects an 'object' at......\n\nparameter 1`);
+			debugHandler(`[ ] createVNode Error:\n expects an 'object' at......\n\nparameter 1`);
 			return false;
 		} else if (len(options) > 3) {
-			debugHandler(`Options Error\n\n createVNode does not accept more than 3 options props arguments`);
+			debugHandler(`[ ] Options Error\n\n createVNode does not accept more than 3 options props arguments`);
 			return false;
 		} else if (!options.type && !validateType(options.type, [
 			String,
 			Object,
 			Function
 		])) {
-			debugHandler(`Unexpected value passed to type in createVNode\n\n"${getType(options.type)}" is an invalid type value to type option`);
-			debugHandler(`NOTE : The "type" option is required`);
+			debugHandler(`[ ] Unexpected value passed to type in createVNode\n\n"${getType(options.type)}" is an invalid type value to type option`);
+			debugHandler(`[ ] NOTE : The "type" option is required`);
 			return false;
 		}
 		for (let [name, opt] of entries(options)) if (!_makeMap_(optionsName, name)) {
-			debugHandler(`${name} is not a valid createVNode options value`);
+			debugHandler(`[ ] ${name} is not a valid createVNode options value`);
 			return false;
 		} else if (name === "props" && opt && !isPObject(opt)) {
-			debugHandler(`Element props property expects an object value\n\nUnexpected "${getType(opt)}" value`);
+			debugHandler(`[ ] Element props property expects an object value\n\nUnexpected "${getType(opt)}" value`);
 			return false;
 		} else if (name === "children" && exists(opt) && !isChildrenNode(opt)) {
-			debugHandler(`Element children property expects a valid houxit child node instance value\n\nUnexpected "${getType(opt)}" value`);
+			debugHandler(`[ ] Element children property expects a valid houxit child node instance value\n\nUnexpected "${getType(opt)}" value`);
 			return false;
 		}
 		return true;

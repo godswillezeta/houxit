@@ -24,7 +24,8 @@
   "scripts": {
     "build": "vite build",
     "prepublishOnly": "npm run build",
-    "build:dev": "vite build --config vite.config.dev.js"
+    "build:dev": "vite build --config vite.config.dev.js",
+    "build:both":"npm run build && npm run build:dev"
   },
   "repository": {
     "type": "git",

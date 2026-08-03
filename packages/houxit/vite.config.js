@@ -7,7 +7,35 @@ export default defineConfig({
     target: "esnext",
     terserOptions: {
       compress: {
-        pure_funcs: ["debugHandler",'$warn','console','log','warn','Error'],
+        drop_console:true,
+        pure_funcs: ["debugHandler",'$warn'],
+        passes: 5,
+        drop_console: true,
+        drop_debugger: true,
+        pure_getters: true,
+        unsafe_arrows: true,
+        unsafe_methods: true,
+        hoist_funs: true,
+        hoist_vars: false,
+        dead_code: true,
+        unused: true,
+        module: true,
+        evaluate: true,
+        reduce_vars:true,
+        collapse_vars: true,
+        booleans: true,
+        if_return: true,
+        sequences: true,
+        inline: 3,
+        join_vars: true,
+        conditionals: true,
+        
+      },
+      mangle: {
+        toplevel: true
+      },
+      format: {
+        comments: false
       },
     },
     lib: {
@@ -17,17 +45,17 @@ export default defineConfig({
       fileName(format) {
         switch (format) {
           case "es":
-            return "houxit.browser.esm.js";
+            return "houxit.esm.min.js";
           case "cjs":
-            return "index.cjs";
+            return "houxit.min.cjs";
           case "iife":
-            return "houxit.global.js";
+            return "houxit.global.min.js";
         }
       }
     },
     outDir: "dist",
-    emptyOutDir: true,
-    sourcemap: true
+    emptyOutDir: false,
+    sourcemap: false
   },
   
 });

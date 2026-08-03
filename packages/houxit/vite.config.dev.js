@@ -12,9 +12,9 @@ export default defineConfig({
       fileName(format) {
         switch (format) {
           case "es":
-            return "houxit.browser.esm.js";
+            return "houxit.esm.js";
           case "cjs":
-            return "index.cjs";
+            return "houxit.cjs";
           case "iife":
             return "houxit.global.js";
         }
@@ -22,7 +22,7 @@ export default defineConfig({
     },
 
     outDir: "dist",
-    emptyOutDir: true,
+    emptyOutDir: false,
     sourcemap: true
   }
 });

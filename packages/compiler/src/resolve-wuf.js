@@ -70,10 +70,10 @@ function compileSurface(surface, id){
         const { source, keys }= detector(rawChildren, {}, true);
         [ src, importMap]=importExtractor(source);
         instance.build=` ${hasOwn(props, 'async') ? "async " : ""}function build(){
-          ${src}
-        __env__=true;
-        return __controller__(__variables__, ${render || 'undefined'});
-        }`
+${src}
+  __env__=true;
+  return __controller__(__variables__, ${render || 'undefined'});
+}`
       }else{
         instance.script=src;
       }
@@ -101,6 +101,8 @@ function generateCompilerSource(instance, importMap, id){
     if(new Set(['styles','template','markdown']).has(key)){
       option=`\`${option}\``;
     }
+    // if(key === 'script') continue
+    // log(key)
     source+=`\n${instance.script ? "if(!Object.hasOwn(__module_exports__, '${key}')){" : ""}
   __module_exports__['${key}']=${option}
     ${instance.script ? "}" : ""}
