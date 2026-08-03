@@ -8407,7 +8407,6 @@ function applyModelInitialState(self, element, initVal, localName, inForm){
     tick(()=>{
       animatePlay.forEach((fn)=>{
         fn();
-        
       });
     });
   }
@@ -8743,26 +8742,16 @@ function applyModelInitialState(self, element, initVal, localName, inForm){
     return response;
   }
 function get_Model_Event(el) {
-  if (el.tagName === "SELECT") return "change";
-  if (el.tagName === "TEXTAREA") return "input";
+  const tagName=el.localName;
+  if ( tagName === "select") return "change";
+  if (tagName === "textarea") return "input";
 
-  if (el.tagName === "INPUT") {
-    switch (el.type) {
-      case "checkbox":
-      case "radio":
-      case "date":
-      case "time":
-      case "datetime-local":
-      case "month":
-      case "week":
-      case "file":
-        return "change";
-  
-      default:
-        return "input";
+  if (tagName === "input") {
+    if(_makeMap_('checkbox,radio,date,time,datetime-local,month,week,file', el.type)){
+      return 'change'
     }
+    return 'input';
   }
-
   return "input";
 }
   function _compileToStaticTemplateScaffold(self, render, recursive=false){

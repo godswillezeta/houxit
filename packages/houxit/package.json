@@ -3,13 +3,13 @@
   "version": "0.1.11",
   "description": "The blueprint for modern web apps.",
   "type": "module",
-  "main": "dist/index.cjs",
-  "module": "dist/houxit.browser.esm.js",
+  "main": "dist/houxit.cjs",
+  "module": "dist/houxit.esm.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "development": "./src/index.js",
-      "import": "./dist/houxit.browser.esm.js",
+      "import": "./dist/houxit.esm.js",
       "require": "./dist/index.cjs",
       "types": "./dist/index.d.ts"
     },
