@@ -1,0 +1,16 @@
+{
+  "name": "@houxit/compiler",
+  "version": "1.0.0",
+  "description": "",
+  "main": "load-compile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies":{
+    "houxit":"0.1.11"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "type": "module"
+}
