@@ -4,13 +4,13 @@
   "description": "The blueprint for modern web apps.",
   "type": "module",
   "main": "dist/houxit.cjs",
-  "module": "dist/houxit.esm.js",
+  "module": "dist/houxit.esm.min.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "development": "./src/index.js",
       "import": "./dist/houxit.esm.js",
-      "require": "./dist/index.cjs",
+      "require": "./dist/houxit.cjs",
       "types": "./dist/index.d.ts"
     },
     "./runtime/controller": {
@@ -20,6 +20,8 @@
   "files": [
     "dist"
   ],
+  "unpkg": "./dist/houxit.global.min.js",
+  "jsdelivr": "./dist/houxit.global.min.js",
   "sideEffects": false,
   "scripts": {
     "build": "vite build",

@@ -1,13 +1,13 @@
 {
   "name": "@houxit/compiler",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "",
   "main": "load-compile.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "dependencies":{
-    "houxit":"0.1.11"
+  "dependencies": {
+    "houxit": "0.1.11"
   },
   "keywords": [],
   "author": "",

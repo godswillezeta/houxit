@@ -1,11 +1,11 @@
 
   //Prince Chukwuemeka Ezeta 
   // ** This project, 'HOUXIT', is been sponsored by the HOUXIT SYSTEMS
-  // ** Visit 'www.houxit.com/guide' for for more information on the houxit project , documentation and houxit's development process roadmap.
+  // ** Visit 'www.houxit.dev/guide' for for more information on the houxit project , documentation and houxit's development process roadmap.
   // ** This is a web JIT development version of Houxit
   // ** We at the core team of Houxit project are determined on developing and improving Houxit.js features and perfomance issues, we only need your support to help and encourage us on maintaing this template engine.
   // ** Thanks for choosing Houxit
-  // THE TRANSPARENT FOOTPRINT FOR MODERN WEB APPS
+  // THE BLUEPRINT FOR MODERN WEB APPS
 "use strict";
 const log=console.log;
 const version = "0.1.10";
@@ -7992,7 +7992,7 @@ function applyModelInitialState(self, element, initVal, localName, inForm){
       fill:'both',
       autoplay:false
     }, config || {});
-    const { duration, delay, easing, iterations, direction, fill, autoplay, /* WAAPI/CSS path*/ styles, keyframes, /* RAF path*/ frame } = config;
+    const { duration, delay, easing, iterations, direction, fill, autoplay, /* WAAPI/CSS path*/ styles, keyframes, onstart,/* RAF path*/ frame } = config;
     if(!frame && isString(easing.css) && (keyframes && !isFunction(keyframes.keyframes))){
       return applyCSSBasedAnimation(node, config, params, options);
     }
@@ -8187,7 +8187,7 @@ function applyModelInitialState(self, element, initVal, localName, inForm){
       if (e.target !== node) {
         return;
       }
-      onstart?.();
+      onStart?.();
     }
     function handleEnd(e) {
       if (e.target !== node) {
@@ -8617,7 +8617,7 @@ function applyModelInitialState(self, element, initVal, localName, inForm){
       duration: 300,
       easing:easings.linear,
     }, config || {});
-    let { delay, duration, easing, keyframes, frame, styles } = config;
+    let { delay, duration, easing, keyframes, frame, styles, onstart } = config;
     let disposed=false;
     if(!frame && isString(easing.css) && !keyframes && styles){
       return cssBasedTransitionEngine(node, config, params, options);
