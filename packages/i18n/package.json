@@ -1,0 +1,22 @@
+{
+  "name": "@houxit/i18n",
+  "version": "0.1.20",
+  "description": "Houxit Internationalization plugin",
+  "keywords": [
+    "internationalization",
+    "i18n",
+    "houxit",
+    "plugin"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "www.github.com/godswillezeta/i18n"
+  },
+  "license": "MIT",
+  "author": "Godswill Ezeta",
+  "type": "esm",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}

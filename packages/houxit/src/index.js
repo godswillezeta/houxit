@@ -8,7 +8,7 @@
   // THE BLUEPRINT FOR MODERN WEB APPS
 "use strict";
 const log=console.log;
-const version = "0.1.10";
+const version = "0.1.15";
 const get_version=()=>'houxit-'+version;//houxit at it's earliest version
 const isArray=Array.isArray;
 const toString=Object.prototype.toString;
@@ -59,7 +59,7 @@ const isPromise=prom=> _toStringCall(prom) === '[object Promise]' && isFunction(
 const nullObj=()=> Object.create(null);
 const isTrue=compute=>compute === true;
 const isFalse=compute=>compute === false;
-const $warner=`<<< Houxit Exception >>> ..... >>>>>>>`;
+const $warner=`<<<[ Houxit Exception ]>>> ..... >>>>>>>`;
 const characters=/[!"#%&'()*+,./;<=>@[\\\]\^`{|}~\s]+/;
 const stringsMonitorRegex=/"(.*?)"|'(.*?)'|`+(.*?\s)`+/gm;
 function debugHandler(msg, self, dictateW=false, txt=''){
@@ -67,7 +67,7 @@ function debugHandler(msg, self, dictateW=false, txt=''){
   if(isHouxitBuild(self)) {
     DEBUG_ENV=self[$$$core].settings.debug /*&& !self[$$$operands].initializedRender*/;
   }
-  if(DEBUG_ENV ) {
+  if(DEBUG_ENV) {
     if(dictateW) {
       console.warn(`${$warner}\n\nEncountered a problem ${txt} \n\n at  at  \n <${self && isHouxitBuild(self) ? self[$$$ownProperties].name : 'UnknownWidget' }> widget`);//houxit warming debugger
     }
@@ -448,7 +448,7 @@ class BaseMotion{
   const arrowFNRegex=/^(async[ ]+)?(\(([\w$,.\[\]\{\} ]*)\)|[\w$]+)[ ]*=>[ ]*[{]?\s*/;
   const functionFNRegex=/^(async[ ]+)?(function)?([*]?([ ]*)[\w$]*)?\(([\w$]*)?\)[ ]*\{\s*/m;
   const isArrowFunction=(fn)=> isPFunction(fn) && arrowFNRegex.test(fn.toString());
-  const isFNString=str => isString(str) && isTrue(arrowFNRegex.test(str) || functionFNRegex.test(str));
+  const isFNString=str => isString(str) && (arrowFNRegex.test(str) || functionFNRegex.test(str));
   const boundFNRegex=/^bound [\w$]*$/;
   const isBFunction=func=>isPFunction(func) && !isArrowFunction(func) && boundFNRegex.test(func.name);
   const objectDestructureRegex=/^{(.*?)}$/;
@@ -1233,97 +1233,58 @@ class BaseMotion{
   const mapMM="set,delete,clear";
   const tupleMM=setMM+",shift,unshift,splice,pop,extend,replace,prepend,arrange,exchange";
   const objectMM="define,delete";
-  function getMutationArgs(data){
-    return isArray(data) ? arrayMM : isSet(data) ? setMM : isMap(data) ? mapMM : isTuple(data) ? tupleMM : isPObject(data) ? objectMM : "";
+  function getMutationArgs(base){
+    return hasPrototype(base, Set) || hasPrototype(base, WeakSet) ? setMM : hasPrototype(base, Array) ? arrayMM : hasPrototype(base, Tuple) ? tupleMM : hasPrototype(base, Map) || hasPrototype(base, WeakMap) ? mapMM :  "";
   }
-  function getAgentMutators(data, prop, model){
-    const value=data;
-    data=unwrap(data);
-    let mutateArgs= getMutationArgs(data)+"write";
-    const mutation_object=createObj('Mutatations');
-    for(let name of mutateArgs.split(',').values()){
-      function mutate(arg){
-        let rv=undefined;
-        if( validateType(data, [Set, Tuple,Array, Map])) {
-          rv=data[name](arg);
-        }else if(isPObject(data)){
-          if('define' === name) {
-            rv=define(data, ...arguments );
-          }else if('delete' === name ) {
-            delete data[arg];
-            rv = true;
-          }
-        }
-        let assV=rv;
-        if((model || !isPrimitive(value) ) && prop  && name === 'write'){ 
-          assV=set_Object_Value(isModelInstance(model) ? model : !isPrimitive(value) ? value : freeze() , prop, len(arguments) ? arg : data  );
-        }
-        return assV ;
-      }
-      mutate = Function('fn', `
-        return function ${name === 'delete' ? 'del' : name }(value){
-          return fn(...arguments);
-        }
-      `)(mutate);
-      define( mutation_object, name, {
-        value : mutate,
-        enumerable
-      });
-    }
-    return mutation_object;
-  }
-  function _useAgent_(data, ModelInstance){
+  function _useAgent_(data, config){
     const dataRead = ()=> data;
     const response = validateCollectionArgs(arguments, {
       min:1,
       max:2,
-      validators:[ Any, [Model]],
+      validators:[ Any, [Object]],
       name : 'useAgent'
     });
     if(!response) {
       return [ dataRead , pass];
     }
-    if(isHouxitBuild(this) && !isChar(data)){
+    let model=isHouxitBuild(this) ? this.__public_model__ : undefined;
+    if(!model && isObject(this)){
+      model=this;
+    }
+    if(model && (!isChar(data) || !object_Has_Path(model, data))){
       debugHandler(`[ ] data path at positional argument 1 expects a string/symbol value of an existing model path\n\n.>...$useAgent`);
       return [ dataRead, pass ];
-    }else if(isModelInstance(ModelInstance) && !isChar(data)){
-      debugHandler(`[ ] data property at positional argument 1 of "useAgent" expects a string/symbol value\n\nMust be a model valid path`);
-      return [dataRead, pass];
     }
-    const self= isHouxitBuild(this) ? this : isModelInstance(ModelInstance) ? {
-      __public_model__ : ModelInstance
-    } : null;
-    ModelInstance= self ? self.__public_model__ : null;
-    if(self && !isHouxitBuild(self)) {
-      delete self.__public_model__;
-    }
-    let prop=isModelInstance(ModelInstance) ? data : isToken(data) ? data[refInternalEffectKey].accessor : "";
-    if( isModelInstance(ModelInstance) && !object_Has_Path(ModelInstance, prop)){
-      debugHandler(`[ ] "${prop}" property is not a valid model property`, );
-      return[dataRead, pass];
-    }
-    data = isModelInstance(ModelInstance) && exists(prop) ? _$runModelBind( ModelInstance , prop ||  "" ) : data;
-    const mutateArgs= getAgentMutators(data, prop , ModelInstance);
-    let defineCount = 0;
+    let prop=model ? data : isToken(data) ? data[refInternalEffectKey].accessor : "";
+    data = model && exists(prop) ? ()=>_$runModelBind(model , prop ||  "" ) : data;
     const unwrappedGetter= ()=> read(data);
-    function mutate(mutation){
-      if(isPFunction(mutation) && defineCount < 1){
-        defineCount++;
-        define(mutateArgs, 'data', {
-          get(){
-            return unwrappedGetter();
-          }
-        });
+    const mutateArgs= {
+      get value(){
+        return unwrappedGetter();
+      },
+      write(...args){
+        return write(...args);
       }
-      if(isPFunction(mutation) ){
+    }
+    function write(value){
+      return mutate(value, PRIVATE_PROPERTY_KEY);
+    }
+    function mutate(mutation, p_p_k){
+      if(isPFunction(mutation) && p_p_k !== PRIVATE_PROPERTY_KEY ){
         try{
           mutation(mutateArgs);
         }catch(err){
-          debugHandler(`[ ] Encountered an error during the call of the writer callback\n\n${err}`);
+          debugHandler(`[ useAgent write failure ] Encountered an error during the call of the writer callback\n\n${err}`);
+          debugHandler(`${err}`);
           return false;
         }
       }else if(!isPFunction(mutation)){
-        set_Object_Value( isModelInstance(ModelInstance) ? ModelInstance : !isPrimitive(data) ? data : freeze() , prop, mutation  );
+        try{
+          set_Object_Value( model ? model : !isPrimitive(data) ? data : freeze() , prop, mutation  );
+        }catch(e){
+          debugHandler(e);
+          return false;
+        }
         return true;
       }
     }
@@ -1335,8 +1296,8 @@ class BaseMotion{
     }
     return [ reader, writer ] ;
   }
-  function useAgent(data, ModelInstance){
-    return _useAgent_(...arguments);
+  function useAgent(data, value){
+    return _useAgent_.call(this, ...arguments);
   }
   function WRITE(props){
     const response=validateCollectionArgs(arguments, {
@@ -2737,18 +2698,12 @@ class BaseMotion{
       validators:[ Any, Object ]
     });
     if(!response) {
-      return pass;
-    }
-    const self=getCurrentRunningEffect({
-      name:'agent'
-    });
-    if(!self) {
-      return [ pass, pass ];
+      return [pass, pass];
     }
     const parameters = [ value, assign({
       shallow:true
     }, config || {})];
-    const state = !isToken(value) && !isPrimitive(value) ? stream(...parameters) : token(...parameters);
+    const state = token(...parameters);
     return _useAgent_(state);
   }
   function agent(value, config){
@@ -2957,48 +2912,13 @@ class BaseMotion{
   }
   const isGlobalConfig=config=>config instanceof FrameworkCompilerOptions;
   const Compiler_Config_Options= new FrameworkCompilerOptions()
-  class HouxitCompilerSetup{
-    debug(debug){
-      if(isFalse(mapSettingCheck(this, 'debug', debug))) {
+  class CompilerConfigOptions{};
+  for(let key of keys(Compiler_Config_Options)){
+    CompilerConfigOptions.prototype[key]=function(config){
+      if(isFalse(mapSettingCheck(this, key, config))) {
         return this;
       }
-      Compiler_Config_Options.debug=debug
-    }
-    forwardAttrs(forwardAttrs){
-      if(isFalse(mapSettingCheck(this, 'forwardAttrs', forwardAttrs))) {
-        return this;
-      }
-      Compiler_Config_Options.forwardAttrs=forwardAttrs
-    }
-    forwardEvents(forwardEvents){
-      if(isFalse(mapSettingCheck(this, 'forwardEvents', forwardEvents))) {
-        return this;
-      }
-      Compiler_Config_Options.forwardEvents=forwardEvents
-    }
-    flushType(flushType){
-      if(isFalse(mapSettingCheck(this, 'flushType', flushType))) {
-        return this;
-      }
-      Compiler_Config_Options.flushType=flushType
-    }
-    forwardSlot(forwardSlot){
-      if(isFalse(mapSettingCheck(this, 'forwardSlot', forwardSlot))) {
-        return this;
-      }
-      Compiler_Config_Options.forwardSlot=forwardSlot
-    }
-    delimiters(delimiters){
-      if(isFalse(mapSettingCheck(this, 'delimiters', delimiters))) {
-        return this;
-      }
-      Compiler_Config_Options.delimiters=delimiters
-    }
-    scopedStyle(scopedStyle){
-      if(isFalse(mapSettingCheck(this, 'scopedStyle', scopedStyle))) {
-        return this;
-      }
-      Compiler_Config_Options.scopedStyle=scopedStyle
+      Compiler_Config_Options[key]=config;
     }
   }
   function isXtruct(func, ...arg) {
@@ -4453,7 +4373,7 @@ class BaseMotion{
   }
   const hasMotionInstance=(self, name, mode)=>{
     const BUILT_IN_MOTION=mode === 'transitions' ? BUILT_IN_TRANSITIONS : BUILT_IN_ANIMATIONS;
-    return _makeMap_(BUILT_IN_MOTION, name) || _makeMap_(self[$$$register][mode], name) || _wufHas_instance(name);
+    return _makeMap_(BUILT_IN_MOTION, name) || _makeMap_(self[$$$register][mode], name) || _wufHas_instance(self, name);
   }
   function normalize_Motion(self, name, mode){
     const BUILT_IN_MOTION=mode === 'transitions' ? BUILT_IN_TRANSITIONS : BUILT_IN_ANIMATIONS;
@@ -4806,7 +4726,7 @@ class BaseMotion{
     debugHandler(`[ ] [unexpected template tagname]  "${tagname}" is not a valid html element, or a registered widget instance.\n\nif this is a customElement, make sure its defined through the "customElements.define()" method `, self, true);
   }
   function isCustomElementTagname(tagname){
-    return isPFunction(customElements.get(tagname));
+    return isFunction(customElements.get(tagname));
   }
   function getBoundary(instance){
     return isHouxitBuild(instance) ? instance[$$$core].virtualNode.filesFilter.suspense : instance?.[isVNodeClass(instance) ? 'filesFilter' : 'VNodeManager']?.suspense;
@@ -5103,6 +5023,7 @@ class BaseMotion{
     constructor(vnode){
       super(...arguments);
       this.VNodeManager.SSRVnode=new vNodeClass();
+      this.VNodeManager.customEvents={};
       HouxitTemplateGenerators.call(this, ...arguments);
       this.prototype_=vnode.type;
     }
@@ -5375,25 +5296,11 @@ class BaseMotion{
   }
   function _generateTemplateElement(virtualNode, self, hx_Element, siblings, IS_RENDERLESS, customElementsArgs, config){
     const { prototype_ } = virtualNode;
-    if(isString(prototype_) && IS_VALID_TAGNAME(prototype_)) {
+    if(isString(prototype_)) {
       return _createNativeElement(...arguments);
-    }else if(isString(prototype_)) {
-      return generateCustomNativeElement(...arguments );
     }else {
       return _createWidgetElement(...arguments );
     }
-  }
-  function generateCustomNativeElement(vnode, self, hx_Element, siblings, IS_RENDERLESS, customElementsArgs, config ){
-    let { type, props, children, key} = vnode;
-    const argsCount=len(arguments);
-    const is_hyperscript=hx_Element?.is_hyperscript || false;
-    const isRerender=self[$$$operands]?.initializedRender;
-    if(isRerender) {
-      return;
-    }
-    const element=document.createElement(type);
-    element._set_compiler_options(...arguments);
-    return element
   }
   function _createNativeElement(virtualNode, self, hx_Element, siblings, IS_RENDERLESS, customElementsArgs, config, o){
     config=assign({}, config);
@@ -5498,6 +5405,7 @@ class BaseMotion{
       }
     }
     if(props) {
+      if(!IS_VALID_TAGNAME(type)) config.isCustomElement=true;
       Props_dilation_compile(virtualNode, self, hx_Element, metrics, element, config);
     }
     if(!isRerender && virtualNode.prototype_==='slot' && !(isSSR ? element?.props.name.trim() : element.name?.trim())){
@@ -5942,28 +5850,22 @@ class BaseMotion{
   
   const validIdentifierRegex=/([...]*[\w\d]+)/g;
   const isNullBasedKeyword=str=>/^(null|undefined)$/.test(str);
+  const statementRegex=/(?:const|var|let|while|for|of|if|else|import|export|switch|case|try|catch|throw|continue|break|with|debugger|label|do|from|as|finally|delete|void|enum|implements|interface|package|protected|in).*/;;
+  const commentRegex = /\/\/.*$|\/\*[^]*?\*\//gm;//comment matching regular expression
+  const unsupportedRegex = /(?:\.\.|\bthrow\b|\bdelete\b|\bvoid\b|\bconst\b|\blet\b|\bvar\b|\bwhile\b|\bfor\b|\bof\b|\bif\b|\belse\b|\bimport\b|\bexport\b|\bswitch\b|\bcase\b|\btry\b|\bcatch\b|\bcontinue\b|\bbreak\b|\bwith\b|\bdebugger\b|\blabel\b|\bdo\b|\bfrom\b|\bas\b|\bfinally\b|\benum\b|\bimplements\b|\binterface\b|\bpackage\b|\bprotected\b|\bin\b)/mg;
   function _Evaluate_THIS(obj, str, self, optional){// Use a regular expression to match statements or multiple expressions
-  const statementRegex=/^(?:const|var|let|while|for|of|if|else|import|export|switch|case|try|catch|throw|continue|break|with|debugger|label|do|from|as|finally|delete|void|enum|implements|interface|package|protected;).*$/;;
     // =|\+\+|\+=|--|-=|\*|\*=|\.\.|\/\/|\/\*|\*\*|\[=|==\+|\/=|%=\*\*=|&&=|\|\|=|<=|>=|\\|
     // if (statementRegex.test(str.replace(stringsMonitorRegex, ()=>"" )) && !passableBlock(str)) {
-    //   log(str)
     //   throw new Error(`Invalid expression: \n\n"${str}" Your binding seems to contain an unallowed expression as a statement\n Only single expressions are allowed.`, self, true);
     // }// Use a regular expression to remove comments from the expression by using string .replace regex method
-    const commentRegex = /\/\/.*$|\/\*[^]*?\*\//g;//comment matching regular expression
-    let expressionWithoutComments = str.replace(commentRegex, '').replace(stringsMonitorRegex, ()=>"" );// Use a regular expression to match any remaining unsupported constructs and statement keywords
-    const unsupportedRegex = /(?:\.\.|\bthrow\b|\bdelete\b|\bvoid\b|\bconst\b|\blet\b|\bvar\b|\bwhile\b|\bfor\b|\bof\b|\bif\b|\belse\b|\bimport\b|\bexport\b|\bswitch\b|\bcase\b|\btry\b|\bcatch\b|\bcontinue\b|\bbreak\b|\bwith\b|\bdebugger\b|\blabel\b|\bdo\b|\bfrom\b|\bas\b|\bfinally\b|\benum\b|\bimplements\b|\binterface\b|\bpackage\b|\bprotected\b)/;
-    let scriptRender;
-    let checkRegex=false;
-    try{
-      scriptRender=parseScript(expressionWithoutComments);
-    }catch(err){
-      checkRegex=true;
-    }
-    if (checkRegex && unsupportedRegex.test(expressionWithoutComments.replace(stringsMonitorRegex, ()=>"" ))) {
-      throw new Error(`Invalid expression: \n\nUnsupported constructs are not allowed.\n\n"${str}"`, self, true);
-    }else if(commentRegex.test(str)){
-      debugHandler(`[ ] Template SyntaxError...\n\nComments not allowed in template expression\n\n"${str}"`, self, true);
+    let expressionWithoutComments = str.replace(commentRegex, '').replace(stringsMonitorRegex, "" );// Use a regular expression to match any remaining unsupported constructs and statement keywords
+    if (unsupportedRegex.test(expressionWithoutComments.replace(stringsMonitorRegex, ()=>"" ))) {
+      debugHandler(`Invalid expression: \n\nUnsupported constructs are not allowed.\n\n"${str}"\n\n"${expressionWithoutComments.match(unsupportedRegex).join(", ")}" not supported in an inline bind expression`, self, true);
       return;
+    }else if(commentRegex.test(str.replace(stringsMonitorRegex, ()=>""))){
+      // $warn(`[ ] Template SyntaxError...\n\nComments not allowed in template expression\n\n"${str}"`, self, true);
+      str=expressionWithoutComments;
+      // return;
     }
     let dexTransform;
     if(optional && isPObject(optional) && hasOwn(optional, $$dexTransformKey)){
@@ -5974,7 +5876,8 @@ class BaseMotion{
     let compile_Str=`with(obj){
         with($$$ctx){
           try{
-            return dexTransform ? dexTransform.traverse()  : ${str.trim() || "undefined" };
+            if(dexTransform) return  dexTransform.traverse();
+            else return ${str.trim() || "undefined" };
           }catch(err){
             throw new Error(err);
           }
@@ -5985,14 +5888,15 @@ class BaseMotion{
         ${compile_Str}
       }`
     }
-    const getValue = new Function('obj','$$$ctx','dexTransform','__env__', compile_Str);
+    const getValue =  new Function('obj','$$$ctx','dexTransform','__env__', compile_Str);
     let value;
     try{
       value = getValue.call(obj, obj, isPObject(optional) ? optional : {}, dexTransform, self[$$$core].__env__ || {});
     }catch(error){
-     // throw new  Error(error);
+     debugHandler(`${error}`, self, true);
+     return
     }
-      return value;
+    return value;
   }
   function transformDestructureContext(props, sources, vv, metrics=[]){
     props=props.toReversed().join(',');
@@ -6602,7 +6506,7 @@ class BaseMotion{
     bindings.modifiers=isString(modifiers) ? modifiers.split("|") : isArray(modifiers) ? modifiers : [];
     return true
   }
-  function HTMLAttrsMagnifier(element, bindings, hx_Element, self, metrics){
+  function HTMLAttrsMagnifier(element, bindings, hx_Element, self, metrics, config){
     let { is_hyperscript, isRerender, vNode, forwardAttrs } = metrics ;
     const isSSR=isSSRCompiler(self);
     let { key, value:attr, src } = bindings;
@@ -6618,12 +6522,12 @@ class BaseMotion{
         bindings,
         forwardAttrs
       });
-    }else if(isHTMLIDLAttributes(key)) {
+    }else if(isHTMLIDLAttributes(key) ){
       IDLPropsTransform(self, [ key, attr], element, {
         is_hyperscript,
         bindings,
         forwardAttrs
-      }, hx_Element );
+      }, hx_Element, config );
     }else if(!isRerender && (isOnListener(key) || isInlineListener(key) || key === 'dispatch')){ 
       if(!click_handler_facading(self, [ key, attr, src ], bindings, element, hx_Element, metrics)) {
         return;
@@ -6640,7 +6544,7 @@ class BaseMotion{
       motionPropFacade(self, bindings, element, hx_Element, metrics);
     }else{
       try{
-        attr=compileToRenderable(unwrap(attr));
+        attr=compileToRenderable(unwrap(attr), config.isCustomElement);
         const sp=hx_Element?.VNodeManager?.patchFlags.shapeProps;
         if(isSSR || isRerender) {
           const props = isRerender ? sp : element.props;
@@ -6657,10 +6561,10 @@ class BaseMotion{
         return;
       }
       const flush=createPriorityFlush(bindings.effect, function(observers){
-        value=_createElementPropsEffectBlock_(self, {
+        attr=_createElementPropsEffectBlock_(self, {
           element,
           key,
-          value:compileToRenderable(value),
+          value:compileToRenderable(attr, config.isCustomElement),
           mode:undefined,
           effect:bindings.effect
         }, observers);
@@ -6697,6 +6601,7 @@ class BaseMotion{
   }
   function click_handler_facading(self,[ key, attr, src], bindings, element, hx_Element, metrics){
     attr=unwrap(attr);
+    const { config } = metrics;
     if(key === "dispatch" && !isArray(attr)){
       debugHandler(`[ ] <dispatch> dispatcher expects an array value of events and method\n\nFound "${attr}" of "${getType(attr)}" type`, self, !isNull(self));
       return;
@@ -6711,6 +6616,13 @@ class BaseMotion{
     bindings.value=attr;
     metrics=assign({ options }, metrics);
     if(!validateListenSpecialEvent(self, bindings)) {
+      return
+    }
+    // log(key, 900, attr, metrics)
+    if(config.isCustomElement){
+      element[key]=attr;
+      // log(element, keys(element))
+      // element.setAttribute(key, attr)
       return
     }
     $$dir_ON(self, bindings, element, hx_Element, metrics);
@@ -6907,8 +6819,8 @@ class BaseMotion{
     if(!isHouxitBuild(app)){
       return;
     }
-    const { value, effect, key } = metrics;
-    const transform= effect.runEffect().value;
+    const { value, effect, key, config } = metrics;
+    const transform= isEffect(effect) ? effect.runEffect?.().value : effect;
     const newValue = unwrap(transform);
     const params=app[$$$ownProperties].$params;
     const attrs=app.__public_model__.$attrs;
@@ -6984,7 +6896,7 @@ class BaseMotion{
       hx_Element.VNodeManager.vNodeClass.key=bindings.value;
       hx_Element.VNodeManager.keyIdBinding=bindings;
     }else{ 
-      ( isW ? widget_props_plugin : HTMLAttrsMagnifier )(element, bindings, hx_Element, self, metrics );
+      ( isW ? widget_props_plugin : HTMLAttrsMagnifier )(element, bindings, hx_Element, self, metrics, config );
     }
   }
   function slotNamingTRANSITION(self, bindings, element, hx_Element, metrics){
@@ -7050,7 +6962,7 @@ class BaseMotion{
       });
     }
   }
-  function IDLPropsTransform(self, props, element, metrics, hx_Element ){
+  function IDLPropsTransform(self, props, element, metrics, hx_Element, config ){
     let [ key, attr ] = props;
     const { is_hyperscript, bindings } = metrics;
     const isSSR=isSSRCompiler(self);
@@ -7072,9 +6984,9 @@ class BaseMotion{
     }else {
       if(isSSR || isRerender){
         const props=isRerender ? sp : hx_Element.VNodeManager.SSRVnode.props
-        props[ _makeMap_('innerText,textContent', key) ? 'innerText' : key]=escapeDecoder(compileToRenderable(attr));
+        props[ _makeMap_('innerText,textContent', key) ? 'innerText' : key]=config.isCustomElement ? attr : escapeDecoder(compileToRenderable(attr));
       }else {
-        element[key]=compileToRenderable(attr) ;
+        element[key]=compileToRenderable(attr, config.isCustomElement) ;
       }
     }
     if((isRerender && !len( bindings.subscribers )) || isSSR) {
@@ -7406,7 +7318,7 @@ class BaseMotion{
       debugHandler(`[templateRefs reference] not a token. templateRefs expects a token() instance.\nSee [Template Refs] reference`, self, true);
       return;
     }
-    const [ getRef, setRef ] = model.$useAgent(ref);
+    const [ getRef, setRef ] =useAgent(ref);
     let cb=pass;
     const current=getRef();
     if(current && !isArray(current)){
@@ -7567,9 +7479,8 @@ class BaseMotion{
       }, hx_Element, metrics.is_hyperscript);
       const funcToken=attr;
       effect=_createHouxitEffectFrame(()=>{
-        attr=_$runModelBind(self, attr, hx_Element);
-        attr=object_Has_Path(self.__public_model__, funcToken) && isPFunction(attr) ? attr.bind(self.__public_model__) : attr;
-        return attr;
+        let res=_$runModelBind(self, attr, hx_Element);
+        return object_Has_Path(self.__public_model__, funcToken) && isPFunction(res) ? res.bind(self.__public_model__) : res;
       }, self);
       try{
         attr=effectRunner(effect).value;
@@ -7593,28 +7504,25 @@ class BaseMotion{
     if(!isRerender && isWidget){
       const board=vNode.filesFilter.$$$Events;
       for( let [ ind, ev ] of deepKeys.entries()){
-        let card={
-          callbacks:new Tuple(),
-          event:ev,
-          effect
-        }
-        if(hasOwn(board, ev)) {
-          card=board[ev];
-        }else {
-          board[ev]=card;
+        if(!hasOwn(board, ev)) {
+          board[ev]={
+            callbacks:new Tuple(),
+            event:ev,
+            effect
+          }
         }
         attr.options=options;
-        card.callbacks.add(attr);
+        board[ev].callbacks.add(attr);
       }
     }else if(!isRerender && (isHydration(self) && isVNodeClass(node)) || (!isSSR && IS_ELEMENT_NODE(node))){
       let index=0;
       for(let event of deepKeys.values()) {
-        if(!IS_VALID_EVENT_HANDLER(event)){
+        if(!IS_VALID_EVENT_HANDLER(event) && !metrics.config.isCustomElement ){
           debugHandler(`[ ] "${event}" is not a valid event name`, self, true);
         }else {
           const callbackListen=element=>{
             element.addEventListener(event, (...args)=>{
-              (isFunction(listenerHandle) ? listenerHandle : pass)(...args);
+              safeCall(listenerHandle, ...args);
             }, options);
           }
           if(isHydration(self)) {
@@ -7627,7 +7535,6 @@ class BaseMotion{
     }
     createPriorityFlush(effect, ()=>{
       listenerHandle=effect.runEffect().value;
-      listenerHandle = !isPFunction(listenerHandle) ? pass : listenerHandle;
     });
     return node;
   }
@@ -7670,11 +7577,6 @@ class BaseMotion{
     const type=directive === 'transite' ? 'transitions' : 'animations';
     const is_hyperscript=hx_Element.is_hyperscript;
     const item=value;
-    const effect=_createHouxitEffectFrame(function(){
-      return _$runModelBind(self, value, hx_Element, !modifiers.has('bind'));
-    }, self);
-    value= effectRunner(effect).value;
-    value=unwrap(value);
     const obj=hx_Element.VNodeManager.motion_object;
     const mode =modifiers.has('in') ? 'in,' : modifiers.has('out') ? 'out' : 'both';
     const activateMotion=(key, directive)=>{
@@ -7784,7 +7686,6 @@ class BaseMotion{
           try{
             initVal=updateElementModelValue(self, element, get_I_V($ev.target), item, initVal, modifiers);
           }catch(err){
-            debugHandler(err)
             debugHandler(`[ ] ${err}`, self, true);
           }
         });
@@ -7792,7 +7693,7 @@ class BaseMotion{
       if(isHydration(self)) {
         element.filesFilter.$ssr_kit.hydrationFlushs.add(flushCallback);
       }else if(!isSSR) {
-        whenMounted(self, element, ()=>flushCallback(element));
+        flushCallback(element);
       }
       createPriorityFlush(effect, ()=>{
         if(localName==='form') return;
@@ -7838,6 +7739,7 @@ function normalize_form_model(self, element, value, modifiers, effect){
       try{
         initVal=updateElementModelValue(self, control, get_I_V($ev.target), name, initVal, modifiers, value);
       }catch(err){
+        console.error(err)
         debugHandler(err)
         debugHandler(`[ ] ${err}`, self, true);
       }
@@ -7881,7 +7783,7 @@ function applyModelInitialState(self, element, initVal, localName, inForm){
         element.checked=false;
       }
     }else if(type === 'file'){
-      debugHandler(`[Houxit $$model Warning]:$$model is not supported on ${escapeDecoder('<input type="file">')}. Use @change to access event.target.files instead.`);
+      debugHandler(`[Houxit $$model Warning]:$$model is not supported on ${escapeDecoder('<input type="file">')}. \nUse @change to access event.target.files instead.`);
       return;
     }else{
       if(!isNull(initVal)) element.value=compileToRenderable(initVal);
@@ -7897,12 +7799,16 @@ function applyModelInitialState(self, element, initVal, localName, inForm){
       return val;
     }
     if(name === 'select'){
+      if(element.multiple && !isCollection(value)){
+        debugHandler(`[ invalid $$model value ] ${escapeDecoder("<select multiple>")} expects an array/collection value reference`, self, true);
+        return;
+      }
       let coll=isCollection(value) && element.multiple ? genericCollection(value) : value;
       for(let [index, opt] of entries(element.options)){
         const v=applyModelValueModifiers(opt.value, modifiers);
         if(opt.selected && !(element.multiple ? coll.has(v) : v === value)){
           value= isCollection(value) && element.multiple ? coll.add(v) : setV(v);
-        }else if(!opt.selected && (element.multiple ? coll.has(v) : v === value)){
+        }else if(!opt.selected && (element.multiple ? coll.has?.(v) : v === value)){
           value = isCollection(value) && element.multiple ? coll.delete(v) : setV(null);
         }
       }
@@ -7916,7 +7822,9 @@ function applyModelInitialState(self, element, initVal, localName, inForm){
           if(element.checked && !coll.has(current)) coll.add(current);
           else if(!element.checked && coll.has(current)) coll.delete(current);
         }else if(!cs || (cs && isNull(value))) value=setV(current);
-      }else if(!cs || (cs && isNull(value))) value=setV(current);
+      }else if(!cs || (cs && isNull(value))) {
+        value=setV(target_value);
+      }
     }
     return value;
   }
@@ -7992,7 +7900,7 @@ function applyModelInitialState(self, element, initVal, localName, inForm){
       fill:'both',
       autoplay:false
     }, config || {});
-    const { duration, delay, easing, iterations, direction, fill, autoplay, /* WAAPI/CSS path*/ styles, keyframes, onstart,/* RAF path*/ frame } = config;
+    const { duration, delay, easing, iterations, direction, fill, autoplay, /* WAAPI/CSS path*/ styles, keyframes, /* RAF path*/ frame, onStart } = config;
     if(!frame && isString(easing.css) && (keyframes && !isFunction(keyframes.keyframes))){
       return applyCSSBasedAnimation(node, config, params, options);
     }
@@ -8029,7 +7937,7 @@ function applyModelInitialState(self, element, initVal, localName, inForm){
         let iterationProgress = rawT - iterationIndex;
         if (!started) {
           started = true;
-          onStart?.();
+          // onStart?.();
         }
         if (totalIterations !== Infinity && iterationIndex >= totalIterations) {     // clamp for finite iterations
           iterationIndex = totalIterations - 1;
@@ -8096,7 +8004,7 @@ function applyModelInitialState(self, element, initVal, localName, inForm){
           oncancel?.();
         }
       };
-      onstart?.();
+      // onstart?.();
       if (!autoplay) {
         player.pause();
       }
@@ -8157,6 +8065,17 @@ function applyModelInitialState(self, element, initVal, localName, inForm){
     }
     return css;
   }
+  function generateWAAPIOffsetsframes(frameCallback, samples=100){
+    let key=[];
+    for (let i = 0; i <= samples; i++) {
+      const t = i / samples;
+      const u = 1 - t;
+      key.push({
+        //trying to generateOffsets for WAAPI keyframestgat are sent as a callbacks
+      })
+    }
+    
+  }
   function applyCSSBasedAnimation(node, config, params = {},  options = {}) {
     if (!node){
       return null;
@@ -8187,7 +8106,7 @@ function applyModelInitialState(self, element, initVal, localName, inForm){
       if (e.target !== node) {
         return;
       }
-      onStart?.();
+      // onstart?.();
     }
     function handleEnd(e) {
       if (e.target !== node) {
@@ -8617,7 +8536,7 @@ function applyModelInitialState(self, element, initVal, localName, inForm){
       duration: 300,
       easing:easings.linear,
     }, config || {});
-    let { delay, duration, easing, keyframes, frame, styles, onstart } = config;
+    let { delay, duration, easing, keyframes, frame, styles } = config;
     let disposed=false;
     if(!frame && isString(easing.css) && !keyframes && styles){
       return cssBasedTransitionEngine(node, config, params, options);
@@ -9601,7 +9520,7 @@ function get_Model_Event(el) {
     }
     return;
   }
-  function assignSlot(self, slot, content, name, assynedSlots, renderedSlotsList, vnode){
+  function assignSlot(self, slot, content, name, assynedSlots, renderedSlotsList, vnode, isCustomElement){
     if(content && isHouxitElement(content) && !hasOwn(renderedSlotsList, name)){
       if(isSSRCompiler(self)){
         slot=grabSSRVNodSlots(self, vnode, name);
@@ -9634,17 +9553,37 @@ function get_Model_Event(el) {
     }
     return IS_ELEMENT_NODE(element) && !element.innerHTML.trim() && element?.localName !== 'slot';
   }
+  function custom_elements_slotting(element, slots, self){
+    slots.default=new Tuple;
+    for(let [ind, el] of entries(element.children)){
+      let name=el.slot || 'default';
+      if(!hasOwn(slots, name)) slots[name]=new Tuple;
+      slots[name].add(el._hx_Element.hx_Element);
+      if(isInDomNode(el)) el.remove();
+    }
+    for(let [name, content ] of entries(slots)){
+      if(len(content) > 1) {
+        slots[name]=new HouxitFragmentElement(content.list(), self)
+      }else if(len(content)){
+        slots[name]=content.at(0);
+      }
+    }
+  }
   function _$slotHydrationRenderer(self, opts, vnode_build){
     const slots=self[$$$core].slots;
-    if(!len(slots) || !vnode_build || !isHouxitElement(vnode_build) || isHouxitTextElement(vnode_build)) {
+    const $$config=self[$$$compiler].$$config;
+    if((!len(slots) && !$$config?.isCustomElement) || !vnode_build || !isHouxitElement(vnode_build) || isHouxitTextElement(vnode_build)) {
       return vnode_build ;
     }
     const renderedSlotsList={};
     const slot_elements=resolveSlotsFilter( self, vnode_build ) ;
     const assynedSlots=new Tuple();
+    if($$config?.isCustomElement){
+      custom_elements_slotting($$config.element, slots, self);
+    }
     for(const [ slotN, slot_el ] of entries(slot_elements)){
       if(hasOwn(slots, slotN) && !assynedSlots.has(slotN)) {
-        assignSlot(self, slot_el, slots[slotN]?.(self), slotN, assynedSlots, renderedSlotsList, vnode_build);
+        assignSlot(self, slot_el, safeCall(slots[slotN], self), slotN, assynedSlots, renderedSlotsList, vnode_build, $$config.isCustomElement);
       }
     }
     if(shouldForwwardSlots(vnode_build?.$element, slot_elements, self) && !len(vnode_build.NodeList)){
@@ -10028,7 +9967,18 @@ function get_Model_Event(el) {
       return merger.call(this, ...arguments);
     }
   }
+  class HouxitEvents extends Event{
+    #properties;
+    constructor(event, properties={}){
+      super(event);
+      this.#properties=properties;
+    }
+    get target(){
+      return this.#properties.target_value;
+    }
+  }
   function $construct_With_Signals(self, options, in_build=false, vnode){
+    const $$config=self[$$$compiler].$$config;
     if(!self.__public_model__.$events) {
       defineGetter(self.__public_model__, '$events', new Events());
     }
@@ -10038,6 +9988,22 @@ function get_Model_Event(el) {
     const $$events=self[$$$core].virtualNode.filesFilter.$$$Events;
     const signals=new Tuple(...(options.signals || []));
     const $signals=self.__public_model__.$signals;
+    let ce_events={};
+    const ce_hx_Element=$$config?.element?._hx_Element.hx_Element;
+    if(!in_build && $$config?.isCustomElement){
+      for(let [ev_name, my_event] of entries(ce_hx_Element.VNodeManager.customEvents) ){
+        if(!hasOwn($$events, ev_name)){
+          $$events[ev_name]={
+            callbacks:new Tuple,
+            event:ev_name,
+            effect:undefined
+          }
+        }
+        $$events[ev_name].callbacks.add(function(){
+          $$config.element.dispatchEvent(my_event);
+        });
+      }
+    }
     for(const  [ key, event] of entries( $$events )){
         if(signals.has(key)) {
           $signals[key]=createSignalFromEventObject(self, event);
@@ -10323,11 +10289,11 @@ function get_Model_Event(el) {
         response=false;
       }
     }else if(isTuple(target)){
-      if(_makeMap_(tupleMM)){
+      if(_makeMap_(tupleMM, prop)){
         response=false
       }
     }else if(isArray(target)){
-      if(_makeMap_(arrayMM)){
+      if(_makeMap_(arrayMM, prop)){
         response=false;
       }
     }else if(prop === $$$StreamProxyKey){
@@ -10394,6 +10360,7 @@ function get_Model_Event(el) {
     return reactive;
   }
   function hasPrototype(obj, prototype) {
+    if(!isClass(obj) && isPObject(obj)) obj instanceof prototype;
     obj=obj.prototype;
     prototype=prototype.prototype;
     while (obj) {
@@ -10411,7 +10378,7 @@ function get_Model_Event(el) {
     return res;
   }
   function CollectionsEffectMutationsTrap(BaseStream, ReactiveEffect){
-    const mutators = hasPrototype(BaseStream, Set) || hasPrototype(BaseStream, WeakSet) ? setMM : hasPrototype(BaseStream, Array) ? arrayMM : hasPrototype(BaseStream, Tuple) ? tupleMM : hasPrototype(BaseStream, Map) || hasPrototype(BaseStream, WeakMap) ? mapMM : "";
+    const mutators = getMutationArgs(BaseStream);
     mutators.split(",").values().forEach((method)=>{
       if(!method) {
         return;
@@ -10996,7 +10963,7 @@ function get_Model_Event(el) {
     if(!hasOwn(opts, 'receive')) {
       return;
     }
-    const globalBoard= isInitialBuild(self) ? self[$$$core]?.$globals.transmited : (self[$$$core].$root||{})[$$$core]?.$globals.transmited;
+    const globalBoard= isInitialBuild(self) ? self[$$$core]?.$globals.transmited : (self[$$$core].$root||{})[$$$core]?.$globals.transmited || {};
     for(let [ key, valueX] of getIterator(opts.receive)){
       let keyName = isArray(opts.receive) ? valueX : key ;
       if( !validateType(keyName, [String, Symbol])){
@@ -11072,7 +11039,7 @@ function get_Model_Event(el) {
     const store={};
     for(const mx of mixins.toReversed().values()){
       if(!validateType(mx, [Function, Object])){
-        debugHandler(`[ ] [Houxit Mixin Merge Warn] Mixins expects a plain fuction/object instance/valid Houxit widget instance`, self, true);
+        debugHandler(`[Houxit Mixin Merge Warn] Mixins expects a plain fuction/object instance/valid Houxit widget instance`, self, true);
         return
       }else if(applied_mixins.has(mx)){
         continue;
@@ -12350,7 +12317,10 @@ function get_Model_Event(el) {
           is_hyperscript,
           observer
         });
-      }).catch((e)=> debugHandler(e))
+      }).catch((e)=> {
+        console.error(e)
+        debugHandler(e)
+      })
     }catch(e){
       RenderEffect_$Warn(self, e);
     }
@@ -12936,7 +12906,7 @@ function get_Model_Event(el) {
     define(child[$$$core], '$owner', {
       value:self
     });
-    for(let [ prop, content] of entries(root[$$$core].$globals.register)){
+    for(let [ prop, content] of entries(root?.[$$$core]?.$globals?.register || {})){
       child[$$$core].$globals.register[prop] = assign(child[$$$core].$globals.register[prop], content);
     }
   }
@@ -13031,11 +13001,12 @@ function get_Model_Event(el) {
         virtualNode.filesFilter.isHydration=true;
       }
     }
-    const child=initializedRenderBuild(self, hx_Element, virtualNode);
+    const child=initializedRenderBuild(self, hx_Element, virtualNode, config);
     return child.mount( _createFragment() ) ;//mounts the build to a houxit fragment
   }
-  function initializedRenderBuild(self, hx_Element, virtualNode){
+  function initializedRenderBuild(self, hx_Element, virtualNode, config){
     const child = new HouxitBuild( virtualNode ) ;
+    child[$$$compiler].$$config=config;
     integrateUseInstallProto(child);
     if(hx_Element) {
       hx_Element.widget_instance=child;
@@ -13043,6 +13014,11 @@ function get_Model_Event(el) {
     if( self ) {
       controllerHydration( self , child, hx_Element, virtualNode) ;
       child.install( controllerGlobalPlugin, { self } ) ;//build the widget and other installations
+    }
+    if(config.isCustomElement){
+      for(let callback of config.configureApp.values()){
+        callback.call(config.element, child);
+      }
     }
     return child;
   }
@@ -13312,7 +13288,7 @@ function get_Model_Event(el) {
   // const openingTagsRegex = /(\<[ ]*\>|\<\/[ ]*\>)|(<(\/)?([\w\-\$!:\#\@.()[\]%?\/&]+)(\s+[^>]*?(?:(?:[\w]+[_!@#$'"%^&*()+\-\[\]{};:\\|,.<\/?~`]*)|(?:'[^']*')|(?:"[^"]*")))*\s*(\/)?>)|([\w \s!@#$'"%^&*()+\-\[\]{};:\\|,.\/?`~]+)/mg;//old and original regex
   const openingTagsRegex = /(\<[ ]*\>|\<\/[ ]*\>)|(<(\/)?([\w\-\$!:\#\@.()[\]%?\/&]+)(\s+[^>]*?(?:(?:[\w]+[_!@#$'"%^&*()+\-\[\]{};:\\|,.<\/?~`]*)|(?:'[^']*'[^>\s]*)|(?:"[^"]*"[^>\s]*)))*\s*(\/)?>)|([\w \s!@#$'"%^&*()+\-\[\]{};:\\|,.>=\/?`~]+)/mg;
 
-  const openingTagRegex=/<([\w\-\$!:\#\@.()[\]%?&]+)(\s+[^>]*?(?:(?:[\w]+[_!@#$'"%^&*()+\-\[\]{};:\\|,.<\/?>=`~]*)|(?:'[^']*'[^>\s]*)|(?:"[^"]*"[^>\s]*)))*\s*(\/)?>/m;
+  const openingTagRegex=/<([\w\-\$!:\#\@.()[\]%?&]+)(\s+[^>]*?(?:(?:[\w]+[_!@#$'"%^&*()+\-\[\]{};:\\|,.<\/?=`~]*)|(?:'[^']*'[^>\s]*)|(?:"[^"]*"[^>\s]*)))*\s*(\/)?>/m;
   const isOpeningTag = (source)=> openingTagRegex.test(source);
   const closingTagRegex= /<[\/]([\w$.:\-\@()[\]%&?\\\/]+)[ ]*>/;
   const isClosingTag=(source)=> closingTagRegex.test(source);
@@ -13321,7 +13297,7 @@ function get_Model_Event(el) {
   const JSXParserRegex=/hx:\(\(__(\d)__\)\)/;
   const isOpeningCommentTag=(tag)=> /<!-->/.test(tag);
   const isClosingCommentTag=(tag)=> /<\/-->/.test(tag);
-  const commentRegex=/((<!--)|(-->))/g;
+  const tempCommentRegex=/((<!--)|(-->))/g;
   function compelToResolveTagname(self, vNode, config={}){
     if((isHouxitBuild(self) && isString(vNode.type) && !IS_VALID_TAGNAME(vNode.type))){
       resolveInstanceWidgetNormalizer(self, vNode);
@@ -13393,7 +13369,7 @@ function get_Model_Event(el) {
       }else if(JSXParserRegex.test(value)){
         const instance=normalizeJSXPropValue(config, key);
         if(!isString(instance)) {
-          debugHandler(`[ ] property key value passed to the "html" macro is not a valid prop name\n\ntype of "${typeof instance}" found >>>> Expects a "string" value`);
+          debugHandler(`[ ] property key value passed to the "htx" macro is not a valid prop name\n\ntype of "${typeof instance}" found >>>> Expects a "string" value`);
           return;
         }
         vnode.props[instance]=vnode.props[key];
@@ -13484,7 +13460,7 @@ function get_Model_Event(el) {
   function parserSourceInitializer(source, self){
     return source.replace(generateBlockTagRegex(isHouxitBuild(self) ? self[$$$core].settings.delimiters : undefined), (match, timing, ClosingTag, name, value, selfClosed)=>{
       return `<${ClosingTag==="/" ? "/" : "" }::@_(${name})_ ${ ClosingTag==="@" ? "exp="+'"'+escapeDecoder(value)+'"' : "" } ${selfClosed ? "/" : ""}>`;
-    }).replace(commentRegex, (match, path, r)=> /<!--/.test(match) ? "<!-->" : /-->/.test(match) ? "</-->" : match );
+    }).replace(tempCommentRegex, (match, path, r)=> /<!--/.test(match) ? "<!-->" : /-->/.test(match) ? "</-->" : match );
   }
   function __HouxitHTMLParser__(source, NodeList=[], config={}, self){
     if(!isString(source) && !source.trim()) {
@@ -14100,7 +14076,7 @@ function get_Model_Event(el) {
       debugHandler(`[ ] "${variable}" is an invalid identifier`, self, true);
       return [];
     }
-    const data = _$runModelBind(self, expression?.trim(), hx_Element || context );
+    let data = _$runModelBind(self, expression?.trim(), hx_Element || context );
     if(isDestructureSyntax(variable)){
       if(isFalse(destructWarn(variable, data, self))){
         return [];
@@ -14156,14 +14132,14 @@ function get_Model_Event(el) {
           count:index
         }, options );
       }else if(!is_hyperscript){
-        if(isForLoopDestructureRegex.test(provide.value)){
+        if(isForLoopDestructureRegex.test(provide?.value)){
           provide.value="["+provide.value.slice(1, -1)+"]";
         }
-        options=wrapNamespaceBind(self, options, provide.value, arrayDestructureRegex.test(provide.value) ? loopState : loopState[0] );
+        options=wrapNamespaceBind(self, options, provide?.value, arrayDestructureRegex.test(provide?.value) ? loopState : loopState[0] );
       }
       config.loop_context=loopState;
       const createElement=()=>{
-        let src= children.map(child=>factoryRender(options, config, safeCall(child, loopState))).filter(v=>isHouxitElement(v));
+        let src= children.map(child=>factoryRender(options, config, safeCall(child, ...loopState))).filter(v=>isHouxitElement(v));
         src=len(src) < 2 ? src[0] : new HouxitFragmentElement(src, self, hx_Element, null, value);
         return src;
       }
@@ -14508,12 +14484,12 @@ function get_Model_Event(el) {
       }
     });
   }
-  function html( strings, ...values){
+  function htx( strings, ...values){
     return __EncodeJSXParser__(strings, values);
   }
   function __EncodeJSXParser__(strings, values){
     if(!isFunction(strings.reduce)){
-      debugHandler(`[ ] html macro can only be called with backticks embeded directly to method name\n\n"html\`<templates>\`" instead of "html()"\nCheck html macro call`);
+      debugHandler(`[ ] htx macro can only be called with backticks embeded directly to method name\n\n"htx\`<templates>\`" instead of "htx()"\nCheck htx macro call`);
       return
     }
     if(len(values)) {
@@ -14524,7 +14500,7 @@ function get_Model_Event(el) {
       return acc + str + value;
     }, ''); 
     if(!isString(html)){
-      debugHandler(`[ ] html parser macro expects strings values`);  
+      debugHandler(`[ ] htx parser macro expects strings values`);  
       return null;
     }
     return __HouxitHTMLParser__( html, [], {
@@ -14535,9 +14511,9 @@ function get_Model_Event(el) {
     
   }
   function MKDParser(mkd){
-    
+    return MKDParser(mkd)
   }
-  function markdown(mkd, ...values){
+  function mdx(mkd, ...values){
     if(!isString(mkd)){
       debugHandler(`[ ] markdown helper expects strings values`);
       return null
@@ -14546,88 +14522,190 @@ function get_Model_Event(el) {
   function createCustomElement(options){
     return _createCustomElement.call({}, ...arguments);
   }
-  function generateCustomNativeElementConstructor(){
+  function __observeAttributes(){
+    this.__attributeObserver = new MutationObserver(
+      mutations => {
+        for (const mutation of mutations) {
+          if (mutation.type !== "attributes") continue;
+          const name = mutation.attributeName;
+          const newValue = this.getAttribute(name);
+          const oldValue = mutation.oldValue;
+          if(oldValue === newValue ) continue;
+          __widget_props_effect(this.__app, {
+            value: oldValue,
+            effect:newValue,
+            key:name
+          });
+        }
+      });
+  }
+  function generateCustomNativeElementConstructor(setup, self){
     if(!inBrowserCompiler) return
-    return class CustomNativeElement extends HTMLElement{
+    return class HouxitCustomElement extends HTMLElement{
       constructor(){
         super();
+        __observeAttributes.call(this);
       }
-      compiler_options={}
-      _set_compiler_options(...compiler_options){
-        this.compiler_options=compiler_options;
-        return ;
+      static get observedAttributes(){
+        return [];
+      }
+      __app=undefined;
+      get __eventsMap(){
+        return new Tuple
+      }
+      addEventListener(e, h, o){
+        const customEvents=this._hx_Element.hx_Element.VNodeManager.customEvents;
+        if(!hasOwn(customEvents, e)){
+          customEvents[e]=new HouxitEvents(e, {
+            target_value:this
+          });
+        }
+        return super.addEventListener(e, h, o);
+      }
+      dispatchEvent(e){
+        return super.dispatchEvent(e);
+      }
+      connectedCallback(...args){
+        for(let hooks of setup.connected.values()){
+          hooks.call(this, ...args);
+        }
+      }
+      disConnectedCallback(...args){
+        for(let hooks of setup.disconnected.values()){
+          hooks.call(this, ...args);
+        }
+      }
+      adoptedCallback(...args){
+        for(let hooks of setup.adopted.values()){
+          hooks.call(this, ...args);
+        }
+      }
+      attributeChangedCallback(...args){
+        for(let hooks of setup.attrChanged.values()){
+          hooks.call(this, ...args);
+        }
       }
     }
   }
-  function generateCustomElementConstructor(name){
+  function generateCustomElementConstructor(name, HouxitCustomElement){
     name = ToPascalCase(name);
     if(!isValidIdentifier(name)){
       debugHandler(`[ ] unable to parse the customElements tag name\n\n
       seems to have been an invalid identifier`);
       return;
     }
-    return Function('CustomNativeElement', `
-      return class ${name} extends CustomNativeElement{
+    return Function('HouxitCustomElement', `
+      return class ${name} extends HouxitCustomElement{
         constructor(){
           super(...arguments);
         }
       }
-    `)(CustomNativeElement);
+    `)(HouxitCustomElement);
   }
-  function _createCustomElement(opts){
+  const configOpts={
+    shadowMode:[String, Boolean],
+    nonce:String,
+    configureElement:Function,
+    configureApp:Function,
+    connected:Function,
+    adopted:Function,
+    attrChanged:Function,
+    disconnected:Function
+  }
+  const ce_lch="connected,disconnected,adopted,attrChanged,configureApp,configureElement";
+  function _createCustomElement(opts, config){
     this.is_Custom_Node=true;
     const response=validateCollectionArgs(arguments, {
-      count:1,
-      validators:[[Function,Object]],
+      min:1,
+      max:2,
+      validators:[[Function, Object], Object],
       name:"createCustomElement"
     });
     if(!response) {
       return;
     }
-    const LifeCycleHooksList="onConnected,onDisconnected,onAdopted,onAttrChanged,plugin";
-    const isMNEOwnOptions=opt=>_makeMap_(LifeCycleHooksList, opt);
-    let Hooks={};
-    const widget = defineWidget(opts)
-    entries(widget).forEach(([ind, value])=>{
-      if(_makeMap_(LifeCycleHooksList, ind)){
-        if(!isFunction(value)){
-          debugHandler(`[ ] LifeCycle callback error\n\n"${ind}" is a callback function, received an invalid type`);
-          return;
-        }
-        if(ind != 'plugin'){
-          Hooks[ind]=value;
-        }
-        delete opts[ind];
+    const setup={
+      connected:[],
+      disconnected:[],
+      adopted:[],
+      attrChanged:[],
+      configureApp:[],
+      configureElement:[]
+    }
+    for(let [name, type ] of entries(configOpts)){
+      if(!hasOwn(config, name)) continue;
+      const value = config[name];
+      if(!validateType(value, type)){
+        debugHandler(`[ createCustomElement options ] customElements config options fails to meet type validation\n"${name}" option`);
+        continue;
       }
-    });
-    const CustomNativeElement=generateCustomNativeElementConstructor();
-    CustomNativeElement.prototype.disConnectedCallback=Hooks.disConnectedCallback || pass;
-    CustomNativeElement.prototype.adoptedCallback=Hooks.adoptedCallback || pass;
-    CustomNativeElement.prototype.attributeChangedCallback=Hooks.attributeChangedCallback || pass;
-    CustomNativeElement.prototype.connectedCallback=connectedCallback;
+      if(name === 'shadowMode' && isString(value) && !_makeMap_('closed,open', value)){
+        debugHandler(`"shadowMode" config option of createCustomElement expects only valid type of 'open' | 'closed'\n\nmay output Unexpected result`);
+      }
+      if(_makeMap_(ce_lch, name)) setup[name].push(value);
+    }
+    let { shadowMode='open', nonce='' } = config || {};
+    const HouxitCustomElement=generateCustomNativeElementConstructor(setup);
     function connectedCallback(){
       let props={};
+      const compiler_options={};
       if(len(keys(this.attributes))){
-        for( const [key, attr ] of entries(this.attributes)) {
-          const { name, value } = attr;
-          props[name]=value
+        for( const [ key, attr ] of entries(this.attributes)) {
+          let { name, value } = attr;
+          if(isOnListener(name)){
+            const customEvents=this._hx_Element.hx_Element.VNodeManager.customEvents;
+              name=name.slice(2);
+              if(!hasOwn(customEvents, name)){
+                customEvents[name]=new HouxitEvents(name, {
+                  target_value:this
+                });
+              }
+            continue;
+          }
+          props[name]=value;
         }
       }
-      // _set_compiler_options
-      let [ vnode, self, hx_Element, siblings, IS_RENDERLESS, customElementsArgs ] = this.compiler_options;
-      const shadow=this.attachShadow({ mode: 'open'});
-      vnode=h(opts, assign(props, vnode.props|| {}), vnode.children);
-      customElementsArgs.unshift();
-      const createElement=()=> $compilerEngine(null, vnode, null, {}).$build;
+      let shadow;
+      if(isBoolean(shadowMode)){
+        if(!shadowMode){
+          shadowMode="closed"
+          // shadow=document.createElement('template');
+        }else shadowMode='open';
+      }
+      if(isString(shadowMode)) shadow=this.attachShadow({ mode: shadowMode });
+      let vnode=h(opts, props);
+      const createElement=()=> {
+        let app=$compilerEngine(null, vnode, null, {}, {
+          isCustomElement:true,
+          element:this,
+          shadow,
+          compiler_options,
+          configureApp:setup.configureApp
+        });
+        return app.$build;
+      }
+      setup.configureApp.unshift(function(app){
+        defineGetter(this, '__app', app);
+      });
       const template=createElement();
       shadow.appendChild(template.$element);
-      const user_defined_callback=Hooks.connectedCallback || pass
-      user_defined_callback.call(this, ...arguments);
+      
+      this.__attributeObserver.observe(this, {
+        attributes: true,
+        attributeOldValue: true
+      });
     }
-    CustomNativeElement.define=function define(name, inherit){
-      return __define.call(this, ...arguments);
+    setup.connected.unshift(connectedCallback);
+    setup.disconnected.unshift(function(){
+      this.__attributeObserver.disconnect();
+    });
+    for(let hks of setup.configureElement.values()){
+      hks.call(this);
     }
-    function __define(name, inherit){
+    HouxitCustomElement.define=function define(name, inherit){
+      return __define.call(this, name, inherit, HouxitCustomElement);
+    }
+    function __define(name, inherit, HouxitCustomElement){
       if(!validateCollectionArgs(arguments, {
         name:"customElements.define()",
         min:1,
@@ -14640,18 +14718,18 @@ function get_Model_Event(el) {
         debugHandler('Name positional argument passed to define is not a string or a valid name value\n\n or may have conflicted with native html/svg/mathml tags');
         return;
       }
-      if(inherit && !isString(inherit) && !IS_HTML_TAG(inherit)){
-        debugHandler(`[ ] problem with the inherit value, \n\n may not be a string value or a valid HTML tagName`);
+      if(inherit && (!isString(inherit) && !IS_HTML_TAG(inherit))){
+        debugHandler(`[ ] problem with the inherit value, \n\n may not be a string value or a valid HTML tagName signature`);
         debugHandler(`[ ] CustomElement registration failed`);
         return;
       }
-      const CustomElementsInstance=generateCustomElementConstructor(name);
+      const CustomElementsInstance=generateCustomElementConstructor(name, HouxitCustomElement);
       if(inBrowserCompiler) customElements.define(name, CustomElementsInstance, inherit ? { 
         extends:inherit
       } : {});
       return CustomElementsInstance;
     }
-    return CustomNativeElement;
+    return HouxitCustomElement;
   };
   function _asyncWidget(callback, config){
     if(!validateCollectionArgs(arguments, {
@@ -14743,7 +14821,7 @@ function get_Model_Event(el) {
   }
   function _renderToStringCompiler(build, config){
     if(!isSSRCompiler(build)){
-      debugHandler(`[ ] "renderToString" macro was called on a non SSR renderer build...\n\nplease check, you may have used "initBuild" app initializer instead of the "initSSRBuild"`);
+      debugHandler(`[ ] "renderToString" macro was called on a non SSR App build...\n\nuse "initSSRBuild" instead for an SSR App`);
       return undefined;
     }
     return new Promise((resolve)=>{
@@ -14806,11 +14884,23 @@ function get_Model_Event(el) {
     }
     return src;
   }
-  function renderToStreamPipe(){
+  function renderToNodeStream(app){
+    
+  }
+  function renderToNodeWritable(app, writable){
+    
+  }
+  function renderToWebWritable(app, writable){
+    
+  }
+  function renderToWebStream(app){
+    
+  }
+  function renderToSimpleStream(app, cbs){ // callback based
     
   }
   function _createInitSSRBuild_(options, props, children){
-    const vNode=createSSRStreamHack( arguments, {
+    const vNode=createSSRStreamHack(arguments, {
       type:'stream',
       render:None
     });
@@ -14935,10 +15025,11 @@ function get_Model_Event(el) {
   _$compiler_engine_hydrator();
 
 export {
-  createVNode , Suspense , isToken , scaffold , get_version , h , shallowStream , None , useBindDriver , Else , enSlot , If , For , escapeReverseDecoder , HouxitCompilerSetup , isReactiveToken , ElseIf , trackEffectDeps , initBuild , Memo , postUpdate , initSSRBuild , log ,//dev
-  readonlyStream , preMount , Portal , postDestroy , Build , Self , asyncWidget , preUpdate , shallowReadonlyStream , isShallow , useRef , Motion , HTMLParser , Provider , postMount , postBuild , useReceiver , unToken , onSlotRender , onSlotEffect , useTransmit , defineConfig , useStyleSheet , useContext , defineSlots , defineParams , useAdapter , useModel , createHouxitElement , isReadonly , preDestroy , markdown , MKDParser , validateType , Any , Arguments , mergeProps , _getNodeListResponse , tick , generateUUID , boilerPlate , Type , defineWidget , isShallowStream , onCatch ,//dev
+  createVNode , Suspense , isToken , scaffold , get_version , h , shallowStream , None , useBindDriver , Else , enSlot , If , For , escapeReverseDecoder , CompilerConfigOptions , isReactiveToken , ElseIf , trackEffectDeps , initBuild , Memo , postUpdate , initSSRBuild , log ,//dev
+  readonlyStream , preMount , Portal , postDestroy , Build , Self , asyncWidget , preUpdate , shallowReadonlyStream , isShallow , useRef , Motion , HTMLParser , Provider , postMount , postBuild , useReceiver , unToken , onSlotRender , onSlotEffect , useTransmit , defineConfig , useStyleSheet , useContext , defineSlots , defineParams , useAdapter , useModel , createHouxitElement , isReadonly , preDestroy , mdx , MKDParser , validateType , Any , Arguments , mergeProps , _getNodeListResponse , tick , generateUUID , boilerPlate , Type , defineWidget , isShallowStream , onCatch ,//dev
   createEffectFrame,
-  onEffect , onTracked , html , Class , readonly , escapeDecoder , resolve , observe , effectHook , generateTemplateElement , memMove , useOptions , defineSignals , Widget , len , markRaw , isRaw , validateProps , toReadonly , toShallow , shallow , validateCollection , isStream , useReadonlyBypasser , stream , token , createNativeElement , scopeEffectHook , scopeObserve , computed , read , factoryToken , isNativeElement , createWidgetElement , tokenGENERATOR , cubicBezier , RENDER_ELEMENTS , toToken , to_kebab_case , Token , ToPascalCase , toCamelCase , createTextElement , renderToString , cloneVElement , createCustomElement , _createFragment , debugHandler , //dev
+  onEffect , onTracked , htx , Class , readonly , escapeDecoder , resolve , observe , effectHook , generateTemplateElement , memMove , useOptions , defineSignals , Widget , len , markRaw , isRaw , validateProps , toReadonly , toShallow , shallow , validateCollection , isStream , useReadonlyBypasser , stream , token , createNativeElement , scopeEffectHook , scopeObserve , computed , read , factoryToken , isNativeElement , createWidgetElement , tokenGENERATOR , cubicBezier , RENDER_ELEMENTS , toToken , to_kebab_case , Token , ToPascalCase , toCamelCase , createTextElement , renderToString , cloneVElement , createCustomElement , _createFragment , debugHandler , //dev
   Fragment , agent , Exception , Tuple , _GenerateRoot , traceBack , version , raise ,//dev
+  renderToSimpleStream , renderToWebStream , renderToWebWritable , renderToNodeStream , renderToNodeWritable ,
   deepEqualityCheck , isShallowReadonly , isShallowReadonlyStream , toReadonlyStream , toShallowStream , toShallowReadonlyStream , pushEffect , HTMLPropsParser , animate , transite , PRIVATE_PROPERTY_KEY, easings , createEasing , TemplateClass , createTemplateClass , isReadonlyStream , __WUFClass__ , isComputed , useAgent }
   
