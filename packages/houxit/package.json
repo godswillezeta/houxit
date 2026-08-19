@@ -8,7 +8,7 @@
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "development": "./src/houxit.esm.js",
+      "development": "./dist/houxit.esm.js",
       "import": "./dist/houxit.esm.js",
       "require": "./dist/houxit.cjs",
       "types": "./dist/index.d.ts"
