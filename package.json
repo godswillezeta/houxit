@@ -1,6 +1,6 @@
 {
   "name": "houxit-core",
-  "version": "0.1.12",
+  "version": "0.1.15",
   "description": "The blueprint for modern web apps.",
   "private": true,
   "type": "module",
@@ -17,7 +17,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/houxitsystems/houxit.git"
+    "url": "https://github.com/godswillezeta/houxit.git"
   },
   "keywords": [
     "houxit",
