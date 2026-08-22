@@ -1,6 +1,6 @@
 {
   "name": "houxit",
-  "version": "0.1.13",
+  "version": "0.1.15",
   "description": "The blueprint for modern web apps.",
   "type": "module",
   "main": "dist/houxit.cjs",

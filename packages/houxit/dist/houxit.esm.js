@@ -165,7 +165,7 @@ var HTMLIDLAttributes = "accesskey,contenteditable,dir,draggable,enterkeyhint,hi
 var isHTMLIDLAttributes = (txt) => _makeMap_(HTMLIDLAttributes, txt);
 var HTMLBooleanAttributes = "disabled,hidden,draggable,checked,selected,defer,ismap,reversed,readonly,autoplay,disableremoteplayback,muted,loop,autofocus,async,controls,default,inert,open,scoped,seamless,muted,multiple,itemscope,allowfullscreen,formnovalidate,nomodule,novalidate";
 var isHTMLBooleanAttributes = (txt) => _makeMap_(HTMLBooleanAttributes, txt);
-var SVG_TAGS = "animate,animateMotion,animateTransform,circle,clipPath,defs,desc,discard,ellipse,feBlend,feColorMatrix,feComponentTransfer,feComposite,feConvolveMatrix,feDiffuseLighting,feDisplacementMap,feDistantLight,feDropShadow,feFlood,feFuncA,feFuncB,feFuncG,feFuncR,feGaussianBlur,feImage,feMerge,feMergeNode,feMorphology,feOffset,fePointLight,feSpecularLighting,feSpotLight,feTile,feTurbulence,filter,foreignObject,g,hatch,hatchpath,image,line,linearGradient,marker,mask,metadata,mpath,path,pattern,polygon,polyline,radialGradient,rect,set,stopsvg,switch,symbol,text,textPath,tspan,use,view";
+var SVG_TAGS = "animate,animateMotion,animateTransform,circle,clipPath,defs,desc,discard,ellipse,feBlend,feColorMatrix,feComponentTransfer,feComposite,feConvolveMatrix,feDiffuseLighting,feDisplacementMap,feDistantLight,feDropShadow,feFlood,feFuncA,feFuncB,feFuncG,feFuncR,feGaussianBlur,feImage,feMerge,feMergeNode,feMorphology,feOffset,fePointLight,feSpecularLighting,feSpotLight,feTile,feTurbulence,filter,foreignObject,g,hatch,hatchpath,image,line,linearGradient,marker,mask,metadata,mpath,path,pattern,polygon,polyline,radialGradient,rect,set,stopsvg,switch,symbol,text,textPath,tspan,use,view,stop";
 var SVG_DEPRECATED_TAGS = "altGlyph,altGlyphDef,altGlyphItem,cursor,font,font-face,font-face-format,font-face-name,font-face-src,font-face-uri,glyph,glyphToken,hkern,missing-glyph,tref,vkern";
 var IS_SVG_TAG = (tag) => _makeMap_(SVG_TAGS, tag);
 var IS_SVG_DEPRRCATED_TAG = (tag) => _makeMap_(SVG_DEPRECATED_TAGS, tag);
@@ -8923,7 +8923,7 @@ function handleBuildGenerator(self, selector) {
 			responseRender = renderer;
 			if (isArrowFunction(widgetBuild) && !isPFunction(renderer)) responseRender = () => renderer;
 		} catch (err) {
-			debugHandler(`[ ] Error during the call of the build function`, self, true, DebugFlags.build);
+			debugHandler(`[ ] Error during the call of the build function\n\n${err}`, self, true, DebugFlags.build);
 			debugHandler(err);
 			if (isXtruct(widgetBuild)) debugHandler(`[ ] build options method seems to be a constructor function`, self);
 			else debugHandler(`${err}`, self);
@@ -10152,6 +10152,7 @@ function resolveInstanceWidgetNormalizer(self, vNode) {
 	const tagname = isBlockTag(vNode.type) ? getBlockTagName(vNode.type) : vNode.type;
 	let widget;
 	if (!isBlockTag(vNode.type) && !isDynamicPropTag(vNode.type) && !instance_Has_Widget(self, tagname) && !(inBrowserCompiler ? customElements.get(tagname) : false)) {
+	  log(vNode, tagname, IS_SVG_TAG(tagname))
 		debugHandler(`[ ] Template Compilation Error::\n\nUnresolved tagname "<${tagname}>"\n\n   ...if this is a Houxit widget, make sure its registered through the "widgets" option or defined through the CustomElementsInstance.define() method if it's a customElement `, self, true);
 		return false;
 	} else if (isBlockTag(vNode.type)) {
