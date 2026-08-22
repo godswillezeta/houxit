@@ -9,7 +9,7 @@ export default function houxit() {
     transform(code, id) {
       if (id.endsWith(".houxit") ) return compileSource(code, id);
       // Compile the .houxit file 
-      else if(id.endsWith(".jsx")) return {
+      else if(id.endsWith(".jsx") || id.endsWith(".tsx")) return {
         code:transform(code, id),
         map:null
       }

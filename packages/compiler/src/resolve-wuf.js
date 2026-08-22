@@ -38,7 +38,7 @@ export default function resolve(source, id){
     throw new Error(`[WUF resolve Error] Conflicting <script build> with a render prop. can not co-exist on the same block\n check [${id}] instance`);
     res=false;
   }else if(render && render.rawChildren.trim() && !render.rawChildren.trim().includes('return')){
-    throw new Error(`[WUF render block] omits a return statement`)
+    throw new Error(`[WUF render block] <script render> omits a return statement`)
   }
   if(!res){
     return {};
@@ -47,7 +47,7 @@ export default function resolve(source, id){
 }
 function compileSurface(surface, id){
   let imported=surface.build ? `
-  import __controller__ from 'houxit/runtime/controller';\n
+  import { useModel as __use_env_model__ } from 'houxit';\n
   ` : "";
   let instance={};
   let render=""
@@ -72,7 +72,9 @@ function compileSurface(surface, id){
         instance.build=` ${hasOwn(props, 'async') ? "async " : ""}function build(){
 ${src}
   __env__=true;
-  return __controller__(__variables__, ${render || 'undefined'});
+  return (${ render.trim() || null }) ?? __use_env_model__({
+    __env__:__variables__
+  });
 }`
       }else{
         instance.script=src;

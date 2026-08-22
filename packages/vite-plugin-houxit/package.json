@@ -7,10 +7,9 @@
     "url": "github.com/houxitsystems/vite-plugin-houxit"
   },
   "dependencies": {
-    "@houxit/compiler": "1.0.0",
+    "@houxit/compiler": "latest",
     "@houxit/houxit-jsx": "1.0.0",
-    "@houxit/vite-plugin-houxit": "file:",
-    "houxit": "0.1.11"
+    "houxit": "latest"
   },
   "license": "MIT",
   "author": "Prince Godswill Chukwuemeka Ezeta",
