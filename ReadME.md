@@ -310,9 +310,8 @@ A string-based option used to define your widget markup. It is recommended to us
 
 You can parse any valid HTML markup into the template option. Houxit provides additional compile-time semantics to help you build efficiently.
 
-> **Note:** Model-defined properties are accessed directly within the template using the Houxit interpolation syntax `{{ greeting }}` — you do **not** need to access them through `this`.
+> **Note:** Model-defined properties are accessed directly within the template using the Houxit interpolation syntax `{{ greeting }}` — you do **not** need to access them through `this` even if it can work. `{{ this.greeting }}`.
 
-> **Warning:** Without using the Houxit interpolation syntax, JavaScript provides a string interpolation system within backtick multiline strings. However, accessing `this` in the template option will point to the wrapping object, not the widget model. The same fault occurs if you are using a class-based widget type — it will point to the class object. Houxit's reactive dependency tracker will not be notified if you use a non-model-defined property, since the widget UI build updates whenever the model-returned properties change or are mutated.
 
 ---
 
@@ -689,11 +688,11 @@ const { token } = Houxit;
 
 export default {
   model() {
-    this.value = token("Houxit Explorer");
+    this.value = "Houxit Explorer";
   },
   template: `
-    <input $$model='value.data'>
-    <h3> {{ value.data }} </h3>
+    <input $$model='value'>
+    <h3> {{ value }} </h3>
   `
 }
 ```
@@ -779,8 +778,9 @@ Accessing a node object from inside a widget and side-effect manipulation on DOM
 ```js
 export default {
   model() {
-    this.value = "";
+    this.name = "";
   },
+  refs:['value'],
   template: `
     <input ref="value" >
   `,
@@ -792,9 +792,9 @@ export default {
 }
 ```
 
-The value of the `value` property will be populated with the element or widget instance if passed to a widget tag.
+The value of the `$refs.value` property will be populated with the element or widget instance if passed to a widget tag.
 
-> **Note:** Refs are available on `this.$refs` after `postMount`. Declare ref names in `tokenRefs`.
+> **Note:** Refs are available on `this.$refs` after `postMount`. Declare ref names in `refs`.
 
 ### `$$text`
 
@@ -904,7 +904,7 @@ export default {
 }
 ```
 
-A function directive behaves as the `created` hook.
+A function directive behaves as the `mounted` hook.
 
 ### Object Form
 
@@ -955,7 +955,8 @@ For example, `$$focus:input.deep.path="val"` produces:
 ```js
 {
   key: 'input',
-  deepKeys: ['deep', 'path']
+  deepKeys: ['deep', 'path'],
+  modifiers: {}
 }
 ```
 
@@ -1003,8 +1004,8 @@ export default {
       this.count++;
     }
   },
-  build() {
-    return () => h('button', { onClick: this.increment }, 'Clicked me ' + this.count + ' times');
+  render() {
+    return h('button', { onClick: this.increment }, 'Clicked me ' + this.count + ' times');
   }
 }
 ```
@@ -1036,7 +1037,7 @@ Modifiers can be chained:
 <button $$on:click|once|stop|trusted='increment' />
 ```
 
-For passing modifiers to handlers when using a hyperscript-powered UI, you need the array syntax
+For passing modifiers to handlers when using a hyperscript-powered UI and the onXxx, you need the array syntax
 
 ```js
 
@@ -1051,7 +1052,7 @@ export default {
   },
   render() {
     return h('button', {
-      onClick: [this.increment, 'prevent', 'trusted', 'nonpassive']
+      onClick: [this.increment, ['prevent', 'trusted', 'nonpassive']]
     }, 'Clicked me ' + this.count + ' times');
   }
 }
@@ -1091,8 +1092,8 @@ For keyboard events, filter by specific key using Houxit's key aliases:
 For any key not covered by an alias, use the exact `KeyboardEvent.key` value in kebab-case:
 
 ```html
-<input @keydown.page-down="scrollDown" />
-<input @keydown.caps-lock="warnCaps" />
+<input @keydown|page-down="scrollDown" />
+<input @keydown|caps-lock="warnCaps" />
 ```
 
 ### Event Chaining
@@ -1134,7 +1135,7 @@ export default initBuild({
 }).mount('#root');
 ```
 
-Notice how changes in the data (`count`) automatically update the UI. This reactivity system may not be effective when a data being mutated is accessed from an object-based dataType like a Set, Map, Array, or a plain object. Utilize the `token` macro for deep reactive object dataType reactivity hydration.
+Notice how changes in the data (`count`) automatically update the UI.
 
 ---
 
@@ -1148,22 +1149,18 @@ The `token` macro is used for scalar reactive values. Its returned data is expos
 const { token, stream } = Houxit;
 
 let widget = {
-  model() {
-    // initialized widget instances
-    this.obj = stream({
+  build() {
+    const obj = stream({
       message: "Exploring Houxit",
       count: 0
     });
-    this.num = token(34);
-  },
-  build() {
-    // accessed in the widget through the ***this*** keyword
-    this.obj.count += 70;
-    // to access them in template, they will be exposed as data.count — these data objects are reactive
+    const num = token(34);
+    obj.count += 70;
+    //  — these data objects are reactive by passing a lazy function
     return htx`
-      <h1>{{ obj.message }}</h1>
-      <p>{{ obj.count }}</p>
-      <h5> {{ num.data }}</h5>
+      <h1>${ ()=>obj.message }</h1>
+      <p>${ ()=> obj.count }</p>
+      <h5> ${ ()=>num.data }</h5>
     `;
   }
 }
@@ -1234,7 +1231,7 @@ For cases where you want only the top-level properties to be reactive, use the s
 import { shallow, shallowStream } from 'houxit';
 
 let config = shallow({ theme: 'dark', nested: { value: 1 } });
-// config.data is reactive, but config.data.nested.value is NOT tracked
+// config.data is reactive, but config.data.theme or even tge deeper config.data.nested.value are NOT tracked
 
 let list = shallowStream({ items: [1, 2, 3], meta: { count: 3 } });
 // list.items is reactive, but list.items[0] is NOT tracked
@@ -1298,14 +1295,13 @@ import { factoryToken } from 'houxit';
 
 function vault(value, config) {
   return factoryToken(function(track, effect, deepTransform) {
-    value = config.shallow ? value : deepTransform(value);
+    // you can make effects deeply reactive by passing them to stream
     return {
       get() {
         track();          // registers this read in the active tracking context
         return value;
       },
       set(newValue) {
-        value = config.shallow ? newValue : deepTransform(newValue);
         effect();         // triggers all subscribers of this token
         return true;
       },
@@ -1474,15 +1470,15 @@ Unlike raw `h()`, Houxit's JSX compiler instruments reactive reads via AST analy
 ```jsx
 import { For, If, Else, ElseIf } from 'houxit';
 
-<If test={() => isLoggedIn}>
+<If test={isLoggedIn}>
   <Dashboard />
-  <ElseIf test={() => isPending} />
+  <ElseIf test={isPending} />
   <Spinner />
   <Else />
   <LoginForm />
 </If>
 
-<For each={() => items}>
+<For each={items}>
   {(item, key) => (
     <li key={key}>{item.name}</li>
   )}
@@ -1579,7 +1575,7 @@ The Adapter API is Houxit's script-first authoring style. Everything declared at
 
 ```html
 <script build>
-  import { token, computed, observe, postMount } from 'houxit';
+  import { token, computed, observe, postMount, defineParams, defineSignals } from 'houxit';
 
   const params = defineParams({
     initialQuantity: { type: Number, default: 1 },
@@ -1647,7 +1643,7 @@ WUF — Widget Unit File — is Houxit's single-file widget format. Every `.houx
 
 ### File Extensions
 
-`.houxit` — the primary extension, preferred for widget files. `.hx` is also recognized identically by the compiler, the VSCode extension, and all Houxit tooling.
+`.houxit` — the primary extension recognized by the compiler, the VSCode extension, and all Houxit tooling.
 
 ### Block Overview
 
@@ -1777,8 +1773,8 @@ export default {
         else return true;
       }
     }
-  },
-  template: `<h2> My name is {{ $params.name }} </h2>`
+  },//in template, they are directly exposed on the widget instance.
+  template: `<h2> My name is {{ name }} </h2>`
 }
 ```
 
@@ -1790,7 +1786,6 @@ export default {
 
 > **Note:** Widget properties / JavaScript expressions or attribute names can also be bound using the `*` asterisk flag. When passing in-template expressions like objects/arrays/functions or other special data types, they must be quoted, especially in cases where inner quoting might be involved. Double quoting is recommended so single quoting can be used internally. In cases where complex expressions might be involved, it is recommended to define the data in the model data method, then reference it from the template.
 
-Params will be exposed to the template instance as `$params.xxx` within the child widget. Validations will raise a Houxit Error or warning if failed or when a validator function returns false.
 
 Params can also be passed an array of param name strings. This is useful when there is no use case for validations:
 
@@ -1804,8 +1799,8 @@ params: ['color', 'seed']
 |---|---|---|
 | `required` | Boolean | `false` |
 | `validator` | Function | — |
-| `default` | Any | — |
-| `type` | Function | — |
+| `default` | Any | undefined |
+| `type` | Function | Houxit.Any |
 
 ### Custom Data Types Prototyping
 
@@ -1963,7 +1958,7 @@ To attach one handler to multiple events in the `onXxx` convention, concatenate 
 <div *onHoverClickMouseover="handler">Multi-event</div>
 ```
 
-> **Note:** Because of how the DOM passes attributes, `onXx` event props cannot be used directly in inlined DOM template strings (the `template` option in no-build environments). In those contexts, use `$$on` directives or the `dispatch` prop instead.
+> **Note:** Because of how the DOM passes attributes, `onXx` event props cannot be used directly in inlined DOM template strings (the `template` option in the initBuild().mount() target environments). In those contexts, use `$$on` directives or the `dispatch/attach` props instead.
 
 ### `dispatch` — Render Function Event Binding
 
@@ -2028,9 +2023,9 @@ To parse slot contents for slot elements, Houxit provides you with the `$$slot` 
 
 ```html
 <Widget>
-  <template $$slot:header>
+  <hx:fragment $$slot:header>
     <!-- Slot contents goes here -->
-  </template>
+  </hx:fragment>
   <input>
 </Widget>
 ```
@@ -2125,7 +2120,7 @@ Each entry in `slots` is a function that renders the slot's content. `slots` is 
 
 The `context` option allows passing of model data props in a reversed manner, from a child widget to its scope within the consumer parent's widget.
 
-A method with its `this` keyword model public instance. Access to model instances are to be exposed directly. The `this` keyword will be available in the scope, and its returned value will be exposed as a state within its consumer scope:
+A method with its `this` keyword model public instance. Access to model instances are to be exposed directly. The `this` keyword will be available in the scope, and its returned value will be exposed as a state within its consumer scope: must return a plain object.
 
 ```js
 export default {
@@ -2143,7 +2138,7 @@ Any value can be returned from the context. This will be exposed to the scope of
 
 ```html
 <Widget $$provide=prop>
-  <!-- context attributes of this child widget will only be available within this scope of Widget instance as $provide -->
+  <!-- context attributes of this child widget will only be available within this scope of Widget instance as $$provide -->
   <h1>{{ prop.<xxx> }}</h1>
 </Widget>
 ```
@@ -2166,7 +2161,7 @@ import { useContext } from 'houxit';
 useContext(() => ({
   selectedItem: this.selected,
   count: this.count
-}));
+}));// may Receive the return object directly
 ```
 
 ---
@@ -2261,9 +2256,9 @@ app.transmit({
 
 The `build` function is the widget's major building compilation engine.
 
-The `build` function has access to some useful widget options data as parameters, through two arguments: `[params, context]`.
+The `build` function has access to some useful widget options data as parameters, through two arguments: `build(params, context){}`.
 
-The `params` parameter is a reference to `this.$params` data object, while the `context` is an object with access to `signals`, `slots`, `attrs`, and `utils`.
+The `params` parameter is a reference to the params defined data object, while the `context` is an object with access to `signals`, `slots`, `attrs`, and `events`.
 
 This is useful when utilizing the hyperscript pattern:
 
@@ -2275,7 +2270,7 @@ export default {
 }
 ```
 
-These properties can be accessed from the use of the `this` keyword, with the exception of the slots and utils, but are provided here for simplicity. They can be accessed by appending the `$` character to the `signals` and `attrs` data instances:
+These properties can be accessed from the use of the `this` keyword, with the exception of the slots, but are provided here for simplicity. They can be accessed by appending the `$` character to the `signals` and `attrs` data instances except the params that are directly exposed to the context:
 
 ```js
 const { log } = Houxit;
@@ -2299,7 +2294,7 @@ export default {
   build() {
     let count = token(0);
     function increment() { count.data++; }
-    return Houxit.useModel({ count, increment });
+    return useModel({ count, increment });
   }
 }
 ```
@@ -2462,7 +2457,7 @@ Within the `observers` object option, Houxit accepts only objects with names tha
 ```js
 export default {
   observers: {
-    'value.data': function() {
+    'value': function() {
     }
   }
 }
@@ -2492,9 +2487,9 @@ export default {
 
 Observer methods get triggered each time the select prop calls its setter function.
 
-### `this._observe` Macro
+### `this.$observe` Macro
 
-For observation of multiple and complex data, you can accomplish such tasks within the `postMount` or any lifecycle hook or the `build` method by using the `this._observe` macro:
+For observation of multiple and complex data, you can accomplish such tasks within the `postMount` or any lifecycle hook or the `build` method by using the `this.$observe` macro:
 
 ```js
 const { token } = Houxit;
@@ -2505,7 +2500,7 @@ export default {
   },
   postMount() {
     // We are targeting to watch the age property of obj.data.info
-    this._observe('obj.data.info.age', () => {
+    this.$observe('obj.data.info.age', () => {
       // a callback function
     });
     // observe accepts three arguments: the path to the reactive object to watch,
@@ -2547,9 +2542,9 @@ export default {
 
 Houxit watches the value of these properties and reacts when their values change on re-evaluation, instead of the data properties directly.
 
-### `_effectHook`
+### `$effectHook`
 
-`_effectHook` is the instance-level auto-tracking side effect mechanism. It runs a callback immediately, tracks every reactive read inside it, and re-runs whenever any dependency changes.
+`$effectHook` is the instance-level auto-tracking side effect mechanism. It runs a callback immediately, tracks every reactive read inside it, and re-runs whenever any dependency changes.
 
 ---
 
@@ -2694,15 +2689,10 @@ Template blocks are Houxit's structural building blocks — special `{{ @tag }}`
 
 > **Warning:** Only use with trusted content.
 
-### `@await` — Async Content ⚠️ Deprecated
+### `@await` — Async text Content ⚠️ Deprecated
 
 ```html
 {{@await fetchUser(userId)}}
-  {{@then user}}
-    <p>Welcome, {{ user.name }}!</p>
-  {{@catch error}}
-    <p>Something went wrong: {{ error.message }}</p>
-{{/await}}
 ```
 
 > ⚠️ **Deprecated:** Prefer `<hx:suspense>` for all async boundary use cases.
@@ -2767,35 +2757,6 @@ export default {
 {{/list_guard}}
 ```
 
-### Mustache Block Helpers
-
-Houxit provides mustache tag configuration setup while compiling mustache tag expressions:
-
-```html
-{{ %foo >> model_based_expressions }}
-```
-
-A template block helper is recognized by appending the `%` character before the block name and separating the block name from the actual expression using double greater-than character `>>`.
-
-Block helpers can be passed modifiers just like passing modifiers to directives:
-
-```html
-{{ %safe|mod|once >> stringValues }}
-```
-
-Block helpers can be chained, separating each block with the dot `.` character:
-
-```html
-{{ %safe.html|mod|once >> stringValues }}
-```
-
-You can pass multiple parameters by separating them with the `>>` character:
-
-```html
-<p> {{ %myBlock >> firstValue >> 890 }}</p>
-```
-
----
 
 ## 27. Template Classes
 
@@ -3408,15 +3369,6 @@ Renders the current widget recursively.
 
 ## 34. Utility Functions
 
-### `withDirectives()`
-
-```js
-function withDirectives(Attributes, Directives)
-```
-
-Helpers function that provides the use of directives within the hyperscript interface.
-.
-
 ### `token()`
 
 ```js
@@ -3425,16 +3377,16 @@ function token(DataValue)
 
 Creates a reactive reference.
 
-### `deferTick()`
+### `tick()`
 
 ```js
-function deferTick(Callback, TimeOut)
+function tick(Callback, TimeOut)
 ```
 
-`deferTick` waits for the DOM to re-render after mutating a model property before being called:
+`tick` waits for the DOM to re-render after mutating a model property before being called:
 
 ```js
-let { deferTick } = Houxit;
+let { tick } = Houxit;
 
 export default {
   model() {
@@ -3442,7 +3394,7 @@ export default {
   },
   postMount() {
     this.count += 34;
-    deferTick(() => {
+    tick(() => {
       // this callback will wait till the above mutation is done
       // with its DOM re-rendering before being triggered
     });
@@ -3450,7 +3402,7 @@ export default {
 }
 ```
 
-### `html<BackTicks>`
+### `htx<BackTicks>`
 
 ```js
 function htx`BacktickString`
@@ -3484,19 +3436,15 @@ Component used in defining custom elements. Accepts only an object parameter wit
 
 | Function | Purpose |
 |---|---|
-| `VNode()` | VNode creation |
-| `mapFor()` | Mapping utility |
+| `createVNode()` | VNode creation |
 | `h()` | Hyperscript |
 | `initBuild()` | App entry point |
 | `initSSRBuild()` | SSR entry point |
-| `ref()` | Ref utility |
 | `initAsyncBuild()` | Async build init |
-| `defineElement()` | Element definition |
-| `markup()` | Markup utility |
-| `extend()` | Extension utility |
+| `defineElement()` | Element definition 
 | `$scarfold()` | Scaffold utility |
-| `renderSlots()` | Slot rendering |
-| `$expose()` | Exposure utility |
+| `enSlot()` | render function slot rendering |
+| `useModel()` | Exposure utility |
 | `postBuild()` | Lifecycle macro |
 | `postMount()` | Lifecycle macro |
 | `preMount()` | Lifecycle macro |
@@ -3668,11 +3616,12 @@ document.querySelector('user-card').addEventListener('select', (event) => {
 
 | Custom Elements callback | Houxit lifecycle |
 |---|---|
-| `constructor` | `preBuild` |
-| `connectedCallback` | `preMount` → `postMount` |
-| `disconnectedCallback` | `preDestroy` → `postDestroy` |
-| `attributeChangedCallback` | Reactive param update → `preUpdate` → `postUpdate` |
-| `adoptedCallback` | No direct equivalent |
+| `connected` | `preMount` → `postMount` |
+| `disconnected` | `preDestroy` → `postDestroy` |
+| `attrChange` | Reactive param update → `preUpdate` → `postUpdate` |
+| `adopted` | No direct equivalent |
+
+All to be defined on the `createCustomElement` config object as methods
 
 ### Houxit Widget vs Custom Element
 
